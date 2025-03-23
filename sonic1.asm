@@ -3438,7 +3438,7 @@ LevSel_Level_SS:			; XREF: LevelSelect
 		bne.s	LevSel_Level	; if not, branch
 		move.b	#$10,($FFFFF600).w ; set screen	mode to	$10 (Special Stage)
 		clr.w	($FFFFFE10).w	; clear	level
-		move.b	#3,($FFFFFE12).w ; set lives to	3
+		move.b	#39,($FFFFFE12).w ; set lives to	3
 		moveq	#0,d0
 		move.w	d0,($FFFFFE20).w ; clear rings
 		move.l	d0,($FFFFFE22).w ; clear time
@@ -3452,7 +3452,7 @@ LevSel_Level:				; XREF: LevSel_Level_SS
 
 PlayLevel:				; XREF: ROM:00003246j ...
 		move.b	#$C,($FFFFF600).w ; set	screen mode to $0C (level)
-		move.b	#3,($FFFFFE12).w ; set lives to	3
+		move.b	#39,($FFFFFE12).w ; set lives to	3
 		moveq	#0,d0
 		move.w	d0,($FFFFFE20).w ; clear rings
 		move.l	d0,($FFFFFE22).w ; clear time
@@ -3533,7 +3533,7 @@ loc_3422:
 		clr.b	($FFFFFE16).w	; clear	special	stage number
 
 Demo_Level:
-		move.b	#3,($FFFFFE12).w ; set lives to	3
+		move.b	#39,($FFFFFE12).w ; set lives to	3
 		moveq	#0,d0
 		move.w	d0,($FFFFFE20).w ; clear rings
 		move.l	d0,($FFFFFE22).w ; clear time
@@ -5524,7 +5524,7 @@ loc_4DF2:
 
 Cont_GotoLevel:				; XREF: Cont_MainLoop
 		move.b	#$C,($FFFFF600).w ; set	screen mode to $0C (level)
-		move.b	#3,($FFFFFE12).w ; set lives to	3
+		move.b	#39,($FFFFFE12).w ; set lives to	3
 		moveq	#0,d0
 		move.w	d0,($FFFFFE20).w ; clear rings
 		move.l	d0,($FFFFFE22).w ; clear time
@@ -6298,7 +6298,7 @@ EndingDemoLoad:				; XREF: Credits
 		bcc.s	EndDemo_Exit	; if yes, branch
 		move.w	#$8001,($FFFFFFF0).w ; force demo mode
 		move.b	#8,($FFFFF600).w ; set game mode to 08 (demo)
-		move.b	#3,($FFFFFE12).w ; set lives to	3
+		move.b	#39,($FFFFFE12).w ; set lives to	3
 		moveq	#0,d0
 		move.w	d0,($FFFFFE20).w ; clear rings
 		move.l	d0,($FFFFFE22).w ; clear time
