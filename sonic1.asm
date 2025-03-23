@@ -15,6 +15,17 @@ align macro
 	cnop 0,\1
 	endm
 		include	"sound/smps2asm_inc.asm"
+
+; NOTES FOR ANYONE MAKING CHARACTERS
+v_character = $FFFFFEC9
+; pointers for:
+; PLAYER MAPPINGS -> Player_Maps
+; PLAYER ANIM SCRIPTS -> Player_Anim
+; PLAYER ART -> Player_Art
+; PLAYER DPLC -> Player_DPLC
+; PLAYER PALETTE -> Player_Palette
+
+
 StartOfRom:
 Vectors:	dc.l $FFFE00, EntryPoint, BusError, AddressError
 		dc.l IllegalInstr, ZeroDivide, ChkInstr, TrapvInstr
@@ -3920,11 +3931,20 @@ Level_ClrVars3:
 		clr.b	($FFFFF64D).w	; clear	water routine counter
 		clr.b	($FFFFF64E).w	; clear	water movement
 		move.b	#1,($FFFFF64C).w ; enable water
-
+		bra.s	Level_LoadPal
+Player_Palette:
+		dc.w	3 ; Sonic 
+		; add more player palettes
 Level_LoadPal:
 		move.w	#$1E,($FFFFFE14).w
 		move	#$2300,sr
-		moveq	#3,d0
+
+		moveq	#0,d0
+		move.b	(v_character),d0
+		add.w	d0,d0
+		lea 	Player_Palette(pc),a1
+		move.w	(a1,d0.w),d0	; load Map patterns
+		
 		bsr.w	PalLoad2	; load Sonic's pallet line
 		cmpi.b	#1,($FFFFFE10).w ; is level LZ?
 		bne.s	Level_GetBgm	; if not, branch
@@ -23800,11 +23820,21 @@ Obj01_Index:	dc.w Obj01_Main-Obj01_Index
 		dc.w Obj01_ResetLevel-Obj01_Index
 ; ===========================================================================
 
+Player_Maps:
+	dc.l	Map_Sonic
+	; insert player mapping here
+	
 Obj01_Main:				; XREF: Obj01_Index
 		addq.b	#2,$24(a0)
 		move.b	#$13,$16(a0)
 		move.b	#9,$17(a0)
-		move.l	#Map_Sonic,4(a0)
+		
+		moveq	#0,d0
+		move.b	(v_character),d0
+		lsl.w	#2,d0
+		lea 	Player_Maps(pc),a1
+		move.l	(a1,d0.w),4(a0)	; load Map patterns
+		
 		move.w	#$780,2(a0)
 		move.b	#2,$18(a0)
 		move.b	#$18,$19(a0)
@@ -25413,9 +25443,18 @@ locret_139C2:
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-
+Player_Anim:
+	dc.l	SonicAniData
+	; Insert more animation data for other characters here
+	
 Sonic_Animate:				; XREF: Obj01_Control; et al
-		lea	(SonicAniData).l,a1
+			moveq	#0,d0
+		move.b	(v_character),d0
+		lsl.w	#2,d0
+		lea 	Player_Anim(pc),a1
+		
+		movea.l	(a1,d0.w),a1	; load Sonic dplc
+	
 		moveq	#0,d0
 		move.b	$1C(a0),d0
 		cmp.b	$1D(a0),d0	; is animation set to restart?
@@ -25591,7 +25630,12 @@ SonicAniData:
 ; ---------------------------------------------------------------------------
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
-
+Player_DPLC:
+	dc.l	SonicDynPLC
+	; add pointers for player dplc here
+Player_Art:
+	dc.l	Art_Sonic
+	; add pointers for player art here
 
 LoadSonicDynPLC:			; XREF: Obj01_Control; et al
 		moveq	#0,d0
@@ -25599,7 +25643,14 @@ LoadSonicDynPLC:			; XREF: Obj01_Control; et al
 		cmp.b	($FFFFF766).w,d0
 		beq.s	locret_13C96
 		move.b	d0,($FFFFF766).w
-		lea	(SonicDynPLC).l,a2
+		
+		move.w	#0,d1
+		move.b	(v_character),d1
+		lsl.w	#2,d1
+		lea 	Player_DPLC(pc),a2
+
+		movea.l	(a2,d1.w),a2	; load Sonic dplc
+		
 		add.w	d0,d0
 		adda.w	(a2,d0.w),a2
 		moveq	#0,d1
@@ -25610,6 +25661,13 @@ LoadSonicDynPLC:			; XREF: Obj01_Control; et al
 		move.b	#1,($FFFFF767).w
 
 SPLC_ReadEntry:
+		move.w	#0,d0
+		move.b	(v_character),d0
+		lsl.w	#2,d0
+		lea 	Player_Art(pc),a1
+
+		movea.l	(a1,d0.w),a1	; load Sonic art
+
 		moveq	#0,d2
 		move.b	(a2)+,d2
 		move.w	d2,d0
@@ -25617,7 +25675,6 @@ SPLC_ReadEntry:
 		lsl.w	#8,d2
 		move.b	(a2)+,d2
 		lsl.w	#5,d2
-		lea	(Art_Sonic).l,a1
 		adda.l	d2,a1
 
 SPLC_LoadTile:
