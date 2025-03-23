@@ -2134,27 +2134,6 @@ PalCycle_MZ:				; XREF: PalCycle
 
 
 PalCycle_SLZ:				; XREF: PalCycle
-		subq.w	#1,($FFFFF634).w
-		bpl.s	locret_1A80
-		move.w	#7,($FFFFF634).w
-		move.w	($FFFFF632).w,d0
-		addq.w	#1,d0
-		cmpi.w	#6,d0
-		bcs.s	loc_1A60
-		moveq	#0,d0
-
-loc_1A60:
-		move.w	d0,($FFFFF632).w
-		move.w	d0,d1
-		add.w	d1,d1
-		add.w	d1,d0
-		add.w	d0,d0
-		lea	(Pal_SLZCyc).l,a0
-		lea	($FFFFFB56).w,a1
-		move.w	(a0,d0.w),(a1)
-		move.l	2(a0,d0.w),4(a1)
-
-locret_1A80:
 		rts	
 ; End of function PalCycle_SLZ
 
