@@ -17,7 +17,7 @@ align macro
 		include	"sound/smps2asm_inc.asm"
 
 ; NOTES FOR ANYONE MAKING CHARACTERS
-v_character = $FFFFFEC9
+v_character = $FFFFFFE8
 ; pointers for:
 ; PLAYER MAPPINGS -> Player_Maps
 ; PLAYER ANIM SCRIPTS -> Player_Anim
@@ -2869,6 +2869,7 @@ Pal_SpeResult:	incbin	pallet\ssresult.bin	; special stage results screen pallets
 Pal_SpeContinue:incbin	pallet\sscontin.bin	; special stage results screen continue pallet
 Pal_Ending:	incbin	pallet\ending.bin	; ending sequence pallets
 Pal_Idiot:	incbin	pallet\idiot.bin	; idiot pallet
+Pal_Gronic:	incbin	pallet\gronic.bin	; gronic char
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	delay the program by ($FFFFF62A) frames
@@ -3315,6 +3316,14 @@ Title_CountC:
 loc_3230:
 		tst.w	($FFFFF614).w
 		beq.w	Demo
+		; (temporary until we have an actual options screen)
+		btst	#5,	($FFFFF605).w ; check if c pressed
+		beq.s	@notc
+
+		eor.b	#1,(v_character) ; sonic/gronic 
+		move.b	#$B5,d0		; play ring sound when code is entered
+		bsr.w	PlaySound_Special
+	@notc:
 		andi.b	#$80,($FFFFF605).w ; check if Start is pressed
 		beq.w	loc_317C	; if not, branch
 
@@ -3323,6 +3332,8 @@ Title_ChkLevSel:
 		beq.w	PlayLevel	; if not, play level
 		btst	#6,($FFFFF604).w ; check if A is pressed
 		beq.w	PlayLevel	; if not, play level
+		
+		
 		moveq	#2,d0
 		bsr.w	PalLoad2	; load level select pallet
 		lea	($FFFFCC00).w,a1
@@ -3934,6 +3945,7 @@ Level_ClrVars3:
 		bra.s	Level_LoadPal
 Player_Palette:
 		dc.w	3 ; Sonic 
+		dc.w	21 ; Pal_Gronic 
 		; add more player palettes
 Level_LoadPal:
 		move.w	#$1E,($FFFFFE14).w
@@ -23822,6 +23834,7 @@ Obj01_Index:	dc.w Obj01_Main-Obj01_Index
 
 Player_Maps:
 	dc.l	Map_Sonic
+	dc.l	Map_Sonic ; gronic
 	; insert player mapping here
 	
 Obj01_Main:				; XREF: Obj01_Index
@@ -25445,6 +25458,7 @@ locret_139C2:
 
 Player_Anim:
 	dc.l	SonicAniData
+	dc.l	SonicAniData ; gronic
 	; Insert more animation data for other characters here
 	
 Sonic_Animate:				; XREF: Obj01_Control; et al
@@ -25632,9 +25646,11 @@ SonicAniData:
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 Player_DPLC:
 	dc.l	SonicDynPLC
+	dc.l	SonicDynPLC ; gronic
 	; add pointers for player dplc here
 Player_Art:
 	dc.l	Art_Sonic
+	dc.l	Art_Sonic ; gronic
 	; add pointers for player art here
 
 LoadSonicDynPLC:			; XREF: Obj01_Control; et al

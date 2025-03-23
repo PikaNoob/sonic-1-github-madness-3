@@ -1,6 +1,7 @@
 {
-    "description": "Flex 2 Project File",
+    "Flex": 2,
     "name": "",
+    "node": "7c221514-e097-4e7e-a467-34ba98094ecd",
     "objects": [
         {
             "uuid": "221514e0-977e-4ee4-a734-ba98094ecd01",
@@ -25,7 +26,7 @@
             }
         },
         {
-            "uuid": "7c221514-e097-4e7e-a467-34ba98094ecd",
+            "uuid": "db436497-8172-4473-ab1a-116ba31d78a9",
             "format": "Sonic 1.js",
             "name": "sonc",
             "palettes": [
@@ -47,6 +48,33 @@
             "dplcs": {
                 "enabled": true,
                 "path": "_inc\\Sonic dynamic pattern load cues.asm",
+                "label": "",
+                "customDefinition": ""
+            }
+        },
+        {
+            "uuid": "7c221514-e097-4e7e-a467-34ba98094ecd",
+            "format": "Sonic 1 Raw.js",
+            "name": "gronic",
+            "palettes": [
+                {
+                    "path": "pallet/gronic.bin",
+                    "length": 1
+                }
+            ],
+            "art": {
+                "path": "artunc/sonic.bin",
+                "compression": "Uncompressed",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "_maps/Sonic.asm",
+                "label": "",
+                "customDefinition": ""
+            },
+            "dplcs": {
+                "enabled": true,
+                "path": "_inc/Sonic dynamic pattern load cues.asm",
                 "label": "",
                 "customDefinition": ""
             }
