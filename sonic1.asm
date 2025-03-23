@@ -30062,7 +30062,7 @@ Map_obj8A:
 
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
-; Object 3D - Eggman (GHZ)
+; Object 3D - matthew boss - modified by GK89
 ; ---------------------------------------------------------------------------
 
 Obj3D:					; XREF: Obj_Index
@@ -30110,7 +30110,7 @@ loc_17772:
 		move.w	8(a0),$30(a0)
 		move.w	$C(a0),$38(a0)
 		move.b	#$F,$20(a0)
-		move.b	#8,$21(a0)	; set number of	hits to	8
+		move.b	#$28,$21(a0)	; set number of	hits to	8
 
 Obj3D_ShipMain:				; XREF: Obj3D_Index
 		moveq	#0,d0
@@ -30135,7 +30135,7 @@ Obj3D_ShipIndex:dc.w Obj3D_ShipStart-Obj3D_ShipIndex
 ; ===========================================================================
 
 Obj3D_ShipStart:			; XREF: Obj3D_ShipIndex
-		move.w	#$100,$12(a0)	; move ship down
+		jsr    Obj3D_ShipMove
 		bsr.w	BossMove
 		cmpi.w	#$338,$38(a0)
 		bne.s	loc_177E6
@@ -30242,9 +30242,7 @@ BossMove:
 
 ; ===========================================================================
 
-Obj3D_MakeBall:				; XREF: Obj3D_ShipIndex
-		move.w	#-$100,$10(a0)
-		move.w	#-$40,$12(a0)
+Obj3D_MakeBall:				; XREF: Obj3D_ShipIndex		
 		bsr.w	BossMove
 		cmpi.w	#$2A00,$30(a0)
 		bne.s	loc_17916
@@ -30265,21 +30263,48 @@ loc_17916:
 		bra.w	loc_177E6
 ; ===========================================================================
 
-Obj3D_ShipMove:				; XREF: Obj3D_ShipIndex
+Obj3D_ShipMove:				; XREF:  sonic follow move
 		subq.w	#1,$3C(a0)
-		bpl.s	Obj3D_Reverse
+		jsr 	Obj3D_UpStuff
 		addq.b	#2,$25(a0)
 		move.w	#$3F,$3C(a0)
-		move.w	#$100,$10(a0)	; move the ship	sideways
-		cmpi.w	#$2A00,$30(a0)
-		bne.s	Obj3D_Reverse
-		move.w	#$7F,$3C(a0)
-		move.w	#$40,$10(a0)
+		move.w	($FFFFD008).w,d0	 
+		sub.w	8(a0),d0		 
+		bpl.s	Obj3D_left			 
+		bclr	#0,$22(a0)		 
+		bra.s	Obj3D_right		 
+		bclr	#5,$22(a0)
+ 		jsr     loc_17950
+		rts
+; ===========================================================================
 
-Obj3D_Reverse:
-		btst	#0,$22(a0)
-		bne.s	loc_17950
-		neg.w	$10(a0)		; reverse direction of the ship
+Obj3D_right:
+		move.w	#-$100,$10(a0)	
+		Rts
+
+Obj3D_left:
+		move.w	#$100,$10(a0)	 
+		btst	#0,$22(a0)	; is matt facing	left?
+		bne.s	RTSboss  	; if not, branch
+ 		bchg	#0,$22(a0)
+
+RTSboss:	    
+		rts
+ ; ===========================================================================
+
+Obj3D_UpStuff:
+		move.w	($FFFFD00C).w,d0	 
+		sub.w	$C(a0),d0		 
+		bpl.s	Obj3D_down			 
+ 		bra.s	Obj3D_up		 
+		bclr	#5,$22(a0)
+ 
+Obj3D_up:		
+		move.w	#-$120,$12(a0)           ; Up	 
+ 	    rts
+
+Obj3D_down:
+ 		move.w	#$120, $12(a0)           ; Down
 
 loc_17950:
 		bra.w	loc_177E6
@@ -30317,16 +30342,18 @@ loc_17984:
 		tst.b	($FFFFF7A7).w
 		bne.s	locret_179AA
 		move.b	#1,($FFFFF7A7).w
+		move.w	#$300,($FFFFF726).w
+		bra.w	BossDefeated
 
 locret_179AA:
 		rts	
 ; ===========================================================================
 
 loc_179AC:				; XREF: Obj3D_ShipIndex
+		jsr ObjectFall		
 		addq.w	#1,$3C(a0)
 		beq.s	loc_179BC
 		bpl.s	loc_179C2
-		addi.w	#$18,$12(a0)
 		bra.s	loc_179EE
 ; ===========================================================================
 
@@ -30348,6 +30375,7 @@ loc_179C2:
 loc_179DA:
 		subq.w	#8,$12(a0)
 		bra.s	loc_179EE
+		bra.w	BossDefeated
 ; ===========================================================================
 
 loc_179E0:
@@ -30361,8 +30389,6 @@ loc_179EE:
 ; ===========================================================================
 
 loc_179F6:				; XREF: Obj3D_ShipIndex
-		move.w	#$400,$10(a0)
-		move.w	#-$40,$12(a0)
 		cmpi.w	#$2AC0,($FFFFF72A).w
 		beq.s	loc_17A10
 		addq.w	#2,($FFFFF72A).w
