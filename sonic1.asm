@@ -8683,12 +8683,16 @@ Resize_SLZ:				; XREF: Resize_Index
 		move.w	Resize_SLZx(pc,d0.w),d0
 		jmp	Resize_SLZx(pc,d0.w)
 ; ===========================================================================
-Resize_SLZx:	dc.w Resize_SLZ12-Resize_SLZx
-		dc.w Resize_SLZ12-Resize_SLZx
+Resize_SLZx:	dc.w Resize_SLZ1-Resize_SLZx
+		dc.w Resize_SLZ2-Resize_SLZx
 		dc.w Resize_SLZ3-Resize_SLZx
 ; ===========================================================================
 
-Resize_SLZ12:
+Resize_SLZ1:
+		move.w	#$100,($FFFFF726).w ; set lower	y-boundary
+		rts	
+
+Resize_SLZ2:
 		rts	
 ; ===========================================================================
 
