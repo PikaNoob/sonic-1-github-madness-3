@@ -1,7 +1,6 @@
 {
-    "Flex": 2,
+    "description": "Flex 2 Project File",
     "name": "",
-    "node": "7c221514-e097-4e7e-a467-34ba98094ecd",
     "objects": [
         {
             "uuid": "221514e0-977e-4ee4-a734-ba98094ecd01",
@@ -15,12 +14,14 @@
             },
             "mappings": {
                 "path": "_maps\\obj1F.asm",
-                "label": ""
+                "label": "",
+                "customDefinition": ""
             },
             "dplcs": {
                 "enabled": false,
                 "path": "",
-                "label": ""
+                "label": "",
+                "customDefinition": ""
             }
         },
         {
@@ -40,12 +41,14 @@
             },
             "mappings": {
                 "path": "_maps\\Sonic.asm",
-                "label": ""
+                "label": "",
+                "customDefinition": ""
             },
             "dplcs": {
                 "enabled": true,
                 "path": "_inc\\Sonic dynamic pattern load cues.asm",
-                "label": ""
+                "label": "",
+                "customDefinition": ""
             }
         },
         {
