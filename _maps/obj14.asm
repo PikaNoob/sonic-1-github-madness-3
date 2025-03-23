@@ -1,22 +1,22 @@
-; ---------------------------------------------------------------------------
-; Sprite mappings - lava balls (MZ, SLZ)
-; ---------------------------------------------------------------------------
-		dc.w byte_B37A-Map_obj14
-		dc.w byte_B380-Map_obj14
-		dc.w byte_B386-Map_obj14
-		dc.w byte_B38C-Map_obj14
-		dc.w byte_B392-Map_obj14
-		dc.w byte_B398-Map_obj14
-byte_B37A:	dc.b 1
-		dc.b $E8, 7, 0,	0, $F8
-byte_B380:	dc.b 1
-		dc.b $E8, 7, 0,	8, $F8
-byte_B386:	dc.b 1
-		dc.b $F0, 6, 0,	$10, $F8
-byte_B38C:	dc.b 1
-		dc.b $F8, $D, 0, $16, $E8
-byte_B392:	dc.b 1
-		dc.b $F8, $D, 0, $1E, $E8
-byte_B398:	dc.b 1
-		dc.b $F8, 9, 0,	$26, $F0
+; --------------------------------------------------------------------------------
+; Sprite mappings - output from SonMapEd - Sonic 1 format
+; --------------------------------------------------------------------------------
+
+SME_C6wT7:	
+		dc.w SME_C6wT7_C-SME_C6wT7, SME_C6wT7_12-SME_C6wT7	
+		dc.w SME_C6wT7_18-SME_C6wT7, SME_C6wT7_23-SME_C6wT7	
+		dc.w SME_C6wT7_29-SME_C6wT7, SME_C6wT7_2F-SME_C6wT7	
+SME_C6wT7_C:	dc.b 1	
+		dc.b $E8, $F, 0, 0, $F8	
+SME_C6wT7_12:	dc.b 1	
+		dc.b $E8, $F, 0, 0, $F8	
+SME_C6wT7_18:	dc.b 2	
+		dc.b $EF, 6, 0, $10, $F8	
+		dc.b $E7, 7, 0, $16, 8	
+SME_C6wT7_23:	dc.b 1	
+		dc.b $F0, $F, 0, 0, $E8	
+SME_C6wT7_29:	dc.b 1	
+		dc.b $F0, $F, 0, 0, $E8	
+SME_C6wT7_2F:	dc.b 1	
+		dc.b $F0, $B, 0, $1E, $E8	
 		even
