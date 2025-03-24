@@ -60096,1276 +60096,1276 @@
 0009FFDA                            Music93:	incbin	sound\music93.bin ; Chaos Emerald
 000A00AA                            		even
 000A00AA                            Music94:	incbin	sound\music94.bin ; Green Hill Act 2
-000A00E4 00                         		even
-000A00E4                            Music95:	incbin	sound\music95.bin ; Green Hill Act 3
-000A011E 00                         		even
-000A011E                            Music96:	incbin	sound\music96.bin ; Labyrinth Act 2
-000A0158 00                         		even
-000A0158                            Music97:	incbin	sound\music97.bin ; Labyrinth Act 3
-000A0192 00                         		even
-000A0192                            Music98:	incbin	sound\music98.bin ; Marble Act 2
-000A01CC 00                         		even
-000A01CC                            Music99:	incbin	sound\music99.bin ; Marble Act 3
-000A0206 00                         		even
-000A0206                            Music9A:	incbin	sound\music9A.bin ; Star Light Act 2
-000A0240 00                         		even
-000A0240                            Music9B:	incbin	sound\music9B.bin ; Star Light Act 3
-000A027A 00                         		even
-000A027A                            Music9C:	incbin	sound\music9C.bin ; Spring Yard Act 2
-000A02B4 00                         		even
-000A02B4                            Music9D:	incbin	sound\music9D.bin ; Spring Yard Act 3
-000A02EE 00                         		even
-000A02EE                            Music9E:	incbin	sound\music9E.bin ; Scrap Brain Act 2
-000A07DE                            		even
-000A07DE                            Music9F:	include	sound\music9F.asm ; Scrap Brain Act 3
-000A07DE                            GentleBreeze_Header:
-000A07DE =00000001                  smpsHeaderStartSong = 1
-000A07DE 0000                       	smpsHeaderVoice     GentleBreeze_Voices
-000A07E0 0603                       	smpsHeaderChan      $06, $03
-000A07E2 0100                       	smpsHeaderTempo     $01, $00
-000A07E4                            
-000A07E8 0000 0000                  	smpsHeaderFM        GentleBreeze_FM1,	$00, $00
-000A07EC 0000 0000                  	smpsHeaderFM        GentleBreeze_FM2,	$00, $00
-000A07F0 0000 0000                  	smpsHeaderFM        GentleBreeze_FM3,	$00, $00
-000A07F4 0000 0000                  	smpsHeaderFM        GentleBreeze_FM4,	$00, $00
-000A07F8 0000 0000                  	smpsHeaderFM        GentleBreeze_FM5,	$00, $00
-000A07FC 0000 0000 0000             	smpsHeaderPSG       GentleBreeze_PSG1,	$00, $00, $00, $00
-000A0802 0000 0000 0000             	smpsHeaderPSG       GentleBreeze_PSG2,	$00, $00, $00, $00
-000A0808 0000 0000 0000             	smpsHeaderPSG       GentleBreeze_PSG3,	$00, $00, $00, $00
-000A080E                            
-000A080E                            ; PSG3 Data
-000A080E                            GentleBreeze_PSG3:
-000A080E F2                         	smpsStop
-000A080F                            
-000A080F                            ; FM1 Data
-000A080F                            GentleBreeze_FM1:
-000A0811 E0C0                       	smpsPan             panCenter, $00
-000A0813 E1FF                       	smpsAlterNote       $FF
-000A0815 C410                       	dc.b	nG5, $10
-000A0817 E60F                       	smpsAlterVol        $0F
-000A0819 C4                         	dc.b	nG5
-000A081A E6F1                       	smpsAlterVol        $F1
-000A081C E100                       	smpsAlterNote       $00
-000A081E C2                         	dc.b	nF5
-000A081F E60F                       	smpsAlterVol        $0F
-000A0821 08                         	dc.b	$08
-000A0822 E6F1                       	smpsAlterVol        $F1
-000A0824 C010                       	dc.b	nEb5, $10
-000A0826 E60F                       	smpsAlterVol        $0F
-000A0828 C0                         	dc.b	nEb5
-000A0829 E6F1                       	smpsAlterVol        $F1
-000A082B BDC0 C208 C910             	dc.b	nC5, nEb5, nF5, $08, nC6, $10
-000A0831 E60F                       	smpsAlterVol        $0F
-000A0833 C9                         	dc.b	nC6
-000A0834 E6F1                       	smpsAlterVol        $F1
-000A0836 C5                         	dc.b	nAb5
-000A0837 E60F                       	smpsAlterVol        $0F
-000A0839 08                         	dc.b	$08
-000A083A E6F1                       	smpsAlterVol        $F1
-000A083C C010                       	dc.b	nEb5, $10
-000A083E E60F                       	smpsAlterVol        $0F
-000A0840 C0                         	dc.b	nEb5
-000A0841 E6F1                       	smpsAlterVol        $F1
-000A0843 C208                       	dc.b	nF5, $08
-000A0845 E1FF                       	smpsAlterNote       $FF
-000A0847 C410                       	dc.b	nG5, $10
-000A0849 E100                       	smpsAlterNote       $00
-000A084B C5C7                       	dc.b	nAb5, nBb5
-000A084D E60F                       	smpsAlterVol        $0F
-000A084F C7                         	dc.b	nBb5
-000A0850 E6F1                       	smpsAlterVol        $F1
-000A0852 C5                         	dc.b	nAb5
-000A0853 E60F                       	smpsAlterVol        $0F
-000A0855 08                         	dc.b	$08
-000A0856 E6F1                       	smpsAlterVol        $F1
-000A0858 E1FF                       	smpsAlterNote       $FF
-000A085A C410                       	dc.b	nG5, $10
-000A085C E60F                       	smpsAlterVol        $0F
-000A085E C4                         	dc.b	nG5
-000A085F E6F1                       	smpsAlterVol        $F1
-000A0861 C4                         	dc.b	nG5
-000A0862 E100                       	smpsAlterNote       $00
-000A0864 C208 C010 C2               	dc.b	nF5, $08, nEb5, $10, nF5
-000A0869 E60F                       	smpsAlterVol        $0F
-000A086B C2                         	dc.b	nF5
-000A086C E6F1                       	smpsAlterVol        $F1
-000A086E E1FF                       	smpsAlterNote       $FF
-000A0870 C4                         	dc.b	nG5
-000A0871 E60F                       	smpsAlterVol        $0F
-000A0873 08                         	dc.b	$08
-000A0874 E6F1                       	smpsAlterVol        $F1
-000A0876 10                         	dc.b	$10
-000A0877 E60F                       	smpsAlterVol        $0F
-000A0879 38                         	dc.b	$38
-000A087A E6F1                       	smpsAlterVol        $F1
-000A087C 10                         	dc.b	$10
-000A087D E60F                       	smpsAlterVol        $0F
-000A087F C4                         	dc.b	nG5
-000A0880 E6F1                       	smpsAlterVol        $F1
-000A0882 E100                       	smpsAlterNote       $00
-000A0884 C2                         	dc.b	nF5
-000A0885 E60F                       	smpsAlterVol        $0F
-000A0887 08                         	dc.b	$08
-000A0888 E6F1                       	smpsAlterVol        $F1
-000A088A C010                       	dc.b	nEb5, $10
-000A088C E60F                       	smpsAlterVol        $0F
-000A088E C0                         	dc.b	nEb5
-000A088F E6F1                       	smpsAlterVol        $F1
-000A0891 BDC0 C208 C910             	dc.b	nC5, nEb5, nF5, $08, nC6, $10
-000A0897 E60F                       	smpsAlterVol        $0F
-000A0899 C9                         	dc.b	nC6
-000A089A E6F1                       	smpsAlterVol        $F1
-000A089C C5                         	dc.b	nAb5
-000A089D E60F                       	smpsAlterVol        $0F
-000A089F 08                         	dc.b	$08
-000A08A0 E6F1                       	smpsAlterVol        $F1
-000A08A2 C010                       	dc.b	nEb5, $10
-000A08A4 E60F                       	smpsAlterVol        $0F
-000A08A6 C0                         	dc.b	nEb5
-000A08A7 E6F1                       	smpsAlterVol        $F1
-000A08A9 C208                       	dc.b	nF5, $08
-000A08AB E1FF                       	smpsAlterNote       $FF
-000A08AD C410                       	dc.b	nG5, $10
-000A08AF E100                       	smpsAlterNote       $00
-000A08B1 C5C7                       	dc.b	nAb5, nBb5
-000A08B3 E60F                       	smpsAlterVol        $0F
-000A08B5 C7                         	dc.b	nBb5
-000A08B6 E6F1                       	smpsAlterVol        $F1
-000A08B8 C5                         	dc.b	nAb5
-000A08B9 E60F                       	smpsAlterVol        $0F
-000A08BB 08                         	dc.b	$08
-000A08BC E6F1                       	smpsAlterVol        $F1
-000A08BE E1FF                       	smpsAlterNote       $FF
-000A08C0 C410                       	dc.b	nG5, $10
-000A08C2 E60F                       	smpsAlterVol        $0F
-000A08C4 C4                         	dc.b	nG5
-000A08C5 E6F1                       	smpsAlterVol        $F1
-000A08C7 C4                         	dc.b	nG5
-000A08C8 E100                       	smpsAlterNote       $00
-000A08CA C208 C010 C2               	dc.b	nF5, $08, nEb5, $10, nF5
-000A08CF E60F                       	smpsAlterVol        $0F
-000A08D1 28                         	dc.b	$28
-000A08D2 E6F1                       	smpsAlterVol        $F1
-000A08D4 C008 10                    	dc.b	nEb5, $08, $10
-000A08D7 E60F                       	smpsAlterVol        $0F
-000A08D9 21                         	dc.b	$21
-000A08DA                            
-000A08DA                            GentleBreeze_Loop12:
-000A08DA E7C0 7F                    	dc.b	smpsNoAttack, nEb5, $7F
-000A08DD F700 08FF F9               	smpsLoop            $00, $08, GentleBreeze_Loop12
-000A08E2 E717                       	dc.b	smpsNoAttack, $17
-000A08E4 E6F1                       	smpsAlterVol        $F1
-000A08E6 E1FF                       	smpsAlterNote       $FF
-000A08E8 C410                       	dc.b	nG5, $10
-000A08EA E60F                       	smpsAlterVol        $0F
-000A08EC C4                         	dc.b	nG5
-000A08ED E6F1                       	smpsAlterVol        $F1
-000A08EF E100                       	smpsAlterNote       $00
-000A08F1 C2                         	dc.b	nF5
-000A08F2 E60F                       	smpsAlterVol        $0F
-000A08F4 08                         	dc.b	$08
-000A08F5 E6F1                       	smpsAlterVol        $F1
-000A08F7 C010                       	dc.b	nEb5, $10
-000A08F9 E60F                       	smpsAlterVol        $0F
-000A08FB C0                         	dc.b	nEb5
-000A08FC E6F1                       	smpsAlterVol        $F1
-000A08FE BDC0 C208 C910             	dc.b	nC5, nEb5, nF5, $08, nC6, $10
-000A0904 E60F                       	smpsAlterVol        $0F
-000A0906 C9                         	dc.b	nC6
-000A0907 E6F1                       	smpsAlterVol        $F1
-000A0909 C5                         	dc.b	nAb5
-000A090A E60F                       	smpsAlterVol        $0F
-000A090C 08                         	dc.b	$08
-000A090D E6F1                       	smpsAlterVol        $F1
-000A090F C010                       	dc.b	nEb5, $10
-000A0911 E60F                       	smpsAlterVol        $0F
-000A0913 C0                         	dc.b	nEb5
-000A0914 E6F1                       	smpsAlterVol        $F1
-000A0916 C208                       	dc.b	nF5, $08
-000A0918 E1FF                       	smpsAlterNote       $FF
-000A091A C410                       	dc.b	nG5, $10
-000A091C E100                       	smpsAlterNote       $00
-000A091E C5C7                       	dc.b	nAb5, nBb5
-000A0920 E60F                       	smpsAlterVol        $0F
-000A0922 C7                         	dc.b	nBb5
-000A0923 E6F1                       	smpsAlterVol        $F1
-000A0925 C5                         	dc.b	nAb5
-000A0926 E60F                       	smpsAlterVol        $0F
-000A0928 08                         	dc.b	$08
-000A0929 E6F1                       	smpsAlterVol        $F1
-000A092B E1FF                       	smpsAlterNote       $FF
-000A092D C410                       	dc.b	nG5, $10
-000A092F E60F                       	smpsAlterVol        $0F
-000A0931 C4                         	dc.b	nG5
-000A0932 E6F1                       	smpsAlterVol        $F1
-000A0934 C4                         	dc.b	nG5
-000A0935 E100                       	smpsAlterNote       $00
-000A0937 C208 C010 C2               	dc.b	nF5, $08, nEb5, $10, nF5
-000A093C E60F                       	smpsAlterVol        $0F
-000A093E C2                         	dc.b	nF5
-000A093F E6F1                       	smpsAlterVol        $F1
-000A0941 E1FF                       	smpsAlterNote       $FF
-000A0943 C4                         	dc.b	nG5
-000A0944 E60F                       	smpsAlterVol        $0F
-000A0946 08                         	dc.b	$08
-000A0947 E6F1                       	smpsAlterVol        $F1
-000A0949 10                         	dc.b	$10
-000A094A E60F                       	smpsAlterVol        $0F
-000A094C 38                         	dc.b	$38
-000A094D E6F1                       	smpsAlterVol        $F1
-000A094F 10                         	dc.b	$10
-000A0950 E60F                       	smpsAlterVol        $0F
-000A0952 C4                         	dc.b	nG5
-000A0953 E6F1                       	smpsAlterVol        $F1
-000A0955 E100                       	smpsAlterNote       $00
-000A0957 C2                         	dc.b	nF5
-000A0958 E60F                       	smpsAlterVol        $0F
-000A095A 08                         	dc.b	$08
-000A095B E6F1                       	smpsAlterVol        $F1
-000A095D C010                       	dc.b	nEb5, $10
-000A095F E60F                       	smpsAlterVol        $0F
-000A0961 C0                         	dc.b	nEb5
-000A0962 E6F1                       	smpsAlterVol        $F1
-000A0964 BDC0 C208 C910             	dc.b	nC5, nEb5, nF5, $08, nC6, $10
-000A096A E60F                       	smpsAlterVol        $0F
-000A096C C9                         	dc.b	nC6
-000A096D E6F1                       	smpsAlterVol        $F1
-000A096F C5                         	dc.b	nAb5
-000A0970 E60F                       	smpsAlterVol        $0F
-000A0972 08                         	dc.b	$08
-000A0973 E6F1                       	smpsAlterVol        $F1
-000A0975 C010                       	dc.b	nEb5, $10
-000A0977 E60F                       	smpsAlterVol        $0F
-000A0979 C0                         	dc.b	nEb5
-000A097A E6F1                       	smpsAlterVol        $F1
-000A097C C208                       	dc.b	nF5, $08
-000A097E E1FF                       	smpsAlterNote       $FF
-000A0980 C410                       	dc.b	nG5, $10
-000A0982 E100                       	smpsAlterNote       $00
-000A0984 C5C7                       	dc.b	nAb5, nBb5
-000A0986 E60F                       	smpsAlterVol        $0F
-000A0988 C7                         	dc.b	nBb5
-000A0989 E6F1                       	smpsAlterVol        $F1
-000A098B C5                         	dc.b	nAb5
-000A098C E60F                       	smpsAlterVol        $0F
-000A098E 08                         	dc.b	$08
-000A098F E6F1                       	smpsAlterVol        $F1
-000A0991 E1FF                       	smpsAlterNote       $FF
-000A0993 C410                       	dc.b	nG5, $10
-000A0995 E60F                       	smpsAlterVol        $0F
-000A0997 C4                         	dc.b	nG5
-000A0998 E6F1                       	smpsAlterVol        $F1
-000A099A C4                         	dc.b	nG5
-000A099B E100                       	smpsAlterNote       $00
-000A099D C208 C010 C2               	dc.b	nF5, $08, nEb5, $10, nF5
-000A09A2 E60F                       	smpsAlterVol        $0F
-000A09A4 28                         	dc.b	$28
-000A09A5 E6F1                       	smpsAlterVol        $F1
-000A09A7 C008 10                    	dc.b	nEb5, $08, $10
-000A09AA E60F                       	smpsAlterVol        $0F
-000A09AC 21                         	dc.b	$21
-000A09AD E0C0                       	smpsPan             panCenter, $00
-000A09AF F6FF 29                    	smpsJump            GentleBreeze_Loop12
-000A09B2                            
-000A09B2                            ; FM2 Data
-000A09B2                            GentleBreeze_FM2:
-000A09B4 E60C                       	smpsAlterVol        $0C
-000A09B6 E0C0                       	smpsPan             panCenter, $00
-000A09B8 9E20 A018 A508 8040 A020+  	dc.b	nF2, $20, nG2, $18, nC3, $08, nRst, $40, nG2, $20, nF2, $18
-000A09C4 A508 8020 A010 9E9E 20A0+  	dc.b	nC3, $08, nRst, $20, nG2, $10, nF2, nF2, $20, nG2, $18, nC3
-000A09D0 0880 409E 38A0 489E 20A0+  	dc.b	$08, nRst, $40, nF2, $38, nG2, $48, nF2, $20, nG2, $18, nC3
-000A09DC 0880 40A0 209E 18A5 0880+  	dc.b	$08, nRst, $40, nG2, $20, nF2, $18, nC3, $08, nRst, $20, nG2
-000A09E8 109E 9E20 A018 A508 8040+  	dc.b	$10, nF2, nF2, $20, nG2, $18, nC3, $08, nRst, $40, nF2, $38
-000A09F4 A039                       	dc.b	nG2, $39
-000A09F6                            
-000A09F6                            GentleBreeze_Jump04:
-000A09F6 E7A0 0F                    	dc.b	smpsNoAttack, nG2, $0F
-000A09F9                            
-000A09F9                            GentleBreeze_Loop11:
-000A09F9 A118 0880 10A1 2008 A09E+  	dc.b	nAb2, $18, $08, nRst, $10, nAb2, $20, $08, nG2, nF2, nFs2, nG2
-000A0A05 A1A0 1808 8010 A020 0880+  	dc.b	nAb2, nG2, $18, $08, nRst, $10, nG2, $20, $08, nRst, nG2, nC3
-000A0A11 189E A020 A510 A008 A518+  	dc.b	$18, nF2, nG2, $20, nC3, $10, nG2, $08, nC3, $18, nG2, $08
-000A0A1D 9FA0 9C18 979C 2008 9EA2+  	dc.b	nFs2, nG2, nEb2, $18, nBb1, nEb2, $20, $08, nF2, nA2, nEb3, nB2
-000A0A29 A3                         	dc.b	nBb2
-000A0A2A F700 02FF CB               	smpsLoop            $00, $02, GentleBreeze_Loop11
-000A0A2F 9E20 A018 A508 8040 A020+  	dc.b	nF2, $20, nG2, $18, nC3, $08, nRst, $40, nG2, $20, nF2, $18
-000A0A3B A508 8020 A010 9E9E 20A0+  	dc.b	nC3, $08, nRst, $20, nG2, $10, nF2, nF2, $20, nG2, $18, nC3
-000A0A47 0880 409E 38A0 489E 20A0+  	dc.b	$08, nRst, $40, nF2, $38, nG2, $48, nF2, $20, nG2, $18, nC3
-000A0A53 0880 40A0 209E 18A5 0880+  	dc.b	$08, nRst, $40, nG2, $20, nF2, $18, nC3, $08, nRst, $20, nG2
-000A0A5F 109E 9E20 A018 A508 8040+  	dc.b	$10, nF2, nF2, $20, nG2, $18, nC3, $08, nRst, $40, nF2, $38
-000A0A6B A039                       	dc.b	nG2, $39
-000A0A6D E0C0                       	smpsPan             panCenter, $00
-000A0A6F F6FF 85                    	smpsJump            GentleBreeze_Jump04
-000A0A72                            
-000A0A72                            ; FM3 Data
-000A0A72                            GentleBreeze_FM3:
-000A0A74 E0C0                       	smpsPan             panCenter, $00
-000A0A76 807F 7F7F 7F04             	dc.b	nRst, $7F, $7F, $7F, $7F, $04
-000A0A7E E616                       	smpsAlterVol        $16
-000A0A80 F000 0207 03               	smpsModSet          $00, $02, $07, $03
-000A0A85                            
-000A0A85                            GentleBreeze_Loop0F:
-000A0A85 C008 BDC9                  	dc.b	nEb5, $08, nC5, nC6
-000A0A89 E1FF                       	smpsAlterNote       $FF
-000A0A8B C4                         	dc.b	nG5
-000A0A8C E100                       	smpsAlterNote       $00
-000A0A8E C0BB BDC0 10               	dc.b	nEb5, nBb4, nC5, nEb5, $10
-000A0A93 E608                       	smpsAlterVol        $08
-000A0A95 C080 08                    	dc.b	nEb5, nRst, $08
-000A0A98 E6F8                       	smpsAlterVol        $F8
-000A0A9A C7                         	dc.b	nBb5
-000A0A9B E1FF                       	smpsAlterNote       $FF
-000A0A9D C4                         	dc.b	nG5
-000A0A9E E100                       	smpsAlterNote       $00
-000A0AA0 C0BB                       	dc.b	nEb5, nBb4
-000A0AA2 F700 02FF DF               	smpsLoop            $00, $02, GentleBreeze_Loop0F
-000A0AA7 C0BD C9                    	dc.b	nEb5, nC5, nC6
-000A0AAA E1FF                       	smpsAlterNote       $FF
-000A0AAC C4                         	dc.b	nG5
-000A0AAD E100                       	smpsAlterNote       $00
-000A0AAF C0BB BDC0 10               	dc.b	nEb5, nBb4, nC5, nEb5, $10
-000A0AB4 E608                       	smpsAlterVol        $08
-000A0AB6 C080 08                    	dc.b	nEb5, nRst, $08
-000A0AB9 E6F8                       	smpsAlterVol        $F8
-000A0ABB E1FF                       	smpsAlterNote       $FF
-000A0ABD C4                         	dc.b	nG5
-000A0ABE E100                       	smpsAlterNote       $00
-000A0AC0 C2C0 BBC0 BBC7 C5          	dc.b	nF5, nEb5, nBb4, nEb5, nBb4, nBb5, nAb5
-000A0AC7 E1FF                       	smpsAlterNote       $FF
-000A0AC9 C4                         	dc.b	nG5
-000A0ACA E100                       	smpsAlterNote       $00
-000A0ACC C2C0 BBBB C0               	dc.b	nF5, nEb5, nBb4, nBb4, nEb5
-000A0AD1 E1FF                       	smpsAlterNote       $FF
-000A0AD3 C4                         	dc.b	nG5
-000A0AD4 E100                       	smpsAlterNote       $00
-000A0AD6 C7                         	dc.b	nBb5
-000A0AD7 E1FF                       	smpsAlterNote       $FF
-000A0AD9 C4                         	dc.b	nG5
-000A0ADA E100                       	smpsAlterNote       $00
-000A0ADC C2C0 01                    	dc.b	nF5, nEb5, $01
-000A0ADF                            
-000A0ADF                            GentleBreeze_Jump03:
-000A0ADF E7C0 07BB 08               	dc.b	smpsNoAttack, nEb5, $07, nBb4, $08
-000A0AE6 E6FA                       	smpsAlterVol        $FA
-000A0AE8 F4                         	smpsModOff
-000A0AE9 E1FF                       	smpsAlterNote       $FF
-000A0AEB B850                       	dc.b	nG4, $50
-000A0AED E100                       	smpsAlterNote       $00
-000A0AEF B408 B1B4 B5B6 AF18 B510+  	dc.b	nEb4, $08, nC4, nEb4, nE4, nF4, nBb3, $18, nE4, $10, nF4, $08
-000A0AFB E1FF                       	smpsAlterNote       $FF
-000A0AFD B810                       	dc.b	nG4, $10
-000A0AFF E100                       	smpsAlterNote       $00
-000A0B01 BB18 B908 80               	dc.b	nBb4, $18, nAb4, $08, nRst
-000A0B06 E1FF                       	smpsAlterNote       $FF
-000A0B08 B8                         	dc.b	nG4
-000A0B09 E100                       	smpsAlterNote       $00
-000A0B0B B610                       	dc.b	nF4, $10
-000A0B0D E1FF                       	smpsAlterNote       $FF
-000A0B0F B850                       	dc.b	nG4, $50
-000A0B11 E100                       	smpsAlterNote       $00
-000A0B13 B608 B410 08B6 AF60        	dc.b	nF4, $08, nEb4, $10, $08, nF4, nBb3, $60
-000A0B1B E1FF                       	smpsAlterNote       $FF
-000A0B1D AC08                       	dc.b	nG3, $08
-000A0B1F E100                       	smpsAlterNote       $00
-000A0B21 AFB3 B4B6 B7               	dc.b	nBb3, nD4, nEb4, nF4, nFs4
-000A0B26 E1FF                       	smpsAlterNote       $FF
-000A0B28 B850                       	dc.b	nG4, $50
-000A0B2A E100                       	smpsAlterNote       $00
-000A0B2C BB08                       	dc.b	nBb4, $08
-000A0B2E E1FF                       	smpsAlterNote       $FF
-000A0B30 B8                         	dc.b	nG4
-000A0B31 E100                       	smpsAlterNote       $00
-000A0B33 BDBB B6                    	dc.b	nC5, nBb4, nF4
-000A0B36 E1FF                       	smpsAlterNote       $FF
-000A0B38 B810 08                    	dc.b	nG4, $10, $08
-000A0B3B E100                       	smpsAlterNote       $00
-000A0B3D B6                         	dc.b	nF4
-000A0B3E E1FF                       	smpsAlterNote       $FF
-000A0B40 B880                       	dc.b	nG4, nRst
-000A0B42 E100                       	smpsAlterNote       $00
-000A0B44 BBB9 BB                    	dc.b	nBb4, nAb4, nBb4
-000A0B47 E1FF                       	smpsAlterNote       $FF
-000A0B49 B810                       	dc.b	nG4, $10
-000A0B4B E100                       	smpsAlterNote       $00
-000A0B4D B308 B4B1 AFB4 B5          	dc.b	nD4, $08, nEb4, nC4, nBb3, nEb4, nE4
-000A0B54 E1FF                       	smpsAlterNote       $FF
-000A0B56 B87F E77F E702 807F 7F7F+  	dc.b	nG4, $7F, smpsNoAttack, $7F, smpsNoAttack, $02, nRst, $7F, $7F, $7F, $7F, $04
-000A0B64 E606                       	smpsAlterVol        $06
-000A0B66 F000 0207 03               	smpsModSet          $00, $02, $07, $03
-000A0B6B E100                       	smpsAlterNote       $00
-000A0B6D                            
-000A0B6D                            GentleBreeze_Loop10:
-000A0B6D C008 BDC9                  	dc.b	nEb5, $08, nC5, nC6
-000A0B71 E1FF                       	smpsAlterNote       $FF
-000A0B73 C4                         	dc.b	nG5
-000A0B74 E100                       	smpsAlterNote       $00
-000A0B76 C0BB BDC0 10               	dc.b	nEb5, nBb4, nC5, nEb5, $10
-000A0B7B E608                       	smpsAlterVol        $08
-000A0B7D C080 08                    	dc.b	nEb5, nRst, $08
-000A0B80 E6F8                       	smpsAlterVol        $F8
-000A0B82 C7                         	dc.b	nBb5
-000A0B83 E1FF                       	smpsAlterNote       $FF
-000A0B85 C4                         	dc.b	nG5
-000A0B86 E100                       	smpsAlterNote       $00
-000A0B88 C0BB                       	dc.b	nEb5, nBb4
-000A0B8A F700 02FF DF               	smpsLoop            $00, $02, GentleBreeze_Loop10
-000A0B8F C0BD C9                    	dc.b	nEb5, nC5, nC6
-000A0B92 E1FF                       	smpsAlterNote       $FF
-000A0B94 C4                         	dc.b	nG5
-000A0B95 E100                       	smpsAlterNote       $00
-000A0B97 C0BB BDC0 10               	dc.b	nEb5, nBb4, nC5, nEb5, $10
-000A0B9C E608                       	smpsAlterVol        $08
-000A0B9E C080 08                    	dc.b	nEb5, nRst, $08
-000A0BA1 E6F8                       	smpsAlterVol        $F8
-000A0BA3 E1FF                       	smpsAlterNote       $FF
-000A0BA5 C4                         	dc.b	nG5
-000A0BA6 E100                       	smpsAlterNote       $00
-000A0BA8 C2C0 BBC0 BBC7 C5          	dc.b	nF5, nEb5, nBb4, nEb5, nBb4, nBb5, nAb5
-000A0BAF E1FF                       	smpsAlterNote       $FF
-000A0BB1 C4                         	dc.b	nG5
-000A0BB2 E100                       	smpsAlterNote       $00
-000A0BB4 C2C0 BBBB C0               	dc.b	nF5, nEb5, nBb4, nBb4, nEb5
-000A0BB9 E1FF                       	smpsAlterNote       $FF
-000A0BBB C4                         	dc.b	nG5
-000A0BBC E100                       	smpsAlterNote       $00
-000A0BBE C7                         	dc.b	nBb5
-000A0BBF E1FF                       	smpsAlterNote       $FF
-000A0BC1 C4                         	dc.b	nG5
-000A0BC2 E100                       	smpsAlterNote       $00
-000A0BC4 C2C0 01                    	dc.b	nF5, nEb5, $01
-000A0BC7 E0C0                       	smpsPan             panCenter, $00
-000A0BC9 F1                         	smpsModOn
-000A0BCA F6FF 13                    	smpsJump            GentleBreeze_Jump03
-000A0BCD                            
-000A0BCD                            ; FM4 Data
-000A0BCD                            GentleBreeze_FM4:
-000A0BCF E0C0                       	smpsPan             panCenter, $00
-000A0BD1 80                         	dc.b	nRst
-000A0BD2                            
-000A0BD2                            GentleBreeze_Loop0D:
-000A0BD2 7F                         	dc.b	$7F
-000A0BD3 F700 07FF FB               	smpsLoop            $00, $07, GentleBreeze_Loop0D
-000A0BD8 77                         	dc.b	$77
-000A0BDB E609                       	smpsAlterVol        $09
-000A0BDD C001                       	dc.b	nEb5, $01
-000A0BDF                            
-000A0BDF                            GentleBreeze_Jump02:
-000A0BDF E7C0 07C2 08               	dc.b	smpsNoAttack, nEb5, $07, nF5, $08
-000A0BE4 E607                       	smpsAlterVol        $07
-000A0BE6 E1FF                       	smpsAlterNote       $FF
-000A0BE8 C450                       	dc.b	nG5, $50
-000A0BEA E100                       	smpsAlterNote       $00
-000A0BEC C008 BDC0 C1C2 BB18 C110+  	dc.b	nEb5, $08, nC5, nEb5, nE5, nF5, nBb4, $18, nE5, $10, nF5, $08
-000A0BF8 E1FF                       	smpsAlterNote       $FF
-000A0BFA C410                       	dc.b	nG5, $10
-000A0BFC E100                       	smpsAlterNote       $00
-000A0BFE C718 C508 80               	dc.b	nBb5, $18, nAb5, $08, nRst
-000A0C03 E1FF                       	smpsAlterNote       $FF
-000A0C05 C4                         	dc.b	nG5
-000A0C06 E100                       	smpsAlterNote       $00
-000A0C08 C210                       	dc.b	nF5, $10
-000A0C0A E1FF                       	smpsAlterNote       $FF
-000A0C0C C450                       	dc.b	nG5, $50
-000A0C0E E100                       	smpsAlterNote       $00
-000A0C10 C208 C010 08C2 BB60        	dc.b	nF5, $08, nEb5, $10, $08, nF5, nBb4, $60
-000A0C18 E1FF                       	smpsAlterNote       $FF
-000A0C1A B808                       	dc.b	nG4, $08
-000A0C1C E100                       	smpsAlterNote       $00
-000A0C1E BBBF C0C2 C3               	dc.b	nBb4, nD5, nEb5, nF5, nFs5
-000A0C23 E1FF                       	smpsAlterNote       $FF
-000A0C25 C450                       	dc.b	nG5, $50
-000A0C27 E100                       	smpsAlterNote       $00
-000A0C29 C708                       	dc.b	nBb5, $08
-000A0C2B E1FF                       	smpsAlterNote       $FF
-000A0C2D C4                         	dc.b	nG5
-000A0C2E E100                       	smpsAlterNote       $00
-000A0C30 C9C7 C2                    	dc.b	nC6, nBb5, nF5
-000A0C33 E1FF                       	smpsAlterNote       $FF
-000A0C35 C410 08                    	dc.b	nG5, $10, $08
-000A0C38 E100                       	smpsAlterNote       $00
-000A0C3A C2                         	dc.b	nF5
-000A0C3B E1FF                       	smpsAlterNote       $FF
-000A0C3D C480                       	dc.b	nG5, nRst
-000A0C3F E100                       	smpsAlterNote       $00
-000A0C41 C7C5 C7                    	dc.b	nBb5, nAb5, nBb5
-000A0C44 E1FF                       	smpsAlterNote       $FF
-000A0C46 C410                       	dc.b	nG5, $10
-000A0C48 E100                       	smpsAlterNote       $00
-000A0C4A BF08 C0BD BBC0 C1          	dc.b	nD5, $08, nEb5, nC5, nBb4, nEb5, nE5
-000A0C51 E1FF                       	smpsAlterNote       $FF
-000A0C53 C47F E701 7FE7 0180        	dc.b	nG5, $7F, smpsNoAttack, $01, $7F, smpsNoAttack, $01, nRst
-000A0C5B                            
-000A0C5B                            GentleBreeze_Loop0E:
-000A0C5B 7F                         	dc.b	$7F
-000A0C5C F700 07FF FB               	smpsLoop            $00, $07, GentleBreeze_Loop0E
-000A0C61 77                         	dc.b	$77
-000A0C62 E100                       	smpsAlterNote       $00
-000A0C64 C001                       	dc.b	nEb5, $01
-000A0C66 E6F9                       	smpsAlterVol        $F9
-000A0C68 E0C0                       	smpsPan             panCenter, $00
-000A0C6A E100                       	smpsAlterNote       $00
-000A0C6C F6FF 71                    	smpsJump            GentleBreeze_Jump02
-000A0C6F                            
-000A0C6F                            ; FM5 Data
-000A0C6F                            GentleBreeze_FM5:
-000A0C71 E0C0                       	smpsPan             panCenter, $00
-000A0C73 A5                         	dc.b	nC3
-000A0C74                            
-000A0C74                            GentleBreeze_Loop06:
-000A0C74 10                         	dc.b	$10
-000A0C75 E607                       	smpsAlterVol        $07
-000A0C77 A5                         	dc.b	nC3
-000A0C78 E6F9                       	smpsAlterVol        $F9
-000A0C7A 08                         	dc.b	$08
-000A0C7B E607                       	smpsAlterVol        $07
-000A0C7D A5                         	dc.b	nC3
-000A0C7E E608                       	smpsAlterVol        $08
-000A0C80 A5                         	dc.b	nC3
-000A0C81 E6F1                       	smpsAlterVol        $F1
-000A0C83 18                         	dc.b	$18
-000A0C84 E607                       	smpsAlterVol        $07
-000A0C86 10                         	dc.b	$10
-000A0C87 E608                       	smpsAlterVol        $08
-000A0C89 A5                         	dc.b	nC3
-000A0C8A E6F1                       	smpsAlterVol        $F1
-000A0C8C A5                         	dc.b	nC3
-000A0C8D F700 03FF E3               	smpsLoop            $00, $03, GentleBreeze_Loop06
-000A0C92 A5                         	dc.b	nC3
-000A0C93                            
-000A0C93                            GentleBreeze_Loop07:
-000A0C93 E607                       	smpsAlterVol        $07
-000A0C95 A5                         	dc.b	nC3
-000A0C96 E6F9                       	smpsAlterVol        $F9
-000A0C98 08                         	dc.b	$08
-000A0C99 E607                       	smpsAlterVol        $07
-000A0C9B A5                         	dc.b	nC3
-000A0C9C E608                       	smpsAlterVol        $08
-000A0C9E A5                         	dc.b	nC3
-000A0C9F E6F1                       	smpsAlterVol        $F1
-000A0CA1 10                         	dc.b	$10
-000A0CA2 F700 02FF ED               	smpsLoop            $00, $02, GentleBreeze_Loop07
-000A0CA7                            
-000A0CA7                            GentleBreeze_Loop08:
-000A0CA7 A5                         	dc.b	nC3
-000A0CA8 E607                       	smpsAlterVol        $07
-000A0CAA A5                         	dc.b	nC3
-000A0CAB E6F9                       	smpsAlterVol        $F9
-000A0CAD 08                         	dc.b	$08
-000A0CAE E607                       	smpsAlterVol        $07
-000A0CB0 A5                         	dc.b	nC3
-000A0CB1 E608                       	smpsAlterVol        $08
-000A0CB3 A5                         	dc.b	nC3
-000A0CB4 E6F1                       	smpsAlterVol        $F1
-000A0CB6 18                         	dc.b	$18
-000A0CB7 E607                       	smpsAlterVol        $07
-000A0CB9 10                         	dc.b	$10
-000A0CBA E608                       	smpsAlterVol        $08
-000A0CBC A5                         	dc.b	nC3
-000A0CBD E6F1                       	smpsAlterVol        $F1
-000A0CBF A5                         	dc.b	nC3
-000A0CC0 F700 03FF E3               	smpsLoop            $00, $03, GentleBreeze_Loop08
-000A0CC5 A5                         	dc.b	nC3
-000A0CC6 E607                       	smpsAlterVol        $07
-000A0CC8 A5                         	dc.b	nC3
-000A0CC9 E6F9                       	smpsAlterVol        $F9
-000A0CCB 08                         	dc.b	$08
-000A0CCC E607                       	smpsAlterVol        $07
-000A0CCE A5                         	dc.b	nC3
-000A0CCF E608                       	smpsAlterVol        $08
-000A0CD1 A5                         	dc.b	nC3
-000A0CD2 E6F1                       	smpsAlterVol        $F1
-000A0CD4 10                         	dc.b	$10
-000A0CD5 E607                       	smpsAlterVol        $07
-000A0CD7 A5                         	dc.b	nC3
-000A0CD8 E6F9                       	smpsAlterVol        $F9
-000A0CDA 08                         	dc.b	$08
-000A0CDB E607                       	smpsAlterVol        $07
-000A0CDD A5                         	dc.b	nC3
-000A0CDE E608                       	smpsAlterVol        $08
-000A0CE0 A5                         	dc.b	nC3
-000A0CE1 E6F1                       	smpsAlterVol        $F1
-000A0CE3 01                         	dc.b	$01
-000A0CE4                            
-000A0CE4                            GentleBreeze_Jump01:
-000A0CE4 E7A5 0F                    	dc.b	smpsNoAttack, nC3, $0F
-000A0CE7 E607                       	smpsAlterVol        $07
-000A0CE9                            
-000A0CE9                            GentleBreeze_Loop09:
-000A0CE9 10                         	dc.b	$10
-000A0CEA E608                       	smpsAlterVol        $08
-000A0CEC A5                         	dc.b	nC3
-000A0CED E6F1                       	smpsAlterVol        $F1
-000A0CEF 08                         	dc.b	$08
-000A0CF0 E60F                       	smpsAlterVol        $0F
-000A0CF2 18                         	dc.b	$18
-000A0CF3 E6F8                       	smpsAlterVol        $F8
-000A0CF5 F700 0FFF F0               	smpsLoop            $00, $0F, GentleBreeze_Loop09
-000A0CFA 10                         	dc.b	$10
-000A0CFB E608                       	smpsAlterVol        $08
-000A0CFD A5                         	dc.b	nC3
-000A0CFE E6F1                       	smpsAlterVol        $F1
-000A0D00 08                         	dc.b	$08
-000A0D01 E60F                       	smpsAlterVol        $0F
-000A0D03 18                         	dc.b	$18
-000A0D04 E6F1                       	smpsAlterVol        $F1
-000A0D06                            
-000A0D06                            GentleBreeze_Loop0A:
-000A0D06 10                         	dc.b	$10
-000A0D07 E607                       	smpsAlterVol        $07
-000A0D09 A5                         	dc.b	nC3
-000A0D0A E6F9                       	smpsAlterVol        $F9
-000A0D0C 08                         	dc.b	$08
-000A0D0D E607                       	smpsAlterVol        $07
-000A0D0F A5                         	dc.b	nC3
-000A0D10 E608                       	smpsAlterVol        $08
-000A0D12 A5                         	dc.b	nC3
-000A0D13 E6F1                       	smpsAlterVol        $F1
-000A0D15 18                         	dc.b	$18
-000A0D16 E607                       	smpsAlterVol        $07
-000A0D18 10                         	dc.b	$10
-000A0D19 E608                       	smpsAlterVol        $08
-000A0D1B A5                         	dc.b	nC3
-000A0D1C E6F1                       	smpsAlterVol        $F1
-000A0D1E A5                         	dc.b	nC3
-000A0D1F F700 03FF E3               	smpsLoop            $00, $03, GentleBreeze_Loop0A
-000A0D24 A5                         	dc.b	nC3
-000A0D25                            
-000A0D25                            GentleBreeze_Loop0B:
-000A0D25 E607                       	smpsAlterVol        $07
-000A0D27 A5                         	dc.b	nC3
-000A0D28 E6F9                       	smpsAlterVol        $F9
-000A0D2A 08                         	dc.b	$08
-000A0D2B E607                       	smpsAlterVol        $07
-000A0D2D A5                         	dc.b	nC3
-000A0D2E E608                       	smpsAlterVol        $08
-000A0D30 A5                         	dc.b	nC3
-000A0D31 E6F1                       	smpsAlterVol        $F1
-000A0D33 10                         	dc.b	$10
-000A0D34 F700 02FF ED               	smpsLoop            $00, $02, GentleBreeze_Loop0B
-000A0D39                            
-000A0D39                            GentleBreeze_Loop0C:
-000A0D39 A5                         	dc.b	nC3
-000A0D3A E607                       	smpsAlterVol        $07
-000A0D3C A5                         	dc.b	nC3
-000A0D3D E6F9                       	smpsAlterVol        $F9
-000A0D3F 08                         	dc.b	$08
-000A0D40 E607                       	smpsAlterVol        $07
-000A0D42 A5                         	dc.b	nC3
-000A0D43 E608                       	smpsAlterVol        $08
-000A0D45 A5                         	dc.b	nC3
-000A0D46 E6F1                       	smpsAlterVol        $F1
-000A0D48 18                         	dc.b	$18
-000A0D49 E607                       	smpsAlterVol        $07
-000A0D4B 10                         	dc.b	$10
-000A0D4C E608                       	smpsAlterVol        $08
-000A0D4E A5                         	dc.b	nC3
-000A0D4F E6F1                       	smpsAlterVol        $F1
-000A0D51 A5                         	dc.b	nC3
-000A0D52 F700 03FF E3               	smpsLoop            $00, $03, GentleBreeze_Loop0C
-000A0D57 A5                         	dc.b	nC3
-000A0D58 E607                       	smpsAlterVol        $07
-000A0D5A A5                         	dc.b	nC3
-000A0D5B E6F9                       	smpsAlterVol        $F9
-000A0D5D 08                         	dc.b	$08
-000A0D5E E607                       	smpsAlterVol        $07
-000A0D60 A5                         	dc.b	nC3
-000A0D61 E608                       	smpsAlterVol        $08
-000A0D63 A5                         	dc.b	nC3
-000A0D64 E6F1                       	smpsAlterVol        $F1
-000A0D66 10                         	dc.b	$10
-000A0D67 E607                       	smpsAlterVol        $07
-000A0D69 A5                         	dc.b	nC3
-000A0D6A E6F9                       	smpsAlterVol        $F9
-000A0D6C 08                         	dc.b	$08
-000A0D6D E607                       	smpsAlterVol        $07
-000A0D6F A5                         	dc.b	nC3
-000A0D70 E608                       	smpsAlterVol        $08
-000A0D72 A5                         	dc.b	nC3
-000A0D73 E6F1                       	smpsAlterVol        $F1
-000A0D75 01                         	dc.b	$01
-000A0D76 E0C0                       	smpsPan             panCenter, $00
-000A0D78 F6FF 6A                    	smpsJump            GentleBreeze_Jump01
-000A0D7B                            
-000A0D7B                            ; DAC Data
-000A0D7B                            GentleBreeze_DAC:
-000A0D7B 81                         	dc.b	dKick
-000A0D7C                            
-000A0D7C                            GentleBreeze_Loop00:
-000A0D7C 2018 2810 0881             	dc.b	$20, $18, $28, $10, $08, dKick
-000A0D82 F700 02FF F6               	smpsLoop            $00, $02, GentleBreeze_Loop00
-000A0D87 2018 7F80 2988 0889 8A8B+  	dc.b	$20, $18, $7F, nRst, $29, dHiTimpani, $08, dMidTimpani, dLowTimpani, dVLowTimpani, dKick
-000A0D92                            
-000A0D92                            GentleBreeze_Loop01:
-000A0D92 2018 2810 0881             	dc.b	$20, $18, $28, $10, $08, dKick
-000A0D98 F700 02FF F6               	smpsLoop            $00, $02, GentleBreeze_Loop01
-000A0D9D 2018 7F80 2988 0889 8A01   	dc.b	$20, $18, $7F, nRst, $29, dHiTimpani, $08, dMidTimpani, dLowTimpani, $01
-000A0DA7                            
-000A0DA7                            GentleBreeze_Jump00:
-000A0DA7 8007 8B08                  	dc.b	nRst, $07, dVLowTimpani, $08
-000A0DAB                            
-000A0DAB                            GentleBreeze_Loop02:
-000A0DAB 81                         	dc.b	dKick
-000A0DAC                            
-000A0DAC                            GentleBreeze_Loop03:
-000A0DAC 1008 8182 2081 1008 8182+  	dc.b	$10, $08, dKick, dSnare, $20, dKick, $10, $08, dKick, dSnare, $10, dMidTimpani
-000A0DB8 088A                       	dc.b	$08, dLowTimpani
-000A0DBA F700 03FF ED               	smpsLoop            $00, $03, GentleBreeze_Loop02
-000A0DBF 8110 0881 8210 8808 8982+  	dc.b	dKick, $10, $08, dKick, dSnare, $10, dHiTimpani, $08, dMidTimpani, dSnare, dLowTimpani, dVLowTimpani
-000A0DCB 1082 0881 18               	dc.b	$10, dSnare, $08, dKick, $18
-000A0DD0 F701 02FF D8               	smpsLoop            $01, $02, GentleBreeze_Loop03
-000A0DD5                            
-000A0DD5                            GentleBreeze_Loop04:
-000A0DD5 2018 2810 0881             	dc.b	$20, $18, $28, $10, $08, dKick
-000A0DDB F700 02FF F6               	smpsLoop            $00, $02, GentleBreeze_Loop04
-000A0DE0 2018 7F80 2988 0889 8A8B+  	dc.b	$20, $18, $7F, nRst, $29, dHiTimpani, $08, dMidTimpani, dLowTimpani, dVLowTimpani, dKick
-000A0DEB                            
-000A0DEB                            GentleBreeze_Loop05:
-000A0DEB 2018 2810 0881             	dc.b	$20, $18, $28, $10, $08, dKick
-000A0DF1 F700 02FF F6               	smpsLoop            $00, $02, GentleBreeze_Loop05
-000A0DF6 2018 7F80 2988 0889 8A01   	dc.b	$20, $18, $7F, nRst, $29, dHiTimpani, $08, dMidTimpani, dLowTimpani, $01
-000A0E00 F6FF A5                    	smpsJump            GentleBreeze_Jump00
-000A0E03                            
-000A0E03                            ; PSG 1 Data
-000A0E03                            GentleBreeze_PSG1:
-000A0E03 80                         	dc.b	nRst
-000A0E04                            
-000A0E04                            GentleBreeze_LoopPSG02:
-000A0E04 7F                         	dc.b	$7F
-000A0E05 F700 08FF FB               	smpsLoop            $00, $08, GentleBreeze_LoopPSG02
-000A0E0A 08                         	dc.b	$08
-000A0E0B EC04                       	smpsPSGAlterVol     $04
-000A0E0D                            
-000A0E0D                            GentleBreeze_JumpPSG01:
-000A0E0D A37F A07F 019E 7F7F 02A3+  	dc.b	nBb2, $7F, nG2, $7F, $01, nF2, $7F, $7F, $02, nBb2, $7F, $01
-000A0E19 A07F 019E 7F7F 0280        	dc.b	nG2, $7F, $01, nF2, $7F, $7F, $02, nRst
-000A0E21                            
-000A0E21                            GentleBreeze_LoopPSG03:
-000A0E21 7F                         	dc.b	$7F
-000A0E22 F700 08FF FB               	smpsLoop            $00, $08, GentleBreeze_LoopPSG03
-000A0E27 08A3 01                    	dc.b	$08, nBb2, $01
-000A0E2A F6FF E1                    	smpsJump            GentleBreeze_JumpPSG01
-000A0E2D                            
-000A0E2D                            ; PSG2 Data
-000A0E2D                            GentleBreeze_PSG2:
-000A0E2D 80                         	dc.b	nRst
-000A0E2E                            
-000A0E2E                            GentleBreeze_LoopPSG00:
-000A0E2E 7F                         	dc.b	$7F
-000A0E2F F700 08FF FB               	smpsLoop            $00, $08, GentleBreeze_LoopPSG00
-000A0E34 08                         	dc.b	$08
-000A0E35 EC04                       	smpsPSGAlterVol     $04
-000A0E37                            
-000A0E37                            GentleBreeze_JumpPSG00:
-000A0E37 A87F A77F 01A5 7F7F 02A8+  	dc.b	nEb3, $7F, nD3, $7F, $01, nC3, $7F, $7F, $02, nEb3, $7F, $01
-000A0E43 A77F 01A5 7F7F 0280        	dc.b	nD3, $7F, $01, nC3, $7F, $7F, $02, nRst
-000A0E4B                            
-000A0E4B                            GentleBreeze_LoopPSG01:
-000A0E4B 7F                         	dc.b	$7F
-000A0E4C F700 08FF FB               	smpsLoop            $00, $08, GentleBreeze_LoopPSG01
-000A0E51 08A8 01                    	dc.b	$08, nEb3, $01
-000A0E54 F6FF E1                    	smpsJump            GentleBreeze_JumpPSG00
-000A0E57                            
-000A0E57                            GentleBreeze_Voices:
-000A0E57                            ;	Voice $00
-000A0E57                            ;	$0C
-000A0E57                            ;	$2A, $70, $2A, $71, 	$1F, $1F, $1F, $1F, 	$0D, $04, $11, $0C
-000A0E57                            ;	$00, $00, $00, $01, 	$F3, $F4, $F1, $89, 	$7F, $7F, $18, $00
-000A0E57                            	smpsVcAlgorithm     $04
-000A0E57                            	smpsVcFeedback      $01
-000A0E57                            	smpsVcUnusedBits    $00
-000A0E57                            	smpsVcDetune        $07, $02, $07, $02
-000A0E57                            	smpsVcCoarseFreq    $01, $0A, $00, $0A
-000A0E57                            	smpsVcRateScale     $00, $00, $00, $00
-000A0E57                            	smpsVcAttackRate    $1F, $1F, $1F, $1F
-000A0E57                            	smpsVcAmpMod        $00, $00, $00, $00
-000A0E57                            	smpsVcDecayRate1    $0C, $11, $04, $0D
-000A0E57                            	smpsVcDecayRate2    $01, $00, $00, $00
-000A0E57                            	smpsVcDecayLevel    $08, $0F, $0F, $0F
-000A0E57                            	smpsVcReleaseRate   $09, $01, $04, $03
-000A0E57 0C2A 702A 711F 1F1F 1F0D+  	smpsVcTotalLevel    $00, $18, $7F, $7F
-000A0E70                            
-000A0E70                            ;	Voice $01
-000A0E70                            ;	$38
-000A0E70                            ;	$54, $17, $70, $30, 	$9F, $1F, $9F, $1F, 	$12, $02, $0A, $0A
-000A0E70                            ;	$00, $10, $00, $00, 	$05, $05, $05, $08, 	$21, $35, $10, $00
-000A0E70                            	smpsVcAlgorithm     $00
-000A0E70                            	smpsVcFeedback      $07
-000A0E70                            	smpsVcUnusedBits    $00
-000A0E70                            	smpsVcDetune        $03, $07, $01, $05
-000A0E70                            	smpsVcCoarseFreq    $00, $00, $07, $04
-000A0E70                            	smpsVcRateScale     $00, $02, $00, $02
-000A0E70                            	smpsVcAttackRate    $1F, $1F, $1F, $1F
-000A0E70                            	smpsVcAmpMod        $00, $00, $00, $00
-000A0E70                            	smpsVcDecayRate1    $0A, $0A, $02, $12
-000A0E70                            	smpsVcDecayRate2    $00, $00, $10, $00
-000A0E70                            	smpsVcDecayLevel    $00, $00, $00, $00
-000A0E70                            	smpsVcReleaseRate   $08, $05, $05, $05
-000A0E70 3854 1770 309F 1F9F 1F12+  	smpsVcTotalLevel    $00, $10, $35, $21
-000A0E89                            
-000A0E89                            ;	Voice $02
-000A0E89                            ;	$00
-000A0E89                            ;	$00, $00, $00, $00, 	$00, $00, $00, $00, 	$00, $00, $00, $00
-000A0E89                            ;	$00, $00, $00, $00, 	$FF, $FF, $FF, $FF, 	$00, $00, $00, $00
-000A0E89                            	smpsVcAlgorithm     $00
-000A0E89                            	smpsVcFeedback      $00
-000A0E89                            	smpsVcUnusedBits    $00
-000A0E89                            	smpsVcDetune        $00, $00, $00, $00
-000A0E89                            	smpsVcCoarseFreq    $00, $00, $00, $00
-000A0E89                            	smpsVcRateScale     $00, $00, $00, $00
-000A0E89                            	smpsVcAttackRate    $00, $00, $00, $00
-000A0E89                            	smpsVcAmpMod        $00, $00, $00, $00
-000A0E89                            	smpsVcDecayRate1    $00, $00, $00, $00
-000A0E89                            	smpsVcDecayRate2    $00, $00, $00, $00
-000A0E89                            	smpsVcDecayLevel    $0F, $0F, $0F, $0F
-000A0E89                            	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-000A0E89 0000 0000 0000 0000 0000+  	smpsVcTotalLevel    $00, $00, $00, $00
-000A0EA2                            
-000A0EA2                            ;	Voice $03
-000A0EA2                            ;	$36
-000A0EA2                            ;	$0F, $0F, $08, $09, 	$16, $18, $00, $1F, 	$0F, $16, $0C, $0B
-000A0EA2                            ;	$00, $12, $00, $00, 	$06, $2F, $4F, $4F, 	$00, $00, $65, $53
-000A0EA2                            	smpsVcAlgorithm     $06
-000A0EA2                            	smpsVcFeedback      $06
-000A0EA2                            	smpsVcUnusedBits    $00
-000A0EA2                            	smpsVcDetune        $00, $00, $00, $00
-000A0EA2                            	smpsVcCoarseFreq    $09, $08, $0F, $0F
-000A0EA2                            	smpsVcRateScale     $00, $00, $00, $00
-000A0EA2                            	smpsVcAttackRate    $1F, $00, $18, $16
-000A0EA2                            	smpsVcAmpMod        $00, $00, $00, $00
-000A0EA2                            	smpsVcDecayRate1    $0B, $0C, $16, $0F
-000A0EA2                            	smpsVcDecayRate2    $00, $00, $12, $00
-000A0EA2                            	smpsVcDecayLevel    $04, $04, $02, $00
-000A0EA2                            	smpsVcReleaseRate   $0F, $0F, $0F, $06
-000A0EA2 360F 0F08 0916 1800 1F0F+  	smpsVcTotalLevel    $53, $65, $00, $00
-000A0EBB                            
-000A0EBB                            ;	Voice $04
-000A0EBB                            ;	$07
-000A0EBB                            ;	$05, $53, $64, $75, 	$5C, $5C, $5C, $1C, 	$17, $17, $17, $17
-000A0EBB                            ;	$00, $00, $00, $00, 	$26, $26, $26, $26, 	$00, $00, $00, $00
-000A0EBB                            	smpsVcAlgorithm     $07
-000A0EBB                            	smpsVcFeedback      $00
-000A0EBB                            	smpsVcUnusedBits    $00
-000A0EBB                            	smpsVcDetune        $07, $06, $05, $00
-000A0EBB                            	smpsVcCoarseFreq    $05, $04, $03, $05
-000A0EBB                            	smpsVcRateScale     $00, $01, $01, $01
-000A0EBB                            	smpsVcAttackRate    $1C, $1C, $1C, $1C
-000A0EBB                            	smpsVcAmpMod        $00, $00, $00, $00
-000A0EBB                            	smpsVcDecayRate1    $17, $17, $17, $17
-000A0EBB                            	smpsVcDecayRate2    $00, $00, $00, $00
-000A0EBB                            	smpsVcDecayLevel    $02, $02, $02, $02
-000A0EBB                            	smpsVcReleaseRate   $06, $06, $06, $06
-000A0EBB 0705 5364 755C 5C5C 1C17+  	smpsVcTotalLevel    $00, $00, $00, $00
-000A0ED4                            
-000A0ED4                            ;	Voice $05
-000A0ED4                            ;	$3C
-000A0ED4                            ;	$21, $21, $63, $61, 	$13, $10, $14, $0E, 	$09, $0B, $0B, $10
-000A0ED4                            ;	$04, $04, $04, $04, 	$17, $17, $17, $27, 	$1C, $02, $1B, $00
-000A0ED4                            	smpsVcAlgorithm     $04
-000A0ED4                            	smpsVcFeedback      $07
-000A0ED4                            	smpsVcUnusedBits    $00
-000A0ED4                            	smpsVcDetune        $06, $06, $02, $02
-000A0ED4                            	smpsVcCoarseFreq    $01, $03, $01, $01
-000A0ED4                            	smpsVcRateScale     $00, $00, $00, $00
-000A0ED4                            	smpsVcAttackRate    $0E, $14, $10, $13
-000A0ED4                            	smpsVcAmpMod        $00, $00, $00, $00
-000A0ED4                            	smpsVcDecayRate1    $10, $0B, $0B, $09
-000A0ED4                            	smpsVcDecayRate2    $04, $04, $04, $04
-000A0ED4                            	smpsVcDecayLevel    $02, $01, $01, $01
-000A0ED4                            	smpsVcReleaseRate   $07, $07, $07, $07
-000A0ED4 3C21 2163 6113 1014 0E09+  	smpsVcTotalLevel    $00, $1B, $02, $1C
-000A0EED                            
-000A0EED                            
-000A0EEE 00                         		even
-000A0EEE                            ; ---------------------------------------------------------------------------
-000A0EEE                            ; Sound	effect pointers
-000A0EEE                            ; ---------------------------------------------------------------------------
-000A0EEE 0000 0000 0000 0000 0000+  SoundIndex:	dc.l SoundA0, SoundA1, SoundA2
-000A0EFA 0000 0000 0000 0000 0000+  		dc.l SoundA3, SoundA4, SoundA5
-000A0F06 0000 0000 0000 0000 0000+  		dc.l SoundA6, SoundA7, SoundA8
-000A0F12 0000 0000 0000 0000 0000+  		dc.l SoundA9, SoundAA, SoundAB
-000A0F1E 0000 0000 0000 0000 0000+  		dc.l SoundAC, SoundAD, SoundAE
-000A0F2A 0000 0000 0000 0000 0000+  		dc.l SoundAF, SoundB0, SoundB1
-000A0F36 0000 0000 0000 0000 0000+  		dc.l SoundB2, SoundB3, SoundB4
-000A0F42 0000 0000 0000 0000 0000+  		dc.l SoundB5, SoundB6, SoundB7
-000A0F4E 0000 0000 0000 0000 0000+  		dc.l SoundB8, SoundB9, SoundBA
-000A0F5A 0000 0000 0000 0000 0000+  		dc.l SoundBB, SoundBC, SoundBD
-000A0F66 0000 0000 0000 0000 0000+  		dc.l SoundBE, SoundBF, SoundC0
-000A0F72 0000 0000 0000 0000 0000+  		dc.l SoundC1, SoundC2, SoundC3
-000A0F7E 0000 0000 0000 0000 0000+  		dc.l SoundC4, SoundC5, SoundC6
-000A0F8A 0000 0000 0000 0000 0000+  		dc.l SoundC7, SoundC8, SoundC9
-000A0F96 0000 0000 0000 0000 0000+  		dc.l SoundCA, SoundCB, SoundCC
-000A0FA2 0000 0000 0000 0000 0000+  		dc.l SoundCD, SoundCE, SoundCF
-000A0FAE 0000 0000                  SoundD0Index:	dc.l SoundD0
-000A0FB2                            SoundA0:	incbin	sound\soundA0.bin
-000A0FC8                            		even
-000A0FC8                            SoundA1:	incbin	sound\soundA1.bin
-000A0FF2                            		even
-000A0FF2                            SoundA2:	incbin	sound\soundA2.bin
-000A1012                            		even
-000A1012                            SoundA3:	incbin	sound\soundA3.bin
-000A1044                            		even
-000A1044                            SoundA4:	incbin	sound\soundA4.bin
-000A107A                            		even
-000A107A                            SoundA5:	include	sound\fart.asm
-000A107A                            Fart_Header:
-000A107A =00000001                  smpsHeaderStartSong = 1
-000A107A 0000                       	smpsHeaderVoice     Fart_Voices
-000A107C 01                         	smpsHeaderTempoSFX  $01
-000A107D 04                         	smpsHeaderChanSFX   $04
-000A107E                            
-000A1096                            
-000A1096                            Fart_FM3:
-000A1098 E607                       	smpsAlterVol        $07
-000A109A E0C0                       	smpsPan             panCenter, $00
-000A109C F000 0210 03               	smpsModSet          $00, $02, $10, $03
-000A10A1 A003 E7                    	dc.b	nG2, $03, smpsNoAttack
-000A10A4 E1FE                       	smpsAlterNote       $FE
-000A10A6 A201 E7                    	dc.b	nA2, $01, smpsNoAttack
-000A10A9 E100                       	smpsAlterNote       $00
-000A10AB A211 807F 2C               	dc.b	nA2, $11, nRst, $7F, $2C
-000A10B0 F2                         	smpsStop
-000A10B1                            
-000A10B1                            ; FM4 Data
-000A10B1                            Fart_FM4:
-000A10B3 E0C0                       	smpsPan             panCenter, $00
-000A10B5 8006                       	dc.b	nRst, $06
-000A10B9 E616                       	smpsAlterVol        $16
-000A10BB E080                       	smpsPan             panLeft, $00
-000A10BD F000 0210 03               	smpsModSet          $00, $02, $10, $03
-000A10C2 A212                       	dc.b	nA2, $12
-000A10C4 E60A                       	smpsAlterVol        $0A
-000A10C6 E7A2 0C                    	dc.b	smpsNoAttack, nA2, $0C
-000A10C9 E603                       	smpsAlterVol        $03
-000A10CB E7A2                       	dc.b	smpsNoAttack, nA2
-000A10CD E603                       	smpsAlterVol        $03
-000A10CF E7A2                       	dc.b	smpsNoAttack, nA2
-000A10D1 E604                       	smpsAlterVol        $04
-000A10D3 E7A2                       	dc.b	smpsNoAttack, nA2
-000A10D5 E606                       	smpsAlterVol        $06
-000A10D7 E7A2 18                    	dc.b	smpsNoAttack, nA2, $18
-000A10DA E610                       	smpsAlterVol        $10
-000A10DC E7A2 0C                    	dc.b	smpsNoAttack, nA2, $0C
-000A10DF E610                       	smpsAlterVol        $10
-000A10E1 E7A2 1280 42               	dc.b	smpsNoAttack, nA2, $12, nRst, $42
-000A10E6 F2                         	smpsStop
-000A10E7                            
-000A10E7                            ; FM5 Data
-000A10E7                            Fart_FM5:
-000A10E9 E0C0                       	smpsPan             panCenter, $00
-000A10EB 8009                       	dc.b	nRst, $09
-000A10EF E616                       	smpsAlterVol        $16
-000A10F1 E040                       	smpsPan             panRight, $00
-000A10F3 F000 0210 03               	smpsModSet          $00, $02, $10, $03
-000A10F8 A215                       	dc.b	nA2, $15
-000A10FA E60A                       	smpsAlterVol        $0A
-000A10FC E7A2 0C                    	dc.b	smpsNoAttack, nA2, $0C
-000A10FF E603                       	smpsAlterVol        $03
-000A1101 E7A2                       	dc.b	smpsNoAttack, nA2
-000A1103 E603                       	smpsAlterVol        $03
-000A1105 E7A2                       	dc.b	smpsNoAttack, nA2
-000A1107 E604                       	smpsAlterVol        $04
-000A1109 E7A2                       	dc.b	smpsNoAttack, nA2
-000A110B E606                       	smpsAlterVol        $06
-000A110D E7A2 15                    	dc.b	smpsNoAttack, nA2, $15
-000A1110 E610                       	smpsAlterVol        $10
-000A1112 E7A2 0C                    	dc.b	smpsNoAttack, nA2, $0C
-000A1115 E610                       	smpsAlterVol        $10
-000A1117 E7A2 1280 3F               	dc.b	smpsNoAttack, nA2, $12, nRst, $3F
-000A111C F2                         	smpsStop
-000A111D                            
-000A111D                            ; PSG3 Data
-000A111D                            Fart_PSG3:
-000A111D F2                         	smpsStop
-000A111E                            
-000A111E                            ; FM Voices
-000A111E                            Fart_Voices:
-000A111E                            ;	Voice $00
-000A111E                            ;	$39
-000A111E                            ;	$70, $32, $71, $01, 	$DF, $DF, $DF, $1F, 	$04, $00, $00, $00
-000A111E                            ;	$1F, $16, $00, $00, 	$E0, $00, $09, $FA, 	$12, $00, $00, $00
-000A111E                            	smpsVcAlgorithm     $01
-000A111E                            	smpsVcFeedback      $07
-000A111E                            	smpsVcUnusedBits    $00
-000A111E                            	smpsVcDetune        $00, $07, $03, $07
-000A111E                            	smpsVcCoarseFreq    $01, $01, $02, $00
-000A111E                            	smpsVcRateScale     $00, $03, $03, $03
-000A111E                            	smpsVcAttackRate    $1F, $1F, $1F, $1F
-000A111E                            	smpsVcAmpMod        $00, $00, $00, $00
-000A111E                            	smpsVcDecayRate1    $00, $00, $00, $04
-000A111E                            	smpsVcDecayRate2    $00, $00, $16, $1F
-000A111E                            	smpsVcDecayLevel    $0F, $00, $00, $0E
-000A111E                            	smpsVcReleaseRate   $0A, $09, $00, $00
-000A111E 3970 3271 01DF DFDF 1F04+  	smpsVcTotalLevel    $00, $00, $00, $12
-000A1137                            
-000A1137                            ;	Voice $01
-000A1137                            ;	$00
-000A1137                            ;	$00, $00, $00, $00, 	$00, $00, $00, $00, 	$00, $00, $00, $00
-000A1137                            ;	$00, $00, $00, $00, 	$FF, $FF, $FF, $FF, 	$00, $00, $00, $00
-000A1137                            	smpsVcAlgorithm     $00
-000A1137                            	smpsVcFeedback      $00
-000A1137                            	smpsVcUnusedBits    $00
-000A1137                            	smpsVcDetune        $00, $00, $00, $00
-000A1137                            	smpsVcCoarseFreq    $00, $00, $00, $00
-000A1137                            	smpsVcRateScale     $00, $00, $00, $00
-000A1137                            	smpsVcAttackRate    $00, $00, $00, $00
-000A1137                            	smpsVcAmpMod        $00, $00, $00, $00
-000A1137                            	smpsVcDecayRate1    $00, $00, $00, $00
-000A1137                            	smpsVcDecayRate2    $00, $00, $00, $00
-000A1137                            	smpsVcDecayLevel    $0F, $0F, $0F, $0F
-000A1137                            	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-000A1137 0000 0000 0000 0000 0000+  	smpsVcTotalLevel    $00, $00, $00, $00
-000A1137 0000 0000 0000 0000 0000+  	smpsVcTotalLevel    $00, $00, $00, $00
-000A1150                            		even
-000A1150                            SoundA6:	incbin	sound\soundA6.bin
-000A1180                            		even
-000A1180                            SoundA7:	incbin	sound\soundA7.bin
-000A11B0                            		even
-000A11B0                            SoundA8:	incbin	sound\soundA8.bin
-000A11E4                            		even
-000A11E4                            SoundA9:	incbin	sound\soundA9.bin
-000A11F6                            		even
-000A11F6                            SoundAA:	incbin	sound\soundAA.bin
-000A1238                            		even
-000A1238                            SoundAB:	incbin	sound\soundAB.bin
-000A1258                            		even
-000A1258                            SoundAC:	incbin	sound\soundAC.bin
-000A128C                            		even
-000A128C                            SoundAD:	incbin	sound\soundAD.bin
-000A12C2                            		even
-000A12C2                            SoundAE:	incbin	sound\soundAE.bin
-000A130C                            		even
-000A130C                            SoundAF:	incbin	sound\soundAF.bin
-000A133A                            		even
-000A133A                            SoundB0:	incbin	sound\soundB0.bin
-000A136C                            		even
-000A136C                            SoundB1:	incbin	sound\soundB1.bin
-000A1398                            		even
-000A1398                            SoundB2:	incbin	sound\soundB2.bin
-000A13E8                            		even
-000A13E8                            SoundB3:	incbin	sound\soundB3.bin
-000A1432                            		even
-000A1432                            SoundB4:	include	sound\soundB4.asm
-000A1432                            SndB4_Bumper_Header:
-000A1432 =00000001                  smpsHeaderStartSong = 1
-000A1432 0000                       	smpsHeaderVoice     SndB4_Bumper_Voices
-000A1434 01                         	smpsHeaderTempoSFX  $01
-000A1435 03                         	smpsHeaderChanSFX   $03
-000A1436                            
-000A1448                            
-000A1448                            ; FM5 Data
-000A1448                            SndB4_Bumper_FM5:
-000A144A F600 00                    	smpsJump            SndB4_Bumper_Jump00
-000A144D                            
-000A144D                            ; FM4 Data
-000A144D                            SndB4_Bumper_FM4:
-000A144D F2                         	smpsStop
-000A144E                            
-000A144E                            SndB4_Bumper_Jump00:
-000A144E A020                       	dc.b	nG2, $20
-000A1450 F2                         	smpsStop
-000A1451                            
-000A1451                            ; FM3 Data
-000A1451                            SndB4_Bumper_FM3:
-000A1451 F2                         	smpsStop
-000A1452                            
-000A1452                            SndB4_Bumper_Voices:
-000A1452                            ;	Voice $00
-000A1452                            ;	$32
-000A1452                            ;	$04, $20, $70, $70, 	$1F, $1F, $1F, $1F, 	$09, $00, $00, $08
-000A1452                            ;	$09, $00, $00, $0B, 	$00, $00, $00, $0F, 	$0C, $00, $30, $00
-000A1452                            	smpsVcAlgorithm     $02
-000A1452                            	smpsVcFeedback      $06
-000A1452                            	smpsVcUnusedBits    $00
-000A1452                            	smpsVcDetune        $07, $07, $02, $00
-000A1452                            	smpsVcCoarseFreq    $00, $00, $00, $04
-000A1452                            	smpsVcRateScale     $00, $00, $00, $00
-000A1452                            	smpsVcAttackRate    $1F, $1F, $1F, $1F
-000A1452                            	smpsVcAmpMod        $00, $00, $00, $00
-000A1452                            	smpsVcDecayRate1    $08, $00, $00, $09
-000A1452                            	smpsVcDecayRate2    $0B, $00, $00, $09
-000A1452                            	smpsVcDecayLevel    $00, $00, $00, $00
-000A1452                            	smpsVcReleaseRate   $0F, $00, $00, $00
-000A1452 3204 2070 701F 1F1F 1F09+  	smpsVcTotalLevel    $00, $30, $00, $0C
-000A1452 3204 2070 701F 1F1F 1F09+  	smpsVcTotalLevel    $00, $30, $00, $0C
-000A146C 00                         		even
-000A146C                            SoundB5:	incbin	sound\soundB5.bin
-000A148A 00                         		even
-000A148A                            SoundB6:	incbin	sound\soundB6.bin
-000A14A8                            		even
-000A14A8                            SoundB7:	incbin	sound\soundB7.bin
-000A14E4                            		even
-000A14E4                            SoundB8:	incbin	sound\soundB8.bin
-000A1502                            		even
-000A1502                            SoundB9:	incbin	sound\soundB9.bin
-000A1566                            		even
-000A1566                            SoundBA:	incbin	sound\soundBA.bin
-000A158E                            		even
-000A158E                            SoundBB:	incbin	sound\soundBB.bin
-000A15BA                            		even
-000A15BA                            SoundBC:	incbin	sound\soundBC.bin
-000A15FC                            		even
-000A15FC                            SoundBD:	incbin	sound\soundBD.bin
-000A1650                            		even
-000A1650                            SoundBE:	incbin	sound\soundBE.bin
-000A168A                            		even
-000A168A                            SoundBF:	incbin	sound\soundBF.bin
-000A16FC                            		even
-000A16FC                            SoundC0:	incbin	sound\soundC0.bin
-000A172A                            		even
-000A172A                            SoundC1:	incbin	sound\soundC1.bin
-000A1784                            		even
-000A1784                            SoundC2:	incbin	sound\soundC2.bin
-000A17AE                            		even
-000A17AE                            SoundC3:	incbin	sound\soundC3.bin
-000A1828                            		even
-000A1828                            SoundC4:	incbin	sound\soundC4.bin
-000A1926                            		even
-000A1926                            SoundC5:	incbin	sound\soundC5.bin
-000A198E                            		even
-000A198E                            SoundC6:	incbin	sound\soundC6.bin
-000A19D0                            		even
-000A19D0                            SoundC7:	incbin	sound\soundC7.bin
-000A19FE                            		even
-000A19FE                            SoundC8:	incbin	sound\soundC8.bin
-000A1A10                            		even
-000A1A10                            SoundC9:	incbin	sound\soundC9.bin
-000A1A3E                            		even
-000A1A3E                            SoundCA:	incbin	sound\soundCA.bin
-000A1A6C                            		even
-000A1A6C                            SoundCB:	incbin	sound\soundCB.bin
-000A1AB8                            		even
-000A1AB8                            SoundCC:	incbin	sound\C9.ssf
-000A1AE6                            		even
-000A1AE6                            SoundCD:	incbin	sound\soundCD.bin
-000A1B12                            		even
-000A1B12                            SoundCE:	incbin	sound\soundCE.bin
-000A1B30 00                         		even
-000A1B30                            SoundCF:	incbin	sound\soundCF.bin
-000A1B68                            		even
-000A1B68                            SoundD0:	incbin	sound\soundD0.bin
-000A1BA2                            		even
-000A1BA2                            SegaPCM:	incbin	sound\segapcm.bin
-000BBCF8                            SegaPCM_end:	even
-000BBCF8                            
-000BBCF8                            IdiotPCM:	incbin	sound\youare.bin
-000C5DCA 00                         IdiotPCM_end:	even
-000C5DCA                            
-000C5DCA                            Minecraft:	include	minecraft\code\main.asm
-000C5DCA                            ; Minecraft: Very Legacy Console Edition
-000C5DCA                            ; Main file
-000C5DCA                            
-000C5DCA                            	include	minecraft\code\variables.asm
-000C5DCA                            ; Minecraft: Very Legacy Console Edition
-000C5DCA                            ; Variable Definitions
-000C5DCA                            
-000C5DCA =00000040                  MAP_HEIGHT	equ	64
-000C5DCA =00000100                  MAP_WIDTH	equ	256
-000C5DCA                            
-000C5DCA                            		rsset	$FF0000
-000C5DCA =00FF0000                  mapWallBlocks	rs.b	MAP_HEIGHT*MAP_WIDTH	; wall layer layout data
-000C5DCA =00FF4000                  mapCollBlocks	rs.b	MAP_HEIGHT*MAP_WIDTH	; collision layer layout data
-000C5DCA                            
-000C5DCA                            		rsset	$FFFF8000
-000C5DCA =FFFF8000                  planeBuffer	rs.w	29*64			; foreground plane buffer
-000C5DCA                            
-000C5DCA =FFFF8E80                  camXPosFG	rs.w	1			; camera foreground layout x position
-000C5DCA =FFFF8E82                  camYposFG	rs.w	1			; camera foreground layout y position
-000C5DCA =FFFF8E84                  camXPosBG	rs.w	1			; camera background layout x position
-000C5DCA =FFFF8E86                  camYposBG	rs.w	1			; camera background layout y position
-000C5DCA =FFFF8E86                  camYposBG	rs.w	1			; camera background layout y position
-000C5DCA                            
-000C5DCA                            MC_Init:
-000C5DCA 007C 0700                  		ori	#$700,sr		; disables CPU interrupts
-000C5DCE 4DF9 00C0 0004             		lea	($C00004).l,a6	;	; load the address of the VDP control port into a6
-000C5DD4                            
-000C5DD4 3CBC 8134                  		move.w	#$8134,(a6)		; disable display
-000C5DD8 6100 0000                  		bsr.w	MC_ClearScreen		; clear VRAM, CRAM, and VSRAM
-000C5DDC 6100 0000                  		bsr.w	MC_LoadPalette		; load in the palette
-000C5DE0 3CBC 8174                  		move.w	#$8174,(a6)		; enable display
-000C5DE4                            
-000C5DE4                            
-000C5DE4                            
-000C5DE4 6000 FFFE                  		bra.w	*			; spin infinitely
-000C5DE8                            
-000C5DE8                            ; ===========================================================================
-000C5DE8                            ; ---------------------------------------------------------------------------
-000C5DE8                            ; Clear The Screen
-000C5DE8                            ; ---------------------------------------------------------------------------
-000C5DE8                            MC_ClearScreen:
-000C5DE8 3CBC 8F01                  		move.w	#$8F01,(a6)		; set auto-incremement size to byte
-000C5DEC                            
-000C5DEC 2CBC 94FF 93FF             		move.l	#$94FF93FF,(a6)		; clear the VRAM
-000C5DF2 3CBC 9780                  		move.w	#$9780,(a6)		; ^
-000C5DF6 2CBC 4000 0080             		move.l	#$40000080,(a6)		; ^
-000C5DFC 3D7C 0000 FFFC             		move.w	#0,-4(a6)		; ^
-000C5E02                            
-000C5E02 44D6                       .waitVRAMClr:	move.w	(a6),ccr		; is a DMA in progress?
-000C5E04 69FC                       		bvs.s	.waitVRAMClr		; if so, loop until DMA is complete
-000C5E06                            
-000C5E06 2CBC 9400 937F             		move.l	#$9400937F,(a6)		; clear the CRAM
-000C5E0C 3CBC 9780                  		move.w	#$9780,(a6)		; ^
-000C5E10 2CBC C000 0080             		move.l	#$C0000080,(a6)		; ^
-000C5E16 3D7C 0000 FFFC             		move.w	#0,-4(a6)		; ^
-000C5E1C                            
-000C5E1C 44D6                       .waitCRAMClr:	move.w	(a6),ccr		; is a DMA in progress?
-000C5E1E 69FC                       		bvs.s	.waitCRAMClr		; if so, loop until DMA is complete
-000C5E20                            
-000C5E20 2CBC 9400 935F             		move.l	#$9400935F,(a6)		; clear the VSRAM
-000C5E26 3CBC 9780                  		move.w	#$9780,(a6)		; ^
-000C5E2A 2CBC 4000 0090             		move.l	#$40000090,(a6)		; ^
-000C5E30 3D7C 0000 FFFC             		move.w	#0,-4(a6)		; ^
-000C5E36                            
-000C5E36 44D6                       .waitVSRAMClr:	move.w	(a6),ccr		; is a DMA in progress?
-000C5E38 69FC                       		bvs.s	.waitVSRAMClr		; if so, loop until DMA is complete
-000C5E3A                            
-000C5E3A 3CBC 8F02                  		move.w	#$8F02,(a6)		; set auto-incremement size to word
-000C5E3E 4E75                       		rts				; return
-000C5E40                            ; ---------------------------------------------------------------------------
-000C5E40                            
-000C5E40                            ; ===========================================================================
-000C5E40                            ; ---------------------------------------------------------------------------
-000C5E40                            ; Load The Palette
-000C5E40                            ; ---------------------------------------------------------------------------
-000C5E40                            MC_LoadPalette:
-000C5E40 44D6                       		move.w	(a6),ccr		; is v-blank active?
-000C5E42 6AFC                       		bpl.s	MC_LoadPalette		; if not, wait for it to start
-000C5E44                            
-000C5E44                            .updatePalette:
-000C5E44 2CBC 9400 9340             		move.l	#$94009340,(a6)		; set the DMA transfer size (64 colors)
-000C5E4A                            		
-000C5E4A 4BFA 0000                  		lea	MC_Palette(pc),a5	; load the base address of the palette data (pc relative)
-000C5E4E 200D                       		move.l	a5,d0			; move the address to a data register so we can modify it
-000C5E50 E288                       		lsr.l	#1,d0			; divide by two
-000C5E52                            
-000C5E52 323C 9500                  		move.w	#$9500,d1		; set the low byte of the transfer source address
-000C5E56 1200                       		move.b	d0,d1			; ^
-000C5E58 3C81                       		move.w	d1,(a6)			; ^
-000C5E5A                            
-000C5E5A E088                       		lsr.l	#8,d0			; set the middle byte of the transfer source address
-000C5E5C 323C 9600                  		move.w	#$9600,d1		; ^
-000C5E60 1200                       		move.b	d0,d1			; ^
-000C5E62 3C81                       		move.w	d1,(a6)			; ^
-000C5E64                            
-000C5E64 E088                       		lsr.l	#8,d0			; set the high byte of the transfer source address
-000C5E66 323C 9700                  		move.w	#$9700,d1		; ^
-000C5E6A 1200                       		move.b	d0,d1			; ^
-000C5E6C 3C81                       		move.w	d1,(a6)			; ^
-000C5E6E                            
-000C5E6E 2CBC C000 0080             		move.l	#$C0000080,(a6)		; set the destination palette index and begin the transfer
-000C5E74                            
-000C5E74                            .waitForScan:
-000C5E74                            	;	move.w	(a6),ccr		; is v-blank still active?
-000C5E74                            	;	bmi.s	.waitForScan		; if so, wait for active scan before returning
-000C5E74 4E75                       		rts				; return
-000C5E76                            ; ---------------------------------------------------------------------------
-000C5E76                            
-000C5E76                            MC_Palette:
-000C5E76 0E86 08AE 068E 046C 0246+  	dc.w	$E86, $8AE, $68E, $46C, $246, $024, $CC0, $AA0, $C46, $824, $EEE, $444, $222, $000, $000, $000
-000C5E96 0000 0CCC 0AAA 0888 0666+  	dc.w	$000, $CCC, $AAA, $888, $666, $444, $222, $4EE, $6AE, $48C, $26A, $048, $026, $4E6, $2C4, $080
-000C5EB6 0EEE 0EEE 0EEE 0EEE 0EEE+  	dc.w	$EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE
-000C5ED6 0EEE 0EEE 0EEE 0EEE 0EEE+  	dc.w	$EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE
-000C5ED6 0EEE 0EEE 0EEE 0EEE 0EEE+  	dc.w	$EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE
-000C5EF6                            ; end of 'ROM'
-000C5EF6                            EndOfRom:
-000C5EF6                            
-000C5EF6                            
+000A0D80 00                         		even
+000A0D80                            Music95:	incbin	sound\music95.bin ; Green Hill Act 3
+000A0DBA 00                         		even
+000A0DBA                            Music96:	incbin	sound\music96.bin ; Labyrinth Act 2
+000A0DF4 00                         		even
+000A0DF4                            Music97:	incbin	sound\music97.bin ; Labyrinth Act 3
+000A0E2E 00                         		even
+000A0E2E                            Music98:	incbin	sound\music98.bin ; Marble Act 2
+000A0E68 00                         		even
+000A0E68                            Music99:	incbin	sound\music99.bin ; Marble Act 3
+000A0EA2 00                         		even
+000A0EA2                            Music9A:	incbin	sound\music9A.bin ; Star Light Act 2
+000A0EDC 00                         		even
+000A0EDC                            Music9B:	incbin	sound\music9B.bin ; Star Light Act 3
+000A0F16 00                         		even
+000A0F16                            Music9C:	incbin	sound\music9C.bin ; Spring Yard Act 2
+000A0F50 00                         		even
+000A0F50                            Music9D:	incbin	sound\music9D.bin ; Spring Yard Act 3
+000A0F8A 00                         		even
+000A0F8A                            Music9E:	incbin	sound\music9E.bin ; Scrap Brain Act 2
+000A147A                            		even
+000A147A                            Music9F:	include	sound\music9F.asm ; Scrap Brain Act 3
+000A147A                            GentleBreeze_Header:
+000A147A =00000001                  smpsHeaderStartSong = 1
+000A147A 0000                       	smpsHeaderVoice     GentleBreeze_Voices
+000A147C 0603                       	smpsHeaderChan      $06, $03
+000A147E 0100                       	smpsHeaderTempo     $01, $00
+000A1480                            
+000A1484 0000 0000                  	smpsHeaderFM        GentleBreeze_FM1,	$00, $00
+000A1488 0000 0000                  	smpsHeaderFM        GentleBreeze_FM2,	$00, $00
+000A148C 0000 0000                  	smpsHeaderFM        GentleBreeze_FM3,	$00, $00
+000A1490 0000 0000                  	smpsHeaderFM        GentleBreeze_FM4,	$00, $00
+000A1494 0000 0000                  	smpsHeaderFM        GentleBreeze_FM5,	$00, $00
+000A1498 0000 0000 0000             	smpsHeaderPSG       GentleBreeze_PSG1,	$00, $00, $00, $00
+000A149E 0000 0000 0000             	smpsHeaderPSG       GentleBreeze_PSG2,	$00, $00, $00, $00
+000A14A4 0000 0000 0000             	smpsHeaderPSG       GentleBreeze_PSG3,	$00, $00, $00, $00
+000A14AA                            
+000A14AA                            ; PSG3 Data
+000A14AA                            GentleBreeze_PSG3:
+000A14AA F2                         	smpsStop
+000A14AB                            
+000A14AB                            ; FM1 Data
+000A14AB                            GentleBreeze_FM1:
+000A14AD E0C0                       	smpsPan             panCenter, $00
+000A14AF E1FF                       	smpsAlterNote       $FF
+000A14B1 C410                       	dc.b	nG5, $10
+000A14B3 E60F                       	smpsAlterVol        $0F
+000A14B5 C4                         	dc.b	nG5
+000A14B6 E6F1                       	smpsAlterVol        $F1
+000A14B8 E100                       	smpsAlterNote       $00
+000A14BA C2                         	dc.b	nF5
+000A14BB E60F                       	smpsAlterVol        $0F
+000A14BD 08                         	dc.b	$08
+000A14BE E6F1                       	smpsAlterVol        $F1
+000A14C0 C010                       	dc.b	nEb5, $10
+000A14C2 E60F                       	smpsAlterVol        $0F
+000A14C4 C0                         	dc.b	nEb5
+000A14C5 E6F1                       	smpsAlterVol        $F1
+000A14C7 BDC0 C208 C910             	dc.b	nC5, nEb5, nF5, $08, nC6, $10
+000A14CD E60F                       	smpsAlterVol        $0F
+000A14CF C9                         	dc.b	nC6
+000A14D0 E6F1                       	smpsAlterVol        $F1
+000A14D2 C5                         	dc.b	nAb5
+000A14D3 E60F                       	smpsAlterVol        $0F
+000A14D5 08                         	dc.b	$08
+000A14D6 E6F1                       	smpsAlterVol        $F1
+000A14D8 C010                       	dc.b	nEb5, $10
+000A14DA E60F                       	smpsAlterVol        $0F
+000A14DC C0                         	dc.b	nEb5
+000A14DD E6F1                       	smpsAlterVol        $F1
+000A14DF C208                       	dc.b	nF5, $08
+000A14E1 E1FF                       	smpsAlterNote       $FF
+000A14E3 C410                       	dc.b	nG5, $10
+000A14E5 E100                       	smpsAlterNote       $00
+000A14E7 C5C7                       	dc.b	nAb5, nBb5
+000A14E9 E60F                       	smpsAlterVol        $0F
+000A14EB C7                         	dc.b	nBb5
+000A14EC E6F1                       	smpsAlterVol        $F1
+000A14EE C5                         	dc.b	nAb5
+000A14EF E60F                       	smpsAlterVol        $0F
+000A14F1 08                         	dc.b	$08
+000A14F2 E6F1                       	smpsAlterVol        $F1
+000A14F4 E1FF                       	smpsAlterNote       $FF
+000A14F6 C410                       	dc.b	nG5, $10
+000A14F8 E60F                       	smpsAlterVol        $0F
+000A14FA C4                         	dc.b	nG5
+000A14FB E6F1                       	smpsAlterVol        $F1
+000A14FD C4                         	dc.b	nG5
+000A14FE E100                       	smpsAlterNote       $00
+000A1500 C208 C010 C2               	dc.b	nF5, $08, nEb5, $10, nF5
+000A1505 E60F                       	smpsAlterVol        $0F
+000A1507 C2                         	dc.b	nF5
+000A1508 E6F1                       	smpsAlterVol        $F1
+000A150A E1FF                       	smpsAlterNote       $FF
+000A150C C4                         	dc.b	nG5
+000A150D E60F                       	smpsAlterVol        $0F
+000A150F 08                         	dc.b	$08
+000A1510 E6F1                       	smpsAlterVol        $F1
+000A1512 10                         	dc.b	$10
+000A1513 E60F                       	smpsAlterVol        $0F
+000A1515 38                         	dc.b	$38
+000A1516 E6F1                       	smpsAlterVol        $F1
+000A1518 10                         	dc.b	$10
+000A1519 E60F                       	smpsAlterVol        $0F
+000A151B C4                         	dc.b	nG5
+000A151C E6F1                       	smpsAlterVol        $F1
+000A151E E100                       	smpsAlterNote       $00
+000A1520 C2                         	dc.b	nF5
+000A1521 E60F                       	smpsAlterVol        $0F
+000A1523 08                         	dc.b	$08
+000A1524 E6F1                       	smpsAlterVol        $F1
+000A1526 C010                       	dc.b	nEb5, $10
+000A1528 E60F                       	smpsAlterVol        $0F
+000A152A C0                         	dc.b	nEb5
+000A152B E6F1                       	smpsAlterVol        $F1
+000A152D BDC0 C208 C910             	dc.b	nC5, nEb5, nF5, $08, nC6, $10
+000A1533 E60F                       	smpsAlterVol        $0F
+000A1535 C9                         	dc.b	nC6
+000A1536 E6F1                       	smpsAlterVol        $F1
+000A1538 C5                         	dc.b	nAb5
+000A1539 E60F                       	smpsAlterVol        $0F
+000A153B 08                         	dc.b	$08
+000A153C E6F1                       	smpsAlterVol        $F1
+000A153E C010                       	dc.b	nEb5, $10
+000A1540 E60F                       	smpsAlterVol        $0F
+000A1542 C0                         	dc.b	nEb5
+000A1543 E6F1                       	smpsAlterVol        $F1
+000A1545 C208                       	dc.b	nF5, $08
+000A1547 E1FF                       	smpsAlterNote       $FF
+000A1549 C410                       	dc.b	nG5, $10
+000A154B E100                       	smpsAlterNote       $00
+000A154D C5C7                       	dc.b	nAb5, nBb5
+000A154F E60F                       	smpsAlterVol        $0F
+000A1551 C7                         	dc.b	nBb5
+000A1552 E6F1                       	smpsAlterVol        $F1
+000A1554 C5                         	dc.b	nAb5
+000A1555 E60F                       	smpsAlterVol        $0F
+000A1557 08                         	dc.b	$08
+000A1558 E6F1                       	smpsAlterVol        $F1
+000A155A E1FF                       	smpsAlterNote       $FF
+000A155C C410                       	dc.b	nG5, $10
+000A155E E60F                       	smpsAlterVol        $0F
+000A1560 C4                         	dc.b	nG5
+000A1561 E6F1                       	smpsAlterVol        $F1
+000A1563 C4                         	dc.b	nG5
+000A1564 E100                       	smpsAlterNote       $00
+000A1566 C208 C010 C2               	dc.b	nF5, $08, nEb5, $10, nF5
+000A156B E60F                       	smpsAlterVol        $0F
+000A156D 28                         	dc.b	$28
+000A156E E6F1                       	smpsAlterVol        $F1
+000A1570 C008 10                    	dc.b	nEb5, $08, $10
+000A1573 E60F                       	smpsAlterVol        $0F
+000A1575 21                         	dc.b	$21
+000A1576                            
+000A1576                            GentleBreeze_Loop12:
+000A1576 E7C0 7F                    	dc.b	smpsNoAttack, nEb5, $7F
+000A1579 F700 08FF F9               	smpsLoop            $00, $08, GentleBreeze_Loop12
+000A157E E717                       	dc.b	smpsNoAttack, $17
+000A1580 E6F1                       	smpsAlterVol        $F1
+000A1582 E1FF                       	smpsAlterNote       $FF
+000A1584 C410                       	dc.b	nG5, $10
+000A1586 E60F                       	smpsAlterVol        $0F
+000A1588 C4                         	dc.b	nG5
+000A1589 E6F1                       	smpsAlterVol        $F1
+000A158B E100                       	smpsAlterNote       $00
+000A158D C2                         	dc.b	nF5
+000A158E E60F                       	smpsAlterVol        $0F
+000A1590 08                         	dc.b	$08
+000A1591 E6F1                       	smpsAlterVol        $F1
+000A1593 C010                       	dc.b	nEb5, $10
+000A1595 E60F                       	smpsAlterVol        $0F
+000A1597 C0                         	dc.b	nEb5
+000A1598 E6F1                       	smpsAlterVol        $F1
+000A159A BDC0 C208 C910             	dc.b	nC5, nEb5, nF5, $08, nC6, $10
+000A15A0 E60F                       	smpsAlterVol        $0F
+000A15A2 C9                         	dc.b	nC6
+000A15A3 E6F1                       	smpsAlterVol        $F1
+000A15A5 C5                         	dc.b	nAb5
+000A15A6 E60F                       	smpsAlterVol        $0F
+000A15A8 08                         	dc.b	$08
+000A15A9 E6F1                       	smpsAlterVol        $F1
+000A15AB C010                       	dc.b	nEb5, $10
+000A15AD E60F                       	smpsAlterVol        $0F
+000A15AF C0                         	dc.b	nEb5
+000A15B0 E6F1                       	smpsAlterVol        $F1
+000A15B2 C208                       	dc.b	nF5, $08
+000A15B4 E1FF                       	smpsAlterNote       $FF
+000A15B6 C410                       	dc.b	nG5, $10
+000A15B8 E100                       	smpsAlterNote       $00
+000A15BA C5C7                       	dc.b	nAb5, nBb5
+000A15BC E60F                       	smpsAlterVol        $0F
+000A15BE C7                         	dc.b	nBb5
+000A15BF E6F1                       	smpsAlterVol        $F1
+000A15C1 C5                         	dc.b	nAb5
+000A15C2 E60F                       	smpsAlterVol        $0F
+000A15C4 08                         	dc.b	$08
+000A15C5 E6F1                       	smpsAlterVol        $F1
+000A15C7 E1FF                       	smpsAlterNote       $FF
+000A15C9 C410                       	dc.b	nG5, $10
+000A15CB E60F                       	smpsAlterVol        $0F
+000A15CD C4                         	dc.b	nG5
+000A15CE E6F1                       	smpsAlterVol        $F1
+000A15D0 C4                         	dc.b	nG5
+000A15D1 E100                       	smpsAlterNote       $00
+000A15D3 C208 C010 C2               	dc.b	nF5, $08, nEb5, $10, nF5
+000A15D8 E60F                       	smpsAlterVol        $0F
+000A15DA C2                         	dc.b	nF5
+000A15DB E6F1                       	smpsAlterVol        $F1
+000A15DD E1FF                       	smpsAlterNote       $FF
+000A15DF C4                         	dc.b	nG5
+000A15E0 E60F                       	smpsAlterVol        $0F
+000A15E2 08                         	dc.b	$08
+000A15E3 E6F1                       	smpsAlterVol        $F1
+000A15E5 10                         	dc.b	$10
+000A15E6 E60F                       	smpsAlterVol        $0F
+000A15E8 38                         	dc.b	$38
+000A15E9 E6F1                       	smpsAlterVol        $F1
+000A15EB 10                         	dc.b	$10
+000A15EC E60F                       	smpsAlterVol        $0F
+000A15EE C4                         	dc.b	nG5
+000A15EF E6F1                       	smpsAlterVol        $F1
+000A15F1 E100                       	smpsAlterNote       $00
+000A15F3 C2                         	dc.b	nF5
+000A15F4 E60F                       	smpsAlterVol        $0F
+000A15F6 08                         	dc.b	$08
+000A15F7 E6F1                       	smpsAlterVol        $F1
+000A15F9 C010                       	dc.b	nEb5, $10
+000A15FB E60F                       	smpsAlterVol        $0F
+000A15FD C0                         	dc.b	nEb5
+000A15FE E6F1                       	smpsAlterVol        $F1
+000A1600 BDC0 C208 C910             	dc.b	nC5, nEb5, nF5, $08, nC6, $10
+000A1606 E60F                       	smpsAlterVol        $0F
+000A1608 C9                         	dc.b	nC6
+000A1609 E6F1                       	smpsAlterVol        $F1
+000A160B C5                         	dc.b	nAb5
+000A160C E60F                       	smpsAlterVol        $0F
+000A160E 08                         	dc.b	$08
+000A160F E6F1                       	smpsAlterVol        $F1
+000A1611 C010                       	dc.b	nEb5, $10
+000A1613 E60F                       	smpsAlterVol        $0F
+000A1615 C0                         	dc.b	nEb5
+000A1616 E6F1                       	smpsAlterVol        $F1
+000A1618 C208                       	dc.b	nF5, $08
+000A161A E1FF                       	smpsAlterNote       $FF
+000A161C C410                       	dc.b	nG5, $10
+000A161E E100                       	smpsAlterNote       $00
+000A1620 C5C7                       	dc.b	nAb5, nBb5
+000A1622 E60F                       	smpsAlterVol        $0F
+000A1624 C7                         	dc.b	nBb5
+000A1625 E6F1                       	smpsAlterVol        $F1
+000A1627 C5                         	dc.b	nAb5
+000A1628 E60F                       	smpsAlterVol        $0F
+000A162A 08                         	dc.b	$08
+000A162B E6F1                       	smpsAlterVol        $F1
+000A162D E1FF                       	smpsAlterNote       $FF
+000A162F C410                       	dc.b	nG5, $10
+000A1631 E60F                       	smpsAlterVol        $0F
+000A1633 C4                         	dc.b	nG5
+000A1634 E6F1                       	smpsAlterVol        $F1
+000A1636 C4                         	dc.b	nG5
+000A1637 E100                       	smpsAlterNote       $00
+000A1639 C208 C010 C2               	dc.b	nF5, $08, nEb5, $10, nF5
+000A163E E60F                       	smpsAlterVol        $0F
+000A1640 28                         	dc.b	$28
+000A1641 E6F1                       	smpsAlterVol        $F1
+000A1643 C008 10                    	dc.b	nEb5, $08, $10
+000A1646 E60F                       	smpsAlterVol        $0F
+000A1648 21                         	dc.b	$21
+000A1649 E0C0                       	smpsPan             panCenter, $00
+000A164B F6FF 29                    	smpsJump            GentleBreeze_Loop12
+000A164E                            
+000A164E                            ; FM2 Data
+000A164E                            GentleBreeze_FM2:
+000A1650 E60C                       	smpsAlterVol        $0C
+000A1652 E0C0                       	smpsPan             panCenter, $00
+000A1654 9E20 A018 A508 8040 A020+  	dc.b	nF2, $20, nG2, $18, nC3, $08, nRst, $40, nG2, $20, nF2, $18
+000A1660 A508 8020 A010 9E9E 20A0+  	dc.b	nC3, $08, nRst, $20, nG2, $10, nF2, nF2, $20, nG2, $18, nC3
+000A166C 0880 409E 38A0 489E 20A0+  	dc.b	$08, nRst, $40, nF2, $38, nG2, $48, nF2, $20, nG2, $18, nC3
+000A1678 0880 40A0 209E 18A5 0880+  	dc.b	$08, nRst, $40, nG2, $20, nF2, $18, nC3, $08, nRst, $20, nG2
+000A1684 109E 9E20 A018 A508 8040+  	dc.b	$10, nF2, nF2, $20, nG2, $18, nC3, $08, nRst, $40, nF2, $38
+000A1690 A039                       	dc.b	nG2, $39
+000A1692                            
+000A1692                            GentleBreeze_Jump04:
+000A1692 E7A0 0F                    	dc.b	smpsNoAttack, nG2, $0F
+000A1695                            
+000A1695                            GentleBreeze_Loop11:
+000A1695 A118 0880 10A1 2008 A09E+  	dc.b	nAb2, $18, $08, nRst, $10, nAb2, $20, $08, nG2, nF2, nFs2, nG2
+000A16A1 A1A0 1808 8010 A020 0880+  	dc.b	nAb2, nG2, $18, $08, nRst, $10, nG2, $20, $08, nRst, nG2, nC3
+000A16AD 189E A020 A510 A008 A518+  	dc.b	$18, nF2, nG2, $20, nC3, $10, nG2, $08, nC3, $18, nG2, $08
+000A16B9 9FA0 9C18 979C 2008 9EA2+  	dc.b	nFs2, nG2, nEb2, $18, nBb1, nEb2, $20, $08, nF2, nA2, nEb3, nB2
+000A16C5 A3                         	dc.b	nBb2
+000A16C6 F700 02FF CB               	smpsLoop            $00, $02, GentleBreeze_Loop11
+000A16CB 9E20 A018 A508 8040 A020+  	dc.b	nF2, $20, nG2, $18, nC3, $08, nRst, $40, nG2, $20, nF2, $18
+000A16D7 A508 8020 A010 9E9E 20A0+  	dc.b	nC3, $08, nRst, $20, nG2, $10, nF2, nF2, $20, nG2, $18, nC3
+000A16E3 0880 409E 38A0 489E 20A0+  	dc.b	$08, nRst, $40, nF2, $38, nG2, $48, nF2, $20, nG2, $18, nC3
+000A16EF 0880 40A0 209E 18A5 0880+  	dc.b	$08, nRst, $40, nG2, $20, nF2, $18, nC3, $08, nRst, $20, nG2
+000A16FB 109E 9E20 A018 A508 8040+  	dc.b	$10, nF2, nF2, $20, nG2, $18, nC3, $08, nRst, $40, nF2, $38
+000A1707 A039                       	dc.b	nG2, $39
+000A1709 E0C0                       	smpsPan             panCenter, $00
+000A170B F6FF 85                    	smpsJump            GentleBreeze_Jump04
+000A170E                            
+000A170E                            ; FM3 Data
+000A170E                            GentleBreeze_FM3:
+000A1710 E0C0                       	smpsPan             panCenter, $00
+000A1712 807F 7F7F 7F04             	dc.b	nRst, $7F, $7F, $7F, $7F, $04
+000A171A E616                       	smpsAlterVol        $16
+000A171C F000 0207 03               	smpsModSet          $00, $02, $07, $03
+000A1721                            
+000A1721                            GentleBreeze_Loop0F:
+000A1721 C008 BDC9                  	dc.b	nEb5, $08, nC5, nC6
+000A1725 E1FF                       	smpsAlterNote       $FF
+000A1727 C4                         	dc.b	nG5
+000A1728 E100                       	smpsAlterNote       $00
+000A172A C0BB BDC0 10               	dc.b	nEb5, nBb4, nC5, nEb5, $10
+000A172F E608                       	smpsAlterVol        $08
+000A1731 C080 08                    	dc.b	nEb5, nRst, $08
+000A1734 E6F8                       	smpsAlterVol        $F8
+000A1736 C7                         	dc.b	nBb5
+000A1737 E1FF                       	smpsAlterNote       $FF
+000A1739 C4                         	dc.b	nG5
+000A173A E100                       	smpsAlterNote       $00
+000A173C C0BB                       	dc.b	nEb5, nBb4
+000A173E F700 02FF DF               	smpsLoop            $00, $02, GentleBreeze_Loop0F
+000A1743 C0BD C9                    	dc.b	nEb5, nC5, nC6
+000A1746 E1FF                       	smpsAlterNote       $FF
+000A1748 C4                         	dc.b	nG5
+000A1749 E100                       	smpsAlterNote       $00
+000A174B C0BB BDC0 10               	dc.b	nEb5, nBb4, nC5, nEb5, $10
+000A1750 E608                       	smpsAlterVol        $08
+000A1752 C080 08                    	dc.b	nEb5, nRst, $08
+000A1755 E6F8                       	smpsAlterVol        $F8
+000A1757 E1FF                       	smpsAlterNote       $FF
+000A1759 C4                         	dc.b	nG5
+000A175A E100                       	smpsAlterNote       $00
+000A175C C2C0 BBC0 BBC7 C5          	dc.b	nF5, nEb5, nBb4, nEb5, nBb4, nBb5, nAb5
+000A1763 E1FF                       	smpsAlterNote       $FF
+000A1765 C4                         	dc.b	nG5
+000A1766 E100                       	smpsAlterNote       $00
+000A1768 C2C0 BBBB C0               	dc.b	nF5, nEb5, nBb4, nBb4, nEb5
+000A176D E1FF                       	smpsAlterNote       $FF
+000A176F C4                         	dc.b	nG5
+000A1770 E100                       	smpsAlterNote       $00
+000A1772 C7                         	dc.b	nBb5
+000A1773 E1FF                       	smpsAlterNote       $FF
+000A1775 C4                         	dc.b	nG5
+000A1776 E100                       	smpsAlterNote       $00
+000A1778 C2C0 01                    	dc.b	nF5, nEb5, $01
+000A177B                            
+000A177B                            GentleBreeze_Jump03:
+000A177B E7C0 07BB 08               	dc.b	smpsNoAttack, nEb5, $07, nBb4, $08
+000A1782 E6FA                       	smpsAlterVol        $FA
+000A1784 F4                         	smpsModOff
+000A1785 E1FF                       	smpsAlterNote       $FF
+000A1787 B850                       	dc.b	nG4, $50
+000A1789 E100                       	smpsAlterNote       $00
+000A178B B408 B1B4 B5B6 AF18 B510+  	dc.b	nEb4, $08, nC4, nEb4, nE4, nF4, nBb3, $18, nE4, $10, nF4, $08
+000A1797 E1FF                       	smpsAlterNote       $FF
+000A1799 B810                       	dc.b	nG4, $10
+000A179B E100                       	smpsAlterNote       $00
+000A179D BB18 B908 80               	dc.b	nBb4, $18, nAb4, $08, nRst
+000A17A2 E1FF                       	smpsAlterNote       $FF
+000A17A4 B8                         	dc.b	nG4
+000A17A5 E100                       	smpsAlterNote       $00
+000A17A7 B610                       	dc.b	nF4, $10
+000A17A9 E1FF                       	smpsAlterNote       $FF
+000A17AB B850                       	dc.b	nG4, $50
+000A17AD E100                       	smpsAlterNote       $00
+000A17AF B608 B410 08B6 AF60        	dc.b	nF4, $08, nEb4, $10, $08, nF4, nBb3, $60
+000A17B7 E1FF                       	smpsAlterNote       $FF
+000A17B9 AC08                       	dc.b	nG3, $08
+000A17BB E100                       	smpsAlterNote       $00
+000A17BD AFB3 B4B6 B7               	dc.b	nBb3, nD4, nEb4, nF4, nFs4
+000A17C2 E1FF                       	smpsAlterNote       $FF
+000A17C4 B850                       	dc.b	nG4, $50
+000A17C6 E100                       	smpsAlterNote       $00
+000A17C8 BB08                       	dc.b	nBb4, $08
+000A17CA E1FF                       	smpsAlterNote       $FF
+000A17CC B8                         	dc.b	nG4
+000A17CD E100                       	smpsAlterNote       $00
+000A17CF BDBB B6                    	dc.b	nC5, nBb4, nF4
+000A17D2 E1FF                       	smpsAlterNote       $FF
+000A17D4 B810 08                    	dc.b	nG4, $10, $08
+000A17D7 E100                       	smpsAlterNote       $00
+000A17D9 B6                         	dc.b	nF4
+000A17DA E1FF                       	smpsAlterNote       $FF
+000A17DC B880                       	dc.b	nG4, nRst
+000A17DE E100                       	smpsAlterNote       $00
+000A17E0 BBB9 BB                    	dc.b	nBb4, nAb4, nBb4
+000A17E3 E1FF                       	smpsAlterNote       $FF
+000A17E5 B810                       	dc.b	nG4, $10
+000A17E7 E100                       	smpsAlterNote       $00
+000A17E9 B308 B4B1 AFB4 B5          	dc.b	nD4, $08, nEb4, nC4, nBb3, nEb4, nE4
+000A17F0 E1FF                       	smpsAlterNote       $FF
+000A17F2 B87F E77F E702 807F 7F7F+  	dc.b	nG4, $7F, smpsNoAttack, $7F, smpsNoAttack, $02, nRst, $7F, $7F, $7F, $7F, $04
+000A1800 E606                       	smpsAlterVol        $06
+000A1802 F000 0207 03               	smpsModSet          $00, $02, $07, $03
+000A1807 E100                       	smpsAlterNote       $00
+000A1809                            
+000A1809                            GentleBreeze_Loop10:
+000A1809 C008 BDC9                  	dc.b	nEb5, $08, nC5, nC6
+000A180D E1FF                       	smpsAlterNote       $FF
+000A180F C4                         	dc.b	nG5
+000A1810 E100                       	smpsAlterNote       $00
+000A1812 C0BB BDC0 10               	dc.b	nEb5, nBb4, nC5, nEb5, $10
+000A1817 E608                       	smpsAlterVol        $08
+000A1819 C080 08                    	dc.b	nEb5, nRst, $08
+000A181C E6F8                       	smpsAlterVol        $F8
+000A181E C7                         	dc.b	nBb5
+000A181F E1FF                       	smpsAlterNote       $FF
+000A1821 C4                         	dc.b	nG5
+000A1822 E100                       	smpsAlterNote       $00
+000A1824 C0BB                       	dc.b	nEb5, nBb4
+000A1826 F700 02FF DF               	smpsLoop            $00, $02, GentleBreeze_Loop10
+000A182B C0BD C9                    	dc.b	nEb5, nC5, nC6
+000A182E E1FF                       	smpsAlterNote       $FF
+000A1830 C4                         	dc.b	nG5
+000A1831 E100                       	smpsAlterNote       $00
+000A1833 C0BB BDC0 10               	dc.b	nEb5, nBb4, nC5, nEb5, $10
+000A1838 E608                       	smpsAlterVol        $08
+000A183A C080 08                    	dc.b	nEb5, nRst, $08
+000A183D E6F8                       	smpsAlterVol        $F8
+000A183F E1FF                       	smpsAlterNote       $FF
+000A1841 C4                         	dc.b	nG5
+000A1842 E100                       	smpsAlterNote       $00
+000A1844 C2C0 BBC0 BBC7 C5          	dc.b	nF5, nEb5, nBb4, nEb5, nBb4, nBb5, nAb5
+000A184B E1FF                       	smpsAlterNote       $FF
+000A184D C4                         	dc.b	nG5
+000A184E E100                       	smpsAlterNote       $00
+000A1850 C2C0 BBBB C0               	dc.b	nF5, nEb5, nBb4, nBb4, nEb5
+000A1855 E1FF                       	smpsAlterNote       $FF
+000A1857 C4                         	dc.b	nG5
+000A1858 E100                       	smpsAlterNote       $00
+000A185A C7                         	dc.b	nBb5
+000A185B E1FF                       	smpsAlterNote       $FF
+000A185D C4                         	dc.b	nG5
+000A185E E100                       	smpsAlterNote       $00
+000A1860 C2C0 01                    	dc.b	nF5, nEb5, $01
+000A1863 E0C0                       	smpsPan             panCenter, $00
+000A1865 F1                         	smpsModOn
+000A1866 F6FF 13                    	smpsJump            GentleBreeze_Jump03
+000A1869                            
+000A1869                            ; FM4 Data
+000A1869                            GentleBreeze_FM4:
+000A186B E0C0                       	smpsPan             panCenter, $00
+000A186D 80                         	dc.b	nRst
+000A186E                            
+000A186E                            GentleBreeze_Loop0D:
+000A186E 7F                         	dc.b	$7F
+000A186F F700 07FF FB               	smpsLoop            $00, $07, GentleBreeze_Loop0D
+000A1874 77                         	dc.b	$77
+000A1877 E609                       	smpsAlterVol        $09
+000A1879 C001                       	dc.b	nEb5, $01
+000A187B                            
+000A187B                            GentleBreeze_Jump02:
+000A187B E7C0 07C2 08               	dc.b	smpsNoAttack, nEb5, $07, nF5, $08
+000A1880 E607                       	smpsAlterVol        $07
+000A1882 E1FF                       	smpsAlterNote       $FF
+000A1884 C450                       	dc.b	nG5, $50
+000A1886 E100                       	smpsAlterNote       $00
+000A1888 C008 BDC0 C1C2 BB18 C110+  	dc.b	nEb5, $08, nC5, nEb5, nE5, nF5, nBb4, $18, nE5, $10, nF5, $08
+000A1894 E1FF                       	smpsAlterNote       $FF
+000A1896 C410                       	dc.b	nG5, $10
+000A1898 E100                       	smpsAlterNote       $00
+000A189A C718 C508 80               	dc.b	nBb5, $18, nAb5, $08, nRst
+000A189F E1FF                       	smpsAlterNote       $FF
+000A18A1 C4                         	dc.b	nG5
+000A18A2 E100                       	smpsAlterNote       $00
+000A18A4 C210                       	dc.b	nF5, $10
+000A18A6 E1FF                       	smpsAlterNote       $FF
+000A18A8 C450                       	dc.b	nG5, $50
+000A18AA E100                       	smpsAlterNote       $00
+000A18AC C208 C010 08C2 BB60        	dc.b	nF5, $08, nEb5, $10, $08, nF5, nBb4, $60
+000A18B4 E1FF                       	smpsAlterNote       $FF
+000A18B6 B808                       	dc.b	nG4, $08
+000A18B8 E100                       	smpsAlterNote       $00
+000A18BA BBBF C0C2 C3               	dc.b	nBb4, nD5, nEb5, nF5, nFs5
+000A18BF E1FF                       	smpsAlterNote       $FF
+000A18C1 C450                       	dc.b	nG5, $50
+000A18C3 E100                       	smpsAlterNote       $00
+000A18C5 C708                       	dc.b	nBb5, $08
+000A18C7 E1FF                       	smpsAlterNote       $FF
+000A18C9 C4                         	dc.b	nG5
+000A18CA E100                       	smpsAlterNote       $00
+000A18CC C9C7 C2                    	dc.b	nC6, nBb5, nF5
+000A18CF E1FF                       	smpsAlterNote       $FF
+000A18D1 C410 08                    	dc.b	nG5, $10, $08
+000A18D4 E100                       	smpsAlterNote       $00
+000A18D6 C2                         	dc.b	nF5
+000A18D7 E1FF                       	smpsAlterNote       $FF
+000A18D9 C480                       	dc.b	nG5, nRst
+000A18DB E100                       	smpsAlterNote       $00
+000A18DD C7C5 C7                    	dc.b	nBb5, nAb5, nBb5
+000A18E0 E1FF                       	smpsAlterNote       $FF
+000A18E2 C410                       	dc.b	nG5, $10
+000A18E4 E100                       	smpsAlterNote       $00
+000A18E6 BF08 C0BD BBC0 C1          	dc.b	nD5, $08, nEb5, nC5, nBb4, nEb5, nE5
+000A18ED E1FF                       	smpsAlterNote       $FF
+000A18EF C47F E701 7FE7 0180        	dc.b	nG5, $7F, smpsNoAttack, $01, $7F, smpsNoAttack, $01, nRst
+000A18F7                            
+000A18F7                            GentleBreeze_Loop0E:
+000A18F7 7F                         	dc.b	$7F
+000A18F8 F700 07FF FB               	smpsLoop            $00, $07, GentleBreeze_Loop0E
+000A18FD 77                         	dc.b	$77
+000A18FE E100                       	smpsAlterNote       $00
+000A1900 C001                       	dc.b	nEb5, $01
+000A1902 E6F9                       	smpsAlterVol        $F9
+000A1904 E0C0                       	smpsPan             panCenter, $00
+000A1906 E100                       	smpsAlterNote       $00
+000A1908 F6FF 71                    	smpsJump            GentleBreeze_Jump02
+000A190B                            
+000A190B                            ; FM5 Data
+000A190B                            GentleBreeze_FM5:
+000A190D E0C0                       	smpsPan             panCenter, $00
+000A190F A5                         	dc.b	nC3
+000A1910                            
+000A1910                            GentleBreeze_Loop06:
+000A1910 10                         	dc.b	$10
+000A1911 E607                       	smpsAlterVol        $07
+000A1913 A5                         	dc.b	nC3
+000A1914 E6F9                       	smpsAlterVol        $F9
+000A1916 08                         	dc.b	$08
+000A1917 E607                       	smpsAlterVol        $07
+000A1919 A5                         	dc.b	nC3
+000A191A E608                       	smpsAlterVol        $08
+000A191C A5                         	dc.b	nC3
+000A191D E6F1                       	smpsAlterVol        $F1
+000A191F 18                         	dc.b	$18
+000A1920 E607                       	smpsAlterVol        $07
+000A1922 10                         	dc.b	$10
+000A1923 E608                       	smpsAlterVol        $08
+000A1925 A5                         	dc.b	nC3
+000A1926 E6F1                       	smpsAlterVol        $F1
+000A1928 A5                         	dc.b	nC3
+000A1929 F700 03FF E3               	smpsLoop            $00, $03, GentleBreeze_Loop06
+000A192E A5                         	dc.b	nC3
+000A192F                            
+000A192F                            GentleBreeze_Loop07:
+000A192F E607                       	smpsAlterVol        $07
+000A1931 A5                         	dc.b	nC3
+000A1932 E6F9                       	smpsAlterVol        $F9
+000A1934 08                         	dc.b	$08
+000A1935 E607                       	smpsAlterVol        $07
+000A1937 A5                         	dc.b	nC3
+000A1938 E608                       	smpsAlterVol        $08
+000A193A A5                         	dc.b	nC3
+000A193B E6F1                       	smpsAlterVol        $F1
+000A193D 10                         	dc.b	$10
+000A193E F700 02FF ED               	smpsLoop            $00, $02, GentleBreeze_Loop07
+000A1943                            
+000A1943                            GentleBreeze_Loop08:
+000A1943 A5                         	dc.b	nC3
+000A1944 E607                       	smpsAlterVol        $07
+000A1946 A5                         	dc.b	nC3
+000A1947 E6F9                       	smpsAlterVol        $F9
+000A1949 08                         	dc.b	$08
+000A194A E607                       	smpsAlterVol        $07
+000A194C A5                         	dc.b	nC3
+000A194D E608                       	smpsAlterVol        $08
+000A194F A5                         	dc.b	nC3
+000A1950 E6F1                       	smpsAlterVol        $F1
+000A1952 18                         	dc.b	$18
+000A1953 E607                       	smpsAlterVol        $07
+000A1955 10                         	dc.b	$10
+000A1956 E608                       	smpsAlterVol        $08
+000A1958 A5                         	dc.b	nC3
+000A1959 E6F1                       	smpsAlterVol        $F1
+000A195B A5                         	dc.b	nC3
+000A195C F700 03FF E3               	smpsLoop            $00, $03, GentleBreeze_Loop08
+000A1961 A5                         	dc.b	nC3
+000A1962 E607                       	smpsAlterVol        $07
+000A1964 A5                         	dc.b	nC3
+000A1965 E6F9                       	smpsAlterVol        $F9
+000A1967 08                         	dc.b	$08
+000A1968 E607                       	smpsAlterVol        $07
+000A196A A5                         	dc.b	nC3
+000A196B E608                       	smpsAlterVol        $08
+000A196D A5                         	dc.b	nC3
+000A196E E6F1                       	smpsAlterVol        $F1
+000A1970 10                         	dc.b	$10
+000A1971 E607                       	smpsAlterVol        $07
+000A1973 A5                         	dc.b	nC3
+000A1974 E6F9                       	smpsAlterVol        $F9
+000A1976 08                         	dc.b	$08
+000A1977 E607                       	smpsAlterVol        $07
+000A1979 A5                         	dc.b	nC3
+000A197A E608                       	smpsAlterVol        $08
+000A197C A5                         	dc.b	nC3
+000A197D E6F1                       	smpsAlterVol        $F1
+000A197F 01                         	dc.b	$01
+000A1980                            
+000A1980                            GentleBreeze_Jump01:
+000A1980 E7A5 0F                    	dc.b	smpsNoAttack, nC3, $0F
+000A1983 E607                       	smpsAlterVol        $07
+000A1985                            
+000A1985                            GentleBreeze_Loop09:
+000A1985 10                         	dc.b	$10
+000A1986 E608                       	smpsAlterVol        $08
+000A1988 A5                         	dc.b	nC3
+000A1989 E6F1                       	smpsAlterVol        $F1
+000A198B 08                         	dc.b	$08
+000A198C E60F                       	smpsAlterVol        $0F
+000A198E 18                         	dc.b	$18
+000A198F E6F8                       	smpsAlterVol        $F8
+000A1991 F700 0FFF F0               	smpsLoop            $00, $0F, GentleBreeze_Loop09
+000A1996 10                         	dc.b	$10
+000A1997 E608                       	smpsAlterVol        $08
+000A1999 A5                         	dc.b	nC3
+000A199A E6F1                       	smpsAlterVol        $F1
+000A199C 08                         	dc.b	$08
+000A199D E60F                       	smpsAlterVol        $0F
+000A199F 18                         	dc.b	$18
+000A19A0 E6F1                       	smpsAlterVol        $F1
+000A19A2                            
+000A19A2                            GentleBreeze_Loop0A:
+000A19A2 10                         	dc.b	$10
+000A19A3 E607                       	smpsAlterVol        $07
+000A19A5 A5                         	dc.b	nC3
+000A19A6 E6F9                       	smpsAlterVol        $F9
+000A19A8 08                         	dc.b	$08
+000A19A9 E607                       	smpsAlterVol        $07
+000A19AB A5                         	dc.b	nC3
+000A19AC E608                       	smpsAlterVol        $08
+000A19AE A5                         	dc.b	nC3
+000A19AF E6F1                       	smpsAlterVol        $F1
+000A19B1 18                         	dc.b	$18
+000A19B2 E607                       	smpsAlterVol        $07
+000A19B4 10                         	dc.b	$10
+000A19B5 E608                       	smpsAlterVol        $08
+000A19B7 A5                         	dc.b	nC3
+000A19B8 E6F1                       	smpsAlterVol        $F1
+000A19BA A5                         	dc.b	nC3
+000A19BB F700 03FF E3               	smpsLoop            $00, $03, GentleBreeze_Loop0A
+000A19C0 A5                         	dc.b	nC3
+000A19C1                            
+000A19C1                            GentleBreeze_Loop0B:
+000A19C1 E607                       	smpsAlterVol        $07
+000A19C3 A5                         	dc.b	nC3
+000A19C4 E6F9                       	smpsAlterVol        $F9
+000A19C6 08                         	dc.b	$08
+000A19C7 E607                       	smpsAlterVol        $07
+000A19C9 A5                         	dc.b	nC3
+000A19CA E608                       	smpsAlterVol        $08
+000A19CC A5                         	dc.b	nC3
+000A19CD E6F1                       	smpsAlterVol        $F1
+000A19CF 10                         	dc.b	$10
+000A19D0 F700 02FF ED               	smpsLoop            $00, $02, GentleBreeze_Loop0B
+000A19D5                            
+000A19D5                            GentleBreeze_Loop0C:
+000A19D5 A5                         	dc.b	nC3
+000A19D6 E607                       	smpsAlterVol        $07
+000A19D8 A5                         	dc.b	nC3
+000A19D9 E6F9                       	smpsAlterVol        $F9
+000A19DB 08                         	dc.b	$08
+000A19DC E607                       	smpsAlterVol        $07
+000A19DE A5                         	dc.b	nC3
+000A19DF E608                       	smpsAlterVol        $08
+000A19E1 A5                         	dc.b	nC3
+000A19E2 E6F1                       	smpsAlterVol        $F1
+000A19E4 18                         	dc.b	$18
+000A19E5 E607                       	smpsAlterVol        $07
+000A19E7 10                         	dc.b	$10
+000A19E8 E608                       	smpsAlterVol        $08
+000A19EA A5                         	dc.b	nC3
+000A19EB E6F1                       	smpsAlterVol        $F1
+000A19ED A5                         	dc.b	nC3
+000A19EE F700 03FF E3               	smpsLoop            $00, $03, GentleBreeze_Loop0C
+000A19F3 A5                         	dc.b	nC3
+000A19F4 E607                       	smpsAlterVol        $07
+000A19F6 A5                         	dc.b	nC3
+000A19F7 E6F9                       	smpsAlterVol        $F9
+000A19F9 08                         	dc.b	$08
+000A19FA E607                       	smpsAlterVol        $07
+000A19FC A5                         	dc.b	nC3
+000A19FD E608                       	smpsAlterVol        $08
+000A19FF A5                         	dc.b	nC3
+000A1A00 E6F1                       	smpsAlterVol        $F1
+000A1A02 10                         	dc.b	$10
+000A1A03 E607                       	smpsAlterVol        $07
+000A1A05 A5                         	dc.b	nC3
+000A1A06 E6F9                       	smpsAlterVol        $F9
+000A1A08 08                         	dc.b	$08
+000A1A09 E607                       	smpsAlterVol        $07
+000A1A0B A5                         	dc.b	nC3
+000A1A0C E608                       	smpsAlterVol        $08
+000A1A0E A5                         	dc.b	nC3
+000A1A0F E6F1                       	smpsAlterVol        $F1
+000A1A11 01                         	dc.b	$01
+000A1A12 E0C0                       	smpsPan             panCenter, $00
+000A1A14 F6FF 6A                    	smpsJump            GentleBreeze_Jump01
+000A1A17                            
+000A1A17                            ; DAC Data
+000A1A17                            GentleBreeze_DAC:
+000A1A17 81                         	dc.b	dKick
+000A1A18                            
+000A1A18                            GentleBreeze_Loop00:
+000A1A18 2018 2810 0881             	dc.b	$20, $18, $28, $10, $08, dKick
+000A1A1E F700 02FF F6               	smpsLoop            $00, $02, GentleBreeze_Loop00
+000A1A23 2018 7F80 2988 0889 8A8B+  	dc.b	$20, $18, $7F, nRst, $29, dHiTimpani, $08, dMidTimpani, dLowTimpani, dVLowTimpani, dKick
+000A1A2E                            
+000A1A2E                            GentleBreeze_Loop01:
+000A1A2E 2018 2810 0881             	dc.b	$20, $18, $28, $10, $08, dKick
+000A1A34 F700 02FF F6               	smpsLoop            $00, $02, GentleBreeze_Loop01
+000A1A39 2018 7F80 2988 0889 8A01   	dc.b	$20, $18, $7F, nRst, $29, dHiTimpani, $08, dMidTimpani, dLowTimpani, $01
+000A1A43                            
+000A1A43                            GentleBreeze_Jump00:
+000A1A43 8007 8B08                  	dc.b	nRst, $07, dVLowTimpani, $08
+000A1A47                            
+000A1A47                            GentleBreeze_Loop02:
+000A1A47 81                         	dc.b	dKick
+000A1A48                            
+000A1A48                            GentleBreeze_Loop03:
+000A1A48 1008 8182 2081 1008 8182+  	dc.b	$10, $08, dKick, dSnare, $20, dKick, $10, $08, dKick, dSnare, $10, dMidTimpani
+000A1A54 088A                       	dc.b	$08, dLowTimpani
+000A1A56 F700 03FF ED               	smpsLoop            $00, $03, GentleBreeze_Loop02
+000A1A5B 8110 0881 8210 8808 8982+  	dc.b	dKick, $10, $08, dKick, dSnare, $10, dHiTimpani, $08, dMidTimpani, dSnare, dLowTimpani, dVLowTimpani
+000A1A67 1082 0881 18               	dc.b	$10, dSnare, $08, dKick, $18
+000A1A6C F701 02FF D8               	smpsLoop            $01, $02, GentleBreeze_Loop03
+000A1A71                            
+000A1A71                            GentleBreeze_Loop04:
+000A1A71 2018 2810 0881             	dc.b	$20, $18, $28, $10, $08, dKick
+000A1A77 F700 02FF F6               	smpsLoop            $00, $02, GentleBreeze_Loop04
+000A1A7C 2018 7F80 2988 0889 8A8B+  	dc.b	$20, $18, $7F, nRst, $29, dHiTimpani, $08, dMidTimpani, dLowTimpani, dVLowTimpani, dKick
+000A1A87                            
+000A1A87                            GentleBreeze_Loop05:
+000A1A87 2018 2810 0881             	dc.b	$20, $18, $28, $10, $08, dKick
+000A1A8D F700 02FF F6               	smpsLoop            $00, $02, GentleBreeze_Loop05
+000A1A92 2018 7F80 2988 0889 8A01   	dc.b	$20, $18, $7F, nRst, $29, dHiTimpani, $08, dMidTimpani, dLowTimpani, $01
+000A1A9C F6FF A5                    	smpsJump            GentleBreeze_Jump00
+000A1A9F                            
+000A1A9F                            ; PSG 1 Data
+000A1A9F                            GentleBreeze_PSG1:
+000A1A9F 80                         	dc.b	nRst
+000A1AA0                            
+000A1AA0                            GentleBreeze_LoopPSG02:
+000A1AA0 7F                         	dc.b	$7F
+000A1AA1 F700 08FF FB               	smpsLoop            $00, $08, GentleBreeze_LoopPSG02
+000A1AA6 08                         	dc.b	$08
+000A1AA7 EC04                       	smpsPSGAlterVol     $04
+000A1AA9                            
+000A1AA9                            GentleBreeze_JumpPSG01:
+000A1AA9 A37F A07F 019E 7F7F 02A3+  	dc.b	nBb2, $7F, nG2, $7F, $01, nF2, $7F, $7F, $02, nBb2, $7F, $01
+000A1AB5 A07F 019E 7F7F 0280        	dc.b	nG2, $7F, $01, nF2, $7F, $7F, $02, nRst
+000A1ABD                            
+000A1ABD                            GentleBreeze_LoopPSG03:
+000A1ABD 7F                         	dc.b	$7F
+000A1ABE F700 08FF FB               	smpsLoop            $00, $08, GentleBreeze_LoopPSG03
+000A1AC3 08A3 01                    	dc.b	$08, nBb2, $01
+000A1AC6 F6FF E1                    	smpsJump            GentleBreeze_JumpPSG01
+000A1AC9                            
+000A1AC9                            ; PSG2 Data
+000A1AC9                            GentleBreeze_PSG2:
+000A1AC9 80                         	dc.b	nRst
+000A1ACA                            
+000A1ACA                            GentleBreeze_LoopPSG00:
+000A1ACA 7F                         	dc.b	$7F
+000A1ACB F700 08FF FB               	smpsLoop            $00, $08, GentleBreeze_LoopPSG00
+000A1AD0 08                         	dc.b	$08
+000A1AD1 EC04                       	smpsPSGAlterVol     $04
+000A1AD3                            
+000A1AD3                            GentleBreeze_JumpPSG00:
+000A1AD3 A87F A77F 01A5 7F7F 02A8+  	dc.b	nEb3, $7F, nD3, $7F, $01, nC3, $7F, $7F, $02, nEb3, $7F, $01
+000A1ADF A77F 01A5 7F7F 0280        	dc.b	nD3, $7F, $01, nC3, $7F, $7F, $02, nRst
+000A1AE7                            
+000A1AE7                            GentleBreeze_LoopPSG01:
+000A1AE7 7F                         	dc.b	$7F
+000A1AE8 F700 08FF FB               	smpsLoop            $00, $08, GentleBreeze_LoopPSG01
+000A1AED 08A8 01                    	dc.b	$08, nEb3, $01
+000A1AF0 F6FF E1                    	smpsJump            GentleBreeze_JumpPSG00
+000A1AF3                            
+000A1AF3                            GentleBreeze_Voices:
+000A1AF3                            ;	Voice $00
+000A1AF3                            ;	$0C
+000A1AF3                            ;	$2A, $70, $2A, $71, 	$1F, $1F, $1F, $1F, 	$0D, $04, $11, $0C
+000A1AF3                            ;	$00, $00, $00, $01, 	$F3, $F4, $F1, $89, 	$7F, $7F, $18, $00
+000A1AF3                            	smpsVcAlgorithm     $04
+000A1AF3                            	smpsVcFeedback      $01
+000A1AF3                            	smpsVcUnusedBits    $00
+000A1AF3                            	smpsVcDetune        $07, $02, $07, $02
+000A1AF3                            	smpsVcCoarseFreq    $01, $0A, $00, $0A
+000A1AF3                            	smpsVcRateScale     $00, $00, $00, $00
+000A1AF3                            	smpsVcAttackRate    $1F, $1F, $1F, $1F
+000A1AF3                            	smpsVcAmpMod        $00, $00, $00, $00
+000A1AF3                            	smpsVcDecayRate1    $0C, $11, $04, $0D
+000A1AF3                            	smpsVcDecayRate2    $01, $00, $00, $00
+000A1AF3                            	smpsVcDecayLevel    $08, $0F, $0F, $0F
+000A1AF3                            	smpsVcReleaseRate   $09, $01, $04, $03
+000A1AF3 0C2A 702A 711F 1F1F 1F0D+  	smpsVcTotalLevel    $00, $18, $7F, $7F
+000A1B0C                            
+000A1B0C                            ;	Voice $01
+000A1B0C                            ;	$38
+000A1B0C                            ;	$54, $17, $70, $30, 	$9F, $1F, $9F, $1F, 	$12, $02, $0A, $0A
+000A1B0C                            ;	$00, $10, $00, $00, 	$05, $05, $05, $08, 	$21, $35, $10, $00
+000A1B0C                            	smpsVcAlgorithm     $00
+000A1B0C                            	smpsVcFeedback      $07
+000A1B0C                            	smpsVcUnusedBits    $00
+000A1B0C                            	smpsVcDetune        $03, $07, $01, $05
+000A1B0C                            	smpsVcCoarseFreq    $00, $00, $07, $04
+000A1B0C                            	smpsVcRateScale     $00, $02, $00, $02
+000A1B0C                            	smpsVcAttackRate    $1F, $1F, $1F, $1F
+000A1B0C                            	smpsVcAmpMod        $00, $00, $00, $00
+000A1B0C                            	smpsVcDecayRate1    $0A, $0A, $02, $12
+000A1B0C                            	smpsVcDecayRate2    $00, $00, $10, $00
+000A1B0C                            	smpsVcDecayLevel    $00, $00, $00, $00
+000A1B0C                            	smpsVcReleaseRate   $08, $05, $05, $05
+000A1B0C 3854 1770 309F 1F9F 1F12+  	smpsVcTotalLevel    $00, $10, $35, $21
+000A1B25                            
+000A1B25                            ;	Voice $02
+000A1B25                            ;	$00
+000A1B25                            ;	$00, $00, $00, $00, 	$00, $00, $00, $00, 	$00, $00, $00, $00
+000A1B25                            ;	$00, $00, $00, $00, 	$FF, $FF, $FF, $FF, 	$00, $00, $00, $00
+000A1B25                            	smpsVcAlgorithm     $00
+000A1B25                            	smpsVcFeedback      $00
+000A1B25                            	smpsVcUnusedBits    $00
+000A1B25                            	smpsVcDetune        $00, $00, $00, $00
+000A1B25                            	smpsVcCoarseFreq    $00, $00, $00, $00
+000A1B25                            	smpsVcRateScale     $00, $00, $00, $00
+000A1B25                            	smpsVcAttackRate    $00, $00, $00, $00
+000A1B25                            	smpsVcAmpMod        $00, $00, $00, $00
+000A1B25                            	smpsVcDecayRate1    $00, $00, $00, $00
+000A1B25                            	smpsVcDecayRate2    $00, $00, $00, $00
+000A1B25                            	smpsVcDecayLevel    $0F, $0F, $0F, $0F
+000A1B25                            	smpsVcReleaseRate   $0F, $0F, $0F, $0F
+000A1B25 0000 0000 0000 0000 0000+  	smpsVcTotalLevel    $00, $00, $00, $00
+000A1B3E                            
+000A1B3E                            ;	Voice $03
+000A1B3E                            ;	$36
+000A1B3E                            ;	$0F, $0F, $08, $09, 	$16, $18, $00, $1F, 	$0F, $16, $0C, $0B
+000A1B3E                            ;	$00, $12, $00, $00, 	$06, $2F, $4F, $4F, 	$00, $00, $65, $53
+000A1B3E                            	smpsVcAlgorithm     $06
+000A1B3E                            	smpsVcFeedback      $06
+000A1B3E                            	smpsVcUnusedBits    $00
+000A1B3E                            	smpsVcDetune        $00, $00, $00, $00
+000A1B3E                            	smpsVcCoarseFreq    $09, $08, $0F, $0F
+000A1B3E                            	smpsVcRateScale     $00, $00, $00, $00
+000A1B3E                            	smpsVcAttackRate    $1F, $00, $18, $16
+000A1B3E                            	smpsVcAmpMod        $00, $00, $00, $00
+000A1B3E                            	smpsVcDecayRate1    $0B, $0C, $16, $0F
+000A1B3E                            	smpsVcDecayRate2    $00, $00, $12, $00
+000A1B3E                            	smpsVcDecayLevel    $04, $04, $02, $00
+000A1B3E                            	smpsVcReleaseRate   $0F, $0F, $0F, $06
+000A1B3E 360F 0F08 0916 1800 1F0F+  	smpsVcTotalLevel    $53, $65, $00, $00
+000A1B57                            
+000A1B57                            ;	Voice $04
+000A1B57                            ;	$07
+000A1B57                            ;	$05, $53, $64, $75, 	$5C, $5C, $5C, $1C, 	$17, $17, $17, $17
+000A1B57                            ;	$00, $00, $00, $00, 	$26, $26, $26, $26, 	$00, $00, $00, $00
+000A1B57                            	smpsVcAlgorithm     $07
+000A1B57                            	smpsVcFeedback      $00
+000A1B57                            	smpsVcUnusedBits    $00
+000A1B57                            	smpsVcDetune        $07, $06, $05, $00
+000A1B57                            	smpsVcCoarseFreq    $05, $04, $03, $05
+000A1B57                            	smpsVcRateScale     $00, $01, $01, $01
+000A1B57                            	smpsVcAttackRate    $1C, $1C, $1C, $1C
+000A1B57                            	smpsVcAmpMod        $00, $00, $00, $00
+000A1B57                            	smpsVcDecayRate1    $17, $17, $17, $17
+000A1B57                            	smpsVcDecayRate2    $00, $00, $00, $00
+000A1B57                            	smpsVcDecayLevel    $02, $02, $02, $02
+000A1B57                            	smpsVcReleaseRate   $06, $06, $06, $06
+000A1B57 0705 5364 755C 5C5C 1C17+  	smpsVcTotalLevel    $00, $00, $00, $00
+000A1B70                            
+000A1B70                            ;	Voice $05
+000A1B70                            ;	$3C
+000A1B70                            ;	$21, $21, $63, $61, 	$13, $10, $14, $0E, 	$09, $0B, $0B, $10
+000A1B70                            ;	$04, $04, $04, $04, 	$17, $17, $17, $27, 	$1C, $02, $1B, $00
+000A1B70                            	smpsVcAlgorithm     $04
+000A1B70                            	smpsVcFeedback      $07
+000A1B70                            	smpsVcUnusedBits    $00
+000A1B70                            	smpsVcDetune        $06, $06, $02, $02
+000A1B70                            	smpsVcCoarseFreq    $01, $03, $01, $01
+000A1B70                            	smpsVcRateScale     $00, $00, $00, $00
+000A1B70                            	smpsVcAttackRate    $0E, $14, $10, $13
+000A1B70                            	smpsVcAmpMod        $00, $00, $00, $00
+000A1B70                            	smpsVcDecayRate1    $10, $0B, $0B, $09
+000A1B70                            	smpsVcDecayRate2    $04, $04, $04, $04
+000A1B70                            	smpsVcDecayLevel    $02, $01, $01, $01
+000A1B70                            	smpsVcReleaseRate   $07, $07, $07, $07
+000A1B70 3C21 2163 6113 1014 0E09+  	smpsVcTotalLevel    $00, $1B, $02, $1C
+000A1B89                            
+000A1B89                            
+000A1B8A 00                         		even
+000A1B8A                            ; ---------------------------------------------------------------------------
+000A1B8A                            ; Sound	effect pointers
+000A1B8A                            ; ---------------------------------------------------------------------------
+000A1B8A 0000 0000 0000 0000 0000+  SoundIndex:	dc.l SoundA0, SoundA1, SoundA2
+000A1B96 0000 0000 0000 0000 0000+  		dc.l SoundA3, SoundA4, SoundA5
+000A1BA2 0000 0000 0000 0000 0000+  		dc.l SoundA6, SoundA7, SoundA8
+000A1BAE 0000 0000 0000 0000 0000+  		dc.l SoundA9, SoundAA, SoundAB
+000A1BBA 0000 0000 0000 0000 0000+  		dc.l SoundAC, SoundAD, SoundAE
+000A1BC6 0000 0000 0000 0000 0000+  		dc.l SoundAF, SoundB0, SoundB1
+000A1BD2 0000 0000 0000 0000 0000+  		dc.l SoundB2, SoundB3, SoundB4
+000A1BDE 0000 0000 0000 0000 0000+  		dc.l SoundB5, SoundB6, SoundB7
+000A1BEA 0000 0000 0000 0000 0000+  		dc.l SoundB8, SoundB9, SoundBA
+000A1BF6 0000 0000 0000 0000 0000+  		dc.l SoundBB, SoundBC, SoundBD
+000A1C02 0000 0000 0000 0000 0000+  		dc.l SoundBE, SoundBF, SoundC0
+000A1C0E 0000 0000 0000 0000 0000+  		dc.l SoundC1, SoundC2, SoundC3
+000A1C1A 0000 0000 0000 0000 0000+  		dc.l SoundC4, SoundC5, SoundC6
+000A1C26 0000 0000 0000 0000 0000+  		dc.l SoundC7, SoundC8, SoundC9
+000A1C32 0000 0000 0000 0000 0000+  		dc.l SoundCA, SoundCB, SoundCC
+000A1C3E 0000 0000 0000 0000 0000+  		dc.l SoundCD, SoundCE, SoundCF
+000A1C4A 0000 0000                  SoundD0Index:	dc.l SoundD0
+000A1C4E                            SoundA0:	incbin	sound\soundA0.bin
+000A1C64                            		even
+000A1C64                            SoundA1:	incbin	sound\soundA1.bin
+000A1C8E                            		even
+000A1C8E                            SoundA2:	incbin	sound\soundA2.bin
+000A1CAE                            		even
+000A1CAE                            SoundA3:	incbin	sound\soundA3.bin
+000A1CE0                            		even
+000A1CE0                            SoundA4:	incbin	sound\soundA4.bin
+000A1D16                            		even
+000A1D16                            SoundA5:	include	sound\fart.asm
+000A1D16                            Fart_Header:
+000A1D16 =00000001                  smpsHeaderStartSong = 1
+000A1D16 0000                       	smpsHeaderVoice     Fart_Voices
+000A1D18 01                         	smpsHeaderTempoSFX  $01
+000A1D19 04                         	smpsHeaderChanSFX   $04
+000A1D1A                            
+000A1D32                            
+000A1D32                            Fart_FM3:
+000A1D34 E607                       	smpsAlterVol        $07
+000A1D36 E0C0                       	smpsPan             panCenter, $00
+000A1D38 F000 0210 03               	smpsModSet          $00, $02, $10, $03
+000A1D3D A003 E7                    	dc.b	nG2, $03, smpsNoAttack
+000A1D40 E1FE                       	smpsAlterNote       $FE
+000A1D42 A201 E7                    	dc.b	nA2, $01, smpsNoAttack
+000A1D45 E100                       	smpsAlterNote       $00
+000A1D47 A211 807F 2C               	dc.b	nA2, $11, nRst, $7F, $2C
+000A1D4C F2                         	smpsStop
+000A1D4D                            
+000A1D4D                            ; FM4 Data
+000A1D4D                            Fart_FM4:
+000A1D4F E0C0                       	smpsPan             panCenter, $00
+000A1D51 8006                       	dc.b	nRst, $06
+000A1D55 E616                       	smpsAlterVol        $16
+000A1D57 E080                       	smpsPan             panLeft, $00
+000A1D59 F000 0210 03               	smpsModSet          $00, $02, $10, $03
+000A1D5E A212                       	dc.b	nA2, $12
+000A1D60 E60A                       	smpsAlterVol        $0A
+000A1D62 E7A2 0C                    	dc.b	smpsNoAttack, nA2, $0C
+000A1D65 E603                       	smpsAlterVol        $03
+000A1D67 E7A2                       	dc.b	smpsNoAttack, nA2
+000A1D69 E603                       	smpsAlterVol        $03
+000A1D6B E7A2                       	dc.b	smpsNoAttack, nA2
+000A1D6D E604                       	smpsAlterVol        $04
+000A1D6F E7A2                       	dc.b	smpsNoAttack, nA2
+000A1D71 E606                       	smpsAlterVol        $06
+000A1D73 E7A2 18                    	dc.b	smpsNoAttack, nA2, $18
+000A1D76 E610                       	smpsAlterVol        $10
+000A1D78 E7A2 0C                    	dc.b	smpsNoAttack, nA2, $0C
+000A1D7B E610                       	smpsAlterVol        $10
+000A1D7D E7A2 1280 42               	dc.b	smpsNoAttack, nA2, $12, nRst, $42
+000A1D82 F2                         	smpsStop
+000A1D83                            
+000A1D83                            ; FM5 Data
+000A1D83                            Fart_FM5:
+000A1D85 E0C0                       	smpsPan             panCenter, $00
+000A1D87 8009                       	dc.b	nRst, $09
+000A1D8B E616                       	smpsAlterVol        $16
+000A1D8D E040                       	smpsPan             panRight, $00
+000A1D8F F000 0210 03               	smpsModSet          $00, $02, $10, $03
+000A1D94 A215                       	dc.b	nA2, $15
+000A1D96 E60A                       	smpsAlterVol        $0A
+000A1D98 E7A2 0C                    	dc.b	smpsNoAttack, nA2, $0C
+000A1D9B E603                       	smpsAlterVol        $03
+000A1D9D E7A2                       	dc.b	smpsNoAttack, nA2
+000A1D9F E603                       	smpsAlterVol        $03
+000A1DA1 E7A2                       	dc.b	smpsNoAttack, nA2
+000A1DA3 E604                       	smpsAlterVol        $04
+000A1DA5 E7A2                       	dc.b	smpsNoAttack, nA2
+000A1DA7 E606                       	smpsAlterVol        $06
+000A1DA9 E7A2 15                    	dc.b	smpsNoAttack, nA2, $15
+000A1DAC E610                       	smpsAlterVol        $10
+000A1DAE E7A2 0C                    	dc.b	smpsNoAttack, nA2, $0C
+000A1DB1 E610                       	smpsAlterVol        $10
+000A1DB3 E7A2 1280 3F               	dc.b	smpsNoAttack, nA2, $12, nRst, $3F
+000A1DB8 F2                         	smpsStop
+000A1DB9                            
+000A1DB9                            ; PSG3 Data
+000A1DB9                            Fart_PSG3:
+000A1DB9 F2                         	smpsStop
+000A1DBA                            
+000A1DBA                            ; FM Voices
+000A1DBA                            Fart_Voices:
+000A1DBA                            ;	Voice $00
+000A1DBA                            ;	$39
+000A1DBA                            ;	$70, $32, $71, $01, 	$DF, $DF, $DF, $1F, 	$04, $00, $00, $00
+000A1DBA                            ;	$1F, $16, $00, $00, 	$E0, $00, $09, $FA, 	$12, $00, $00, $00
+000A1DBA                            	smpsVcAlgorithm     $01
+000A1DBA                            	smpsVcFeedback      $07
+000A1DBA                            	smpsVcUnusedBits    $00
+000A1DBA                            	smpsVcDetune        $00, $07, $03, $07
+000A1DBA                            	smpsVcCoarseFreq    $01, $01, $02, $00
+000A1DBA                            	smpsVcRateScale     $00, $03, $03, $03
+000A1DBA                            	smpsVcAttackRate    $1F, $1F, $1F, $1F
+000A1DBA                            	smpsVcAmpMod        $00, $00, $00, $00
+000A1DBA                            	smpsVcDecayRate1    $00, $00, $00, $04
+000A1DBA                            	smpsVcDecayRate2    $00, $00, $16, $1F
+000A1DBA                            	smpsVcDecayLevel    $0F, $00, $00, $0E
+000A1DBA                            	smpsVcReleaseRate   $0A, $09, $00, $00
+000A1DBA 3970 3271 01DF DFDF 1F04+  	smpsVcTotalLevel    $00, $00, $00, $12
+000A1DD3                            
+000A1DD3                            ;	Voice $01
+000A1DD3                            ;	$00
+000A1DD3                            ;	$00, $00, $00, $00, 	$00, $00, $00, $00, 	$00, $00, $00, $00
+000A1DD3                            ;	$00, $00, $00, $00, 	$FF, $FF, $FF, $FF, 	$00, $00, $00, $00
+000A1DD3                            	smpsVcAlgorithm     $00
+000A1DD3                            	smpsVcFeedback      $00
+000A1DD3                            	smpsVcUnusedBits    $00
+000A1DD3                            	smpsVcDetune        $00, $00, $00, $00
+000A1DD3                            	smpsVcCoarseFreq    $00, $00, $00, $00
+000A1DD3                            	smpsVcRateScale     $00, $00, $00, $00
+000A1DD3                            	smpsVcAttackRate    $00, $00, $00, $00
+000A1DD3                            	smpsVcAmpMod        $00, $00, $00, $00
+000A1DD3                            	smpsVcDecayRate1    $00, $00, $00, $00
+000A1DD3                            	smpsVcDecayRate2    $00, $00, $00, $00
+000A1DD3                            	smpsVcDecayLevel    $0F, $0F, $0F, $0F
+000A1DD3                            	smpsVcReleaseRate   $0F, $0F, $0F, $0F
+000A1DD3 0000 0000 0000 0000 0000+  	smpsVcTotalLevel    $00, $00, $00, $00
+000A1DD3 0000 0000 0000 0000 0000+  	smpsVcTotalLevel    $00, $00, $00, $00
+000A1DEC                            		even
+000A1DEC                            SoundA6:	incbin	sound\soundA6.bin
+000A1E1C                            		even
+000A1E1C                            SoundA7:	incbin	sound\soundA7.bin
+000A1E4C                            		even
+000A1E4C                            SoundA8:	incbin	sound\soundA8.bin
+000A1E80                            		even
+000A1E80                            SoundA9:	incbin	sound\soundA9.bin
+000A1E92                            		even
+000A1E92                            SoundAA:	incbin	sound\soundAA.bin
+000A1ED4                            		even
+000A1ED4                            SoundAB:	incbin	sound\soundAB.bin
+000A1EF4                            		even
+000A1EF4                            SoundAC:	incbin	sound\soundAC.bin
+000A1F28                            		even
+000A1F28                            SoundAD:	incbin	sound\soundAD.bin
+000A1F5E                            		even
+000A1F5E                            SoundAE:	incbin	sound\soundAE.bin
+000A1FA8                            		even
+000A1FA8                            SoundAF:	incbin	sound\soundAF.bin
+000A1FD6                            		even
+000A1FD6                            SoundB0:	incbin	sound\soundB0.bin
+000A2008                            		even
+000A2008                            SoundB1:	incbin	sound\soundB1.bin
+000A2034                            		even
+000A2034                            SoundB2:	incbin	sound\soundB2.bin
+000A2084                            		even
+000A2084                            SoundB3:	incbin	sound\soundB3.bin
+000A20CE                            		even
+000A20CE                            SoundB4:	include	sound\soundB4.asm
+000A20CE                            SndB4_Bumper_Header:
+000A20CE =00000001                  smpsHeaderStartSong = 1
+000A20CE 0000                       	smpsHeaderVoice     SndB4_Bumper_Voices
+000A20D0 01                         	smpsHeaderTempoSFX  $01
+000A20D1 03                         	smpsHeaderChanSFX   $03
+000A20D2                            
+000A20E4                            
+000A20E4                            ; FM5 Data
+000A20E4                            SndB4_Bumper_FM5:
+000A20E6 F600 00                    	smpsJump            SndB4_Bumper_Jump00
+000A20E9                            
+000A20E9                            ; FM4 Data
+000A20E9                            SndB4_Bumper_FM4:
+000A20E9 F2                         	smpsStop
+000A20EA                            
+000A20EA                            SndB4_Bumper_Jump00:
+000A20EA A020                       	dc.b	nG2, $20
+000A20EC F2                         	smpsStop
+000A20ED                            
+000A20ED                            ; FM3 Data
+000A20ED                            SndB4_Bumper_FM3:
+000A20ED F2                         	smpsStop
+000A20EE                            
+000A20EE                            SndB4_Bumper_Voices:
+000A20EE                            ;	Voice $00
+000A20EE                            ;	$32
+000A20EE                            ;	$04, $20, $70, $70, 	$1F, $1F, $1F, $1F, 	$09, $00, $00, $08
+000A20EE                            ;	$09, $00, $00, $0B, 	$00, $00, $00, $0F, 	$0C, $00, $30, $00
+000A20EE                            	smpsVcAlgorithm     $02
+000A20EE                            	smpsVcFeedback      $06
+000A20EE                            	smpsVcUnusedBits    $00
+000A20EE                            	smpsVcDetune        $07, $07, $02, $00
+000A20EE                            	smpsVcCoarseFreq    $00, $00, $00, $04
+000A20EE                            	smpsVcRateScale     $00, $00, $00, $00
+000A20EE                            	smpsVcAttackRate    $1F, $1F, $1F, $1F
+000A20EE                            	smpsVcAmpMod        $00, $00, $00, $00
+000A20EE                            	smpsVcDecayRate1    $08, $00, $00, $09
+000A20EE                            	smpsVcDecayRate2    $0B, $00, $00, $09
+000A20EE                            	smpsVcDecayLevel    $00, $00, $00, $00
+000A20EE                            	smpsVcReleaseRate   $0F, $00, $00, $00
+000A20EE 3204 2070 701F 1F1F 1F09+  	smpsVcTotalLevel    $00, $30, $00, $0C
+000A20EE 3204 2070 701F 1F1F 1F09+  	smpsVcTotalLevel    $00, $30, $00, $0C
+000A2108 00                         		even
+000A2108                            SoundB5:	incbin	sound\soundB5.bin
+000A2126 00                         		even
+000A2126                            SoundB6:	incbin	sound\soundB6.bin
+000A2144                            		even
+000A2144                            SoundB7:	incbin	sound\soundB7.bin
+000A2180                            		even
+000A2180                            SoundB8:	incbin	sound\soundB8.bin
+000A219E                            		even
+000A219E                            SoundB9:	incbin	sound\soundB9.bin
+000A2202                            		even
+000A2202                            SoundBA:	incbin	sound\soundBA.bin
+000A222A                            		even
+000A222A                            SoundBB:	incbin	sound\soundBB.bin
+000A2256                            		even
+000A2256                            SoundBC:	incbin	sound\soundBC.bin
+000A2298                            		even
+000A2298                            SoundBD:	incbin	sound\soundBD.bin
+000A22EC                            		even
+000A22EC                            SoundBE:	incbin	sound\soundBE.bin
+000A2326                            		even
+000A2326                            SoundBF:	incbin	sound\soundBF.bin
+000A2398                            		even
+000A2398                            SoundC0:	incbin	sound\soundC0.bin
+000A23C6                            		even
+000A23C6                            SoundC1:	incbin	sound\soundC1.bin
+000A2420                            		even
+000A2420                            SoundC2:	incbin	sound\soundC2.bin
+000A244A                            		even
+000A244A                            SoundC3:	incbin	sound\soundC3.bin
+000A24C4                            		even
+000A24C4                            SoundC4:	incbin	sound\soundC4.bin
+000A25C2                            		even
+000A25C2                            SoundC5:	incbin	sound\soundC5.bin
+000A262A                            		even
+000A262A                            SoundC6:	incbin	sound\soundC6.bin
+000A266C                            		even
+000A266C                            SoundC7:	incbin	sound\soundC7.bin
+000A269A                            		even
+000A269A                            SoundC8:	incbin	sound\soundC8.bin
+000A26AC                            		even
+000A26AC                            SoundC9:	incbin	sound\soundC9.bin
+000A26DA                            		even
+000A26DA                            SoundCA:	incbin	sound\soundCA.bin
+000A2708                            		even
+000A2708                            SoundCB:	incbin	sound\soundCB.bin
+000A2754                            		even
+000A2754                            SoundCC:	incbin	sound\C9.ssf
+000A2782                            		even
+000A2782                            SoundCD:	incbin	sound\soundCD.bin
+000A27AE                            		even
+000A27AE                            SoundCE:	incbin	sound\soundCE.bin
+000A27CC 00                         		even
+000A27CC                            SoundCF:	incbin	sound\soundCF.bin
+000A2804                            		even
+000A2804                            SoundD0:	incbin	sound\soundD0.bin
+000A283E                            		even
+000A283E                            SegaPCM:	incbin	sound\segapcm.bin
+000BC994                            SegaPCM_end:	even
+000BC994                            
+000BC994                            IdiotPCM:	incbin	sound\youare.bin
+000C6A66 00                         IdiotPCM_end:	even
+000C6A66                            
+000C6A66                            Minecraft:	include	minecraft\code\main.asm
+000C6A66                            ; Minecraft: Very Legacy Console Edition
+000C6A66                            ; Main file
+000C6A66                            
+000C6A66                            	include	minecraft\code\variables.asm
+000C6A66                            ; Minecraft: Very Legacy Console Edition
+000C6A66                            ; Variable Definitions
+000C6A66                            
+000C6A66 =00000040                  MAP_HEIGHT	equ	64
+000C6A66 =00000100                  MAP_WIDTH	equ	256
+000C6A66                            
+000C6A66                            		rsset	$FF0000
+000C6A66 =00FF0000                  mapWallBlocks	rs.b	MAP_HEIGHT*MAP_WIDTH	; wall layer layout data
+000C6A66 =00FF4000                  mapCollBlocks	rs.b	MAP_HEIGHT*MAP_WIDTH	; collision layer layout data
+000C6A66                            
+000C6A66                            		rsset	$FFFF8000
+000C6A66 =FFFF8000                  planeBuffer	rs.w	29*64			; foreground plane buffer
+000C6A66                            
+000C6A66 =FFFF8E80                  camXPosFG	rs.w	1			; camera foreground layout x position
+000C6A66 =FFFF8E82                  camYposFG	rs.w	1			; camera foreground layout y position
+000C6A66 =FFFF8E84                  camXPosBG	rs.w	1			; camera background layout x position
+000C6A66 =FFFF8E86                  camYposBG	rs.w	1			; camera background layout y position
+000C6A66 =FFFF8E86                  camYposBG	rs.w	1			; camera background layout y position
+000C6A66                            
+000C6A66                            MC_Init:
+000C6A66 007C 0700                  		ori	#$700,sr		; disables CPU interrupts
+000C6A6A 4DF9 00C0 0004             		lea	($C00004).l,a6	;	; load the address of the VDP control port into a6
+000C6A70                            
+000C6A70 3CBC 8134                  		move.w	#$8134,(a6)		; disable display
+000C6A74 6100 0000                  		bsr.w	MC_ClearScreen		; clear VRAM, CRAM, and VSRAM
+000C6A78 6100 0000                  		bsr.w	MC_LoadPalette		; load in the palette
+000C6A7C 3CBC 8174                  		move.w	#$8174,(a6)		; enable display
+000C6A80                            
+000C6A80                            
+000C6A80                            
+000C6A80 6000 FFFE                  		bra.w	*			; spin infinitely
+000C6A84                            
+000C6A84                            ; ===========================================================================
+000C6A84                            ; ---------------------------------------------------------------------------
+000C6A84                            ; Clear The Screen
+000C6A84                            ; ---------------------------------------------------------------------------
+000C6A84                            MC_ClearScreen:
+000C6A84 3CBC 8F01                  		move.w	#$8F01,(a6)		; set auto-incremement size to byte
+000C6A88                            
+000C6A88 2CBC 94FF 93FF             		move.l	#$94FF93FF,(a6)		; clear the VRAM
+000C6A8E 3CBC 9780                  		move.w	#$9780,(a6)		; ^
+000C6A92 2CBC 4000 0080             		move.l	#$40000080,(a6)		; ^
+000C6A98 3D7C 0000 FFFC             		move.w	#0,-4(a6)		; ^
+000C6A9E                            
+000C6A9E 44D6                       .waitVRAMClr:	move.w	(a6),ccr		; is a DMA in progress?
+000C6AA0 69FC                       		bvs.s	.waitVRAMClr		; if so, loop until DMA is complete
+000C6AA2                            
+000C6AA2 2CBC 9400 937F             		move.l	#$9400937F,(a6)		; clear the CRAM
+000C6AA8 3CBC 9780                  		move.w	#$9780,(a6)		; ^
+000C6AAC 2CBC C000 0080             		move.l	#$C0000080,(a6)		; ^
+000C6AB2 3D7C 0000 FFFC             		move.w	#0,-4(a6)		; ^
+000C6AB8                            
+000C6AB8 44D6                       .waitCRAMClr:	move.w	(a6),ccr		; is a DMA in progress?
+000C6ABA 69FC                       		bvs.s	.waitCRAMClr		; if so, loop until DMA is complete
+000C6ABC                            
+000C6ABC 2CBC 9400 935F             		move.l	#$9400935F,(a6)		; clear the VSRAM
+000C6AC2 3CBC 9780                  		move.w	#$9780,(a6)		; ^
+000C6AC6 2CBC 4000 0090             		move.l	#$40000090,(a6)		; ^
+000C6ACC 3D7C 0000 FFFC             		move.w	#0,-4(a6)		; ^
+000C6AD2                            
+000C6AD2 44D6                       .waitVSRAMClr:	move.w	(a6),ccr		; is a DMA in progress?
+000C6AD4 69FC                       		bvs.s	.waitVSRAMClr		; if so, loop until DMA is complete
+000C6AD6                            
+000C6AD6 3CBC 8F02                  		move.w	#$8F02,(a6)		; set auto-incremement size to word
+000C6ADA 4E75                       		rts				; return
+000C6ADC                            ; ---------------------------------------------------------------------------
+000C6ADC                            
+000C6ADC                            ; ===========================================================================
+000C6ADC                            ; ---------------------------------------------------------------------------
+000C6ADC                            ; Load The Palette
+000C6ADC                            ; ---------------------------------------------------------------------------
+000C6ADC                            MC_LoadPalette:
+000C6ADC 44D6                       		move.w	(a6),ccr		; is v-blank active?
+000C6ADE 6AFC                       		bpl.s	MC_LoadPalette		; if not, wait for it to start
+000C6AE0                            
+000C6AE0                            .updatePalette:
+000C6AE0 2CBC 9400 9340             		move.l	#$94009340,(a6)		; set the DMA transfer size (64 colors)
+000C6AE6                            		
+000C6AE6 4BFA 0000                  		lea	MC_Palette(pc),a5	; load the base address of the palette data (pc relative)
+000C6AEA 200D                       		move.l	a5,d0			; move the address to a data register so we can modify it
+000C6AEC E288                       		lsr.l	#1,d0			; divide by two
+000C6AEE                            
+000C6AEE 323C 9500                  		move.w	#$9500,d1		; set the low byte of the transfer source address
+000C6AF2 1200                       		move.b	d0,d1			; ^
+000C6AF4 3C81                       		move.w	d1,(a6)			; ^
+000C6AF6                            
+000C6AF6 E088                       		lsr.l	#8,d0			; set the middle byte of the transfer source address
+000C6AF8 323C 9600                  		move.w	#$9600,d1		; ^
+000C6AFC 1200                       		move.b	d0,d1			; ^
+000C6AFE 3C81                       		move.w	d1,(a6)			; ^
+000C6B00                            
+000C6B00 E088                       		lsr.l	#8,d0			; set the high byte of the transfer source address
+000C6B02 323C 9700                  		move.w	#$9700,d1		; ^
+000C6B06 1200                       		move.b	d0,d1			; ^
+000C6B08 3C81                       		move.w	d1,(a6)			; ^
+000C6B0A                            
+000C6B0A 2CBC C000 0080             		move.l	#$C0000080,(a6)		; set the destination palette index and begin the transfer
+000C6B10                            
+000C6B10                            .waitForScan:
+000C6B10                            	;	move.w	(a6),ccr		; is v-blank still active?
+000C6B10                            	;	bmi.s	.waitForScan		; if so, wait for active scan before returning
+000C6B10 4E75                       		rts				; return
+000C6B12                            ; ---------------------------------------------------------------------------
+000C6B12                            
+000C6B12                            MC_Palette:
+000C6B12 0E86 08AE 068E 046C 0246+  	dc.w	$E86, $8AE, $68E, $46C, $246, $024, $CC0, $AA0, $C46, $824, $EEE, $444, $222, $000, $000, $000
+000C6B32 0000 0CCC 0AAA 0888 0666+  	dc.w	$000, $CCC, $AAA, $888, $666, $444, $222, $4EE, $6AE, $48C, $26A, $048, $026, $4E6, $2C4, $080
+000C6B52 0EEE 0EEE 0EEE 0EEE 0EEE+  	dc.w	$EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE
+000C6B72 0EEE 0EEE 0EEE 0EEE 0EEE+  	dc.w	$EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE
+000C6B72 0EEE 0EEE 0EEE 0EEE 0EEE+  	dc.w	$EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE
+000C6B92                            ; end of 'ROM'
+000C6B92                            EndOfRom:
+000C6B92                            
+000C6B92                            

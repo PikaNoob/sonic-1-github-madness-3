@@ -19,6 +19,4 @@ fixheadr.exe s1built.bin
 
 echo see ya
 
-start s1built.bin
-
 pause
