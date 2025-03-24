@@ -2888,6 +2888,7 @@ Pal_Idiot:	incbin	pallet\idiot.bin	; idiot pallet
 Pal_Gronic:	incbin	pallet\gronic.bin	; gronic char
 Pal_LZGroWater:	incbin	pallet\groniclzuw.bin	; Gronic (underwater in SBZ act 3) pallet
 Pal_SBZ3GroWat:	incbin	pallet\gronicsbz3uw.bin	; Gronic (underwater in SBZ act 3) pallet
+Pal_Anakama:incbin	pallet\anakama.bin	; anakama char
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	delay the program by ($FFFFF62A) frames
@@ -3370,7 +3371,11 @@ loc_3230:
 		btst	#5,	($FFFFF605).w ; check if c pressed
 		beq.s	@notc
 
-		eor.b	#1,(v_character) ; sonic/gronic 
+		add.b	#1,(v_character).w ; sonic/gronic 
+		cmpi.b	#3,(v_character).w
+		blt.s	@notoverflow
+		move.b	#0,(v_character).w
+	@notoverflow:
 		move.b	#$B5,d0		; play ring sound when code is entered
 		bsr.w	PlaySound_Special
 	@notc:
@@ -4038,6 +4043,7 @@ Player_Palette:
 		dc.w	3,$F,$10,0 ; Sonic 
 		
 		dc.w	21,22,23,0 ; Pal_Gronic 
+		dc.w	24,22,23,0 ; Pal_Anakama 
 		; add more player palettes
 Level_LoadPal:
 		move.w	#$1E,($FFFFFE14).w
@@ -24009,6 +24015,7 @@ Obj01_Index:	dc.w Obj01_Main-Obj01_Index
 Player_Maps:
 	dc.l	Map_Sonic
 	dc.l	Map_Sonic ; gronic
+	dc.l	Map_Sonic ; anakama
 	; insert player mapping here
 	
 Obj01_Main:				; XREF: Obj01_Index
@@ -25635,6 +25642,7 @@ locret_139C2:
 Player_Anim:
 	dc.l	SonicAniData
 	dc.l	SonicAniData ; gronic
+	dc.l	SonicAniData ; anakama
 	; Insert more animation data for other characters here
 	
 Sonic_Animate:				; XREF: Obj01_Control; et al
@@ -25823,10 +25831,12 @@ SonicAniData:
 Player_DPLC:
 	dc.l	SonicDynPLC
 	dc.l	SonicDynPLC ; gronic
+	dc.l	SonicDynPLC ; anakama
 	; add pointers for player dplc here
 Player_Art:
 	dc.l	Art_Sonic
 	dc.l	Art_Sonic ; gronic
+	dc.l	Art_Sonic ; anakama
 	; add pointers for player art here
 
 LoadSonicDynPLC:			; XREF: Obj01_Control; et al
