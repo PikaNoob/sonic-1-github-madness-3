@@ -73,3 +73,6 @@
 	dc.l Pal_SBZ3GroWat
 	dc.w $FB00
 	dc.w 7
+	dc.l Pal_Anakama
+	dc.w $FB00
+	dc.w 7
