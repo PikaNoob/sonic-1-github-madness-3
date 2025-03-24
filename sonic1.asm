@@ -3163,6 +3163,7 @@ Title_ClrObjRam:
 		move.l	#$40000003,d0
 		moveq	#$27,d1
 		moveq	#$1B,d2
+		bsr.w	ShowVDPGraphics
 
 		lea	($FF0000).l,a1
 		move.l	#$60000003,d0
@@ -41375,7 +41376,7 @@ SoundIndex:	dc.l SoundA0, SoundA1, SoundA2
 		dc.l SoundCA, SoundCB, SoundCC
 		dc.l SoundCD, SoundCE, SoundCF
 SoundD0Index:	dc.l SoundD0
-SoundA0:	include	sound\jump.asm
+SoundA0:	incbin	sound\soundA0.bin
 		even
 SoundA1:	incbin	sound\soundA1.bin
 		even
