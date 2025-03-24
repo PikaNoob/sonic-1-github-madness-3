@@ -8,8 +8,8 @@
             "name": "ballhog",
             "palettes": [
                 {
-                    "path": "pallet\\sbz_act1.bin",
-                    "length": 1
+                    "path": "pallet\\sbz_act2.bin",
+                    "length": 3
                 }
             ],
             "art": {
