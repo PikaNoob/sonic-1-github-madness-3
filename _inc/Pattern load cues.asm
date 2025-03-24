@@ -17,6 +17,7 @@
 	dc.w PLC_SBZAnimals-ArtLoadCues, PLC_SpeStResult-ArtLoadCues
 	dc.w PLC_Ending-ArtLoadCues, PLC_TryAgain-ArtLoadCues
 	dc.w PLC_EggmanSBZ2-ArtLoadCues, PLC_FZBoss-ArtLoadCues
+	dc.w Plc_TetoBoss-ArtLoadCues
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - standard block 1
 ; ---------------------------------------------------------------------------
@@ -511,4 +512,14 @@ PLC_FZBoss:	dc.w 4
 		dc.w $8E00
 		dc.l Nem_Exhaust	; exhaust flame
 		dc.w $A540
+; ---------------------------------------------------------------------------
+; Pattern load cues - Teto boss
+; ---------------------------------------------------------------------------
+PLC_TetoBoss:	dc.w 2
+		dc.l Nem_Tetoboss		; Eggman main patterns
+		dc.w $8000
+		dc.l Nem_Prison		; prison capsule
+		dc.w $93A0
+		dc.l Nem_Peartobomb		; bomb enemy (gets overwritten)
+		dc.w $9000
 		even
