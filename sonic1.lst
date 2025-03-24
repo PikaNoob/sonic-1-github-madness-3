@@ -764,9 +764,9 @@
 000000E0 0000 0000 0000 0000 0000+  		dc.l ErrorTrap,	ErrorTrap, ErrorTrap, ErrorTrap
 000000F0 0000 0000 0000 0000 0000+  		dc.l ErrorTrap,	ErrorTrap, ErrorTrap, ErrorTrap
 00000100 5345 4741 204D 4547 4120+  Console:	dc.b 'SEGA MEGA DRIVE ' ; Hardware system ID
-00000110 2843 2943 4144 4520 4341+  Date:		dc.b '(C)CADE CADE C  ' ; Release date
+00000110 2843 2949 444B 2032 3030+  Date:		dc.b '(C)IDK 2001.SEP '
 00000120 686F 7720 746F 2064 6973+  Title_Local:	dc.b 'how to disassemble vhs tapes on a slab of wood  ' ; Domestic name
-00000150 686F 7720 746F 2064 6973+  Title_Int:	dc.b 'how to disassemble vhs tapes on a slab of wood  ' ; International name
+00000150 686F 7720 746F 2064 6973+  Title_Int:	dc.b 'how to disassemble vhs tapes on a slab of wood  '
 00000180 474D 2030 3030 3031 3030+  Serial:		dc.b 'GM 00001009-00'   ; Serial/version number
 0000018E 0000                       Checksum:	dc.w 0
 00000190 4A20 2020 2020 2020 2020+  		dc.b 'J               ' ; I/O support
@@ -4699,11 +4699,11 @@
 00003A28                            LevelMenuText:	
 00003A28 4352 554E 4348 5920 524F+  		dc.b    "CRUNCHY ROLL   1"
 00003A38 2020 2020 2020 2020 2020+          dc.b    "               2"
-00003A48 2020 2020 2020 2020 2020+          dc.b    "               3"
+00003A48 6B61 6D61 2073 6F20 676F+          dc.b    "kama so goated 3"
 00003A58 4920 4C49 4B45 2046 494C+          dc.b    "I LIKE FILE    1"
 00003A68 2045 5850 4C4F 5245 5220+          dc.b    " EXPLORER      2"
-00003A78 2020 2020 2020 2020 2020+          dc.b    "               3"
-00003A88 4D41 5242 4C20 2020 2020+          dc.b    "MARBL          1"
+00003A78 4841 4D42 5552 4752 2020+          dc.b    "HAMBURGR       3"
+00003A88 4D41 5242 4C45 2020 2020+          dc.b    "MARBLE         1"
 00003A98 2020 2020 2020 2020 2020+          dc.b    "               2"
 00003AA8 2020 2020 2020 2020 2020+          dc.b    "               3"
 00003AB8 444F 4E54 4745 5452 4944+          dc.b    "DONTGETRIDOTHIS1"
@@ -4719,7 +4719,7 @@
 00003B48 4649 4E41 4C20 5A4F 4E45+          dc.b    "FINAL ZONE      "
 00003B58 5350 4543 4941 4C20 5354+          dc.b    "SPECIAL STAGE   "
 00003B68 534F 554E 4420 5445 5354+          dc.b    "SOUND TEST $    "
-00003B78 4652 4545 2057 4946 4920+  		dc.b	"FREE WIFI       "
+00003B78 4652 4545 2057 4946 4920+  		dc.b	"FREE WIFI VIRUS "
 00003B88 4F50 5449 4F4E 5320 4C41+  		dc.b	"OPTIONS LATER   "
 00003B98                            LMTSelectableEnd:
 00003B98 4341 4E54 2054 4F55 4348+  		dc.b	"CANT TOUCH ME XD"

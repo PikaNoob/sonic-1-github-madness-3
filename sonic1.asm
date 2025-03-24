@@ -58,9 +58,9 @@ Vectors:	dc.l $FFFE00, EntryPoint, BusError, AddressError
 		dc.l ErrorTrap,	ErrorTrap, ErrorTrap, ErrorTrap
 		dc.l ErrorTrap,	ErrorTrap, ErrorTrap, ErrorTrap
 Console:	dc.b 'SEGA MEGA DRIVE ' ; Hardware system ID
-Date:		dc.b '(C)CADE CADE C  ' ; Release date
+Date:		dc.b '(C)IDK 2001.SEP '
 Title_Local:	dc.b 'how to disassemble vhs tapes on a slab of wood  ' ; Domestic name
-Title_Int:	dc.b 'how to disassemble vhs tapes on a slab of wood  ' ; International name
+Title_Int:	dc.b 'how to disassemble vhs tapes on a slab of wood  '
 Serial:		dc.b 'GM 00001009-00'   ; Serial/version number
 Checksum:	dc.w 0
 		dc.b 'J               ' ; I/O support
@@ -3857,11 +3857,11 @@ CStringSlop:				; XREF: LevSelTextLoad
 LevelMenuText:	
 		dc.b    "CRUNCHY ROLL   1"
         dc.b    "               2"
-        dc.b    "               3"
+        dc.b    "				3"
         dc.b    "I LIKE FILE    1"
         dc.b    " EXPLORER      2"
-        dc.b    "               3"
-        dc.b    "MARBL          1"
+        dc.b    "HAMBURGR       3"
+        dc.b    "MARBLE         1"
         dc.b    "               2"
         dc.b    "               3"
         dc.b    "DONTGETRIDOTHIS1"
@@ -3877,7 +3877,7 @@ LMTSecondRow:
         dc.b    "FINAL ZONE      "
         dc.b    "SPECIAL STAGE   "
         dc.b    "SOUND TEST $    "
-		dc.b	"FREE WIFI       "
+		dc.b	"FREE WIFI VIRUS "
 		dc.b	"OPTIONS LATER   "
 LMTSelectableEnd:
 		dc.b	"CANT TOUCH ME XD"
