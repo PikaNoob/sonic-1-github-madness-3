@@ -1,8 +1,56 @@
 {
     "Flex": 2,
     "name": "",
-    "node": "40411ff1-69e9-4f03-a2e7-5ff964cce728",
+    "node": "c3845ff0-9aaa-42b4-9fbe-958287cf7ae4",
     "objects": [
+        {
+            "name": "teto boss",
+            "children": [
+                {
+                    "format": "Sonic 1.js",
+                    "name": "fat fuck",
+                    "palettes": [],
+                    "art": {
+                        "path": "artnem\\TetoBoss.bin",
+                        "compression": "Nemesis",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "_maps\\Tetoboss.asm",
+                        "label": ""
+                    },
+                    "dplcs": {
+                        "enabled": false,
+                        "path": "",
+                        "label": ""
+                    },
+                    "uuid": "c3845ff0-9aaa-42b4-9fbe-958287cf7ae4"
+                },
+                {
+                    "format": "Sonic 1.js",
+                    "name": "pearto bomb",
+                    "palettes": [],
+                    "art": {
+                        "path": "artnem\\peartobomb.bin",
+                        "compression": "Nemesis",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "_maps\\obj19.asm",
+                        "label": ""
+                    },
+                    "dplcs": {
+                        "enabled": false,
+                        "path": "",
+                        "label": ""
+                    },
+                    "uuid": "9aaa02b4-5fbe-4582-87cf-7ae4afdeea09"
+                }
+            ],
+            "isDirectory": true,
+            "expanded": true,
+            "uuid": "8d375b5b-0e50-4bcf-92e3-85ad7f9c6f15"
+        },
         {
             "uuid": "40411ff1-69e9-4f03-a2e7-5ff964cce728",
             "format": "Sonic 1.js",
