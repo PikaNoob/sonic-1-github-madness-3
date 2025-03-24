@@ -16,6 +16,20 @@ align macro
 	endm
 		include	"sound/smps2asm_inc.asm"
 
+;level select constants (to not give the foward reference warning this was moved here)
+lsscrpos = $60860003 ; level select screen position
+lsoff = $240000 ; second row jump
+lsstpos = lsscrpos+$43C0000 ; sound test
+lsnppos = $6C820003	; now playing
+lsctrlpos = $6C800003 ; control help
+lsrow1size: equ (LMTSecondRow-LevelMenuText)/16
+lsrow2size: equ (LMTEnd-LMTSecondRow)/16
+lsselectable: equ ((LMTSelectableEnd-LevelMenuText)/16)-1 ; last selectable item
+; level select item constants
+lssndtest: equ lsrow2size+8
+lswifi: equ lsrow2size+9
+
+
 ; NOTES FOR ANYONE MAKING CHARACTERS
 v_character = $FFFFFFE8
 ; pointers for:
@@ -1099,7 +1113,7 @@ loc_1314:
 		move.l	#0,($FFFFF61A).w
 		lea	($FFFFF800).w,a1
 		moveq	#0,d0
-		move.w	#$A0,d1
+		move.w	#$9F,d1
 
 loc_133A:
 		move.l	d0,(a1)+
@@ -1107,7 +1121,7 @@ loc_133A:
 
 		lea	($FFFFCC00).w,a1
 		moveq	#0,d0
-		move.w	#$100,d1
+		move.w	#$FF,d1
 
 loc_134A:
 		move.l	d0,(a1)+
@@ -3363,40 +3377,30 @@ Title_ClrVram:
 		; sound test fix
 		move.w	($FFFFFF82).w,d6
 		move.w	#$14,($FFFFFF82).w
-		move.w	#$E680-$21,d3
+		
+		move.w	#$C680-$21,d3 ; selected
+		cmpi.w	#$14,d6
+		beq.s	@issndtst
+		move.w	#$E680-$21,d3 ; not selected
+	@issndtst:
 		bsr.w	LevSelSndTest	; refresh text
 		move.w	d6,($FFFFFF82).w
-		bra.w	LevelSelect
+		
+		move.w	#$C680-$21,d3	; VRAM setting
+		move.l	#lsctrlpos,4(a6)
+		
+		cmpi.w	#$14,($FFFFFF82).w
+		beq.s	@issndtst2
+		
+		lea	(Controls_Normal).l,a1 ; control help
+		bsr.w	CStringSlop
+		bra.s	LevelSelect
+	@issndtst2:
+		lea	(Controls_SND).l,a1
+		bsr.w	CStringSlop
 ; ---------------------------------------------------------------------------
 ; Level	Select
 ; ---------------------------------------------------------------------------
-YouAreAnIdiot:
-		bsr.w	ClearScreen
-		
-		lea	($C00004).l,a6
-		move.w	#$8700,(a6) ; first colour is bg now
-		
-		move.l	#$40000000,($C00004).l
-		lea	(Nem_Idiot).l,a0 ;	load idiot sprites
-		bsr.w	NemDec
-		lea	($FF0000).l,a1
-		lea	(Eni_Idiot).l,a0 ; load mappings for IDIOT
-		move.w	#0,d0
-		bsr.w	EniDec
-		lea	($FF0000).l,a1
-		move.l	#$43040003,d0
-		moveq	#35,d1
-		moveq	#13,d2
-		bsr.w	ShowVDPGraphics
-		moveq	#20,d0
-		bsr.w	PalLoad2	; load Sega logo pallet
-		
-		move.w	#$E5,d0		; YOU ARE AN IDIOT BOOM
-		move.b	d0,($FFFFF00B).w ; PlaySound_Special but faster
-	@wait:
-		move.b	#4,($FFFFF62A).w
-		bsr.w	DelayProgram
-		bra.s	@wait
 LevelSelect:
 		move.b	#4,($FFFFF62A).w
 		bsr.w	DelayProgram
@@ -3408,16 +3412,31 @@ LevelSelect:
 		beq.s	LevelSelect	; if not, branch
 		move.w	($FFFFFF82).w,d0
 		cmpi.w	#lswifi,d0		; have you selected item $15 (free wifi)?
-		beq.w	YouAreAnIdiot	; if not, dont blow this place up
-		
+		bne.s	@dont	; if not, dont blow this place up
+			
+		move.b	#$E5,($FFFFF00B).w ; YOU ARE AN IDIOT BOOM
+		move.b	#4,($FFFFF62A).w
+		bsr.w	DelayProgram
+	@dont:
 		cmpi.w	#lssndtest,d0		; have you selected item $14 (sound test)?
 		bne.s	LevSel_Level_SS	; if not, go to	Level/SS subroutine
+		
+		andi.b	#$A0,($FFFFF605).w ; is C or Start pressed?
+		beq.s	LevelSelect	; if not, branch
+		
+		btst	#7,($FFFFF605).w ; was it start?
+		bne.s	LevSel_SEGA ; then go to sega screen
 		
 		move.b	($FFFFFF84).w,d0
 		move.b	d0,($FFFFF00B).w ; PlaySound_Special but faster
 		
 		jsr		ShowNow_Playing
 		bra.s	LevelSelect
+; ===========================================================================
+
+LevSel_SEGA:				; XREF: LevelSelect
+		move.b	#$0,($FFFFF600).w ; set screen	mode to	$0 SEGA
+		rts	
 ; ===========================================================================
 
 LevSel_Ending:				; XREF: LevelSelect
@@ -3562,13 +3581,13 @@ LevSelControls:				; XREF: LevelSelect
 		andi.b	#3,d1		; is up/down pressed and held?
 		bne.s	LevSel_UpDown	; if yes, branch
 		subq.w	#1,($FFFFFF80).w ; subtract 1 from time	to next	move
-		bpl.s	LevSel_SndTest	; if time remains, branch
+		bpl.w	LevSel_SndTest	; if time remains, branch
 
 LevSel_UpDown:
 		move.w	#$B,($FFFFFF80).w ; reset time delay
 		move.b	($FFFFF604).w,d1
 		andi.b	#3,d1		; is up/down pressed?
-		beq.s	LevSel_SndTest	; if not, branch
+		beq.w	LevSel_SndTest	; if not, branch
 		move.w	($FFFFFF82).w,d6
 		btst	#0,d1		; is up	pressed?
 		beq.s	LevSel_Down	; if not, branch
@@ -3585,47 +3604,80 @@ LevSel_Down:
 		moveq	#0,d6		; if selection moves above last selectable,	jump to	selection 0
 		bra.s	LevSel_Refresh
 		
-LevSel_GoLR:
+LevSel_LR:
 		btst	#2,d1		; is left pressed?
-		beq.s	LevSel_GoRight	; if not, branch
+		beq.s	LevSel_Right	; if not, branch
 		sub.w	#lsrow2size,d6
 		bcc.s	LevSel_Down
 		add.w	#lsrow2size,d6	; don't jump
-		bra.s	LevSel_Refresh
-LevSel_GoRight:
+LevSel_Right:
+		btst	#3,d1		; is right pressed?
+		beq.s	LevSel_Refresh	; if not, branch
 		add.w	#lsrow1size,d6
 		cmpi.w	#lsselectable+1,d6
 		bcs.s	LevSel_Refresh
 		sub.w	#lsrow1size,d6	; don't jump
 ; ===========================================================================
 LevSel_Refresh:
+		
 		move.w	#$E680-$21,d3	; VRAM setting
 		bsr.w	LevSelHighlightCode	; refresh text
+		
+		cmpi.w	#lssndtest,($FFFFFF82).w
+		bne.s	@exitsndtest
+		
+		move.w	#$C680-$21,d3	; VRAM setting
+		lea	(Controls_Normal).l,a1
+		move.l	#lsctrlpos,4(a6)
+		bsr.w	CStringSlop
+	@exitsndtest:
+	
 		move.w	#$C680-$21,d3
 		move.w	d6,($FFFFFF82).w ; set new selection
 		bsr.w	LevSelHighlightCode	; refresh text
+		
+		cmpi.w	#lssndtest,($FFFFFF82).w 
+		bne.s	@entersndtest
+		
+		move.w	#$C680-$21,d3
+		lea	(Controls_SND).l,a1
+		move.l	#lsctrlpos,4(a6)
+		bsr.w	CStringSlop
+	@entersndtest:
 		rts	
 		
 LevSel_SndTest:				; XREF: LevSelControls
 		move.b	($FFFFF605).w,d1
-		andi.b	#$C,d1		; is left/right	pressed?
+		andi.b	#$5C,d1		; is left/right/a/b	pressed?
 		beq.s	LevSel_NoMove	; if not, branch
-		cmpi.w	#lssndtest,($FFFFFF82).w ; is	item $14 selected?
-		bne.s	LevSel_GoLR	; if not, branch
+		cmpi.w	#lssndtest,($FFFFFF82).w ; is item $14 selected?
+		bne.w	LevSel_LR	; if not, branch
 		
 		move.b	($FFFFFF84).w,d0
 		btst	#2,d1		; is left pressed?
-		beq.s	LevSel_Right	; if not, branch
+		beq.s	SndTest_Right	; if not, branch
 		subq.b	#1,d0		; subtract 1 from sound	test
 		; no need the fact it's a byte does the trick
 
-LevSel_Right:
+SndTest_Right:
 		btst	#3,d1		; is right pressed?
-		beq.s	LevSel_Refresh2	; if not, branch
+		beq.s	SndTest_A	; if not, branch
 		addq.b	#1,d0		; add 1	to sound test
 		; same here
+		
+SndTest_A:
+		btst	#6,d1		; is A pressed?
+		beq.s	SndTest_B	; if not, branch
+		subq.b	#8,d0		; subtract $10 to sound test
+		subq.b	#8,d0
+		
+SndTest_B:
+		btst	#4,d1		; is B pressed?
+		beq.s	SndTest_Refresh	; if not, branch
+		addq.b	#8,d0		; add $10 to sound test
+		addq.b	#8,d0
 
-LevSel_Refresh2:
+SndTest_Refresh:
 		move.w	#$C680-$21,d3
 		move.b	d0,($FFFFFF84).w ; set sound test number
 		bra.w	LevSelSndTest	; refresh text
@@ -3639,9 +3691,6 @@ LevSel_NoMove:
 ; ---------------------------------------------------------------------------
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
-lsscrpos = $60860003
-lsoff = $240000
-lsstpos = lsscrpos+$43C0000
 
 LevSelTextLoad_loop:
 		move.l	d4,4(a6)
@@ -3750,12 +3799,23 @@ CStringSlop:				; XREF: LevSelTextLoad
 		move.b	(a1)+,d0
 		cmpi.b	#$20,d0
 		bgt.s	CStringSlop_draw
-		tst.b	d0
-		beq.s	@end
+		
+		cmpi.b	#1,d0
+		beq.s	@InsertSpaces
+		blo.s	@end
+		
 		move.w	#0,(a6)
 		bra.s	CStringSlop
 	@end:
 		rts
+	@InsertSpaces:
+		moveq	#0,d0
+		move.b	(a1)+,d0
+		
+	@insert:
+		move.w	#0,(a6)
+		dbf.w	d0,@insert
+		bra.s	CStringSlop
 ; End of function LevSel_ChgLine
 
 ; ===========================================================================
@@ -3791,15 +3851,6 @@ LMTSelectableEnd:
 		dc.b	"CANT TOUCH ME XD"
 LMTEnd:
 
-
-lsrow1size = (LMTSecondRow-LevelMenuText)/16
-lsrow2size = (LMTEnd-LMTSecondRow)/16
-lsselectable = ((LMTSelectableEnd-LevelMenuText)/16)-1
-; just to not break these
-lssndtest = lsrow2size+8
-lswifi = lsrow2size+9
-
-nppos = $6C820003
 Now_Playing:
 		dc.b	">>>NOW PLAYING ",0
 		even
@@ -3815,7 +3866,7 @@ ShowNow_Playing:
 		move.w	#$C680-$21,d3	; VRAM setting
 		lea	Now_Playing(pc),a1
 		lea		($C00000).l,a6
-		move.l	#nppos,4(a6)
+		move.l	#lsnppos,4(a6)
 		bsr.w	CStringSlop
 		
 		lea	NP_Track(pc),a1
@@ -3834,6 +3885,14 @@ ShowNow_Playing:
 		move.b	d2,d0
 		bsr.w	LevSel_ChgSnd
 		rts	
+
+; 1 is insert spaces btw
+Controls_Normal:
+		dc.b	"ANY: PLAY",1,27,0
+		even		
+Controls_SND:
+		dc.b	"A: -10  B: +10  C: PLAY  START: QUIT",0
+		even
 ; ---------------------------------------------------------------------------
 ; Music	playlist
 ; ---------------------------------------------------------------------------
@@ -39472,9 +39531,36 @@ return_PlayPCM:
 		
 ; ---------------------------------------------------------------------------
 ; Play you are an idiot pcm sound
+; since the sfx already crashes the game forever load it here :V
 ; ---------------------------------------------------------------------------
 
-Sound_E5:  
+Sound_E5: 
+		jsr	ClearScreen
+		;control port on a5
+		move.l	#$94000000+((($280>>1)&$FF00)<<8)+$9300+(($280>>1)&$FF),(a5)
+		move.l	#$96000000+((($FFFFF800>>1)&$FF00)<<8)+$9500+(($FFFFF800>>1)&$FF),(a5)
+		move.w	#$9700+(((($FFFFF800>>1)&$FF0000)>>16)&$7F),(a5)
+		move.w	#$4000+($F800&$3FFF),(a5)
+		move.w	#$80+(($F800&$C000)>>14),(a5) ; clear sprites
+		
+		move.w	#$8700,(a5) ; first colour is bg now
+		
+		move.l	#$40000000,(a5)
+		lea	(Nem_Idiot).l,a0 ;	load idiot sprites
+		jsr	NemDec
+		lea	($FF0000).l,a1
+		lea	(Eni_Idiot).l,a0 ; load mappings for IDIOT
+		move.w	#0,d0
+		jsr	EniDec
+		lea	($FF0000).l,a1
+		move.l	#$43040003,d0
+		moveq	#35,d1
+		moveq	#13,d2
+		jsr	ShowVDPGraphics
+		moveq	#20,d0
+		jsr	PalLoad2	; load pallet
+		
+Sound_E5_StartPCM:
 		lea	(IdiotPCM).l,a2			; Load the idiot PCM sample into a2. It's important that we use a2 since a0 and a1 are going to be used up ahead when reading the joypad ports 
 		move.l	#(IdiotPCM_End-IdiotPCM),d3			; Load the size of the idiot PCM sample into d3 
 		move.b	#$2A,($A04000).l		; $A04000 = $2A -> Write to DAC channel	  
@@ -39491,14 +39577,11 @@ PlayPCM_LoopE5:
 		move.w	#$58-2,d0				; Write the pitch ($58 in this case) to d0  (-28 from the check before)
 		dbf	d0,*				; Decrement d0; jump to itself if not 0. (for pitch control, avoids playing the sample too fast)   (14 cycles)
 		sub.l	#1,d3				; Subtract 1 from the PCM sample size 
-		beq.s	Sound_E5			; If d3 = 0, we finished playing the PCM sample, DONT STOP
+		beq.s	Sound_E5_StartPCM			; If d3 = 0, we finished playing the PCM sample, DONT STOP
 		bra.s	PlayPCM_LoopE5
 		
 SfxE5SwapPalette:
 		
-		
-		
-		lea	($C00004).l,a5
 		move.l	#$94000000+((($10>>1)&$FF00)<<8)+$9300+(($10>>1)&$FF),(a5) ; len
 		
 		
