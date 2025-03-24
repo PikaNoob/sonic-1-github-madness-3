@@ -217,9 +217,11 @@ GameClrRAM:
 		bsr.w	JoypadInit
 		move.b	#0,($FFFFF600).w ; set Game Mode to Sega Screen
 
+	;	move.b	#$20,($FFFFF600).w ; set Game Mode to Minecraft
+
 MainGameLoop:
 		move.b	($FFFFF600).w,d0 ; load	Game Mode
-		andi.w	#$1C,d0
+		andi.w	#$3C,d0
 		jsr	GameModeArray(pc,d0.w) ; jump to apt location in ROM
 		bra.s	MainGameLoop
 ; ===========================================================================
@@ -244,7 +246,7 @@ GameModeArray:
 ; ===========================================================================
 		bra.w	Credits		; Credits ($1C)
 ; ===========================================================================
-		rts	
+		jmp	Minecraft	; Minecraft ($20)	
 ; ===========================================================================
 
 CheckSumError:
@@ -41360,6 +41362,7 @@ SegaPCM_end:	even
 IdiotPCM:	incbin	sound\youare.bin
 IdiotPCM_end:	even
 
+Minecraft:	include	minecraft\code\main.asm
 ; end of 'ROM'
 EndOfRom:
 
