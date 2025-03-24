@@ -1,8 +1,28 @@
 {
     "Flex": 2,
     "name": "",
-    "node": "db436497-8172-4473-ab1a-116ba31d78a9",
+    "node": "fd06d5dd-8faf-4845-a952-9ea161297073",
     "objects": [
+        {
+            "format": "Sonic 1.js",
+            "name": "spike",
+            "palettes": [],
+            "art": {
+                "path": "artnem/spikes.bin",
+                "compression": "Nemesis",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "_maps/obj36.asm",
+                "label": "Map_obj36_inner"
+            },
+            "dplcs": {
+                "enabled": false,
+                "path": "",
+                "label": ""
+            },
+            "uuid": "fd06d5dd-8faf-4845-a952-9ea161297073"
+        },
         {
             "name": "teto boss",
             "children": [
