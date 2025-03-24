@@ -1,7 +1,6 @@
 {
-    "Flex": 2,
+    "description": "Flex 2 Project File",
     "name": "",
-    "node": "7c221514-e097-4e7e-a467-34ba98094ecd",
     "objects": [
         {
             "uuid": "221514e0-977e-4ee4-a734-ba98094ecd01",
@@ -246,6 +245,27 @@
                 "label": ""
             },
             "uuid": "84dacbf1-a489-4e5d-95f1-29272959b29e"
+        },
+        {
+            "name": "Credits Text",
+            "palettes": [],
+            "art": {
+                "path": "artnem\\credits.bin",
+                "compression": "Nemesis"
+            },
+            "mappings": {
+                "path": "_maps\\obj8A.asm",
+                "format": "Sonic 1",
+                "customDefinition": "",
+                "label": ""
+            },
+            "dplcs": {
+                "enabled": false,
+                "path": "",
+                "format": "Sonic 1",
+                "customDefinition": "",
+                "label": ""
+            }
         }
     ]
 }
