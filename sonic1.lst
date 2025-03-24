@@ -49123,7 +49123,7 @@
 00088600 0000                       	smpsHeaderVoice     music84_Voices
 00088602 0603                       	smpsHeaderChan      $06, $03
 00088604 0205                       	smpsHeaderTempo     $02, $05
-00088606                            
+00088606                            
 0008860A 0000 0000                  	smpsHeaderFM        music84_FM1,	$00, $00
 0008860E 0000 0000                  	smpsHeaderFM        music84_FM2,	$00, $00
 00088612 0000 0000                  	smpsHeaderFM        music84_FM3,	$00, $00
@@ -49132,7 +49132,7 @@
 0008861E 0000 0000 0000             	smpsHeaderPSG       music84_PSG1,	$00, $00, $00, $00
 00088624 0000 0000 0000             	smpsHeaderPSG       music84_PSG2,	$00, $00, $00, $00
 0008862A 0000 0000 0000             	smpsHeaderPSG       music84_PSG3,	$00, $00, $00, $00
-00088630                            
+00088630                            
 00088630                            ; FM1 Data
 00088630                            music84_FM1:
 00088630 E0C0                       	smpsPan             panCenter, $00
@@ -49154,7 +49154,7 @@
 0008865F 9603 A203 8001             	dc.b	nA1, $03, nA2, $03, nRst, $01
 00088665 E107                       	smpsAlterNote       $07
 00088667 9B03                       	dc.b	nD2, $03
-00088669                            
+00088669                            
 00088669                            music84_Jump04:
 00088669 E107                       	smpsAlterNote       $07
 0008866B 9B03 8001                  	dc.b	nD2, $03, nRst, $01
@@ -50085,7 +50085,7 @@
 00089169 E107                       	smpsAlterNote       $07
 0008916B 9B03 8001                  	dc.b	nD2, $03, nRst, $01
 0008916F F6F4 F8                    	smpsJump            music84_Jump04
-00089172                            
+00089172                            
 00089172                            ; FM2 Data
 00089172                            music84_FM2:
 00089172 E0C0                       	smpsPan             panCenter, $00
@@ -50113,7 +50113,7 @@
 000891B4 E107                       	smpsAlterNote       $07
 000891B6 E606                       	smpsAlterVol        $06
 000891B8 BF03                       	dc.b	nD5, $03
-000891BA                            
+000891BA                            
 000891BA                            music84_Jump03:
 000891BA E108                       	smpsAlterNote       $08
 000891BC C103 8001                  	dc.b	nE5, $03, nRst, $01
@@ -51692,7 +51692,7 @@
 0008A005 BF03 8001                  	dc.b	nD5, $03, nRst, $01
 0008A009 E603                       	smpsAlterVol        $03
 0008A00B F6F1 AD                    	smpsJump            music84_Jump03
-0008A00E                            
+0008A00E                            
 0008A00E                            ; FM3 Data
 0008A00E                            music84_FM3:
 0008A00E E0C0                       	smpsPan             panCenter, $00
@@ -51720,7 +51720,7 @@
 0008A052 E109                       	smpsAlterNote       $09
 0008A054 E609                       	smpsAlterVol        $09
 0008A056 B603                       	dc.b	nF4, $03
-0008A058                            
+0008A058                            
 0008A058                            music84_Jump02:
 0008A058 E70A                       	dc.b	smpsNoAttack, $0A
 0008A05A E103                       	smpsAlterNote       $03
@@ -53310,7 +53310,7 @@
 0008AEA8 B604                       	dc.b	nF4, $04
 0008AEAA E602                       	smpsAlterVol        $02
 0008AEAC F6F1 AA                    	smpsJump            music84_Jump02
-0008AEAF                            
+0008AEAF                            
 0008AEAF                            ; FM4 Data
 0008AEAF                            music84_FM4:
 0008AEB1 E040                       	smpsPan             panRight, $00
@@ -53333,7 +53333,7 @@
 0008AEE6 E10A                       	smpsAlterNote       $0A
 0008AEE8 BD03 8001                  	dc.b	nC5, $03, nRst, $01
 0008AEEE 03                         	dc.b	$03
-0008AEEF                            
+0008AEEF                            
 0008AEEF                            music84_Jump01:
 0008AEEF E10B                       	smpsAlterNote       $0B
 0008AEF1 BF03 8001                  	dc.b	nD5, $03, nRst, $01
@@ -54861,7 +54861,7 @@
 0008BD19 03                         	dc.b	$03
 0008BD1A E601                       	smpsAlterVol        $01
 0008BD1C F6F1 D1                    	smpsJump            music84_Jump01
-0008BD1F                            
+0008BD1F                            
 0008BD1F                            ; FM5 Data
 0008BD1F                            music84_FM5:
 0008BD21 E080                       	smpsPan             panLeft, $00
@@ -54881,7 +54881,7 @@
 0008BD4F E10A                       	smpsAlterNote       $0A
 0008BD51 BD01 8001                  	dc.b	nC5, $01, nRst, $01
 0008BD57 03                         	dc.b	$03
-0008BD58                            
+0008BD58                            
 0008BD58                            music84_Jump00:
 0008BD58 8004                       	dc.b	nRst, $04
 0008BD5A E602                       	smpsAlterVol        $02
@@ -56425,7 +56425,7 @@
 0008CB5F 03                         	dc.b	$03
 0008CB60 E6FD                       	smpsAlterVol        $FD
 0008CB62 F6F1 F4                    	smpsJump            music84_Jump00
-0008CB65                            
+0008CB65                            
 0008CB65                            ; PSG1 Data
 0008CB65                            music84_PSG1:
 0008CB65 E1FD                       	smpsAlterNote       $FD
@@ -56497,7 +56497,7 @@
 0008CBDA 01                         	dc.b	$01
 0008CBDB E1FD                       	smpsAlterNote       $FD
 0008CBDD 01                         	dc.b	$01
-0008CBDE                            
+0008CBDE                            
 0008CBDE                            music84_Jump07:
 0008CBDE E105                       	smpsAlterNote       $05
 0008CBE0 8001                       	dc.b	nRst, $01
@@ -58031,7 +58031,7 @@
 0008D6C0 E100                       	smpsAlterNote       $00
 0008D6C2 01                         	dc.b	$01
 0008D6C3 F6F5 19                    	smpsJump            music84_Jump07
-0008D6C6                            
+0008D6C6                            
 0008D6C6                            ; PSG2 Data
 0008D6C6                            music84_PSG2:
 0008D6C6 E1FC                       	smpsAlterNote       $FC
@@ -58102,7 +58102,7 @@
 0008D739 01                         	dc.b	$01
 0008D73A E1FC                       	smpsAlterNote       $FC
 0008D73C 01                         	dc.b	$01
-0008D73D                            
+0008D73D                            
 0008D73D                            music84_Jump06:
 0008D73D E10A                       	smpsAlterNote       $0A
 0008D73F 8001                       	dc.b	nRst, $01
@@ -59654,19 +59654,19 @@
 0008E244 EC07                       	smpsPSGAlterVol     $07
 0008E246 8008                       	dc.b	nRst, $08
 0008E248 F6F4 F3                    	smpsJump            music84_Jump06
-0008E24B                            
+0008E24B                            
 0008E24B                            ; PSG3 Data
 0008E24B                            music84_PSG3:
 0008E24B F500                       	smpsPSGvoice        $00
 0008E24D E1FF                       	smpsAlterNote       $FF
 0008E24F EC0F                       	smpsPSGAlterVol     $0F
 0008E251 803A                       	dc.b	nRst, $3A
-0008E253                            
+0008E253                            
 0008E253                            music84_Jump05:
 0008E253 8068 6868 6868 6868 6868+  	dc.b	nRst, $68, $68, $68, $68, $68, $68, $68, $68, $68, $68, $68
 0008E25F 6868 6868 6868 6868 6802   	dc.b	$68, $68, $68, $68, $68, $68, $68, $68, $68, $02
 0008E269 F6FF E8                    	smpsJump            music84_Jump05
-0008E26C                            
+0008E26C                            
 0008E26C                            ; DAC Data
 0008E26C                            music84_DAC:
 0008E26C E0C0                       	smpsPan             panCenter, $00
@@ -59747,7 +59747,7 @@
 0008E5E6 8103 8207 8203 8204 8107+  	dc.b	dKick, $03, dSnare, $07, dSnare, $03, dSnare, $04, dKick, $07, dKick, $17
 0008E5F2 E0C0                       	smpsPan             panCenter, $00
 0008E5F4 F2                         	smpsStop
-0008E5F5                            
+0008E5F5                            
 0008E5F5                            music84_Voices:
 0008E5F5                            ;	Voice $00
 0008E5F5                            ;	$3D
@@ -59766,7 +59766,7 @@
 0008E5F5                            	smpsVcDecayLevel    $0F, $0F, $0F, $0F
 0008E5F5                            	smpsVcReleaseRate   $08, $08, $08, $07
 0008E5F5 3D41 3141 5111 1111 110A+  	smpsVcTotalLevel    $14, $20, $14, $1A
-0008E60E                            
+0008E60E                            
 0008E60E                            ;	Voice $01
 0008E60E                            ;	$04
 0008E60E                            ;	$5A, $41, $3A, $41, 	$5F, $1F, $5F, $1F, 	$00, $0E, $00, $0E
@@ -59784,7 +59784,7 @@
 0008E60E                            	smpsVcDecayLevel    $08, $0E, $08, $0E
 0008E60E                            	smpsVcReleaseRate   $06, $06, $06, $06
 0008E60E 045A 413A 415F 1F5F 1F00+  	smpsVcTotalLevel    $10, $19, $10, $19
-0008E627                            
+0008E627                            
 0008E627                            ;	Voice $02
 0008E627                            ;	$30
 0008E627                            ;	$6C, $03, $21, $41, 	$14, $1F, $1F, $1F, 	$0D, $0C, $0E, $01
@@ -59802,7 +59802,7 @@
 0008E627                            	smpsVcDecayLevel    $08, $0B, $0C, $0F
 0008E627                            	smpsVcReleaseRate   $09, $0B, $08, $0F
 0008E627 306C 0321 4114 1F1F 1F0D+  	smpsVcTotalLevel    $10, $14, $27, $24
-0008E640                            
+0008E640                            
 0008E640                            ;	Voice $03
 0008E640                            ;	$3A
 0008E640                            ;	$01, $21, $61, $41, 	$14, $14, $19, $18, 	$09, $09, $0D, $09
@@ -59820,7 +59820,7 @@
 0008E640                            	smpsVcDecayLevel    $0E, $0F, $0B, $0F
 0008E640                            	smpsVcReleaseRate   $08, $0F, $0F, $07
 0008E640 3A01 2161 4114 1419 1809+  	smpsVcTotalLevel    $10, $1E, $16, $26
-0008E659                            
+0008E659                            
 0008E659                            ;	Voice $04
 0008E659                            ;	$3C
 0008E659                            ;	$3A, $02, $00, $70, 	$1F, $10, $1F, $10, 	$00, $00, $00, $00
@@ -59838,7 +59838,7 @@
 0008E659                            	smpsVcDecayLevel    $0F, $0F, $0F, $0F
 0008E659                            	smpsVcReleaseRate   $0A, $02, $0A, $02
 0008E659 3C3A 0200 701F 101F 1000+  	smpsVcTotalLevel    $18, $24, $1F, $30
-0008E672                            
+0008E672                            
 0008E672                            ;	Voice $05
 0008E672                            ;	$38
 0008E672                            ;	$00, $21, $61, $41, 	$10, $1F, $1F, $1F, 	$17, $00, $03, $00
@@ -59856,8 +59856,8 @@
 0008E672                            	smpsVcDecayLevel    $0F, $0F, $0F, $0A
 0008E672                            	smpsVcReleaseRate   $08, $05, $05, $05
 0008E672 3800 2161 4110 1F1F 1F17+  	smpsVcTotalLevel    $14, $11, $10, $1D
-0008E68B                            
-0008E68B                            
+0008E68B                            
+0008E68B                            
 0008E68C 00                         		even
 0008E68C                            Music85:	incbin	sound\glass2.bin ; Spring Yard Act 1
 0009289C                            		even
