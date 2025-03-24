@@ -4015,7 +4015,6 @@
 00003246 6100 ED4E                  		bsr.w	Pal_FadeTo
 0000324A 6100 EDF0                  		bsr.w	Pal_FadeFrom
 0000324E                            
-0000324E                            
 0000324E 6100 E298                  		bsr.w	ClearScreen
 00003252 23FC 4000 0000 00C0 0004   		move.l	#$40000000,($C00004).l
 0000325C 41F9 0000 0000             		lea	(Nem_JapNames).l,a0 ; load Japanese credits
