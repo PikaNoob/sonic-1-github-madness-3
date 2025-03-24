@@ -21,7 +21,7 @@ lsscrpos = $60860003 ; level select screen position
 lsoff = $240000 ; second row jump
 lsstpos = lsscrpos+$43C0000 ; sound test
 lsnppos = $6C820003	; now playing
-lsctrlpos = $6C800003 ; control help
+lsctrlpos = $6D020003 ; control help
 lsrow1size: equ (LMTSecondRow-LevelMenuText)/16
 lsrow2size: equ (LMTEnd-LMTSecondRow)/16
 lsselectable: equ ((LMTSelectableEnd-LevelMenuText)/16)-1 ; last selectable item
