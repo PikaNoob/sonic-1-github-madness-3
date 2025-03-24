@@ -24565,6 +24565,8 @@ Sonic_AirUnroll:
 		move.b	#$13,$16(a0)
 		move.b	#9,$17(a0)
 		move.b	#14,$1C(a0)	; use dunk animation
+		move.w	#$A5,d0
+		jsr	(PlaySound_Special).l ;	play fart sound
 		move.l	$10(a0),d0
 		add.l	d0,d0
 		move.l	d0,$10(a0)
@@ -41264,7 +41266,7 @@ SoundA3:	incbin	sound\soundA3.bin
 		even
 SoundA4:	incbin	sound\soundA4.bin
 		even
-SoundA5:	incbin	sound\soundA5.bin
+SoundA5:	include	sound\fart.asm
 		even
 SoundA6:	incbin	sound\soundA6.bin
 		even
