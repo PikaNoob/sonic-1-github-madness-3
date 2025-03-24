@@ -3413,8 +3413,7 @@ LevelSelect:
 		cmpi.w	#lssndtest,d0		; have you selected item $14 (sound test)?
 		bne.s	LevSel_Level_SS	; if not, go to	Level/SS subroutine
 		
-		move.w	($FFFFFF84).w,d0
-		addi.w	#$80,d0
+		move.b	($FFFFFF84).w,d0
 		move.b	d0,($FFFFF00B).w ; PlaySound_Special but faster
 		
 		jsr		ShowNow_Playing
@@ -3614,24 +3613,21 @@ LevSel_SndTest:				; XREF: LevSelControls
 		cmpi.w	#lssndtest,($FFFFFF82).w ; is	item $14 selected?
 		bne.s	LevSel_GoLR	; if not, branch
 		
-		move.w	($FFFFFF84).w,d0
+		move.b	($FFFFFF84).w,d0
 		btst	#2,d1		; is left pressed?
 		beq.s	LevSel_Right	; if not, branch
-		subq.w	#1,d0		; subtract 1 from sound	test
-		bcc.s	LevSel_Right
-		moveq	#$4F,d0		; if sound test	moves below 0, set to $4F
+		subq.b	#1,d0		; subtract 1 from sound	test
+		; no need the fact it's a byte does the trick
 
 LevSel_Right:
 		btst	#3,d1		; is right pressed?
 		beq.s	LevSel_Refresh2	; if not, branch
-		addq.w	#1,d0		; add 1	to sound test
-		cmpi.w	#$50,d0
-		bcs.s	LevSel_Refresh2
-		moveq	#0,d0		; if sound test	moves above $4F, set to	0
+		addq.b	#1,d0		; add 1	to sound test
+		; same here
 
 LevSel_Refresh2:
 		move.w	#$C680-$21,d3
-		move.w	d0,($FFFFFF84).w ; set sound test number
+		move.b	d0,($FFFFFF84).w ; set sound test number
 		bra.w	LevSelSndTest	; refresh text
 
 LevSel_NoMove:
@@ -3645,7 +3641,7 @@ LevSel_NoMove:
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 lsscrpos = $60860003
 lsoff = $240000
-lsstpos = lsscrpos+$43A0000
+lsstpos = lsscrpos+$43C0000
 
 LevSelTextLoad_loop:
 		move.l	d4,4(a6)
@@ -3697,8 +3693,7 @@ LevSelHighlightCode:
 LevSelSndTest:
 		add.w	#$30,d3
 		move.l	#lsstpos,($C00004).l ; screen	position (sound	test)
-		move.w	($FFFFFF84).w,d0
-		addi.w	#$80,d0
+		move.b	($FFFFFF84).w,d0
 		move.b	d0,d2
 		lsr.b	#4,d0
 		bsr.w	LevSel_ChgSnd
@@ -3789,7 +3784,7 @@ LMTSecondRow:
         dc.b    "               3"
         dc.b    "FINAL ZONE      "
         dc.b    "SPECIAL STAGE   "
-        dc.b    "SOUND TEST      "
+        dc.b    "SOUND TEST $    "
 		dc.b	"FREE WIFI       "
 		dc.b	"OPTIONS LATER   "
 LMTSelectableEnd:
