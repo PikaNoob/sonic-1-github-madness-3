@@ -3165,6 +3165,7 @@ Title_ClrObjRam:
 		moveq	#$1B,d2
 		bsr.w	ShowVDPGraphics
 
+
 		lea	($FF0000).l,a1
 		move.l	#$60000003,d0
 		moveq	#$27,d1
@@ -3194,6 +3195,7 @@ Title_ClrObjRam:
 		lea	($FFFFFB80).w,a1
 		moveq	#0,d0
 		move.w	#$1F,d1
+
 
 Title_ClrPallet:
 		move.l	d0,(a1)+
@@ -3270,7 +3272,7 @@ Title_LoadText:
 		move.w	#$178,($FFFFF614).w ; run title	screen for $178	frames
 		lea	($FFFFD080).w,a1
 		moveq	#0,d0
-		move.w	#7,d1
+		move.w	#$F,d1
 
 Title_ClrObjRam2:
 		move.l	d0,(a1)+
@@ -41376,7 +41378,7 @@ SoundIndex:	dc.l SoundA0, SoundA1, SoundA2
 		dc.l SoundCA, SoundCB, SoundCC
 		dc.l SoundCD, SoundCE, SoundCF
 SoundD0Index:	dc.l SoundD0
-SoundA0:	include	sound\jump.asm
+SoundA0:	incbin	sound\soundA0.bin
 		even
 SoundA1:	incbin	sound\soundA1.bin
 		even
