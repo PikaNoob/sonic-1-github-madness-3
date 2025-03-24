@@ -1,8 +1,33 @@
 {
     "Flex": 2,
     "name": "",
-    "node": "e02c60bf-44b8-4ec7-a78f-359839fecb2b",
+    "node": "3d860095-97a9-49b2-a7d4-b8cb3af5edda",
     "objects": [
+        {
+            "format": "Sonic 1.js",
+            "name": "ballhog",
+            "palettes": [
+                {
+                    "path": "pallet\\sbz_act1.bin",
+                    "length": 1
+                }
+            ],
+            "art": {
+                "path": "artnem\\ballhog.bin",
+                "compression": "Nemesis",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "_maps\\obj1E.asm",
+                "label": ""
+            },
+            "dplcs": {
+                "enabled": false,
+                "path": "",
+                "label": ""
+            },
+            "uuid": "3d860095-97a9-49b2-a7d4-b8cb3af5edda"
+        },
         {
             "format": "Sonic 1.js",
             "name": "object",
