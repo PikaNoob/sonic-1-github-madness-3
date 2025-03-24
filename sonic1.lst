@@ -3995,10 +3995,12 @@
 00003204 6100 E45E                  		bsr.w	NemDec
 00003208 7003                       		moveq	#3,d0		; load Sonic's pallet
 0000320A 6100 F0DA                  		bsr.w	PalLoad1
+0000320E                            
 0000320E 43F9 00FF 0000             		lea	($FF0000).l,a1
 00003214 41F9 0000 0000             		lea	(Eni_Gomer).l,a0 ; load mappings for	Gomer credits
 0000321A 303C 0000                  		move.w	#0,d0
 0000321E 6100 E722                  		bsr.w	EniDec
+00003222                            ; help how the fuck can i do this IT SHOWS NOTHING
 00003222 43F9 00FF 0000             		lea	($FF0000).l,a1
 00003228 203C 4000 0003             		move.l	#$40000003,d0
 0000322E 7227                       		moveq	#$27,d1
