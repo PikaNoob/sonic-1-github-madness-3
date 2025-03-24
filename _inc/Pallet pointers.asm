@@ -67,3 +67,9 @@
 	dc.l Pal_Gronic
 	dc.w $FB00
 	dc.w 7
+	dc.l Pal_LZGroWater
+	dc.w $FB00
+	dc.w 7
+	dc.l Pal_SBZ3GroWat
+	dc.w $FB00
+	dc.w 7

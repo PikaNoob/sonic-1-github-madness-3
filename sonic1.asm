@@ -2870,6 +2870,8 @@ Pal_SpeContinue:incbin	pallet\sscontin.bin	; special stage results screen contin
 Pal_Ending:	incbin	pallet\ending.bin	; ending sequence pallets
 Pal_Idiot:	incbin	pallet\idiot.bin	; idiot pallet
 Pal_Gronic:	incbin	pallet\gronic.bin	; gronic char
+Pal_LZGroWater:	incbin	pallet\groniclzuw.bin	; Gronic (underwater in SBZ act 3) pallet
+Pal_SBZ3GroWat:	incbin	pallet\gronicsbz3uw.bin	; Gronic (underwater in SBZ act 3) pallet
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	delay the program by ($FFFFF62A) frames
@@ -3942,28 +3944,31 @@ Level_ClrVars3:
 		clr.b	($FFFFF64D).w	; clear	water routine counter
 		clr.b	($FFFFF64E).w	; clear	water movement
 		move.b	#1,($FFFFF64C).w ; enable water
-		bra.s	Level_LoadPal
+		bra.w	Level_LoadPal
 Player_Palette:
-		dc.w	3 ; Sonic 
-		dc.w	21 ; Pal_Gronic 
+		; normal, lz, sbz, blank
+		dc.w	3,$F,$10,0 ; Sonic 
+		
+		dc.w	21,22,23,0 ; Pal_Gronic 
 		; add more player palettes
 Level_LoadPal:
 		move.w	#$1E,($FFFFFE14).w
 		move	#$2300,sr
 
-		moveq	#0,d0
-		move.b	(v_character),d0
-		add.w	d0,d0
-		lea 	Player_Palette(pc),a1
-		move.w	(a1,d0.w),d0	; load Map patterns
+		moveq	#0,d1
+		move.b	(v_character),d1
+		add.w	d1,d1
+		add.w	d1,d1
+		add.w	d1,d1
+		move.w	Player_Palette(pc,d1.w),d0	; load palette
 		
 		bsr.w	PalLoad2	; load Sonic's pallet line
 		cmpi.b	#1,($FFFFFE10).w ; is level LZ?
 		bne.s	Level_GetBgm	; if not, branch
-		moveq	#$F,d0		; pallet number	$0F (LZ)
+		move.w	Player_Palette+2(pc,d1.w),d0	; load palette
 		cmpi.b	#3,($FFFFFE11).w ; is act number 3?
 		bne.s	Level_WaterPal	; if not, branch
-		moveq	#$10,d0		; pallet number	$10 (SBZ3)
+		move.w	Player_Palette+4(pc,d1.w),d0	; load palette
 
 Level_WaterPal:
 		bsr.w	PalLoad3_Water	; load underwater pallet (see d0)
