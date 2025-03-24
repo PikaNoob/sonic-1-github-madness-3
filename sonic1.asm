@@ -41314,7 +41314,7 @@ Music9D:	incbin	sound\music9D.bin ; Spring Yard Act 3
 		even
 Music9E:	incbin	sound\music9E.bin ; Scrap Brain Act 2
 		even
-Music9F:	incbin	sound\music9F.bin ; Scrap Brain Act 3
+Music9F:	include	sound\music9F.asm ; Scrap Brain Act 3
 		even
 ; ---------------------------------------------------------------------------
 ; Sound	effect pointers
