@@ -1,7 +1,28 @@
 {
-    "description": "Flex 2 Project File",
+    "Flex": 2,
     "name": "",
+    "node": "40411ff1-69e9-4f03-a2e7-5ff964cce728",
     "objects": [
+        {
+            "uuid": "40411ff1-69e9-4f03-a2e7-5ff964cce728",
+            "format": "Sonic 1.js",
+            "name": "FISHER",
+            "palettes": [],
+            "art": {
+                "path": "artnem\\chopper.bin",
+                "compression": "Nemesis",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "_maps\\obj2B.asm",
+                "label": ""
+            },
+            "dplcs": {
+                "enabled": false,
+                "path": "",
+                "label": ""
+            }
+        },
         {
             "uuid": "221514e0-977e-4ee4-a734-ba98094ecd01",
             "format": "Sonic 1.js",
@@ -251,7 +272,8 @@
             "palettes": [],
             "art": {
                 "path": "artnem\\credits.bin",
-                "compression": "Nemesis"
+                "compression": "Nemesis",
+                "offset": 0
             },
             "mappings": {
                 "path": "_maps\\obj8A.asm",
@@ -265,7 +287,8 @@
                 "format": "Sonic 1",
                 "customDefinition": "",
                 "label": ""
-            }
+            },
+            "uuid": "8f40411f-f169-49bf-8322-e75ff964cce7"
         }
     ]
 }
