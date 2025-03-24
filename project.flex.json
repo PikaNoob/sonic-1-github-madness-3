@@ -1,7 +1,33 @@
 {
-    "description": "Flex 2 Project File",
+    "Flex": 2,
     "name": "",
+    "node": "e02c60bf-44b8-4ec7-a78f-359839fecb2b",
     "objects": [
+        {
+            "format": "Sonic 1.js",
+            "name": "object",
+            "palettes": [
+                {
+                    "path": "pallet\\sonic.bin",
+                    "length": 1
+                }
+            ],
+            "art": {
+                "path": "artnem\\segalogo.bin",
+                "compression": "Nemesis",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "sprites\\Amappings.bin",
+                "label": ""
+            },
+            "dplcs": {
+                "enabled": false,
+                "path": "",
+                "label": ""
+            },
+            "uuid": "e02c60bf-44b8-4ec7-a78f-359839fecb2b"
+        },
         {
             "uuid": "221514e0-977e-4ee4-a734-ba98094ecd01",
             "format": "Sonic 1.js",
@@ -251,7 +277,8 @@
             "palettes": [],
             "art": {
                 "path": "artnem\\credits.bin",
-                "compression": "Nemesis"
+                "compression": "Nemesis",
+                "offset": 0
             },
             "mappings": {
                 "path": "_maps\\obj8A.asm",
@@ -265,7 +292,8 @@
                 "format": "Sonic 1",
                 "customDefinition": "",
                 "label": ""
-            }
+            },
+            "uuid": "c5e02c60-bf44-489e-8767-8f359839fecb"
         }
     ]
 }
