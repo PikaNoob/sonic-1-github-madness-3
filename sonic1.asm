@@ -3125,8 +3125,8 @@ Sega_GotoTitle:
 TitleScreen:				; XREF: GameModeArray
 		move.b	#$E4,d0
 		bsr.w	PlaySound_Special ; stop music
-		bsr.w	ClearPLC
 		bsr.w	Pal_FadeFrom
+		bsr.w	ClearPLC
 		move	#$2700,sr
 		bsr.w	SoundDriverLoad
 		lea	($C00004).l,a6
@@ -3147,6 +3147,33 @@ Title_ClrObjRam:
 		move.l	d0,(a1)+
 		dbf	d1,Title_ClrObjRam ; fill object RAM ($D000-$EFFF) with	$0
 
+; gomer
+		move.l	#$40000000,($C00004).l
+		lea	(Nem_Gomer).l,a0 ; load Gomer patterns
+		bsr.w	NemDec
+		moveq	#3,d0		; load Sonic's pallet
+		bsr.w	PalLoad1
+
+		lea	($FF0000).l,a1
+		lea	(Eni_Gomer).l,a0 ; load mappings for	Gomer credits
+		move.w	#0,d0
+		bsr.w	EniDec
+; help how the fuck can i do this IT SHOWS NOTHING
+		lea	($FF0000).l,a1
+		move.l	#$40000003,d0
+		moveq	#$27,d1
+		moveq	#$1B,d2
+
+		lea	($FF0000).l,a1
+		move.l	#$60000003,d0
+		moveq	#$27,d1
+		moveq	#$1B,d2
+
+		bsr.w	Pal_FadeTo
+		bsr.w	Pal_FadeFrom
+
+
+		bsr.w	ClearScreen
 		move.l	#$40000000,($C00004).l
 		lea	(Nem_JapNames).l,a0 ; load Japanese credits
 		bsr.w	NemDec
@@ -3162,6 +3189,7 @@ Title_ClrObjRam:
 		moveq	#$27,d1
 		moveq	#$1B,d2
 		bsr.w	ShowVDPGraphics
+		bsr.w	Pal_FadeFrom
 		lea	($FFFFFB80).w,a1
 		moveq	#0,d0
 		move.w	#$1F,d1
@@ -3203,6 +3231,7 @@ Title_LoadText:
 		move.w	#0,($FFFFF634).w ; disable pallet cycling
 		bsr.w	LevelSizeLoad
 		bsr.w	DeformBgLayer
+
 		lea	($FFFFB000).w,a1
 		lea	(Blk16_GHZ).l,a0 ; load	GHZ 16x16 mappings
 		move.w	#0,d0
@@ -3211,7 +3240,7 @@ Title_LoadText:
 		lea	($FF0000).l,a1
 		bsr.w	KosDec
 		bsr.w	LevelLayoutLoad
-		bsr.w	Pal_FadeFrom
+
 		move	#$2700,sr
 		bsr.w	ClearScreen
 		lea	($C00004).l,a5
@@ -38186,6 +38215,10 @@ ArtLoadCues:
 Nem_SegaLogo:	incbin	artnem\segalogo.bin	; large Sega logo
 		even
 Eni_SegaLogo:	incbin	mapeni\segalogo.bin	; large Sega logo (mappings)
+		even
+Nem_Gomer:	incbin	artnem\gomer.bin
+		even
+Eni_Gomer:	incbin	mapeni\gomer.bin
 		even
 Eni_Title:	incbin	mapeni\titlescr.bin	; title screen foreground (mappings)
 		even

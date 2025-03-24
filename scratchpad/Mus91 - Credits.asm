@@ -17,7 +17,7 @@ Mus91_Credits_Header:
 ;	ripper, 	part,		joke
 ;	undecided, 	intro,		undecided
 ;	coninight, 	ghz,		luka luka night fever
-;	undecided, 	lz,		undecided
+;	coninight, 	lz,		the cleveland show (callback)
 ;	undecided, 	mz,		undecided
 ;	carlos, 	slz,		meltdown
 ;	undecided, 	sbz,		undecided
