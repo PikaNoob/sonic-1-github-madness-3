@@ -1,95 +1,32 @@
 {
     "Flex": 2,
     "name": "",
-    "node": "fd06d5dd-8faf-4845-a952-9ea161297073",
+    "node": "e02c60bf-44b8-4ec7-a78f-359839fecb2b",
     "objects": [
         {
             "format": "Sonic 1.js",
-            "name": "spike",
-            "palettes": [],
-            "art": {
-                "path": "artnem/spikes.bin",
-                "compression": "Nemesis",
-                "offset": 0
-            },
-            "mappings": {
-                "path": "_maps/obj36.asm",
-                "label": "Map_obj36_inner"
-            },
-            "dplcs": {
-                "enabled": false,
-                "path": "",
-                "label": ""
-            },
-            "uuid": "fd06d5dd-8faf-4845-a952-9ea161297073"
-        },
-        {
-            "name": "teto boss",
-            "children": [
+            "name": "object",
+            "palettes": [
                 {
-                    "format": "Sonic 1.js",
-                    "name": "fat fuck",
-                    "palettes": [],
-                    "art": {
-                        "path": "artnem/TetoBoss.bin",
-                        "compression": "Nemesis",
-                        "offset": 0
-                    },
-                    "mappings": {
-                        "path": "_maps/Tetoboss.asm",
-                        "label": ""
-                    },
-                    "dplcs": {
-                        "enabled": false,
-                        "path": "",
-                        "label": ""
-                    },
-                    "uuid": "c3845ff0-9aaa-42b4-9fbe-958287cf7ae4"
-                },
-                {
-                    "format": "Sonic 1.js",
-                    "name": "pearto bomb",
-                    "palettes": [],
-                    "art": {
-                        "path": "artnem/peartobomb.bin",
-                        "compression": "Nemesis",
-                        "offset": 0
-                    },
-                    "mappings": {
-                        "path": "_maps/obj19.asm",
-                        "label": ""
-                    },
-                    "dplcs": {
-                        "enabled": false,
-                        "path": "",
-                        "label": ""
-                    },
-                    "uuid": "9aaa02b4-5fbe-4582-87cf-7ae4afdeea09"
+                    "path": "pallet\\sonic.bin",
+                    "length": 1
                 }
             ],
-            "isDirectory": true,
-            "expanded": true,
-            "uuid": "8d375b5b-0e50-4bcf-92e3-85ad7f9c6f15"
-        },
-        {
-            "uuid": "40411ff1-69e9-4f03-a2e7-5ff964cce728",
-            "format": "Sonic 1.js",
-            "name": "FISHER",
-            "palettes": [],
             "art": {
-                "path": "artnem/chopper.bin",
+                "path": "artnem\\segalogo.bin",
                 "compression": "Nemesis",
                 "offset": 0
             },
             "mappings": {
-                "path": "_maps/obj2B.asm",
+                "path": "sprites\\Amappings.bin",
                 "label": ""
             },
             "dplcs": {
                 "enabled": false,
                 "path": "",
                 "label": ""
-            }
+            },
+            "uuid": "e02c60bf-44b8-4ec7-a78f-359839fecb2b"
         },
         {
             "uuid": "221514e0-977e-4ee4-a734-ba98094ecd01",
@@ -97,12 +34,12 @@
             "name": "bill newton crabmeat real",
             "palettes": [],
             "art": {
-                "path": "artnem/crabmeat.bin",
+                "path": "artnem\\crabmeat.bin",
                 "compression": "Nemesis",
                 "offset": 0
             },
             "mappings": {
-                "path": "_maps/obj1F.asm",
+                "path": "_maps\\obj1F.asm",
                 "label": "",
                 "customDefinition": ""
             },
@@ -119,23 +56,23 @@
             "name": "sonc",
             "palettes": [
                 {
-                    "path": "pallet/sonic.bin",
+                    "path": "pallet\\sonic.bin",
                     "length": 1
                 }
             ],
             "art": {
-                "path": "artunc/sonic.bin",
+                "path": "artunc\\sonic.bin",
                 "compression": "Uncompressed",
                 "offset": 0
             },
             "mappings": {
-                "path": "_maps/Sonic.asm",
+                "path": "_maps\\Sonic.asm",
                 "label": "",
                 "customDefinition": ""
             },
             "dplcs": {
                 "enabled": true,
-                "path": "_inc/Sonic dynamic pattern load cues.asm",
+                "path": "_inc\\Sonic dynamic pattern load cues.asm",
                 "label": "",
                 "customDefinition": ""
             }
@@ -172,12 +109,12 @@
             "name": "motobug",
             "palettes": [],
             "art": {
-                "path": "artnem/motobug.bin",
+                "path": "artnem\\motobug.bin",
                 "compression": "Nemesis",
                 "offset": 0
             },
             "mappings": {
-                "path": "_maps/obj40.asm",
+                "path": "_maps\\obj40.asm",
                 "label": "",
                 "customDefinition": "",
                 "format": "Sonic 1"
@@ -195,12 +132,12 @@
             "name": "buzz bomber",
             "palettes": [],
             "art": {
-                "path": "artnem/buzzbomb.bin",
+                "path": "artnem\\buzzbomb.bin",
                 "compression": "Nemesis",
                 "offset": 0
             },
             "mappings": {
-                "path": "_maps/obj22.asm",
+                "path": "_maps\\obj22.asm",
                 "label": "",
                 "customDefinition": "",
                 "format": "Sonic 1"
@@ -218,12 +155,12 @@
             "name": "plap brain egg",
             "palettes": [],
             "art": {
-                "path": "artnem/sbz2boss.bin",
+                "path": "artnem\\sbz2boss.bin",
                 "compression": "Nemesis",
                 "offset": 0
             },
             "mappings": {
-                "path": "_maps/obj82.asm",
+                "path": "_maps\\obj82.asm",
                 "label": "",
                 "customDefinition": "",
                 "format": "Sonic 1"
@@ -241,12 +178,12 @@
             "name": "robotonic",
             "palettes": [],
             "art": {
-                "path": "artnem/bossmain.bin",
+                "path": "artnem\\bossmain.bin",
                 "compression": "Nemesis",
                 "offset": 0
             },
             "mappings": {
-                "path": "_maps/Eggman.asm",
+                "path": "_maps\\Eggman.asm",
                 "label": "",
                 "customDefinition": "",
                 "format": "Sonic 1"
@@ -264,24 +201,24 @@
             "name": "sonic",
             "palettes": [
                 {
-                    "path": "pallet/sonic.bin",
+                    "path": "pallet\\sonic.bin",
                     "length": 1
                 }
             ],
             "art": {
-                "path": "artunc/sonic.bin",
+                "path": "artunc\\sonic.bin",
                 "compression": "Uncompressed",
                 "offset": 0
             },
             "mappings": {
-                "path": "_maps/Sonic.asm",
+                "path": "_maps\\Sonic.asm",
                 "label": "",
                 "customDefinition": "",
                 "format": "Sonic 1"
             },
             "dplcs": {
                 "enabled": true,
-                "path": "_inc/Sonic dynamic pattern load cues.asm",
+                "path": "_inc\\Sonic dynamic pattern load cues.asm",
                 "label": "",
                 "customDefinition": "",
                 "format": "Sonic 1"
@@ -292,12 +229,12 @@
             "name": "Monitors",
             "palettes": [],
             "art": {
-                "path": "artnem/monitors.bin",
+                "path": "artnem\\monitors.bin",
                 "compression": "Nemesis",
                 "offset": 0
             },
             "mappings": {
-                "path": "_maps/obj26.asm",
+                "path": "_maps\\obj26.asm",
                 "format": "Sonic 1",
                 "customDefinition": "",
                 "label": ""
@@ -316,12 +253,12 @@
             "name": "title sonic",
             "palettes": [],
             "art": {
-                "path": "artnem/titleson.bin",
+                "path": "artnem\\titleson.bin",
                 "compression": "Nemesis",
                 "offset": 0
             },
             "mappings": {
-                "path": "_maps/obj0E.asm",
+                "path": "_maps\\obj0E.asm",
                 "format": "Sonic 1",
                 "customDefinition": "",
                 "label": ""
@@ -339,12 +276,12 @@
             "name": "Credits Text",
             "palettes": [],
             "art": {
-                "path": "artnem/credits.bin",
+                "path": "artnem\\credits.bin",
                 "compression": "Nemesis",
                 "offset": 0
             },
             "mappings": {
-                "path": "_maps/obj8A.asm",
+                "path": "_maps\\obj8A.asm",
                 "format": "Sonic 1",
                 "customDefinition": "",
                 "label": ""
@@ -356,7 +293,7 @@
                 "customDefinition": "",
                 "label": ""
             },
-            "uuid": "8f40411f-f169-49bf-8322-e75ff964cce7"
+            "uuid": "c5e02c60-bf44-489e-8767-8f359839fecb"
         }
     ]
 }
