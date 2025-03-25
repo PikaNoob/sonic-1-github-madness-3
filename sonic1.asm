@@ -39044,15 +39044,32 @@ Go_PSGIndex:	dc.l PSG_Index		; XREF: sub_72926
 PSG_Index:	dc.l PSG1, PSG2, PSG3
 		dc.l PSG4, PSG5, PSG6
 		dc.l PSG7, PSG8, PSG9
-PSG1:		incbin	sound\psg1.bin
-PSG2:		incbin	sound\psg2.bin
-PSG3:		incbin	sound\psg3.bin
-PSG4:		incbin	sound\psg4.bin
-PSG6:		incbin	sound\psg6.bin
-PSG5:		incbin	sound\psg5.bin
-PSG7:		incbin	sound\psg7.bin
-PSG8:		incbin	sound\psg8.bin
-PSG9:		incbin	sound\psg9.bin
+
+PSG1:		dc.b    0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5
+            dc.b    5, 5, 6, 6, 6, 7, $80
+
+PSG2:		dc.b    0, 2, 4, 6, 8, $10, $80
+
+PSG3:		dc.b    0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7
+            dc.b    $80
+
+PSG4:		dc.b    0, 0, 2, 3, 4, 4, 5, 5, 5, 6, $80
+
+PSG5:		dc.b    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1
+            dc.b    1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2
+            dc.b    3, 3, 3, 3, 3, 3, 3, 3, 4, $80
+
+PSG6:		dc.b    3, 3, 3, 2, 2, 2, 2, 1, 1, 1, 0, 0, 0, 0, $80
+
+PSG7:		dc.b    0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2
+            dc.b    3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 7, $80
+
+PSG8:		dc.b    0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2
+            dc.b    3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 6
+            dc.b    6, 6, 6, 6, 7, 7, 7, $80
+
+PSG9:		dc.b    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, $A, $B, $C, $D, $E, $F
+            dc.b    $80
 
 byte_71A94:	dc.b 7,	$72, $73, $26, $15, 8, $FF, 5
 ; ---------------------------------------------------------------------------
