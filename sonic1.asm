@@ -39680,6 +39680,12 @@ Sound_E5:
 		moveq	#20,d0
 		jsr	PalLoad2	; load pallet
 		
+		lea	(IdiotPCM).l,a2			; Load the idiot PCM sample into a2. It's important that we use a2 since a0 and a1 are going to be used up ahead when reading the joypad ports 
+		move.l	#(IdiotPCM_End-IdiotPCM),d3			; Load the size of the idiot PCM sample into d3 
+		move.b	#$2A,($A04000).l		; $A04000 = $2A -> Write to DAC channel	  
+		
+		bsr.s	SfxE5SwapPalette
+		
 Sound_E5_StartPCM:
 		lea	(IdiotPCM).l,a2			; Load the idiot PCM sample into a2. It's important that we use a2 since a0 and a1 are going to be used up ahead when reading the joypad ports 
 		move.l	#(IdiotPCM_End-IdiotPCM),d3			; Load the size of the idiot PCM sample into d3 
@@ -41400,7 +41406,7 @@ Music8C:	incbin	sound\music8C.bin; VS Boss
 		even
 Music8D:	incbin	sound\music8D.bin; Final Zone
 		even
-Music8E:	incbin	sound\fle.bin ;		Act Clear
+Music8E:	include	sound\fle.asm ;		Act Clear
 		even
 Music8F:	incbin	sound\music8F.bin ; Game Over
 		even
