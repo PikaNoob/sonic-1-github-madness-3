@@ -199,18 +199,18 @@ GameProgram:
 		beq.w	GameInit	; if yes, branch
 
 CheckSumCheck:
-		movea.l	#ErrorTrap,a0	; start	checking bytes after the header	($200)
-		movea.l	#RomEndLoc,a1	; stop at end of ROM
-		move.l	(a1),d0
-		moveq	#0,d1
-
-loc_32C:
-		add.w	(a0)+,d1
-		cmp.l	a0,d0
-		bcc.s	loc_32C
-		movea.l	#Checksum,a1	; read the checksum
-		cmp.w	(a1),d1		; compare correct checksum to the one in ROM
-		bne.w	CheckSumError	; if they don't match, branch
+;		movea.l	#ErrorTrap,a0	; start	checking bytes after the header	($200)
+;		movea.l	#RomEndLoc,a1	; stop at end of ROM
+;		move.l	(a1),d0
+;		moveq	#0,d1
+;
+;loc_32C:
+;		add.w	(a0)+,d1
+;		cmp.l	a0,d0
+;		bcc.s	loc_32C
+;		movea.l	#Checksum,a1	; read the checksum
+;		cmp.w	(a1),d1		; compare correct checksum to the one in ROM
+;		bne.w	CheckSumError	; if they don't match, branch
 		lea	($FFFFFE00).w,a6
 		moveq	#0,d7
 		move.w	#$7F,d6
@@ -243,8 +243,8 @@ GameClrRAM:
 	;	move.b	#$20,($FFFFF600).w ; set Game Mode to Minecraft
 
 MainGameLoop:
-		move.b	($FFFFF600).w,d0 ; load	Game Mode
-		andi.w	#$3C,d0
+		moveq	#$7E,d0
+		and.b	($FFFFF600).w,d0 ; load	Game Mode
 		jsr	GameModeArray(pc,d0.w) ; jump to apt location in ROM
 		bra.s	MainGameLoop
 ; ===========================================================================
