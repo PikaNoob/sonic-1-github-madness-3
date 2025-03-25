@@ -26,8 +26,8 @@ lsrow1size: equ (LMTSecondRow-LevelMenuText)/16
 lsrow2size: equ (LMTEnd-LMTSecondRow)/16
 lsselectable: equ ((LMTSelectableEnd-LevelMenuText)/16)-1 ; last selectable item
 ; level select item constants
-lssndtest: equ lsrow2size+8
-lswifi: equ lsrow2size+9
+lssndtest: equ lsrow1size+8
+lswifi: equ lsrow1size+9
 
 vBlankRoutine equ $FFFFFFC4 ; VBlank Routine Jump Instruction (6 bytes)
 vBlankJump equ vBlankRoutine
@@ -3509,7 +3509,7 @@ LevSel_Level_SS:			; XREF: LevelSelect
 		add.w	d0,d0
 		move.w	LSelectPointers(pc,d0.w),d0 ; load level number
 		bmi.w	LevelSelect
-		cmpi.w	#$700,d0	; check	if level is 0700 (Special Stage)
+		cmpi.w	#$FFFF,d0	; check	if level is 0700 (Special Stage)
 		bne.s	LevSel_Level	; if not, branch
 		move.b	#$10,($FFFFF600).w ; set screen	mode to	$10 (Special Stage)
 		clr.w	($FFFFFE10).w	; clear	level
@@ -3545,8 +3545,32 @@ PlayLevel:				; XREF: ROM:00003246j ...
 ; Level	select - level pointers
 ; ---------------------------------------------------------------------------
 LSelectPointers:
-		incbin	misc\ls_point.bin
+		dc.w $0000 ; crz
+		dc.w $0001
+		dc.w $0002
+		dc.w $0100 ; ilfez
+		dc.w $0101
+		dc.w $0102
+		dc.w $0200 ; mz
+		dc.w $0201
+		dc.w $0202
+		dc.w $0300 ; dgrotz
+		dc.w $0301 
+		dc.w $0302 
+		dc.w $0700 ; the other mz...
+		dc.w $0701 
+		dc.w $0702 
+		dc.w $0400 ; tpfbz
+		dc.w $0401
+		dc.w $0402
+		dc.w $0500 ; zzzzz
+		dc.w $0501 
+		dc.w $0103 
+		dc.w $0502 ; fz
+		dc.w $FFFF ; special
+		dc.w $8000 ; sound test
 		even
+; --------------------------------------
 ; ---------------------------------------------------------------------------
 ; Level	select codes
 ; ---------------------------------------------------------------------------
@@ -3885,6 +3909,9 @@ LevelMenuText:
         dc.b    "               2"
         dc.b    "               3"
         dc.b    "DONTGETRIDOTHIS1"
+        dc.b    "               2"
+        dc.b    "               3"
+        dc.b    "MAKOTO         1"
         dc.b    "               2"
         dc.b    "               3"
 LMTSecondRow:
