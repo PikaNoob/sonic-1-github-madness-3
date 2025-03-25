@@ -1115,7 +1115,7 @@
 000005AA 4C49 4E45 2031 3131 3120+  asc_5A6:	dc.b 'LINE 1111 EMULATOR '
 000005BE 00                         		even
 000005BE                            
-000005BE                            ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+000005BE                            ; ||||||||||||||| S U B	R O U T	I N ET |||||||||||||||||||||||||||||||||||||||
 000005BE                            
 000005BE                            
 000005BE                            sub_5BA:				; XREF: loc_43A; loc_462
@@ -61315,7 +61315,9 @@
 000C79C6                            ; Minecraft: Very Legacy Console Edition
 000C79C6                            ; Main file
 000C79C6                            
-000C79C6                            	include	minecraft\code\variables.asm
+000C79C6                            ;	align	$20000
+000C79C6                            	opt	l.
+000C79C6                            	include	"minecraft\code\variables.asm"
 000C79C6                            ; Minecraft: Very Legacy Console Edition
 000C79C6                            ; Variable Definitions
 000C79C6                            
@@ -61323,6 +61325,7 @@
 000C79C6 =00000100                  MAP_WIDTH	equ	256
 000C79C6                            
 000C79C6                            		rsset	$FF0000
+000C79C6 =00FF0000                  mcRAM		rs.b	0
 000C79C6 =00FF0000                  mapWallBlocks	rs.b	MAP_HEIGHT*MAP_WIDTH	; wall layer layout data
 000C79C6 =00FF4000                  mapCollBlocks	rs.b	MAP_HEIGHT*MAP_WIDTH	; collision layer layout data
 000C79C6                            
@@ -61333,100 +61336,235 @@
 000C79C6 =FFFF8E82                  camYposFG	rs.w	1			; camera foreground layout y position
 000C79C6 =FFFF8E84                  camXPosBG	rs.w	1			; camera background layout x position
 000C79C6 =FFFF8E86                  camYposBG	rs.w	1			; camera background layout y position
-000C79C6 =FFFF8E86                  camYposBG	rs.w	1			; camera background layout y position
+000C79C6                            
+000C79C6                            		rsset	__RS&$FFFFFF
+000C79C6 =00FF8E88                  mcRAM_End	rs.b	0
+000C79C6 =00FF8E88                  mcRAM_End	rs.b	0
+000C79C6                            	include	"minecraft\code\macros.asm"
+000C79C6                            ; =========================================================================================================================================================
+000C79C6                            ; MegaDrive macros
+000C79C6                            ; =========================================================================================================================================================
+000C79C6                            clrRAM		macro	starta, enda
+000C79C6                            		local	endaddr
+000C79C6                            		if narg<2
+000C79C6                            endaddr			EQUS	"\starta\_End"
+000C79C6                            		else
+000C79C6                            endaddr			EQUS	"\enda"
+000C79C6                            		endif
+000C79C6                            
+000C79C6                            		moveq	#0,d0
+000C79C6                            
+000C79C6                            		if ((\starta)&$8000)=0
+000C79C6                            			lea	\starta,a1
+000C79C6                            		else
+000C79C6                            			lea	(\starta).w,a1
+000C79C6                            		endif
+000C79C6                            		if (\starta)&1
+000C79C6                            			move.b	d0,(a1)+
+000C79C6                            		endif
+000C79C6                            
+000C79C6                            		move.w	#(((\endaddr)-(\starta))-((\starta)&1))>>2-1,d1
+000C79C6                            .Clear\@:	move.l	d0,(a1)+
+000C79C6                            		dbf	d1,.Clear\@
+000C79C6                            
+000C79C6                            		if (((\endaddr)-(\starta))-((\starta)&1))&2
+000C79C6                            			move.w	d0,(a1)+
+000C79C6                            		endif
+000C79C6                            		if (((\endaddr)-(\starta))-((\starta)&1))&1
+000C79C6                            			move.b	d0,(a1)+
+000C79C6                            		endif
+000C79C6                            		endm
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6                            ; Disable interrupts
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6                            ; ARGUMENTS:
+000C79C6                            ;	Nothing
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6                            ; RETURNS:
+000C79C6                            ;	Nothing
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6                            intsOff		macros
+000C79C6                            		ori	#$700,sr
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6                            ; Enable interrupts
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6                            ; ARGUMENTS:
+000C79C6                            ;	Nothing
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6                            ; RETURNS:
+000C79C6                            ;	Nothing
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6                            intsOn		macros
+000C79C6                            		andi	#$F8FF,sr
+000C79C6                            
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6                            ; VDP command instruction
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6                            ; ARGUMENTS:
+000C79C6                            ;	addr	- Address in VDP memory
+000C79C6                            ;	type	- Type of VDP memory
+000C79C6                            ;	rwd	- VDP command
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6                            ; RETURNS:
+000C79C6                            ;	Nothing
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6 =00000021                  VRAM		EQU	%100001		; VRAM
+000C79C6 =0000002B                  CRAM		EQU	%101011		; CRAM
+000C79C6 =00000025                  VSRAM		EQU	%100101		; VSRAM
+000C79C6 =0000000C                  READ		EQU	%001100		; VDP read
+000C79C6 =00000007                  WRITE		EQU	%000111		; VDP write
+000C79C6 =00000027                  DMA		EQU	%100111		; VDP DMA
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6                            vdpCmd		macro	ins, addr, type, rwd, end, end2
+000C79C6                            		if narg=5
+000C79C6                            			\ins	#((((\type&\rwd)&3)<<30)|((\addr&$3FFF)<<16)|(((\type&\rwd)&$FC)<<2)|((\addr&$C000)>>14)), \end
+000C79C6                            		elseif narg>=6
+000C79C6                            			\ins	#((((\type&\rwd)&3)<<30)|((\addr&$3FFF)<<16)|(((\type&\rwd)&$FC)<<2)|((\addr&$C000)>>14))\end, \end2
+000C79C6                            		else
+000C79C6                            			\ins	((((\type&\rwd)&3)<<30)|((\addr&$3FFF)<<16)|(((\type&\rwd)&$FC)<<2)|((\addr&$C000)>>14))
+000C79C6                            		endif
+000C79C6                            		endm
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6                            ; VDP DMA from 68000 memory to VDP memory
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6                            ; ARGUMENTS:
+000C79C6                            ;	src	- Source address in 68000 memory
+000C79C6                            ;	dest	- Destination address in VDP memory
+000C79C6                            ;	len	- Length of data in bytes
+000C79C6                            ;	type	- Type of VDP memory
+000C79C6                            ;	a6.l	- VDP control port
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6                            ; RETURNS:
+000C79C6                            ;	Nothing
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6                            dma68k		macro	src, dest, len, type
+000C79C6                            		move.l	#$94009300|((((\len)/2)&$FF00)<<8)|(((\len)/2)&$FF),(a6)
+000C79C6                            		move.l	#$96009500|((((\src)/2)&$FF00)<<8)|(((\src)/2)&$FF),(a6)
+000C79C6                            		move.w	#$9700|(((\src)>>17)&$7F),(a6)
+000C79C6                            		vdpCmd	move.w, \dest, \type, DMA, >>16, (a6)
+000C79C6                            		vdpCmd	move.w, \dest, \type, DMA, &$FFFF, -(sp)
+000C79C6                            		move.w	(sp)+,(a6)
+000C79C6                            		endm
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6                            ; Fill VRAM with byte
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6                            ; ARGUMENTS:
+000C79C6                            ;	byte	- Byte to fill VRAM with
+000C79C6                            ;	addr	- Address in VRAM
+000C79C6                            ;	len	- Length of fill in bytes
+000C79C6                            ;	a6.l	- VDP control port
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6                            ; RETURNS:
+000C79C6                            ;	Nothing
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6                            dmaFill		macro	byte, addr, len
+000C79C6                            		move.w	#$8F01,(a6)
+000C79C6                            		move.l	#$94009300|((((\len)-1)&$FF00)<<8)|(((\len)-1)&$FF),(a6)
+000C79C6                            		move.w	#$9780,(a6)
+000C79C6                            		move.l	#$40000080|(((\addr)&$3FFF)<<16)|(((\addr)&$C000)>>14),(a6)
+000C79C6                            		move.w	#(\byte)<<8,-4(a6)
+000C79C6                            		waitDMA	(a6)
+000C79C6                            		move.w	#$8F02,(a6)
+000C79C6                            		endm
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6                            ; Copy a region of VRAM to a location in VRAM
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6                            ; ARGUMENTS:
+000C79C6                            ;	src	- Source address in VRAM
+000C79C6                            ;	dest	- Destination address in VRAM
+000C79C6                            ;	len	- Length of copy in bytes
+000C79C6                            ;	a6.l	- VDP control port
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6                            ; RETURNS:
+000C79C6                            ;	Nothing
+000C79C6                            ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+000C79C6                            dmaCopy		macro	src, dest, len
+000C79C6                            		move.w	#$8F01,(a6)
+000C79C6                            		move.l	#$94009300|((((\len)-1)&$FF00)<<8)|(((\len)-1)&$FF),(a6)
+000C79C6                            		move.l	#$96009500|(((\src)&$FF00)<<8)|((\src)&$FF),(a6)
+000C79C6                            		move.w	#$97C0,(a6)
+000C79C6                            		move.l	#$000000C0|(((\dest)&$3FFF)<<16)|(((\dest)&$C000)>>14),(a6)
+000C79C6                            		waitDMA	(a6)
+000C79C6                            		move.w	#$8F02,(a6)
+000C79C6                            		endm
+000C79C6                            		endm
 000C79C6                            
 000C79C6                            MC_Init:
-000C79C6 007C 0700                  		ori	#$700,sr		; disables CPU interrupts
+000C79C6 007C 0700                  		intsOff				; disables CPU interrupts
 000C79CA 4DF9 00C0 0004             		lea	($C00004).l,a6	;	; load the address of the VDP control port into a6
 000C79D0                            
 000C79D0 3CBC 8134                  		move.w	#$8134,(a6)		; disable display
-000C79D4 6100 0000                  		bsr.w	MC_ClearScreen		; clear VRAM, CRAM, and VSRAM
-000C79D8 6100 0000                  		bsr.w	MC_LoadPalette		; load in the palette
-000C79DC 3CBC 8174                  		move.w	#$8174,(a6)		; enable display
-000C79E0                            
-000C79E0                            
-000C79E0                            
-000C79E0 6000 FFFE                  		bra.w	*			; spin infinitely
-000C79E4                            
-000C79E4                            ; ===========================================================================
-000C79E4                            ; ---------------------------------------------------------------------------
-000C79E4                            ; Clear The Screen
-000C79E4                            ; ---------------------------------------------------------------------------
-000C79E4                            MC_ClearScreen:
-000C79E4 3CBC 8F01                  		move.w	#$8F01,(a6)		; set auto-incremement size to byte
-000C79E8                            
-000C79E8 2CBC 94FF 93FF             		move.l	#$94FF93FF,(a6)		; clear the VRAM
-000C79EE 3CBC 9780                  		move.w	#$9780,(a6)		; ^
-000C79F2 2CBC 4000 0080             		move.l	#$40000080,(a6)		; ^
-000C79F8 3D7C 0000 FFFC             		move.w	#0,-4(a6)		; ^
-000C79FE                            
-000C79FE 44D6                       .waitVRAMClr:	move.w	(a6),ccr		; is a DMA in progress?
-000C7A00 69FC                       		bvs.s	.waitVRAMClr		; if so, loop until DMA is complete
-000C7A02                            
-000C7A02 2CBC 9400 937F             		move.l	#$9400937F,(a6)		; clear the CRAM
-000C7A08 3CBC 9780                  		move.w	#$9780,(a6)		; ^
-000C7A0C 2CBC C000 0080             		move.l	#$C0000080,(a6)		; ^
-000C7A12 3D7C 0000 FFFC             		move.w	#0,-4(a6)		; ^
-000C7A18                            
-000C7A18 44D6                       .waitCRAMClr:	move.w	(a6),ccr		; is a DMA in progress?
-000C7A1A 69FC                       		bvs.s	.waitCRAMClr		; if so, loop until DMA is complete
-000C7A1C                            
-000C7A1C 2CBC 9400 935F             		move.l	#$9400935F,(a6)		; clear the VSRAM
-000C7A22 3CBC 9780                  		move.w	#$9780,(a6)		; ^
-000C7A26 2CBC 4000 0090             		move.l	#$40000090,(a6)		; ^
-000C7A2C 3D7C 0000 FFFC             		move.w	#0,-4(a6)		; ^
+000C79D4 3CBC 8C89                  		move.w	#$8C89,(a6)		; enable shadow/highlight mode
+000C79D8                            	
+000C79EA 6100 0000                  		bsr.w	MC_ClearScreen		; clear VRAM, CRAM, and VSRAM
+000C79EE                            
+000C79EE                            .waitVBlank:	
+000C79EE 44D6                       		move.w	(a6),ccr		; is v-blank active?
+000C79F0 6AFC                       		bpl.s	.waitVBlank		; if not, wait for it to start
+000C79F2                            
+000C7A26                            
+000C7A26 3CBC 8174                  		move.w	#$8174,(a6)		; enable display
+000C7A2A                            
+000C7A2A 6000 FFFE                  		bra.w	*			; spin infinitely
+000C7A2E                            
+000C7A2E                            ; ===========================================================================
+000C7A2E                            ; ---------------------------------------------------------------------------
+000C7A2E                            ; Clear The Screen
+000C7A2E                            ; ---------------------------------------------------------------------------
+000C7A2E                            MC_ClearScreen:
+000C7A2E 3CBC 8F01                  		move.w	#$8F01,(a6)		; set auto-incremement size to byte
 000C7A32                            
-000C7A32 44D6                       .waitVSRAMClr:	move.w	(a6),ccr		; is a DMA in progress?
-000C7A34 69FC                       		bvs.s	.waitVSRAMClr		; if so, loop until DMA is complete
-000C7A36                            
-000C7A36 3CBC 8F02                  		move.w	#$8F02,(a6)		; set auto-incremement size to word
-000C7A3A 4E75                       		rts				; return
-000C7A3C                            ; ---------------------------------------------------------------------------
-000C7A3C                            
-000C7A3C                            ; ===========================================================================
-000C7A3C                            ; ---------------------------------------------------------------------------
-000C7A3C                            ; Load The Palette
-000C7A3C                            ; ---------------------------------------------------------------------------
-000C7A3C                            MC_LoadPalette:
-000C7A3C 44D6                       		move.w	(a6),ccr		; is v-blank active?
-000C7A3E 6AFC                       		bpl.s	MC_LoadPalette		; if not, wait for it to start
-000C7A40                            
-000C7A40                            .updatePalette:
-000C7A40 2CBC 9400 9340             		move.l	#$94009340,(a6)		; set the DMA transfer size (64 colors)
-000C7A46                            		
-000C7A46 4BFA 0000                  		lea	MC_Palette(pc),a5	; load the base address of the palette data (pc relative)
-000C7A4A 200D                       		move.l	a5,d0			; move the address to a data register so we can modify it
-000C7A4C E288                       		lsr.l	#1,d0			; divide by two
-000C7A4E                            
-000C7A4E 323C 9500                  		move.w	#$9500,d1		; set the low byte of the transfer source address
-000C7A52 1200                       		move.b	d0,d1			; ^
-000C7A54 3C81                       		move.w	d1,(a6)			; ^
-000C7A56                            
-000C7A56 E088                       		lsr.l	#8,d0			; set the middle byte of the transfer source address
-000C7A58 323C 9600                  		move.w	#$9600,d1		; ^
-000C7A5C 1200                       		move.b	d0,d1			; ^
-000C7A5E 3C81                       		move.w	d1,(a6)			; ^
-000C7A60                            
-000C7A60 E088                       		lsr.l	#8,d0			; set the high byte of the transfer source address
-000C7A62 323C 9700                  		move.w	#$9700,d1		; ^
-000C7A66 1200                       		move.b	d0,d1			; ^
-000C7A68 3C81                       		move.w	d1,(a6)			; ^
-000C7A6A                            
-000C7A6A 2CBC C000 0080             		move.l	#$C0000080,(a6)		; set the destination palette index and begin the transfer
-000C7A70                            
-000C7A70                            .waitForScan:
-000C7A70                            	;	move.w	(a6),ccr		; is v-blank still active?
-000C7A70                            	;	bmi.s	.waitForScan		; if so, wait for active scan before returning
-000C7A70 4E75                       		rts				; return
-000C7A72                            ; ---------------------------------------------------------------------------
-000C7A72                            
-000C7A72                            MC_Palette:
-000C7A72 0E86 08AE 068E 046C 0246+  	dc.w	$E86, $8AE, $68E, $46C, $246, $024, $CC0, $AA0, $C46, $824, $EEE, $444, $222, $000, $000, $000
-000C7A92 0000 0CCC 0AAA 0888 0666+  	dc.w	$000, $CCC, $AAA, $888, $666, $444, $222, $4EE, $6AE, $48C, $26A, $048, $026, $4E6, $2C4, $080
-000C7AB2 0EEE 0EEE 0EEE 0EEE 0EEE+  	dc.w	$EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE
-000C7AD2 0EEE 0EEE 0EEE 0EEE 0EEE+  	dc.w	$EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE
-000C7AD2 0EEE 0EEE 0EEE 0EEE 0EEE+  	dc.w	$EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE
-000C7AF2                            ; end of 'ROM'
-000C7AF2                            EndOfRom:
-000C7AF2                            
-000C7AF2                            
+000C7A32 2CBC 94FF 93FF             		move.l	#$94FF93FF,(a6)		; clear the VRAM
+000C7A38 3CBC 9780                  		move.w	#$9780,(a6)		; ^
+000C7A3C 2CBC 4000 0080             		move.l	#$40000080,(a6)		; ^
+000C7A42 3D7C 0000 FFFC             		move.w	#0,-4(a6)		; ^
+000C7A48                            
+000C7A48 44D6                       .waitVRAMClr:	move.w	(a6),ccr		; is a DMA in progress?
+000C7A4A 69FC                       		bvs.s	.waitVRAMClr		; if so, loop until DMA is complete
+000C7A4C                            
+000C7A4C 2CBC 9400 937F             		move.l	#$9400937F,(a6)		; clear the CRAM
+000C7A52 3CBC 9780                  		move.w	#$9780,(a6)		; ^
+000C7A56 2CBC C000 0080             		move.l	#$C0000080,(a6)		; ^
+000C7A5C 3D7C 0000 FFFC             		move.w	#0,-4(a6)		; ^
+000C7A62                            
+000C7A62 44D6                       .waitCRAMClr:	move.w	(a6),ccr		; is a DMA in progress?
+000C7A64 69FC                       		bvs.s	.waitCRAMClr		; if so, loop until DMA is complete
+000C7A66                            
+000C7A66 2CBC 9400 935F             		move.l	#$9400935F,(a6)		; clear the VSRAM
+000C7A6C 3CBC 9780                  		move.w	#$9780,(a6)		; ^
+000C7A70 2CBC 4000 0090             		move.l	#$40000090,(a6)		; ^
+000C7A76 3D7C 0000 FFFC             		move.w	#0,-4(a6)		; ^
+000C7A7C                            
+000C7A7C 44D6                       .waitVSRAMClr:	move.w	(a6),ccr		; is a DMA in progress?
+000C7A7E 69FC                       		bvs.s	.waitVSRAMClr		; if so, loop until DMA is complete
+000C7A80                            
+000C7A80 3CBC 8F02                  		move.w	#$8F02,(a6)		; set auto-incremement size to word
+000C7A84 4E75                       		rts				; return
+000C7A86                            ; ---------------------------------------------------------------------------
+000C7A86                            block_entry	macro	tileID, palLine, priority
+000C7A86                            	if (narg<3)
+000C7A86                            		dc.w	(palLine<<13)|tileID
+000C7A86                            	else
+000C7A86                            		dc.w	$8000|(palLine<<13)|tileID
+000C7A86                            	endif
+000C7A86                            		endm
+000C7A86                            
+000C7A86                            MC_BlockRender:
+000C7AC6                            
+000C7AE4                            
+000C7AE4                            ; ---------------------------------------------------------------------------
+000C7AE4                            MC_Palette:
+000C7AE4 0E86 08AE 068E 046C 0EE0+  	dc.w	$E86, $8AE, $68E, $46C, $EE0, $CC0, $AA0, $E68, $C46, $824, $444, $222, $000, $EEE, $246, $024
+000C7B04 0000 0CCC 0AAA 0888 0666+  	dc.w	$000, $CCC, $AAA, $888, $666, $444, $222, $4E6, $2C4, $0A2, $080, $6AE, $48C, $26A, $048, $026
+000C7B24 0000 0EEE 0CCC 0AAA 04CE+  	dc.w	$000, $EEE, $CCC, $AAA, $4CE, $2AC, $08A, $E6C, $C4A, $A08, $44E, $22C, $00A, $EE0, $888, $666
+000C7B44 0EEE 0EEE 0EEE 0EEE 0EEE+  	dc.w	$EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE
+000C7B64                            ; ---------------------------------------------------------------------------
+000C7B64                            MC_Terrain:
+000C7B64                            	incbin	"minecraft\assets\bin\terrain.bin"
+000C7FE4                            MC_Terrain_End:
+000C7FE4                            ; ---------------------------------------------------------------------------
+000C7FE4                            ; ---------------------------------------------------------------------------
+000C7FE4                            ; end of 'ROM'
+000C7FE4                            EndOfRom:
+000C7FE4                            
+000C7FE4                            
