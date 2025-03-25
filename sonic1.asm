@@ -474,14 +474,14 @@ loc_B10:				; XREF: Vectors
 		move.w	($C00004).l,d0
 		move.l	#$40000010,($C00004).l
 		move.l	($FFFFF616).w,($C00000).l
-		btst	#6,($FFFFFFF8).w
-		beq.s	loc_B42
-		move.w	#$700,d0
+;		btst	#6,($FFFFFFF8).w
+;		beq.s	loc_B42
+;		move.w	#$700,d0
+;
+;loc_B3E:
+;		dbf	d0,loc_B3E
 
-loc_B3E:
-		dbf	d0,loc_B3E
-
-loc_B42:
+;loc_B42:
 		move.b	($FFFFF62A).w,d0
 		move.b	#0,($FFFFF62A).w
 		move.w	#1,($FFFFF644).w
@@ -516,14 +516,14 @@ loc_B9A:
 		cmpi.b	#1,($FFFFFE10).w ; is level LZ ?
 		bne.w	loc_B5E		; if not, branch
 		move.w	($C00004).l,d0
-		btst	#6,($FFFFFFF8).w
-		beq.s	loc_BBA
-		move.w	#$700,d0
-
-loc_BB6:
-		dbf	d0,loc_BB6
-
-loc_BBA:
+;		btst	#6,($FFFFFFF8).w
+;		beq.s	loc_BBA
+;		move.w	#$700,d0
+;
+;loc_BB6:
+;		dbf	d0,loc_BB6
+;
+;loc_BBA:
 		move.w	#1,($FFFFF644).w
 		move.w	#$100,($A11100).l
 
@@ -39069,24 +39069,33 @@ SoundTypes:	dc.b $90, $90, $90, $90, $90, $90, $90,	$90, $90, $90, $90, $90, $90
 
 
 sub_71B4C:				; XREF: loc_B10; PalToCRAM
+; every 5th frame, update a second time (same technique as most SMPS versions, but more scuffed)
+		moveq	#0,d0			; PAL song timer "optimization"
+		move.w	($FFFFFE0E).w,d0	; TODO: proper timer, this is prone to overflow and cause slight variations
+		divu.w	#5,d0			;       also divisions are generally slow
+		swap	d0
+		tst.w	d0
+		bne.s	@main
+		bsr.w	@main
+@main:
 		move.w	#$100,($A11100).l ; stop the Z80
-		nop	
-		nop	
-		nop	
-
-loc_71B5A:
+		nop
+		nop
+		nop
+; loc_71B5A:
+@wait:
 		btst	#0,($A11100).l
-		bne.s	loc_71B5A
+		bne.s	@wait
 
 		btst	#7,($A01FFD).l
 		beq.s	loc_71B82
 		move.w	#0,($A11100).l	; start	the Z80
-		nop	
-		nop	
-		nop	
-		nop	
-		nop	
-		bra.s	sub_71B4C
+		nop
+		nop
+		nop
+		nop
+		nop
+		bra.s	@main		; if you want really funky sound, use sub_71B4C instead ;)
 ; ===========================================================================
 
 loc_71B82:
