@@ -5121,7 +5121,8 @@ SS_ClrNemRam:
 		move.b	#9,($FFFFD000).w ; load	special	stage Sonic object
 		bsr.w	PalCycle_SS
 		clr.w	($FFFFF780).w	; set stage angle to "upright"
-		move.w	#$40,($FFFFF782).w ; set stage rotation	speed
+		clr.w	($FFFFF784).w	; set stage angle to "upright"
+		move.w	#2,($FFFFF786).w ; set stage rotation speed
 		move.w	#$89,d0
 		bsr.w	PlaySound	; play special stage BG	music
 		move.w	#0,($FFFFF790).w
@@ -5135,11 +5136,11 @@ SS_ClrNemRam:
 		clr.b	($FFFFFE1B).w
 		move.w	#0,($FFFFFE08).w
 		move.w	#1800,($FFFFF614).w
-		tst.b	($FFFFFFE2).w	; has debug cheat been entered?
-		beq.s	SS_NoDebug	; if not, branch
-		btst	#6,($FFFFF604).w ; is A	button pressed?
-		beq.s	SS_NoDebug	; if not, branch
-		move.b	#1,($FFFFFFFA).w ; enable debug	mode
+;		tst.b	($FFFFFFE2).w	; has debug cheat been entered?
+;		beq.s	SS_NoDebug	; if not, branch
+;		btst	#6,($FFFFF604).w ; is A	button pressed?
+;		beq.s	SS_NoDebug	; if not, branch
+;		move.b	#1,($FFFFFFFA).w ; enable debug	mode
 
 SS_NoDebug:
 		move.w	($FFFFF60C).w,d0
@@ -5155,6 +5156,11 @@ SS_MainLoop:
 		bsr.w	PauseGame
 		move.b	#$A,($FFFFF62A).w
 		bsr.w	DelayProgram
+        tst.w   ($FFFFF784).w
+        beq.s   SS_NotReversed
+        subi.w  #1,($FFFFF784).w
+
+SS_NotReversed:
 		bsr.w	MoveSonicInDemo
 		move.w	($FFFFF604).w,($FFFFF602).w
 		jsr	ObjectsLoad
@@ -36025,10 +36031,10 @@ byte_1B97E:	dc.b 1
 ; ---------------------------------------------------------------------------
 
 Obj09:					; XREF: Obj_Index
-		tst.w	($FFFFFE08).w	; is debug mode	being used?
-		beq.s	Obj09_Normal	; if not, branch
+;		tst.w	($FFFFFE08).w	; is debug mode	being used?
+;		beq.s	Obj09_Normal	; if not, branch
 		bsr.w	SS_FixCamera
-		bra.w	DebugMode
+;		bra.w	DebugMode
 ; ===========================================================================
 
 Obj09_Normal:
@@ -36056,11 +36062,11 @@ Obj09_Main:				; XREF: Obj09_Index
 		bset	#1,$22(a0)
 
 Obj09_ChkDebug:				; XREF: Obj09_Index
-		tst.w	($FFFFFFFA).w	; is debug mode	cheat enabled?
-		beq.s	Obj09_NoDebug	; if not, branch
-		btst	#4,($FFFFF605).w ; is button B pressed?
-		beq.s	Obj09_NoDebug	; if not, branch
-		move.w	#1,($FFFFFE08).w ; change Sonic	into a ring
+;		tst.w	($FFFFFFFA).w	; is debug mode	cheat enabled?
+;		beq.s	Obj09_NoDebug	; if not, branch
+;		btst	#4,($FFFFF605).w ; is button B pressed?
+;		beq.s	Obj09_NoDebug	; if not, branch
+;		move.w	#1,($FFFFFE08).w ; change Sonic	into a ring
 
 Obj09_NoDebug:
 		move.b	#0,$30(a0)
@@ -36077,14 +36083,14 @@ Obj09_Modes:	dc.w Obj09_OnWall-Obj09_Modes
 ; ===========================================================================
 
 Obj09_OnWall:				; XREF: Obj09_Modes
-		bsr.w	Obj09_Jump
+		bsr.w	Obj09_Rise
 		bsr.w	Obj09_Move
 		bsr.w	Obj09_Fall
 		bra.s	Obj09_Display
 ; ===========================================================================
 
 Obj09_InAir:				; XREF: Obj09_Modes
-		bsr.w	nullsub_2
+		bsr.w	Obj09_Rise
 		bsr.w	Obj09_Move
 		bsr.w	Obj09_Fall
 
@@ -36105,46 +36111,42 @@ Obj09_Display:				; XREF: Obj09_OnWall
 Obj09_Move:				; XREF: Obj09_OnWall; Obj09_InAir
 		btst	#2,($FFFFF602).w ; is left being pressed?
 		beq.s	Obj09_ChkRight	; if not, branch
+        tst.w   ($FFFFF784).w
+        bne.s   @corereverse1
 		bsr.w	Obj09_MoveLeft
+        bra.s   Obj09_ChkRight          
+
+@corereverse1:
+        bsr.w	Obj09_MoveRight
 
 Obj09_ChkRight:
 		btst	#3,($FFFFF602).w ; is right being pressed?
-		beq.s	loc_1BA78	; if not, branch
+		beq.s	Obj09_MoveSpeed	; if not, branch
+        tst.w   ($FFFFF784).w
+        bne.s   @corereverse2
 		bsr.w	Obj09_MoveRight
+        bra.s   Obj09_MoveSpeed 
 
-loc_1BA78:
+@corereverse2:
+		bsr.w	Obj09_MoveLeft			;	branch to right movement subroutine
+
+Obj09_MoveSpeed:
 		move.b	($FFFFF602).w,d0
 		andi.b	#$C,d0
-		bne.s	loc_1BAA8
-		move.w	$14(a0),d0
-		beq.s	loc_1BAA8
-		bmi.s	loc_1BA9A
-		subi.w	#$C,d0
-		bcc.s	loc_1BA94
-		move.w	#0,d0
+		bne.s	Obj09_MoveCollision
+		move.w	$10(a0),d0
+		beq.s	Obj09_MoveCollision
+		move.w	#0,$10(a0)
 
-loc_1BA94:
-		move.w	d0,$14(a0)
-		bra.s	loc_1BAA8
-; ===========================================================================
-
-loc_1BA9A:
-		addi.w	#$C,d0
-		bcc.s	loc_1BAA4
-		move.w	#0,d0
-
-loc_1BAA4:
-		move.w	d0,$14(a0)
-
-loc_1BAA8:
+Obj09_MoveCollision:
 		move.b	($FFFFF780).w,d0
 		addi.b	#$20,d0
 		andi.b	#$C0,d0
 		neg.b	d0
 		jsr	(CalcSine).l
-		muls.w	$14(a0),d1
+		muls.w	$10(a0),d1
 		add.l	d1,8(a0)
-		muls.w	$14(a0),d0
+		muls.w	$12(a0),d0
 		add.l	d0,$C(a0)
 		movem.l	d0-d1,-(sp)
 		move.l	$C(a0),d2
@@ -36154,7 +36156,7 @@ loc_1BAA8:
 		movem.l	(sp)+,d0-d1
 		sub.l	d1,8(a0)
 		sub.l	d0,$C(a0)
-		move.w	#0,$14(a0)
+		move.w	#0,$10(a0)
 		rts	
 ; ===========================================================================
 
@@ -36169,87 +36171,115 @@ loc_1BAF2:
 
 Obj09_MoveLeft:				; XREF: Obj09_Move
 		bset	#0,$22(a0)
-		move.w	$14(a0),d0
-		beq.s	loc_1BB06
-		bpl.s	loc_1BB1A
+        clr.w   d0
+        move.w  ($FFFFF786).w,d0
+        add.w   d0,d0
+        move.w	SS_XSpdIndex(pc,d0.w),$10(a0)
+        neg.w   $10(a0)
+        rts
 
-loc_1BB06:
-		subi.w	#$C,d0
-		cmpi.w	#-$800,d0
-		bgt.s	loc_1BB14
-		move.w	#-$800,d0
-
-loc_1BB14:
-		move.w	d0,$14(a0)
-		rts	
-; ===========================================================================
-
-loc_1BB1A:
-		subi.w	#$40,d0
-		bcc.s	loc_1BB22
-		nop	
-
-loc_1BB22:
-		move.w	d0,$14(a0)
-		rts	
 ; End of function Obj09_MoveLeft
 
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 
-Obj09_MoveRight:			; XREF: Obj09_Move
+Obj09_MoveRight:
 		bclr	#0,$22(a0)
-		move.w	$14(a0),d0
-		bmi.s	loc_1BB48
-		addi.w	#$C,d0
-		cmpi.w	#$800,d0
-		blt.s	loc_1BB42
-		move.w	#$800,d0
+        clr.w   d0
+        move.w  ($FFFFF786).w,d0
+        add.w   d0,d0
+        move.w	SS_XSpdIndex(pc,d0.w),$10(a0)
+		rts
 
-loc_1BB42:
-		move.w	d0,$14(a0)
-		bra.s	locret_1BB54
-; ===========================================================================
-
-loc_1BB48:
-		addi.w	#$40,d0
-		bcc.s	loc_1BB50
-		nop	
-
-loc_1BB50:
-		move.w	d0,$14(a0)
-
-locret_1BB54:
-		rts	
 ; End of function Obj09_MoveRight
 
+; ---------------------------------------------------------------------------
+
+SS_XSpdIndex:
+		dc.w 50
+		dc.w 100
+		dc.w 150
+		dc.w 200
+		dc.w 250
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 
-Obj09_Jump:				; XREF: Obj09_OnWall
-		move.b	($FFFFF603).w,d0
-		andi.b	#$70,d0		; is A,	B or C pressed?
-		beq.s	Obj09_NoJump	; if not, branch
-		move.b	($FFFFF780).w,d0
-		andi.b	#$FC,d0
-		neg.b	d0
-		subi.b	#$40,d0
-		jsr	(CalcSine).l
-		muls.w	#$680,d1
-		asr.l	#8,d1
-		move.w	d1,$10(a0)
-		muls.w	#$680,d0
-		asr.l	#8,d0
-		move.w	d0,$12(a0)
-		bset	#1,$22(a0)
-		move.w	#$A0,d0
-		jsr	(PlaySound_Special).l ;	play jumping sound
+Obj09_Rise:				; XREF: Obj09_OnWall
+		btst	#0,($FFFFF602).w
+		beq.s	Obj09_NoRise	; if not, branch
+        tst.w   ($FFFFF784).w
+        bne.w   @corereverse1
+		bsr.w	Obj09_MoveUp
+        bra.s   Obj09_NoRise
 
-Obj09_NoJump:
-		rts	
+@corereverse1:
+		bsr.w	Obj09_Falling 
+        
+Obj09_NoRise:
+		btst	#1,($FFFFF602).w	;	is Dn Pressed?
+		beq.s	Obj09_MoveYSpeed		;	
+        tst.w   ($FFFFF784).w
+        bne.w   @corereverse2
+		bsr.w	Obj09_Falling			;	
+        bra.s   Obj09_MoveYSpeed
+
+@corereverse2:
+		bsr.w	Obj09_MoveUp
+		
+Obj09_MoveYSpeed:
+		move.b	($FFFFF602).w,d0
+		andi.b	#3,d0
+		bne.s	Obj09_MoveYCollision
+		move.w	$12(a0),d0
+		beq.s	Obj09_MoveYCollision
+		move.w	#0,$12(a0)
+
+Obj09_MoveYCollision:		;	CODE TO CHECK STAGE COLLISION ON X-AXIS
+		move.b	($FFFFF780).w,d0		;	check the Special Stage Angle
+		addi.b	#$20,d0					;	?
+		andi.b	#$C0,d0					;	
+		neg.b	d0						;	?
+		jsr	(CalcSine).l				;	load speed trajectory algorithms
+		muls.w	$10(a0),d1			;	calculate x-speed trajectory
+		add.l	d1,8(a0)				;	calculate Sonic's next x position
+		muls.w	$12(a0),d0			;	calculate y-speed trajectory
+		add.l	d0,$C(a0)				;	calculate Sonic's next y position
+		movem.l	d0-d1,-(sp)				;	save trajectory values
+		move.l	$C(a0),d2				;	move sonic's next y-position into d2
+		move.l	8(a0),d3				;	move sonic's next x-position into d3
+		bsr.w	sub_1BCE8				;	branch to the collision detection routine
+		beq.w	loc_1BAF2				;	if Sonic's not colliding with anything branch
+		movem.l	(sp)+,d0-d1				;	remove x and y speed trajectory from the stack
+		sub.l	d1,8(a0)				;	cancel out Sonic's next x-position
+		sub.l	d0,$C(a0)				;	cancel out Sonic's next y-position
+		move.w	#0,$12(a0)           ;	Make Sonic Stop
+		rts								;	end routine
+
+Obj09_MoveUp:
+        clr.w   d0
+        move.w  ($FFFFF786).w,d0
+        add.w   d0,d0
+        move.w	SS_YSpdIndex(pc,d0.w),$12(a0)
+        neg.w   $12(a0)
+        rts
+
+Obj09_Falling:
+        clr.w   d0
+        move.w  ($FFFFF786).w,d0
+        add.w   d0,d0
+        move.w	SS_YSpdIndex(pc,d0.w),$12(a0)
+		rts
 ; End of function Obj09_Jump
+
+; ---------------------------------------------------------------------------
+SS_YSpdIndex:
+		dc.w $80
+		dc.w $100
+		dc.w $180
+		dc.w $200
+		dc.w $280
 
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
@@ -36312,14 +36342,14 @@ loc_1BBF4:
 		cmpi.w	#$3000,($FFFFF782).w
 		blt.s	loc_1BC12
 		move.w	#0,($FFFFF782).w
-		move.w	#$4000,($FFFFF780).w
+;		move.w	#$4000,($FFFFF780).w
 		addq.b	#2,$24(a0)
 		move.w	#$3C,$38(a0)
 
 loc_1BC12:
-		move.w	($FFFFF780).w,d0
-		add.w	($FFFFF782).w,d0
-		move.w	d0,($FFFFF780).w
+;		move.w	($FFFFF780).w,d0
+;		add.w	($FFFFF782).w,d0
+;		move.w	d0,($FFFFF780).w
 		jsr	Sonic_Animate
 		jsr	LoadSonicDynPLC
 		bsr.w	SS_FixCamera
@@ -36356,6 +36386,9 @@ Obj09_Fall:				; XREF: Obj09_OnWall; Obj09_InAir
 		asl.l	#8,d4
 		muls.w	#$2A,d1
 		add.l	d4,d1
+		moveq	#0,d5
+		move.w	$10(a0),d5
+		beq.s	Obj09_NoXFall
 		add.l	d0,d3
 		bsr.w	sub_1BCE8
 		beq.s	loc_1BCB0
@@ -36363,6 +36396,11 @@ Obj09_Fall:				; XREF: Obj09_OnWall; Obj09_InAir
 		moveq	#0,d0
 		move.w	d0,$10(a0)
 		bclr	#1,$22(a0)
+
+Obj09_NoXFall
+		moveq	#0,d6
+		move.w	$12(a0),d6
+		beq.s	Obj09_NoYFall
 		add.l	d1,d2
 		bsr.w	sub_1BCE8
 		beq.s	loc_1BCC6
@@ -36373,6 +36411,9 @@ Obj09_Fall:				; XREF: Obj09_OnWall; Obj09_InAir
 ; ===========================================================================
 
 loc_1BCB0:
+		moveq	#0,d6
+		move.w	$12(a0),d6
+		beq.s	Obj09_NoYFall
 		add.l	d1,d2
 		bsr.w	sub_1BCE8
 		beq.s	loc_1BCD4
@@ -36396,6 +36437,9 @@ loc_1BCD4:
 		move.w	d1,$12(a0)
 		bset	#1,$22(a0)
 		rts	
+
+Obj09_NoYFall:
+		rts
 ; End of function Obj09_Fall
 
 
@@ -36440,11 +36484,13 @@ sub_1BCE8:				; XREF: Obj09_Move; Obj09_Fall
 sub_1BD30:				; XREF: sub_1BCE8
 		beq.s	locret_1BD44
 		cmpi.b	#$28,d4
-		beq.s	locret_1BD44
-		cmpi.b	#$3A,d4
-		bcs.s	loc_1BD46
+		blo.s	loc_1BD46
 		cmpi.b	#$4B,d4
-		bcc.s	loc_1BD46
+		bhs.s	loc_1BD46
+		cmpi.b	#$3A,d4
+		bhs.s	locret_1BD44
+		cmpi.b	#$2C,d4
+		bhs.s	loc_1BD46
 
 locret_1BD44:
 		rts	
@@ -36524,9 +36570,9 @@ Obj09_Get1Up:
 
 Obj09_ChkEmer:
 		cmpi.b	#$3B,d4		; is the item an emerald?
-		bcs.s	Obj09_ChkGhost
+		bcs.s	Obj09_UPblock
 		cmpi.b	#$40,d4
-		bhi.s	Obj09_ChkGhost
+		bhi.s	Obj09_UPblock
 		bsr.w	SS_RemoveCollectedItem
 		bne.s	Obj09_GetEmer
 		move.b	#5,(a2)
@@ -36547,6 +36593,64 @@ Obj09_NoEmer:
 		jsr	(PlaySound_Special).l ;	play emerald music
 		moveq	#0,d4
 		rts	
+
+; ===========================================================================
+
+Obj09_UPblock:
+		cmpi.b	#$29,d4		; is the item an "UP" block?
+		bne.s	Obj09_DOWNblock
+		bsr.w	SS_RemoveCollectedItem
+		bne.s	Obj09_SpeedUp
+		move.b	#1,(a2)
+		move.l	a1,4(a2)
+
+Obj09_SpeedUp:
+		cmpi.w	#4,($FFFFF786).w
+		bhs.s	Obj09_UPsnd
+		addi.w	#1,($FFFFF786).w	; increase stage rotation speed
+
+Obj09_UPsnd:
+		move.w	#$A9,d0
+		jsr	(PlaySound_Special).l	; play up/down sound
+		moveq	#0,d4
+		rts	
+; ===========================================================================
+
+Obj09_DOWNblock:
+		cmpi.b	#$2A,d4		; is the item a	"DOWN" block?
+		bne.s	Obj09_Rblock
+		bsr.w	SS_RemoveCollectedItem
+		bne.s	Obj09_SpeedDown
+		move.b	#1,(a2)
+		move.l	a1,4(a2)
+
+Obj09_SpeedDown:
+		tst.w 	($FFFFF786).w
+		beq.s	Obj09_DOWNsnd
+		subi.w	#1,($FFFFF786).w	; reduce stage rotation speed
+
+Obj09_DOWNsnd:
+		move.w	#$A9,d0
+		jsr	(PlaySound_Special).l	; play up/down sound
+		moveq	#0,d4
+		rts	
+; ===========================================================================
+
+Obj09_Rblock:
+		cmpi.b	#$2B,d4		; is the item an "R" block?
+		bne.s	Obj09_ChkGhost
+		bsr.w	SS_RemoveCollectedItem
+		bne.s	Obj09_RevStage
+		move.b	#1,(a2)
+		move.l	a1,4(a2)
+
+Obj09_RevStage:
+        move.w  #300,($FFFFF784).w
+		move.b	#$A9,d0
+		jsr	(PlaySound_Special).l	; play sound
+		moveq	#0,d4
+		rts	
+
 ; ===========================================================================
 
 Obj09_ChkGhost:
@@ -36598,7 +36702,7 @@ Obj09_GhostNotSolid:
 
 Obj09_ChkItems2:			; XREF: Obj09_Display
 		move.b	$30(a0),d0
-		bne.s	Obj09_ChkBumper
+		bne.s	Obj09_GOAL
 		subq.b	#1,$36(a0)
 		bpl.s	loc_1BEA0
 		move.b	#0,$36(a0)
@@ -36612,104 +36716,17 @@ locret_1BEAC:
 		rts	
 ; ===========================================================================
 
-Obj09_ChkBumper:
-		cmpi.b	#$25,d0		; is the item a	bumper?
-		bne.s	Obj09_GOAL
-		move.l	$32(a0),d1
-		subi.l	#$FF0001,d1
-		move.w	d1,d2
-		andi.w	#$7F,d1
-		mulu.w	#$18,d1
-		subi.w	#$14,d1
-		lsr.w	#7,d2
-		andi.w	#$7F,d2
-		mulu.w	#$18,d2
-		subi.w	#$44,d2
-		sub.w	8(a0),d1
-		sub.w	$C(a0),d2
-		jsr	(CalcAngle).l
-		jsr	(CalcSine).l
-		muls.w	#-$700,d1
-		asr.l	#8,d1
-		move.w	d1,$10(a0)
-		muls.w	#-$700,d0
-		asr.l	#8,d0
-		move.w	d0,$12(a0)
-		bset	#1,$22(a0)
-		bsr.w	SS_RemoveCollectedItem
-		bne.s	Obj09_BumpSnd
-		move.b	#2,(a2)
-		move.l	$32(a0),d0
-		subq.l	#1,d0
-		move.l	d0,4(a2)
-
-Obj09_BumpSnd:
-		move.w	#$B4,d0
-		jmp	(PlaySound_Special).l ;	play bumper sound
 ; ===========================================================================
 
 Obj09_GOAL:
 		cmpi.b	#$27,d0		; is the item a	"GOAL"?
-		bne.s	Obj09_UPblock
+		bne.s	Obj09_ChkGlass
 		addq.b	#2,$24(a0)	; run routine "Obj09_ExitStage"
 		move.w	#$A8,d0		; change item
 		jsr	(PlaySound_Special).l ;	play "GOAL" sound
 		rts	
 ; ===========================================================================
 
-Obj09_UPblock:
-		cmpi.b	#$29,d0		; is the item an "UP" block?
-		bne.s	Obj09_DOWNblock
-		tst.b	$36(a0)
-		bne.w	Obj09_NoGlass
-		move.b	#$1E,$36(a0)
-		btst	#6,($FFFFF783).w
-		beq.s	Obj09_UPsnd
-		asl	($FFFFF782).w	; increase stage rotation speed
-		movea.l	$32(a0),a1
-		subq.l	#1,a1
-		move.b	#$2A,(a1)	; change item to a "DOWN" block
-
-Obj09_UPsnd:
-		move.w	#$A9,d0
-		jmp	(PlaySound_Special).l ;	play up/down sound
-; ===========================================================================
-
-Obj09_DOWNblock:
-		cmpi.b	#$2A,d0		; is the item a	"DOWN" block?
-		bne.s	Obj09_Rblock
-		tst.b	$36(a0)
-		bne.w	Obj09_NoGlass
-		move.b	#$1E,$36(a0)
-		btst	#6,($FFFFF783).w
-		bne.s	Obj09_DOWNsnd
-		asr	($FFFFF782).w	; reduce stage rotation	speed
-		movea.l	$32(a0),a1
-		subq.l	#1,a1
-		move.b	#$29,(a1)	; change item to an "UP" block
-
-Obj09_DOWNsnd:
-		move.w	#$A9,d0
-		jmp	(PlaySound_Special).l ;	play up/down sound
-; ===========================================================================
-
-Obj09_Rblock:
-		cmpi.b	#$2B,d0		; is the item an "R" block?
-		bne.s	Obj09_ChkGlass
-		tst.b	$37(a0)
-		bne.w	Obj09_NoGlass
-		move.b	#$1E,$37(a0)
-		bsr.w	SS_RemoveCollectedItem
-		bne.s	Obj09_RevStage
-		move.b	#4,(a2)
-		move.l	$32(a0),d0
-		subq.l	#1,d0
-		move.l	d0,4(a2)
-
-Obj09_RevStage:
-		neg.w	($FFFFF782).w	; reverse stage	rotation
-		move.w	#$A9,d0
-		jmp	(PlaySound_Special).l ;	play sound
 ; ===========================================================================
 
 Obj09_ChkGlass:
