@@ -2328,12 +2328,17 @@ Pal_ToBlack:
 		dbf	d0,Pal_ToBlack	; fill pallet with $000	(black)
 
 		move.w	#$15,d4
+		move.b	#5,d5
 
 loc_1DCE:
 		move.b	#$12,($FFFFF62A).w
 		bsr.w	DelayProgram
+		subi.b	#1,d5
+		tst.b	d5
+		bne.s	loc_1DCE
 		bsr.s	Pal_FadeIn
 		bsr.w	RunPLC_RAM
+		move.b	#5,d5
 		dbf	d4,loc_1DCE
 		rts	
 ; End of function Pal_FadeTo
@@ -2418,12 +2423,17 @@ loc_1E4E:				; XREF: Pal_AddColor
 Pal_FadeFrom:
 		move.w	#$3F,($FFFFF626).w
 		move.w	#$15,d4
+		move.b	#5,d5
 
 loc_1E5C:
 		move.b	#$12,($FFFFF62A).w
 		bsr.w	DelayProgram
+		subi.b	#1,d5
+		tst.b	d5
+		bne.s	loc_1E5C
 		bsr.s	Pal_FadeOut
 		bsr.w	RunPLC_RAM
+		move.b	#5,d5
 		dbf	d4,loc_1E5C
 		rts	
 ; End of function Pal_FadeFrom
@@ -2513,12 +2523,17 @@ PalWhite_Loop:
 		move.w	d1,(a0)+
 		dbf	d0,PalWhite_Loop
 		move.w	#$15,d4
+		move.b	#5,d5
 
 loc_1EF4:
 		move.b	#$12,($FFFFF62A).w
 		bsr.w	DelayProgram
+		subi.b	#1,d5
+		tst.b	d5
+		bne.s	loc_1EF4
 		bsr.s	Pal_WhiteToBlack
 		bsr.w	RunPLC_RAM
+		move.b	#5,d5
 		dbf	d4,loc_1EF4
 		rts	
 ; End of function Pal_MakeWhite
@@ -2606,12 +2621,17 @@ loc_1F78:				; XREF: Pal_DecColor2
 Pal_MakeFlash:				; XREF: SpecialStage
 		move.w	#$3F,($FFFFF626).w
 		move.w	#$15,d4
+		move.b	#5,d5
 
 loc_1F86:
 		move.b	#$12,($FFFFF62A).w
 		bsr.w	DelayProgram
+		subi.b	#1,d5
+		tst.b	d5
+		bne.s	loc_1F86
 		bsr.s	Pal_ToWhite
 		bsr.w	RunPLC_RAM
+		move.b	#5,d5
 		dbf	d4,loc_1F86
 		rts	
 ; End of function Pal_MakeFlash
