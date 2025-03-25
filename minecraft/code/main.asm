@@ -1,18 +1,29 @@
 ; Minecraft: Very Legacy Console Edition
 ; Main file
 
-	include	minecraft\code\variables.asm
+;	align	$20000
+	opt	l.
+	include	"minecraft\code\variables.asm"
+	include	"minecraft\code\macros.asm"
 
 MC_Init:
-		ori	#$700,sr		; disables CPU interrupts
+		intsOff				; disables CPU interrupts
 		lea	($C00004).l,a6	;	; load the address of the VDP control port into a6
 
 		move.w	#$8134,(a6)		; disable display
+		move.w	#$8C89,(a6)		; enable shadow/highlight mode
+	
+		clrRAM	mcRAM			; clear all the RAM used by Minecraft
 		bsr.w	MC_ClearScreen		; clear VRAM, CRAM, and VSRAM
-		bsr.w	MC_LoadPalette		; load in the palette
+
+.waitVBlank:	
+		move.w	(a6),ccr		; is v-blank active?
+		bpl.s	.waitVBlank		; if not, wait for it to start
+
+	dma68k	MC_Palette, $0000, $40*2, CRAM				; load in the palette
+	dma68k	MC_Terrain, $20, MC_Terrain_End-MC_Terrain, VRAM	; load in the block art	
+
 		move.w	#$8174,(a6)		; enable display
-
-
 
 		bra.w	*			; spin infinitely
 
@@ -50,46 +61,72 @@ MC_ClearScreen:
 		move.w	#$8F02,(a6)		; set auto-incremement size to word
 		rts				; return
 ; ---------------------------------------------------------------------------
+block_entry	macro	tileID, palLine, priority
+	if (narg<3)
+		dc.w	(palLine<<13)|tileID
+	else
+		dc.w	$8000|(palLine<<13)|tileID
+	endif
+		endm
 
-; ===========================================================================
+MC_BlockRender:
+	block_entry	$00,0,1			; 00 Air
+	block_entry	$01,1			; 01 Stone
+	block_entry	$02,1			; 02 Dirt
+	block_entry	$03,1			; 03 Grass
+	block_entry	$04,1			; 04 Cobblestone
+	block_entry	$05,1			; 05 Bedrock
+	block_entry	$06,1			; 06 Smooth Stone Slab
+	block_entry	$07,1			; 07 Gravel
+	block_entry	$08,1			; 08 Mossy Cobblestone
+	block_entry	$09,1			; 09 Leaves
+	block_entry	$0A,1			; 0A Wood
+	block_entry	$0B,1			; 0B Wooden Planks
+	block_entry	$0C,1			; 0C Coal Ore
+	block_entry	$0D,1			; 0D Iron Ore
+	block_entry	$0E,2			; 0E Gold Ore
+	block_entry	$0F,2			; 0F Diamond Ore
+	block_entry	$10,2			; 10 Iron Block
+	block_entry	$11,2			; 11 Gold Block
+	block_entry	$12,0			; 12 Diamond Block
+	block_entry	$13,2			; 13 Bricks
+	block_entry	$14,2			; 14 TNT
+	block_entry	$15,2			; 15 Sand
+	block_entry	$16,0			; 16 Glass
+	block_entry	$17,0			; 17 Obsidian
+	block_entry	$18,1			; 18 Sapling
+	block_entry	$19,1			; 19 Brown Mushroom
+	block_entry	$1A,2			; 1A Red Mushroom
+	block_entry	$1B,2			; 1B Dandelion
+	block_entry	$1C,2			; 1C Rose
+	block_entry	$00,0			; 1D Null
+	block_entry	$00,0			; 1E Null
+	block_entry	$00,0			; 1F Null
+
+	block_entry	$24,2			; 20 White Wool
+	block_entry	$24,1			; 21 Silver Wool
+	block_entry	$1D,1			; 22 Gray Wool
+	block_entry	$23,1			; 23 Charcoal Wool
+	block_entry	$20,0			; 24 Black Wool
+	block_entry	$20,2			; 25 Crimson Wool
+	block_entry	$24,0			; 26 Peach Wool
+	block_entry	$1F,1			; 27 Bronze Wool
+	block_entry	$23,2			; 28 Goldenrod Wool
+	block_entry	$1E,1			; 29 Lime Wool
+	block_entry	$23,0			; 2A Turquoise Wool
+	block_entry	$1E,0			; 2B Indigo Wool
+	block_entry	$1E,2			; 2C Violet Wool
+	block_entry	$22,1			; 2D Green Wool
+	block_entry	$20,1			; 2E Cacao Wool
+
 ; ---------------------------------------------------------------------------
-; Load The Palette
-; ---------------------------------------------------------------------------
-MC_LoadPalette:
-		move.w	(a6),ccr		; is v-blank active?
-		bpl.s	MC_LoadPalette		; if not, wait for it to start
-
-.updatePalette:
-		move.l	#$94009340,(a6)		; set the DMA transfer size (64 colors)
-		
-		lea	MC_Palette(pc),a5	; load the base address of the palette data (pc relative)
-		move.l	a5,d0			; move the address to a data register so we can modify it
-		lsr.l	#1,d0			; divide by two
-
-		move.w	#$9500,d1		; set the low byte of the transfer source address
-		move.b	d0,d1			; ^
-		move.w	d1,(a6)			; ^
-
-		lsr.l	#8,d0			; set the middle byte of the transfer source address
-		move.w	#$9600,d1		; ^
-		move.b	d0,d1			; ^
-		move.w	d1,(a6)			; ^
-
-		lsr.l	#8,d0			; set the high byte of the transfer source address
-		move.w	#$9700,d1		; ^
-		move.b	d0,d1			; ^
-		move.w	d1,(a6)			; ^
-
-		move.l	#$C0000080,(a6)		; set the destination palette index and begin the transfer
-
-.waitForScan:
-	;	move.w	(a6),ccr		; is v-blank still active?
-	;	bmi.s	.waitForScan		; if so, wait for active scan before returning
-		rts				; return
-; ---------------------------------------------------------------------------
-
 MC_Palette:
-	dc.w	$E86, $8AE, $68E, $46C, $246, $024, $CC0, $AA0, $C46, $824, $EEE, $444, $222, $000, $000, $000
-	dc.w	$000, $CCC, $AAA, $888, $666, $444, $222, $4EE, $6AE, $48C, $26A, $048, $026, $4E6, $2C4, $080
+	dc.w	$E86, $8AE, $68E, $46C, $EE0, $CC0, $AA0, $E68, $C46, $824, $444, $222, $000, $EEE, $246, $024
+	dc.w	$000, $CCC, $AAA, $888, $666, $444, $222, $4E6, $2C4, $0A2, $080, $6AE, $48C, $26A, $048, $026
+	dc.w	$000, $EEE, $CCC, $AAA, $4CE, $2AC, $08A, $E6C, $C4A, $A08, $44E, $22C, $00A, $EE0, $888, $666
 	dc.w	$EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE
-	dc.w	$EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE
+; ---------------------------------------------------------------------------
+MC_Terrain:
+	incbin	"minecraft\assets\bin\terrain.bin"
+MC_Terrain_End:
+; ---------------------------------------------------------------------------

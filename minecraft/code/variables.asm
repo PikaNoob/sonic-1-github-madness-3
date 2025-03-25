@@ -5,6 +5,7 @@ MAP_HEIGHT	equ	64
 MAP_WIDTH	equ	256
 
 		rsset	$FF0000
+mcRAM		rs.b	0
 mapWallBlocks	rs.b	MAP_HEIGHT*MAP_WIDTH	; wall layer layout data
 mapCollBlocks	rs.b	MAP_HEIGHT*MAP_WIDTH	; collision layer layout data
 
@@ -15,3 +16,6 @@ camXPosFG	rs.w	1			; camera foreground layout x position
 camYposFG	rs.w	1			; camera foreground layout y position
 camXPosBG	rs.w	1			; camera background layout x position
 camYposBG	rs.w	1			; camera background layout y position
+
+		rsset	__RS&$FFFFFF
+mcRAM_End	rs.b	0

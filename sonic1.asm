@@ -409,7 +409,7 @@ asc_593:	dc.b 'LINE 1010 EMULATOR '
 asc_5A6:	dc.b 'LINE 1111 EMULATOR '
 		even
 
-; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+; ||||||||||||||| S U B	R O U T	I N ET |||||||||||||||||||||||||||||||||||||||
 
 
 sub_5BA:				; XREF: loc_43A; loc_462
