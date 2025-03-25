@@ -2065,6 +2065,7 @@ PalCycle:	dc.w PalCycle_GHZ-PalCycle
 		dc.w PalCycle_SYZ-PalCycle
 		dc.w PalCycle_SBZ-PalCycle
 		dc.w PalCycle_GHZ-PalCycle
+		dc.w PalCycle_GHZ-PalCycle
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -2890,6 +2891,7 @@ Pal_SBZ3:	incbin	pallet\sbz_act3.bin	; SBZ act 3 pallets
 Pal_SBZ3Water:	incbin	pallet\sbz_a3uw.bin	; SBZ act 3 (underwater) pallets
 Pal_LZSonWater:	incbin	pallet\son_lzuw.bin	; Sonic (underwater in LZ) pallet
 Pal_SBZ3SonWat:	incbin	pallet\son_sbzu.bin	; Sonic (underwater in SBZ act 3) pallet
+Pal_BHZ:	incbin	pallet\bhz.bin
 Pal_SpeResult:	incbin	pallet\ssresult.bin	; special stage results screen pallets
 Pal_SpeContinue:incbin	pallet\sscontin.bin	; special stage results screen continue pallet
 Pal_Ending:	incbin	pallet\ending.bin	; ending sequence pallets
@@ -4051,8 +4053,8 @@ Player_Palette:
 		; normal, lz, sbz, blank
 		dc.w	3,$F,$10,0 ; Sonic 
 		
-		dc.w	21,22,23,0 ; Pal_Gronic 
-		dc.w	24,22,23,0 ; Pal_Anakama 
+		dc.w	22,23,24,0 ; Pal_Gronic 
+		dc.w	25,23,24,0 ; Pal_Anakama 
         dc.w	3,$F,$10,0 ; LimitedSonic 
 
 		; add more player palettes
@@ -6795,6 +6797,11 @@ LevelSizeArray:        ; GHZ
         dc.w $0004, $0000, $0DC0, $0110, $0110, $0060 ; Act 2 (Bad Ending)
         dc.w $0004, $0000, $2FFF, $0000, $0320, $0060 ; Act 3 (Unused)
         dc.w $0004, $0000, $2FFF, $0000, $0320, $0060 ; Act 4 (Unused)
+        ; BHZ
+        dc.w $0004, $0000, $24BF, $0000, $0300, $0060 ; Act 1
+        dc.w $0004, $0000, $1EBF, $0000, $0300, $0060 ; Act 2
+        dc.w $0004, $0000, $2960, $0000, $0300, $0060 ; Act 3
+        dc.w $0004, $0000, $2ABF, $0000, $0300, $0060 ; Act 4 (Unused)
         even
 EndingStLocArray:
 		incbin	misc\sloc_end.bin
@@ -6867,7 +6874,6 @@ loc_60F8:
 ; ---------------------------------------------------------------------------
 StartLocArray:	incbin	misc\sloc_lev.bin
 		even
-
 ; ---------------------------------------------------------------------------
 ; Which	256x256	tiles contain loops or roll-tunnels
 ; ---------------------------------------------------------------------------
@@ -6876,7 +6882,8 @@ StartLocArray:	incbin	misc\sloc_lev.bin
 ; ---------------------------------------------------------------------------
 LoopTileNums:	incbin	misc\loopnums.bin
 		even
-
+; this is from the cwa source code i will share kaito x gakupo mpreg if this does not work i swear t ogod if this does not
+; ITS GONJE HELP
 ; ===========================================================================
 
 LevSz_Unk:				; XREF: LevelSizeLoad
@@ -6927,7 +6934,7 @@ loc_6206:
 BgScroll_Index:	dc.w BgScroll_GHZ-BgScroll_Index, BgScroll_LZ-BgScroll_Index
 		dc.w BgScroll_MZ-BgScroll_Index, BgScroll_SLZ-BgScroll_Index
 		dc.w BgScroll_SYZ-BgScroll_Index, BgScroll_SBZ-BgScroll_Index
-		dc.w BgScroll_End-BgScroll_Index
+		dc.w BgScroll_End-BgScroll_Index, BgScroll_GHZ-BgScroll_Index
 ; ===========================================================================
 
 BgScroll_GHZ:				; XREF: BgScroll_Index
@@ -7022,7 +7029,7 @@ loc_628E:
 Deform_Index:	dc.w Deform_GHZ-Deform_Index, Deform_LZ-Deform_Index
 		dc.w Deform_MZ-Deform_Index, Deform_SLZ-Deform_Index
 		dc.w Deform_SYZ-Deform_Index, Deform_SBZ-Deform_Index
-		dc.w Deform_GHZ-Deform_Index
+		dc.w Deform_GHZ-Deform_Index, Deform_GHZ-Deform_Index
 ; ---------------------------------------------------------------------------
 ; Green	Hill Zone background layer deformation code
 ; ---------------------------------------------------------------------------
@@ -8491,7 +8498,7 @@ loc_6DC4:
 Resize_Index:	dc.w Resize_GHZ-Resize_Index, Resize_LZ-Resize_Index
 		dc.w Resize_MZ-Resize_Index, Resize_SLZ-Resize_Index
 		dc.w Resize_SYZ-Resize_Index, Resize_SBZ-Resize_Index
-		dc.w Resize_Ending-Resize_Index
+		dc.w Resize_Ending-Resize_Index, Resize_GHZ-Resize_Index
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Green	Hill Zone dynamic screen resizing
@@ -15544,6 +15551,8 @@ Obj34_ConData:	dc.w 0,	$120, $FEFC, $13C, $414, $154, $214, $154 ; GHZ
 		dc.w 0,	$120, $FF04, $144, $41C, $15C, $21C, $15C ; SYZ
 		dc.w 0,	$120, $FF04, $144, $41C, $15C, $21C, $15C ; SBZ
 		dc.w 0,	$120, $FEE4, $124, $3EC, $3EC, $1EC, $12C ; FZ
+		dc.w 0,	$120, $FEFC, $13C, $414, $154, $214, $154 ; GHZ
+		dc.w 0,	$120, $FEFC, $13C, $414, $154, $214, $154 ; GHZ
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Object 39 - "GAME OVER" and "TIME OVER"
@@ -25630,12 +25639,12 @@ locret_13914:
 
 
 Sonic_Loops:				; XREF: Obj01_Control
-		cmpi.b	#3,($FFFFFE10).w ; is level SLZ	?
-		beq.s	loc_13926	; if yes, branch
-		tst.b	($FFFFFE10).w	; is level GHZ ?
-		bne.w	locret_139C2	; if not, branch
-
-loc_13926:
+;		cmpi.b	#3,($FFFFFE10).w ; is level SLZ	?
+;		beq.s	loc_13926	; if yes, branch
+;		tst.b	($FFFFFE10).w	; is level GHZ ?
+;		bne.w	locret_139C2	; if not, branch
+;		this is commented out, please do more plane messups id love that
+;loc_13926:
 		move.w	$C(a0),d0
 		lsr.w	#1,d0
 		andi.w	#$380,d0
@@ -36862,7 +36871,7 @@ AniArt_Pause:
 AniArt_Index:	dc.w AniArt_GHZ-AniArt_Index, AniArt_none-AniArt_Index
 		dc.w AniArt_MZ-AniArt_Index, AniArt_none-AniArt_Index
 		dc.w AniArt_none-AniArt_Index, AniArt_SBZ-AniArt_Index
-		dc.w AniArt_Ending-AniArt_Index
+		dc.w AniArt_Ending-AniArt_Index, AniArt_GHZ-AniArt_Index
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Animated pattern routine - Green Hill
@@ -38691,6 +38700,14 @@ Nem_SBZ:	incbin	artnem\8x8sbz.bin	; SBZ primary patterns
 		even
 Blk256_SBZ:	incbin	map256\sbz.bin
 		even
+Blk16_BHZ:	incbin	map16\bhz.bin
+		even
+Nem_BHZ_1st:	incbin	artnem\8x8bhz1.bin	; GHZ primary patterns
+		even
+Nem_BHZ_2nd:	incbin	artnem\8x8bhz2.bin	; GHZ secondary patterns
+		even
+Blk256_BHZ:	incbin	map256\bhz.bin
+		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - bosses and ending sequence
 ; ---------------------------------------------------------------------------
@@ -38750,6 +38767,8 @@ Col_SLZ:	incbin	collide\slz.bin		; SLZ index
 Col_SYZ:	incbin	collide\syz.bin		; SYZ index
 		even
 Col_SBZ:	incbin	collide\sbz.bin		; SBZ index
+		even
+Col_BHZ:	incbin	collide\bhz.bin		; GHZ index
 		even
 ; ---------------------------------------------------------------------------
 ; Special layouts
@@ -38815,6 +38834,10 @@ Level_Index:	dc.w Level_GHZ1-Level_Index, Level_GHZbg-Level_Index, byte_68D70-Le
 		dc.w Level_End-Level_Index, Level_GHZbg-Level_Index, byte_6A320-Level_Index
 		dc.w byte_6A320-Level_Index, byte_6A320-Level_Index, byte_6A320-Level_Index
 		dc.w byte_6A320-Level_Index, byte_6A320-Level_Index, byte_6A320-Level_Index
+		dc.w Level_BHZ1-Level_Index, Level_BHZbg-Level_Index, byte_68D70-Level_Index
+		dc.w Level_BHZ2-Level_Index, Level_BHZbg-Level_Index, byte_68E3C-Level_Index
+		dc.w Level_BHZ3-Level_Index, Level_BHZbg-Level_Index, byte_68F84-Level_Index
+		dc.w byte_68F88-Level_Index, byte_68F88-Level_Index, byte_68F88-Level_Index
 
 Level_GHZ1:	incbin	levels\ghz1.bin
 		even
@@ -38896,7 +38919,16 @@ byte_6A2FC:	dc.b 0,	0, 0, 0
 Level_End:	incbin	levels\ending.bin
 		even
 byte_6A320:	dc.b 0,	0, 0, 0
+Level_BHZ1:	incbin	levels\bhz1.bin
+		even
 
+Level_BHZ2:	incbin	levels\bhz2.bin
+		even
+
+Level_BHZ3:	incbin	levels\bhz3.bin
+		even
+Level_BHZbg:	incbin	levels\bhzbg.bin
+		even
 ; ---------------------------------------------------------------------------
 ; Animated uncompressed giant ring graphics
 ; ---------------------------------------------------------------------------
@@ -38945,6 +38977,10 @@ ObjPos_Index:	dc.w ObjPos_GHZ1-ObjPos_Index, ObjPos_Null-ObjPos_Index
 		dc.w ObjPos_SBZ1pf3-ObjPos_Index, ObjPos_SBZ1pf4-ObjPos_Index
 		dc.w ObjPos_SBZ1pf5-ObjPos_Index, ObjPos_SBZ1pf6-ObjPos_Index
 		dc.w ObjPos_SBZ1pf1-ObjPos_Index, ObjPos_SBZ1pf2-ObjPos_Index
+	dc.w ObjPos_BHZ1-ObjPos_Index, ObjPos_Null-ObjPos_Index
+		dc.w ObjPos_BHZ2-ObjPos_Index, ObjPos_Null-ObjPos_Index
+		dc.w ObjPos_BHZ3-ObjPos_Index, ObjPos_Null-ObjPos_Index
+		dc.w ObjPos_BHZ1-ObjPos_Index, ObjPos_Null-ObjPos_Index
 		dc.b $FF, $FF, 0, 0, 0,	0
 ObjPos_GHZ1:	incbin	objpos\ghz1.bin
 		even
@@ -39009,6 +39045,12 @@ ObjPos_SBZ1pf5:	incbin	objpos\sbz1pf5.bin
 ObjPos_SBZ1pf6:	incbin	objpos\sbz1pf6.bin
 		even
 ObjPos_End:	incbin	objpos\ending.bin
+		even
+ObjPos_BHZ1:	incbin	objpos\bhz1.bin
+		even
+ObjPos_BHZ2:	incbin	objpos\bhz2.bin
+		even
+ObjPos_BHZ3:	incbin	objpos\bhz3.bin
 		even
 ObjPos_Null:	dc.b $FF, $FF, 0, 0, 0,	0
 ; ---------------------------------------------------------------------------
