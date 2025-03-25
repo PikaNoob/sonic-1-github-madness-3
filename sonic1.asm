@@ -33954,7 +33954,13 @@ loc_19E3E:
 
 loc_19E5A:
 		move.w	#0,$34(a0)
-		move.w	#280,($FF7FFE).l	; set number of	hits to	the max
+		jsr	RandomNumber	; get a number between 0 and 250
+		clr.w	d0
+		swap	d0
+		divu.w	#251,d0
+		swap	d0
+		add.w	#280,d0		; add 280
+		move.w	d0,($FF7FFE).l	; that's the number of hits
 		move.w	#-1,$30(a0)
 
 Obj85_Eggman:				; XREF: Obj85_Index
