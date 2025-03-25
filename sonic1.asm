@@ -11588,7 +11588,7 @@ Obj28_Index:	dc.w Obj28_Ending-Obj28_Index, loc_912A-Obj28_Index
 		dc.w loc_9314-Obj28_Index, loc_9370-Obj28_Index
 		dc.w loc_92D6-Obj28_Index
 
-Obj28_VarIndex:	dc.b 0,	5, 2, 3, 6, 3, 4, 5, 4,	1, 0, 1
+Obj28_VarIndex:	dc.b 0,	5, 2, 3, 6, 3, 4, 5, 4,	1, 0, 1, 0,	5, 0,	5
 
 Obj28_Variables:dc.w $FE00, $FC00
 		dc.l Map_obj28
@@ -38897,6 +38897,10 @@ ObjPos_Index:	dc.w ObjPos_GHZ1-ObjPos_Index, ObjPos_Null-ObjPos_Index
 		dc.w ObjPos_End-ObjPos_Index, ObjPos_Null-ObjPos_Index
 		dc.w ObjPos_End-ObjPos_Index, ObjPos_Null-ObjPos_Index
 		dc.w ObjPos_End-ObjPos_Index, ObjPos_Null-ObjPos_Index
+		dc.w ObjPos_BHZ1-ObjPos_Index, ObjPos_Null-ObjPos_Index
+		dc.w ObjPos_BHZ2-ObjPos_Index, ObjPos_Null-ObjPos_Index
+		dc.w ObjPos_BHZ3-ObjPos_Index, ObjPos_Null-ObjPos_Index
+		dc.w ObjPos_BHZ1-ObjPos_Index, ObjPos_Null-ObjPos_Index
 		dc.w ObjPos_LZ1pf1-ObjPos_Index, ObjPos_LZ1pf2-ObjPos_Index
 		dc.w ObjPos_LZ2pf1-ObjPos_Index, ObjPos_LZ2pf2-ObjPos_Index
 		dc.w ObjPos_LZ3pf1-ObjPos_Index, ObjPos_LZ3pf2-ObjPos_Index
@@ -38905,10 +38909,6 @@ ObjPos_Index:	dc.w ObjPos_GHZ1-ObjPos_Index, ObjPos_Null-ObjPos_Index
 		dc.w ObjPos_SBZ1pf3-ObjPos_Index, ObjPos_SBZ1pf4-ObjPos_Index
 		dc.w ObjPos_SBZ1pf5-ObjPos_Index, ObjPos_SBZ1pf6-ObjPos_Index
 		dc.w ObjPos_SBZ1pf1-ObjPos_Index, ObjPos_SBZ1pf2-ObjPos_Index
-	dc.w ObjPos_BHZ1-ObjPos_Index, ObjPos_Null-ObjPos_Index
-		dc.w ObjPos_BHZ2-ObjPos_Index, ObjPos_Null-ObjPos_Index
-		dc.w ObjPos_BHZ3-ObjPos_Index, ObjPos_Null-ObjPos_Index
-		dc.w ObjPos_BHZ1-ObjPos_Index, ObjPos_Null-ObjPos_Index
 		dc.b $FF, $FF, 0, 0, 0,	0
 ObjPos_GHZ1:	incbin	objpos\ghz1.bin
 		even

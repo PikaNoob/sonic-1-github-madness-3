@@ -35,7 +35,8 @@
 	dc.l Blk16_GHZ
 	dc.l Blk256_GHZ
 	dc.b 0,	$86, $13, $13
-	dc.l Nem_BHZ_2nd+$4000000
+; please help everything is incorrect
+	dc.l Nem_BHZ_2nd+$4000000 ; MAKOTO ZONE
 	dc.l Blk16_BHZ+$5000000
 	dc.l Blk256_BHZ
 	dc.b 0,	$9E, $21,	$21
