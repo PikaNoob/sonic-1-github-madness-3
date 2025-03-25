@@ -3169,6 +3169,7 @@ Title_ClrObjRam:
 		move.w	#0,d0
 		bsr.w	EniDec
 ; help how the fuck can i do this IT SHOWS NOTHING
+		bsr.w	Pal_FadeTo
 		lea	($FF0000).l,a1
 		move.l	#$40000003,d0
 		moveq	#$27,d1
@@ -3181,7 +3182,6 @@ Title_ClrObjRam:
 		moveq	#$27,d1
 		moveq	#$1B,d2
 
-		bsr.w	Pal_FadeTo
 		bsr.w	Pal_FadeFrom
 
 
@@ -15392,7 +15392,6 @@ Map_obj33:
 ; ---------------------------------------------------------------------------
 ; Object 34 - zone title cards
 ; ---------------------------------------------------------------------------
-
 Obj34:					; XREF: Obj_Index
 		moveq	#0,d0
 		move.b	$24(a0),d0
@@ -16075,145 +16074,8 @@ Obj7F_Display:
 ; ---------------------------------------------------------------------------
 ; Sprite mappings - zone title cards
 ; ---------------------------------------------------------------------------
-Map_obj34:	dc.w byte_C9FE-Map_obj34
-		dc.w byte_CA2C-Map_obj34
-		dc.w byte_CA5A-Map_obj34
-		dc.w byte_CA7A-Map_obj34
-		dc.w byte_CAA8-Map_obj34
-		dc.w byte_CADC-Map_obj34
-		dc.w byte_CB10-Map_obj34
-		dc.w byte_CB26-Map_obj34
-		dc.w byte_CB31-Map_obj34
-		dc.w byte_CB3C-Map_obj34
-		dc.w byte_CB47-Map_obj34
-		dc.w byte_CB8A-Map_obj34
-byte_C9FE:	dc.b $C	;  GREEN HILL | CRUNCHY ROLL
-		dc.b $F8, 5, 0, 8, $80		; C
-		dc.b $F8, 5, 0, $3A, $90	; R
-		dc.b $F8, 5, 0, $46, $A0	; U
-		dc.b $F8, 5, 0, $2E, $B0	; N
-		dc.b $F8, 5, 0, 8, $C0		; C
-		dc.b $F8, 5, 0, $1C, $D0	; H
-		dc.b $F8, 5, 0, $4A, $E0	; Y
-		dc.b $F8, 0, 0, $56, $F0	; Space
-		dc.b $F8, 5, 0, $3A, $0	; R
-		dc.b $F8, 5, 0, $32, $10	; O
-		dc.b $F8, 5, 0, $26, $20	; L
-		dc.b $F8, 5, 0, $26, $30	; L
-byte_CA2C:	dc.b $16	;  LABYRINTH | I LIKE FILE EGGSPLORER
-		dc.b $F8, 1, 0, $20, $80	; I
-		dc.b $F8, 0, 0, $56, $88	; Space
-		dc.b $F8, 5, 0, $26, $98	; L
-		dc.b $F8, 1, 0, $20, $A8	; I
-		dc.b $F8, 5, 0, $22, $B0	; K
-		dc.b $F8, 5, 0, $10, $C0	; E
-		dc.b $F8, 0, 0, $56, $D0	; Space
-		dc.b $F8, 5, 0, $14, $E0	; F
-		dc.b $F8, 1, 0, $20, $F0	; I
-		dc.b $F8, 5, 0, $26, $F8	; L
-		dc.b $F8, 5, 0, $10, $8	; E
-		dc.b $F8, 0, 0, $56, $18	; Space
-		dc.b $F8, 5, 0, $10, $28	; E
-		dc.b $F8, 5, 0, $18, $38	; G
-		dc.b $F8, 5, 0, $18, $48	; G
-		dc.b $F8, 5, 0, $3E, $58	; S
-		dc.b $F8, 5, 0, $36, $68	; P
-		dc.b $F8, 5, 0, $26, $78	; L
-		dc.b $F8, 5, 0, $32, $88	; O
-		dc.b $F8, 5, 0, $3A, $98	; R
-		dc.b $F8, 5, 0, $10, $A8	; E
-		dc.b $F8, 5, 0, $3A, $B8	; R
-byte_CA5A:	dc.b 5	;  MARBLE | MARBL
-		dc.b $F8, 5, 0, $2A, $80	; M
-		dc.b $F8, 5, 0, 0, $90		; A
-		dc.b $F8, 5, 0, $3A, $A0	; R
-		dc.b $F8, 5, 0, 4, $B0		; B
-		dc.b $F8, 5, 0, $26, $C0	; L
-byte_CA7A:	dc.b $11	;  STAR LIGHT | DONT GET RIDOTHIS
-		dc.b $F8, 5, 0, $0C, $80	; D
-		dc.b $F8, 5, 0, $32, $90	; O
-		dc.b $F8, 5, 0, $2E, $A0	; N
-		dc.b $F8, 5, 0, $42, $B0	; T
-		dc.b $F8, 0, 0, $56, $C0	; Space
-		dc.b $F8, 5, 0, $18, $D0	; G
-		dc.b $F8, 5, 0, $10, $E0	; E
-		dc.b $F8, 5, 0, $42, $F0	; T
-		dc.b $F8, 0, 0, $56, $0	; Space
-		dc.b $F8, 5, 0, $3A, $10	; R
-		dc.b $F8, 1, 0, $20, $20	; I
-		dc.b $F8, 5, 0, $0C, $28	; D
-		dc.b $F8, 5, 0, $32, $38	; O
-		dc.b $F8, 5, 0, $42, $48	; T
-		dc.b $F8, 5, 0, $1C, $58	; H
-		dc.b $F8, 1, 0, $20, $68	; I
-		dc.b $F8, 5, 0, $3E, $70	; S
-byte_CAA8:	dc.b $15	;  SPRING YARD | THE PIG FROM BARNYARD
-		dc.b $F8, 5, 0, $42, $80	; T
-		dc.b $F8, 5, 0, $1C, $90	; H
-		dc.b $F8, 5, 0, $10, $A0	; E
-		dc.b $F8, 0, 0, $56, $B0	; Space
-		dc.b $F8, 5, 0, $36, $C0	; P
-		dc.b $F8, 1, 0, $20, $D0	; I
-		dc.b $F8, 5, 0, $18, $D8	; G
-		dc.b $F8, 0, 0, $56, $E8	; Space
-		dc.b $F8, 5, 0, $14, $F8	; F
-		dc.b $F8, 5, 0, $3A, $8	; R
-		dc.b $F8, 5, 0, $32, $18	; O
-		dc.b $F8, 5, 0, $2A, $28	; M
-		dc.b $F8, 0, 0, $56, $38	; Space
-		dc.b $F8, 5, 0, 4, $48		; B
-		dc.b $F8, 5, 0, 0, $58		; A
-		dc.b $F8, 5, 0, $3A, $68	; R
-		dc.b $F8, 5, 0, $2E, $78	; N
-		dc.b $F8, 5, 0, $4A, $88	; Y
-		dc.b $F8, 5, 0, 0, $98		; A
-		dc.b $F8, 5, 0, $3A, $A8	; R
-		dc.b $F8, 5, 0, $0C, $B8	; D
-byte_CADC:	dc.b 7	;  SCRAP BRAIN | Z Z Z Z
-		dc.b $F8, 5, 0, $4E, $80	; Z
-		dc.b $F8, 0, 0, $56, $90	; Space
-		dc.b $F8, 5, 0, $4E, $A0	; Z
-		dc.b $F8, 0, 0, $56, $B0	; Space
-		dc.b $F8, 5, 0, $4E, $C0	; Z
-		dc.b $F8, 0, 0, $56, $D0	; Space
-		dc.b $F8, 5, 0, $4E, $E0	; Z
-byte_CB10:	dc.b 4			; ZONE
-		dc.b $F8, 5, 0,	$4E, $E0
-		dc.b $F8, 5, 0,	$32, $F0
-		dc.b $F8, 5, 0,	$2E, 0
-		dc.b $F8, 5, 0,	$10, $10
-		dc.b 0
-byte_CB26:	dc.b 2			; ACT 1
-		dc.b 4,	$C, 0, $53, $EC
-		dc.b $F4, 2, 0,	$57, $C
-byte_CB31:	dc.b 2			; ACT 2
-		dc.b 4,	$C, 0, $53, $EC
-		dc.b $F4, 6, 0,	$5A, 8
-byte_CB3C:	dc.b 2			; ACT 3
-		dc.b 4,	$C, 0, $53, $EC
-		dc.b $F4, 6, 0,	$60, 8
-byte_CB47:	dc.b $D			; Oval
-		dc.b $E4, $C, 0, $70, $F4
-		dc.b $E4, 2, 0,	$74, $14
-		dc.b $EC, 4, 0,	$77, $EC
-		dc.b $F4, 5, 0,	$79, $E4
-		dc.b $14, $C, $18, $70,	$EC
-		dc.b 4,	2, $18,	$74, $E4
-		dc.b $C, 4, $18, $77, 4
-		dc.b $FC, 5, $18, $79, $C
-		dc.b $EC, 8, 0,	$7D, $FC
-		dc.b $F4, $C, 0, $7C, $F4
-		dc.b $FC, 8, 0,	$7C, $F4
-		dc.b 4,	$C, 0, $7C, $EC
-		dc.b $C, 8, 0, $7C, $EC
-		dc.b 0
-byte_CB8A:	dc.b 5			; FINAL
-		dc.b $F8, 5, 0,	$14, $DC
-		dc.b $F8, 1, 0,	$20, $EC
-		dc.b $F8, 5, 0,	$2E, $F4
-		dc.b $F8, 5, 0,	0, 4
-		dc.b $F8, 5, 0,	$26, $14
-		even
+Map_obj34:
+        include "_maps\obj34.asm"
 ; ---------------------------------------------------------------------------
 ; Sprite mappings - "GAME OVER"	and "TIME OVER"
 ; ---------------------------------------------------------------------------
@@ -16228,10 +16090,10 @@ Map_obj3A:	dc.w byte_CBEA-Map_obj3A
 		dc.w byte_CC32-Map_obj3A
 		dc.w byte_CC51-Map_obj3A
 		dc.w byte_CC75-Map_obj3A
-		dc.w byte_CB47-Map_obj3A
-		dc.w byte_CB26-Map_obj3A
-		dc.w byte_CB31-Map_obj3A
-		dc.w byte_CB3C-Map_obj3A
+		;dc.w byte_CB47-Map_obj3A
+		;dc.w byte_CB26-Map_obj3A
+		;dc.w byte_CB31-Map_obj3A
+		;dc.w byte_CB3C-Map_obj3A
 byte_CBEA:	dc.b $F	;  SONIC HAS | CADNIUM SULFIDE
 		dc.b $F8, 5, 0, 8, $7C		; C
 		dc.b $F8, 5, 0, 0, $8C		; A
@@ -16285,7 +16147,7 @@ byte_CC75:	dc.b 7			; RING BONUS
 Map_obj7E:	dc.w byte_CCAC-Map_obj7E
 		dc.w byte_CCEE-Map_obj7E
 		dc.w byte_CD0D-Map_obj7E
-		dc.w byte_CB47-Map_obj7E
+		;dc.w byte_CB47-Map_obj7E
 		dc.w byte_CD31-Map_obj7E
 		dc.w byte_CD46-Map_obj7E
 		dc.w byte_CD5B-Map_obj7E
