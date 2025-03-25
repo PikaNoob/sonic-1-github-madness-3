@@ -41400,7 +41400,7 @@ Music8C:	incbin	sound\music8C.bin; VS Boss
 		even
 Music8D:	incbin	sound\music8D.bin; Final Zone
 		even
-Music8E:	incbin	sound\fle.bin ;		Act Clear
+Music8E:	include	sound\fle.asm ;		Act Clear
 		even
 Music8F:	incbin	sound\music8F.bin ; Game Over
 		even
