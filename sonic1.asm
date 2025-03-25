@@ -16854,6 +16854,51 @@ ObjectFall:
 ; End of function ObjectFall
 
 ; ---------------------------------------------------------------------------
+; Subroutine to	make an	object fall downwards, increasingly fast
+; ---------------------------------------------------------------------------
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+
+ObjectFallNoJump:
+		move.l	8(a0),d2
+		move.l	$C(a0),d3
+		move.w	$10(a0),d0
+		ext.l	d0
+		asl.l	#8,d0
+		add.l	d0,d2
+;		cmpi.b	#1,obID(a0)
+;		beq.s	ObjectFallSonic
+		move.w	$C(a0),d0
+		addi.w	#4,$C(a0)	; increase vertical speed
+;		ext.l	d0
+;		asl.l	#8,d0
+;		add.l	d0,d3
+		move.l	d2,$8(a0)
+;		move.l	d3,obY(a0)
+		rts	
+
+; End of function ObjectFall
+
+JumpFallSonic:
+        movem.w    $10(a0),d0-d1        ; Get speed
+        
+        asl.l    #8,d0                ; Apply X speed
+        add.l    d0,$8(a0)
+        
+        move.w    #$300,d0            ; Y movement speed
+        tst.w    d1                ; Are we falling?
+        bpl.s    .SetYSpeed            ; If so, branch
+        neg.w    d0                ; Make Y movement go up
+        
+.SetYSpeed:
+        ext.l    d0                ; Apply Y speed
+        asl.l    #8,d0
+        add.l    d0,$C(a0)
+        addi.w    #$38,$12(a0)            ; Apply gravity
+        rts
+
+; ---------------------------------------------------------------------------
 ; Subroutine translating object	speed to update	object position
 ; ---------------------------------------------------------------------------
 
@@ -24261,7 +24306,7 @@ Obj01_MdJump:				; XREF: Obj01_Modes
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_ChgJumpDir
 		bsr.w	Sonic_LevelBound
-		jsr	ObjectFall
+		jsr	JumpFallSonic
 		btst	#6,$22(a0)
 		beq.s	loc_12E5C
 		subi.w	#$28,$12(a0)
@@ -24288,7 +24333,7 @@ Obj01_MdJump2:				; XREF: Obj01_Modes
 		bsr.w	Sonic_ChgJumpDir
 		bsr.w	Sonic_LevelBound
 		bsr.w	Sonic_AirUnroll
-		jsr	ObjectFall
+		jsr	JumpFallSonic
 		btst	#6,$22(a0)
 		beq.s	loc_12EA6
 		subi.w	#$28,$12(a0)
@@ -25492,7 +25537,7 @@ locret_13860:
 
 Obj01_Death:				; XREF: Obj01_Index
 		bsr.w	GameOver
-		jsr	ObjectFall
+		jsr	JumpFallSonic
 		bsr.w	Sonic_RecordPos
 		bsr.w	Sonic_Animate
 		bsr.w	LoadSonicDynPLC
