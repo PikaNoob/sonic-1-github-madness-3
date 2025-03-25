@@ -32,6 +32,8 @@ lswifi: equ lsrow2size+9
 vBlankRoutine equ $FFFFFFC4 ; VBlank Routine Jump Instruction (6 bytes)
 vBlankJump equ vBlankRoutine
 vBlankAdress equ vBlankRoutine+2
+; options menu
+optamm: equ ((OMTEnd-OptionMenuText)/16)-1
 
 ; NOTES FOR ANYONE MAKING CHARACTERS
 v_character = $FFFFFFE8
@@ -3394,8 +3396,6 @@ loc_3230:
 		beq.w	loc_317C	; if not, branch
 
 Title_ChkLevSel:
-		tst.b	($FFFFFFE0).w	; check	if level select	code is	on
-		beq.w	PlayLevel	; if not, play level
 		btst	#6,($FFFFF604).w ; check if A is pressed
 		beq.w	PlayLevel	; if not, play level
 		
@@ -3419,6 +3419,9 @@ Title_ClrScroll:
 Title_ClrVram:
 		move.l	d0,(a6)
 		dbf	d1,Title_ClrVram ; fill	VRAM with 0
+
+		tst.b	($FFFFFFE0).w	; check	if level select	code is	on
+		beq.w	GotoOptions	; if not, play level
 
 		bsr.w	LevSelTextLoad
 		
@@ -3446,6 +3449,7 @@ Title_ClrVram:
 	@issndtst2:
 		lea	(Controls_SND).l,a1
 		bsr.w	CStringSlop
+		
 ; ---------------------------------------------------------------------------
 ; Level	Select
 ; ---------------------------------------------------------------------------
@@ -3941,6 +3945,63 @@ Controls_Normal:
 Controls_SND:
 		dc.b	"A: -10  B: +10  C: PLAY  START: QUIT",0
 		even
+		
+OptionMenuText:	
+		dc.b    "PLAY THE GAME!!!"
+        dc.b    "CHARACTER       "
+OMTEnd:
+		
+; ---------------------------------------------------------------------------
+; Level	Select
+; ---------------------------------------------------------------------------
+GotoOptions:
+		lea	(OptionMenuText).l,a1
+		lea	($C00000).l,a6
+		move.w	#$E680-$21,d3	; VRAM setting
+		move.l	#lsscrpos,d4	; screen position (text)
+		
+		move.w	#optamm-1,d1		; number of lines of text (first row)
+		bsr.w	LevSelTextLoad_loop
+
+OptionsMenu:
+		move.b	#4,($FFFFF62A).w
+		bsr.w	DelayProgram
+		bsr.w	OptControls
+		bsr.w	RunPLC_RAM
+		tst.l	($FFFFF680).w
+		bne.s	OptionsMenu
+		andi.b	#$F0,($FFFFF605).w ; is	A, B, C, or Start pressed?
+		beq.s	OptionsMenu	; if not, branch
+		nop
+		bra.s	OptionsMenu
+		
+OptReturn:
+		rts
+OptControls:				; XREF: LevelSelect
+		move.b	($FFFFF605).w,d1
+		andi.b	#3,d1		; is up/down pressed and held?
+		bne.s	Opt_UpDown	; if yes, branch
+		subq.w	#1,($FFFFFF80).w ; subtract 1 from time	to next	move
+		bpl.s	OptReturn	; if time remains, branch
+Opt_UpDown:
+		move.w	#$B,($FFFFFF80).w ; reset time delay
+		move.b	($FFFFF604).w,d1
+		move.w	($FFFFFF82).w,d6
+		btst	#0,d1		; is up	pressed?
+		beq.s	Opt_Down	; if not, branch
+		subq.w	#1,d6		; move up 1 selection
+		bcc.s	Opt_Down
+		moveq	#lsselectable,d6		; if selection moves below 0, jump to last selection
+
+Opt_Down:
+		btst	#1,d1		; is down pressed?
+		beq.s	Opt_Refresh	; if not, branch
+		addq.w	#1,d6		; move down 1 selection
+		cmpi.w	#lsselectable+1,d6
+		bcs.s	Opt_Refresh
+		moveq	#0,d6		; if selection moves above last selectable,	jump to	selection 0
+Opt_Refresh:
+		
 ; ---------------------------------------------------------------------------
 ; Music	playlist
 ; ---------------------------------------------------------------------------
@@ -6803,9 +6864,6 @@ LevelSizeArray:        ; GHZ
         dc.w $0004, $0000, $2960, $0000, $0300, $0060 ; Act 3
         dc.w $0004, $0000, $2ABF, $0000, $0300, $0060 ; Act 4 (Unused)
         even
-EndingStLocArray:
-		incbin	misc\sloc_end.bin
-		even
 
 ; ===========================================================================
 
@@ -6815,8 +6873,9 @@ LevSz_ChkLamp:				; XREF: LevelSizeLoad
 		jsr	Obj79_LoadInfo
 		move.w	($FFFFD008).w,d1
 		move.w	($FFFFD00C).w,d0
-		bra.s	loc_60D0
+		bra.w	loc_60D0
 ; ===========================================================================
+
 
 LevSz_StartLoc:				; XREF: LevelSizeLoad
 		move.w	($FFFFFE10).w,d0
@@ -6824,11 +6883,23 @@ LevSz_StartLoc:				; XREF: LevelSizeLoad
 		lsr.w	#4,d0
 		lea	StartLocArray(pc,d0.w),a1 ; load Sonic's start location
 		tst.w	($FFFFFFF0).w	; is demo mode on?
-		bpl.s	LevSz_SonicPos	; if not, branch
+		bpl.w	LevSz_SonicPos	; if not, branch
 		move.w	($FFFFFFF4).w,d0
 		subq.w	#1,d0
 		lsl.w	#2,d0
 		lea	EndingStLocArray(pc,d0.w),a1 ; load Sonic's start location
+		bra.w	LevSz_SonicPos
+
+EndingStLocArray:
+		incbin	misc\sloc_end.bin
+		even
+		
+; ===========================================================================
+; ---------------------------------------------------------------------------
+; Sonic	start location array
+; ---------------------------------------------------------------------------
+StartLocArray:	incbin	misc\sloc_lev.bin
+		even
 
 LevSz_SonicPos:
 		moveq	#0,d1
@@ -6868,12 +6939,7 @@ loc_60F8:
 		lsl.b	#2,d0
 		move.l	LoopTileNums(pc,d0.w),($FFFFF7AC).w
 		bra.w	LevSz_Unk
-; ===========================================================================
-; ---------------------------------------------------------------------------
-; Sonic	start location array
-; ---------------------------------------------------------------------------
-StartLocArray:	incbin	misc\sloc_lev.bin
-		even
+
 ; ---------------------------------------------------------------------------
 ; Which	256x256	tiles contain loops or roll-tunnels
 ; ---------------------------------------------------------------------------
