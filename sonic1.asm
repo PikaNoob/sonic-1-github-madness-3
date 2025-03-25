@@ -24306,7 +24306,7 @@ Obj01_MdJump:				; XREF: Obj01_Modes
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_ChgJumpDir
 		bsr.w	Sonic_LevelBound
-		jsr	JumpFallSonic
+		jsr	ObjectFall
 		btst	#6,$22(a0)
 		beq.s	loc_12E5C
 		subi.w	#$28,$12(a0)
@@ -24333,7 +24333,7 @@ Obj01_MdJump2:				; XREF: Obj01_Modes
 		bsr.w	Sonic_ChgJumpDir
 		bsr.w	Sonic_LevelBound
 		bsr.w	Sonic_AirUnroll
-		jsr	JumpFallSonic
+		jsr	ObjectFall
 		btst	#6,$22(a0)
 		beq.s	loc_12EA6
 		subi.w	#$28,$12(a0)
@@ -25537,7 +25537,7 @@ locret_13860:
 
 Obj01_Death:				; XREF: Obj01_Index
 		bsr.w	GameOver
-		jsr	JumpFallSonic
+		jsr	ObjectFall
 		bsr.w	Sonic_RecordPos
 		bsr.w	Sonic_Animate
 		bsr.w	LoadSonicDynPLC
