@@ -8547,10 +8547,13 @@ Resize_GHZ2:
 		cmpi.w	#$1600,($FFFFF700).w
 		bcs.s	locret_6E3A
 		move.w	#$400,($FFFFF726).w
-		cmpi.w	#$1D60,($FFFFF700).w
+		cmpi.w	#$1C00,($FFFFF700).w
 		bcs.s	locret_6E3A
-		move.w	#$300,($FFFFF726).w
-
+		move.w	#$100,($FFFFF726).w
+		cmpi.w	#$1D00,($FFFFF700).w
+		bcs.s	locret_6E3A
+		move.w	#$20,($FFFFF726).w
+		
 locret_6E3A:
 		rts	
 ; ===========================================================================
