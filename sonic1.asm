@@ -29,6 +29,9 @@ lsselectable: equ ((LMTSelectableEnd-LevelMenuText)/16)-1 ; last selectable item
 lssndtest: equ lsrow2size+8
 lswifi: equ lsrow2size+9
 
+vBlankRoutine equ $FFFFFFC4 ; VBlank Routine Jump Instruction (6 bytes)
+vBlankJump equ vBlankRoutine
+vBlankAdress equ vBlankRoutine+2
 
 ; NOTES FOR ANYONE MAKING CHARACTERS
 v_character = $FFFFFFE8
@@ -48,7 +51,7 @@ Vectors:	dc.l $FFFE00, EntryPoint, BusError, AddressError
 		dc.l ErrorExcept, ErrorExcept, ErrorExcept, ErrorExcept
 		dc.l ErrorExcept, ErrorExcept, ErrorExcept, ErrorExcept
 		dc.l ErrorExcept, ErrorTrap, ErrorTrap,	ErrorTrap
-		dc.l PalToCRAM,	ErrorTrap, loc_B10, ErrorTrap
+		dc.l PalToCRAM,	ErrorTrap, vBlankRoutine, ErrorTrap
 		dc.l ErrorTrap,	ErrorTrap, ErrorTrap, ErrorTrap
 		dc.l ErrorTrap,	ErrorTrap, ErrorTrap, ErrorTrap
 		dc.l ErrorTrap,	ErrorTrap, ErrorTrap, ErrorTrap
@@ -188,6 +191,8 @@ SetupValues:	dc.w $8000		; XREF: PortA_Ok
 
 GameProgram:
 		tst.w	($C00004).l
+		ori	#$700,sr
+
 		btst	#6,($A1000D).l
 		beq.s	CheckSumCheck
 		cmpi.l	#'init',($FFFFFFFC).w ; has checksum routine already run?
@@ -226,6 +231,10 @@ GameInit:
 GameClrRAM:
 		move.l	d7,(a6)+
 		dbf	d6,GameClrRAM	; fill RAM ($0000-$FDFF) with $0
+
+		move.w	#$4EF9,(vBlankJump).w			; JMP opcode
+		move.l	#loc_B10,(vBlankAdress).w		; Set the V-INT pointer to the standard V-INT routine
+
 		bsr.w	VDPSetupGame
 		bsr.w	SoundDriverLoad
 		bsr.w	JoypadInit
