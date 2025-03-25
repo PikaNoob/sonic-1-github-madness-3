@@ -33951,7 +33951,7 @@ loc_19E3E:
 
 loc_19E5A:
 		move.w	#0,$34(a0)
-		move.b	#8,$21(a0)	; set number of	hits to	8
+		move.w	#280,($FF7FFE).l	; set number of	hits to	the max
 		move.w	#-1,$30(a0)
 
 Obj85_Eggman:				; XREF: Obj85_Index
@@ -34035,20 +34035,23 @@ loc_19F48:
 ; ===========================================================================
 
 loc_19F50:
-		addq.w	#7,($FFFFF636).w
-		cmpi.b	#2,($FFFFD01C).w
-		bne.s	loc_19F48
-		move.w	#$300,d0
-		btst	#0,$22(a0)
-		bne.s	loc_19F6A
-		neg.w	d0
-
-loc_19F6A:
-		move.w	d0,($FFFFD010).w
+		addq.w	#7,($FFFFF636).w	; add 7 to... the rng seed?
+;		cmpi.b	#2,($FFFFD01C).w	; check if player is in ball form (nah)
+;		bne.s	loc_19F48
+;		move.w	#$300,d0		; knock player back (nah)
+;		btst	#0,$22(a0)
+;		bne.s	loc_19F6A
+;		neg.w	d0
+;
+;loc_19F6A:
+;		move.w	d0,($FFFFD010).w
 		tst.b	$35(a0)
 		bne.s	loc_19F88
-		subq.b	#1,$21(a0)
-		move.b	#$64,$35(a0)
+		subq.w	#1,($FF7FFE).l		; no overflowing! dumbass glitch finish the boss again looking ass
+		bcc.s	@notoverflown
+		clr.w	($FF7FFE).l
+@notoverflown:
+		move.b	#1,$35(a0)		; eye-frame timer
 		move.w	#$AC,d0
 		jsr	(PlaySound_Special).l ;	play boss damage sound
 
@@ -34068,7 +34071,7 @@ loc_19F9C:
 ; ===========================================================================
 
 loc_19FA6:
-		tst.b	$21(a0)
+		tst.w	($FF7FFE).l
 		beq.s	loc_19FBC
 		addq.b	#2,$34(a0)
 		move.w	#-1,$30(a0)
@@ -34565,7 +34568,7 @@ loc_1A598:				; XREF: off_1A590
 		tst.b	$29(a0)
 		bne.s	loc_1A5D4
 		movea.l	$34(a0),a1
-		tst.b	$21(a1)
+		tst.w	($FF7FFE).l
 		bne.s	loc_1A5B4
 		bsr.w	BossDefeated
 		subi.l	#$10000,$3C(a0)
@@ -34603,7 +34606,7 @@ loc_1A604:				; XREF: off_1A590
 		tst.b	$29(a0)
 		bne.s	loc_1A646
 		movea.l	$34(a0),a1
-		tst.b	$21(a1)
+		tst.w	($FF7FFE).l
 		bne.s	loc_1A626
 		bsr.w	BossDefeated
 		addi.l	#$10000,$3C(a0)
@@ -34774,14 +34777,18 @@ loc_1A982:				; XREF: Obj86_Index
 		moveq	#0,d0
 		move.b	$25(a0),d0
 		move.w	Obj86_Index2(pc,d0.w),d0
-		jsr	Obj86_Index2(pc,d0.w)
-		lea	Ani_obj86a(pc),a1
-		jsr	AnimateSprite
-		jmp	DisplaySprite
+		jmp	Obj86_Index2(pc,d0.w)
 ; ===========================================================================
 Obj86_Index2:	dc.w loc_1A9A6-Obj86_Index2
 		dc.w loc_1A9C0-Obj86_Index2
-		dc.w loc_1AA1E-Obj86_Index2
+		dc.w Obj86_Ball_Standard-Obj86_Index2	; orb random 1
+		dc.w Obj86_Ball_Sine-Obj86_Index2	; rob random 2
+		dc.w Obj86_Ball_Explode-Obj86_Index2	; orb random 3
+		dc.w Obj86_Ball_Speed-Obj86_Index2	; yeah you get it
+		dc.w Obj86_Ball_Standard-Obj86_Index2
+		dc.w Obj86_Ball_Homing-Obj86_Index2
+		dc.w Obj86_Ball_Standard-Obj86_Index2
+		dc.w Obj86_Ball_Static-Obj86_Index2
 ; ===========================================================================
 
 loc_1A9A6:				; XREF: Obj86_Index2
@@ -34791,7 +34798,11 @@ loc_1A9A6:				; XREF: Obj86_Index2
 		move.w	d0,$10(a0)
 		move.w	#$B4,$28(a0)
 		addq.b	#2,$25(a0)
-		rts	
+
+Obj86_Ball_Animate:
+		lea	Ani_obj86a(pc),a1
+		jsr	AnimateSprite
+		jmp	DisplaySprite
 ; ===========================================================================
 
 loc_1A9C0:				; XREF: Obj86_Index2
@@ -34810,29 +34821,116 @@ loc_1A9E6:
 		move.b	#0,$1C(a0)
 		subq.w	#1,$28(a0)
 		bne.s	locret_1AA1C
-		addq.b	#2,$25(a0)
+		jsr	RandomNumber
+		and.w	#7*2,d0
+		addq.w	#2*2,d0
+		move.b	d0,$25(a0)	; set routine
+		swap	d0
+		move.w	d0,$28(a0)	; set other number
 		move.b	#1,$1C(a0)
 		move.b	#$9A,$20(a0)
-		move.w	#$B4,$28(a0)
-		moveq	#0,d0
 		move.w	($FFFFD008).w,d0
 		sub.w	8(a0),d0
 		move.w	d0,$10(a0)
 		move.w	#$140,$12(a0)
 
 locret_1AA1C:
-		rts	
+		bra.w	Obj86_Ball_Animate
 ; ===========================================================================
 
-loc_1AA1E:				; XREF: Obj86_Index2
+Obj86_Ball_Explode:
+		subq.b	#1,$28(a0)
+		bpl.w	Obj86_Ball_Animate
+		movea.l	$34(a0),a1
+		subq.w	#1,$38(a1)
+		move.l	a0,a1
+		moveq	#0,d2	; GMZ
+		moveq	#16-1,d1	; GMZ: Amount of explosion objects
+		bra.s	@start
+@loop:
+		jsr	SingleObjLoad
+		bne.s	@exit
+		move.w	8(a0),8(a1)
+		move.w	$C(a0),$C(a1)
+@start:
+		move.b	#$27,0(a1)	; change object	to points
+		move.b	#2,$24(a1)	; ML: no animal
+		move.b	d2,$28(a1)	; GMZ: Set subtype:
+		addq.b	#4,d2
+		dbf	d1,@loop
+@exit:
+		bra.w	Obj86_Ball_Animate
+; ===========================================================================
+
+Obj86_Ball_Sine:
+		move.b	$28(a0),d0
+		addq.b	#4,$28(a0)
+		jsr	CalcSine
+		muls.w	#2,d0
+		move.w	d0,$10(a0)
+
+		move.b	$29(a0),d0
+		addq.b	#4,$29(a0)
+		jsr	CalcSine
+		tst.w	d0
+		bmi.s	@upwards
+		lsl.w	#2,d0		; x4 go down faster
+@upwards:
+		move.w	d0,$12(a0)
+		bra.w	loc_1AA1E
+; ===========================================================================
+
+Obj86_Ball_Homing:
+		cmp.b	#$F0,$28(a0)
+		bhs.s	@homer
+		cmp.b	#$E0,$28(a0)
+		bhs.s	Obj86_Ball_Vanish
+		subq.b	#1,$28(a0)
+		bcc.s	@nomorehoming
+		move.w	($FFFFD008).w,d0
+		sub.w	8(a0),d0
+		add.w	d0,$10(a0)
+		add.w	d0,$10(a0)
+@nomorehoming:
+		bra.w	loc_1AA1E
+@homer:
+		cmp.b	#$DF,$28(a0)
+		bra.s	@nomorehoming	; next frame ig
+; ===========================================================================
+
+Obj86_Ball_Speed:
+		clr.w	$10(a0)
+		moveq	#0,d0
+		move.b	$28(a0),d0
+		lsr.w	#2,d0
+		add.w	d0,$12(a0)
+		move.b	$29(a0),d0
+		add.b	d0,$28(a0)
+		bra.w	loc_1AA1E
+; ===========================================================================
+
+Obj86_Ball_Vanish:
+		move.w	#$E1,d0
+		jsr	(PlaySound_Special).l
+		bra.w	loc_1AA34
+; ===========================================================================
+
+Obj86_Ball_Static:
+		clr.w	$10(a0)
+		moveq	#0,d0
+		moveq	#0,d1
+		move.b	$28(a0),d0
+		move.b	$29(a0),d1
+		add.w	d1,d0
+		move.w	d0,$12(a0)
+		bra.w	loc_1AA1E
+; ===========================================================================
+
+Obj86_Ball_Standard:
+loc_1AA1E:
 		jsr	SpeedToPos
 		cmpi.w	#$5E0,$C(a0)
-		bcc.s	loc_1AA34
-		subq.w	#1,$28(a0)
-		beq.s	loc_1AA34
-		rts	
-; ===========================================================================
-
+		blo.w	Obj86_Ball_Animate
 loc_1AA34:
 		movea.l	$34(a0),a1
 		subq.w	#1,$38(a1)
