@@ -4044,6 +4044,8 @@ Player_Palette:
 		
 		dc.w	21,22,23,0 ; Pal_Gronic 
 		dc.w	24,22,23,0 ; Pal_Anakama 
+        dc.w	3,$F,$10,0 ; LimitedSonic 
+
 		; add more player palettes
 Level_LoadPal:
 		move.w	#$1E,($FFFFFE14).w
@@ -24061,6 +24063,7 @@ Player_Maps:
 	dc.l	Map_Sonic
 	dc.l	Map_Sonic ; gronic
 	dc.l	Map_Sonic ; anakama
+	dc.l	Map_Sonic ; LimitedSonic
 	; insert player mapping here
 	
 Obj01_Main:				; XREF: Obj01_Index
@@ -25688,6 +25691,8 @@ Player_Anim:
 	dc.l	SonicAniData
 	dc.l	SonicAniData ; gronic
 	dc.l	SonicAniData ; anakama
+	dc.l	SonicAniData ; LimitedSonic
+
 	; Insert more animation data for other characters here
 	
 Sonic_Animate:				; XREF: Obj01_Control; et al
@@ -25877,11 +25882,13 @@ Player_DPLC:
 	dc.l	SonicDynPLC
 	dc.l	SonicDynPLC ; gronic
 	dc.l	SonicDynPLC ; anakama
+	dc.l	SonicDynPLC ; LimitedSonic
 	; add pointers for player dplc here
 Player_Art:
 	dc.l	Art_Sonic
 	dc.l	Art_Sonic ; gronic
 	dc.l	Art_Sonic ; anakama
+	dc.l	Art_Sonic ; LimitedSonic
 	; add pointers for player art here
 
 LoadSonicDynPLC:			; XREF: Obj01_Control; et al
