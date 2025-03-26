@@ -41610,7 +41610,7 @@ Music8F:	incbin	sound\music8F.bin ; Game Over
 		even
 Music90:	incbin	sound\music90.bin ; Continue
 		even
-Music91:	incbin	sound\music91.bin ; Credits
+Music91:	incbin	sound\music91.asm ; Megurine Luka I mean Credits
 		even
 Music92:	incbin	sound\music92.bin ; Drowning
 		even
