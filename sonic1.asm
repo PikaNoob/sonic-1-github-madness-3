@@ -15,6 +15,7 @@ align macro
 	cnop 0,\1
 	endm
 		include	"sound/smps2asm_inc.asm"
+		include "MapMacros.asm"		; TODO: UNFINISHED DON'T USE MAPMACROS!
 
 ;level select constants (to not give the foward reference warning this was moved here)
 lsscrpos = $60860003 ; level select screen position
@@ -221,8 +222,8 @@ loc_348:
 		move.l	d7,(a6)+
 		dbf	d6,loc_348
 ; HzMd NT/PL MCD JP/OV TMSS TMSS TMSS TMSS
-		moveq	#$EF,d0
-		move.b	($A10001).l,d0
+		move.w	#$EF,d0
+		and.b	($A10001).l,d0
 		bclr	#7,d0
 		beq.s	@jap
 		or.b	#1<<4,d0
@@ -250,10 +251,10 @@ GameClrRAM:
 		bsr.w	SoundDriverLoad
 		bsr.w	JoypadInit
 
-;		move.b	($FFFFFFF8).w,d0
-;		and.w	#$F,d0
-;		beq.s	@notmss
-;		jsr	GM_AntiTMSS
+		move.b	($FFFFFFF8).w,d0
+		and.w	#$F,d0
+		beq.s	@notmss
+		jsr	GM_AntiTMSS
 @notmss:
 		move.b	#0,($FFFFF600).w ; set Game Mode to Sega Screen
 	;	move.b	#$20,($FFFFF600).w ; set Game Mode to Minecraft
@@ -3113,6 +3114,7 @@ SegaScreen:				; XREF: GameModeArray
 		move.w	#$8407,(a6)
 		move.w	#$8700,(a6)
 		move.w	#$8B00,(a6)
+		move.w	#$8C81,(a6)
 		clr.b	($FFFFF64E).w
 		move	#$2700,sr
 		move.w	($FFFFF60C).w,d0
@@ -41832,6 +41834,8 @@ SegaPCM_end:
 IdiotPCM:	incbin	sound\youare.bin
 IdiotPCM_end:
 	even
+
+GM_AntiTMSS:	include _inc/GM_AntiTMSS.asm
 
 Minecraft:	include	minecraft\code\main.asm
 ; end of 'ROM'

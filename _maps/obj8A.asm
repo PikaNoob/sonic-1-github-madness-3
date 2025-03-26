@@ -10,6 +10,7 @@ Map_ca8f_E: 	dc.w Map_ca8f_298-Map_ca8f
 Map_ca8f_10: 	dc.w Map_ca8f_334-Map_ca8f
 Map_ca8f_12: 	dc.w Map_ca8f_380-Map_ca8f
 Map_ca8f_14: 	dc.w Map_ca8f_3A9-Map_ca8f
+Map_ca8f_tm: 	dc.w Map_ca8f_tmss-Map_ca8f
 Map_ca8f_16: 	dc.b $8
 	dc.b $CC, $5, $80, $3E, $BD
 	dc.b $E2, $5, $80, $E, $CD
@@ -234,4 +235,33 @@ Map_ca8f_3A9: 	dc.b $20
 	dc.b $1D, $5, $0, $22, $1A
 	dc.b $1D, $5, $0, $12, $39
 	dc.b $1D, $5, $0, $26, $48
+Map_ca8f_tmss:	dc.b 28
+ spritePiece $24, -$3F, 4, 2, 0, 0, 0, 0, 0
+ spritePiece -$55, -$40, 2, 2, $1A, 0, 0, 0, 0
+ spritePiece -$46, -$40, 2, 2, $26, 0, 0, 0, 0
+ spritePiece -$36, -$40, 2, 2, $3E, 0, 0, 0, 0
+ spritePiece -$E, -$3F, 2, 2, $2A, 0, 0, 0, 0
+ spritePiece $14, -$3F, 2, 2, $E, 0, 0, 0, 0
+ spritePiece 4, -$3F, 2, 2, $2E, 0, 0, 0, 0
+ spritePiece -$1F, -$3F, 2, 2, $48, 0, 0, 0, 0
+ spritePiece -$56, -$29, 2, 2, $E, 0, 0, 0, 0
+ spritePiece -$46, -$29, 2, 2, $1A, 0, 0, 0, 0
+ spritePiece -$36, -$29, 2, 2, $3E, 0, 0, 0, 0
+ spritePiece -$25, -$29, 2, 2, $E, 0, 0, 0, 0
+ spritePiece -$16, -$29, 2, 2, $22, 0, 0, 0, 0
+ spritePiece -6, -$29, 2, 2, $12, 0, 0, 0, 0
+ spritePiece 9, -$29, 2, 2, $22, 0, 0, 0, 0
+ spritePiece $19, -$29, 1, 2, $46, 0, 0, 0, 0
+ spritePiece $21, -$29, 2, 2, $2E, 0, 0, 0, 0
+ spritePiece $40, -$29, 2, 2, $2E, 0, 0, 0, 0
+ spritePiece $30, -$29, 2, 2, $E, 0, 0, 0, 0
+ spritePiece $59, -$29, 2, 2, $16, 0, 0, 0, 0
+ spritePiece $68, -$28, 4, 2, $3E, 0, 0, 0, 0
+ spritePiece -$3E, -$A, 2, 2, $1A, 0, 0, 0, 0
+ spritePiece -$2E, -$A, 2, 2, $26, 0, 0, 0, 0
+ spritePiece -$E, -8, 2, 2, $2E, 0, 0, 0, 0
+ spritePiece 0, -8, 2, 2, $3A, 0, 0, 0, 0
+ spritePiece $10, -8, 1, 2, $46, 0, 0, 0, 0
+ spritePiece $18, -8, 2, 2, $3E, 0, 0, 0, 0
+ spritePiece $3F, -7, 4, 2, $50, 0, 0, 0, 0
 	even
