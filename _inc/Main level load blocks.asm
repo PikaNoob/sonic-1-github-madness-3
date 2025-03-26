@@ -36,7 +36,7 @@
 	dc.l Blk256_GHZ
 	dc.b 0,	$86, $13, $13
 ; there you go lol
-	dc.l Nem_BHZ_2nd|$20<<24 ; MAKOTO ZONE
+	dc.l Nem_BHZ|$20<<24 ; MAKOTO ZONE
 	dc.l Blk16_BHZ|$21<<24
 	dc.l Blk256_BHZ
 	dc.b 0,	$9E, $15, $15

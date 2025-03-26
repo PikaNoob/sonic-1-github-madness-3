@@ -311,11 +311,9 @@ PLC_SBZ2:	dc.w $C
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - DR. Breen Hill
 ; ---------------------------------------------------------------------------
-PLC_BHZ:	dc.w $B
-		dc.l Nem_BHZ_1st	; GHZ main patterns
+PLC_BHZ:	dc.w $A
+		dc.l Nem_BHZ	; GHZ main patterns
 		dc.w 0
-		dc.l Nem_BHZ_2nd	; GHZ secondary	patterns
-		dc.w $39A0
 		dc.l Nem_Stalk		; flower stalk
 		dc.w $6B00
 		dc.l Nem_PplRock	; purple rock

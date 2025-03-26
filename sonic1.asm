@@ -7031,7 +7031,7 @@ loc_6206:
 BgScroll_Index:	dc.w BgScroll_GHZ-BgScroll_Index, BgScroll_LZ-BgScroll_Index
 		dc.w BgScroll_MZ-BgScroll_Index, BgScroll_SLZ-BgScroll_Index
 		dc.w BgScroll_SYZ-BgScroll_Index, BgScroll_SBZ-BgScroll_Index
-		dc.w BgScroll_End-BgScroll_Index, BgScroll_GHZ-BgScroll_Index
+		dc.w BgScroll_End-BgScroll_Index, BgScroll_MZ-BgScroll_Index ; MAKOTO
 ; ===========================================================================
 
 BgScroll_GHZ:				; XREF: BgScroll_Index
@@ -7126,7 +7126,7 @@ loc_628E:
 Deform_Index:	dc.w Deform_GHZ-Deform_Index, Deform_LZ-Deform_Index
 		dc.w Deform_MZ-Deform_Index, Deform_SLZ-Deform_Index
 		dc.w Deform_SYZ-Deform_Index, Deform_SBZ-Deform_Index
-		dc.w Deform_GHZ-Deform_Index, Deform_GHZ-Deform_Index
+		dc.w Deform_GHZ-Deform_Index, Deform_BHZ-Deform_Index ; MAKOTO
 ; ---------------------------------------------------------------------------
 ; Green	Hill Zone background layer deformation code
 ; ---------------------------------------------------------------------------
@@ -7538,7 +7538,38 @@ loc_6576:
 		dbf	d1,loc_6576
 		rts	
 ; End of function Deform_SBZ
+; ---------------------------------------------------------------------------
+; Makoto Zone background layer deformation code
+; ---------------------------------------------------------------------------
 
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+
+Deform_BHZ:				; XREF: Deform_Index
+		move.w	($FFFFF73A).w,d4
+		ext.l	d4
+		asl.l	#4,d4
+		move.w	($FFFFF73C).w,d5
+		ext.l	d5
+		asl.l	#4,d5
+		moveq	#0,d5	; reset bg position in title screen
+		bsr.w	ScrollBlock1
+		move.w	($FFFFF70C).w,($FFFFF618).w
+		lea	($FFFFCC00).w,a1
+		move.w	#$DF,d1
+		move.w	($FFFFF700).w,d0
+		neg.w	d0
+		swap	d0
+		move.w	($FFFFF708).w,d0
+		neg.w	d0
+
+loc_63COCK6:
+		move.l	d0,(a1)+
+		dbf	d1,loc_63COCK6
+		move.w	($FFFFF646).w,d0
+		sub.w	($FFFFF704).w,d0
+		rts	
+; End of function Deform_BHZ
 ; ---------------------------------------------------------------------------
 ; Subroutine to	scroll the level horizontally as Sonic moves
 ; ---------------------------------------------------------------------------
@@ -38774,9 +38805,7 @@ Blk256_SBZ:	incbin	map256\sbz.bin
 		even
 Blk16_BHZ:	incbin	map16\bhz.bin
 		even
-Nem_BHZ_1st:	incbin	artnem\8x8bhz1.bin	; GHZ primary patterns
-		even
-Nem_BHZ_2nd:	incbin	artnem\8x8bhz2.bin	; GHZ secondary patterns
+Nem_BHZ:	incbin	artnem\8x8bhz.bin	; GHZ primary patterns
 		even
 Blk256_BHZ:	incbin	map256\bhz.bin
 		even
