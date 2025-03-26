@@ -19,7 +19,6 @@ MC_Init:
 		move.w	#$8500+(VRAM_SPR_LIST>>9),(a6)		; set sprite table address
 		
 		move.w	#$8B00,(a6)				; EXT-INT off, VScroll by screen, HScroll by screen
-		move.w	#$8C89,(a6)				; set screen size and enable shadow/highlight mode
 		move.w	#$8D00+(VRAM_HSCROLL>>10),(a6)		; set HScroll table address
 		move.w	#$8F02,(a6)				; set auto-incremement size to word
 		move.w	#$9001,(a6)				; set plane size 64x32
@@ -34,94 +33,78 @@ MC_Init:
 	dma68k	MC_Palette,$0000,$40*2,CRAM				; load in the palette
 	dma68k	MC_Terrain,vramTerrain,MC_Terrain_End-MC_Terrain,VRAM	; load in the block art
 		bsr.w	MC_LoadBackground
+		bsr.w	MC_LoadWorld
 
+		move.w	#$8C89,(a6)				; set screen size and enable shadow/highlight mode
 		move.w	#$8174,(a6)				; enable display
 		intsOn						; enable CPU interrupts
 
-		lea	MC_BlockRender(pc),a0
-		lea	(planeBuffer).w,a1
-		moveq	#$2F-1,d7
+.gameLoop:
+		st.b	(vblankWait).w
+		bsr.s	MC_RenderBlocks
 
-.loopLo:
-		move.w	(a0)+,(a1)+
-		dbf	d7,.loopLo
-
-		lea	MC_BlockRender(pc),a0
-		lea	(planeBuffer+(64*2)).w,a1
-		moveq	#$2F-1,d7
-
-.loopHi:
-		move.w	#$8000,d0
-		or.w	(a0)+,d0
-		move.w	d0,(a1)+
-		dbf	d7,.loopHi
-
-		bra.w	*					; spin infinitely
+.spin:
+		tst.b	(vblankWait).w
+		beq.s	.gameLoop
+		bra.s	.spin
 
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
-; Clear The Screen
+; Render the Visible Portion of the World to the Screen
 ; ---------------------------------------------------------------------------
-MC_ClearScreen:
-		move.w	#$8F01,(a6)				; set auto-incremement size to byte
+MC_RenderBlocks:
+		move.w	(camXPosFG).w,d0	; Get the camera's x coordinate
+		lsr.w	#3,d0			; Divide by 8 to get the index of the tile within the row
+		andi.w	#$FF,d0			; Cap to a maximum index value of 0xFF
 
-		move.l	#$94FF93FF,(a6)				; clear the VRAM
-		move.w	#$9780,(a6)				; ^
-		move.l	#$40000080,(a6)				; ^
-		move.w	#0,-4(a6)				; ^
+		move.w	(camYPosFG).w,d1	; Get the camera's y coordinate
+		lsl.w	#5,d1			; Make into row offset
+		andi.w	#$3F00,d1		; ^
 
-.waitVRAMClr:	move.w	(a6),ccr				; is a DMA in progress?
-		bvs.s	.waitVRAMClr				; if so, loop until DMA is complete
+		lea	(mapCollBlocks).l,a0	; Load the world map collision layer into a0
+		lea	(mapCollBlocks).l,a1	; Load the world map wall layer into a1
+		lea	(planeBuffer).w,a2	; Load the plane A buffer into a2
+		moveq	#0,d3			; Clear d3
+		moveq	#28,d6			; Load the number of rows as the outer loop counter
 
-		move.l	#$9400937F,(a6)				; clear the CRAM
-		move.w	#$9780,(a6)				; ^
-		move.l	#$C0000080,(a6)				; ^
-		move.w	#0,-4(a6)				; ^
+.renderScreen:
+		moveq	#40,d7			; Load the number of blocks in each row as the inner loop counter
+		move.w	d1,d2			; Load the offset into the current row into d2
+		move.b	d0,d2			; ^
 
-.waitCRAMClr:	move.w	(a6),ccr				; is a DMA in progress?
-		bvs.s	.waitCRAMClr				; if so, loop until DMA is complete
+.renderRow:
+		move.b	(a0,d2.w),d3		; Get the block ID at the current main layout coordinates
+		beq.s	.renderWall
 
-		move.l	#$9400935F,(a6)				; clear the VSRAM
-		move.w	#$9780,(a6)				; ^
-		move.l	#$40000090,(a6)				; ^
-		move.w	#0,-4(a6)				; ^
+		move.w	#$8000,d4			; Set the priority bit
+		add.w	d3,d3				; Turn tile ID into index
+		or.w	MC_BlockProperties(pc,d3.w),d4	; Combine with the tile render properties
+		move.w	d4,(a2)+			; Load the corresponding tile to the plane A buffer
+		
+		addq.b	#1,d2			; Increment the index with wrap-around within the current row
+		dbf	d7,.renderRow		; Loop until the entire visible row is rendered
+		bra.s	.endRenderRow		; Branch
 
-.waitVSRAMClr:	move.w	(a6),ccr				; is a DMA in progress?
-		bvs.s	.waitVSRAMClr				; if so, loop until DMA is complete
+.renderWall:
+		move.b	(a1,d2.w),d3		; Get the block ID at the current wall layout coordinates
+		add.w	d3,d3				; Turn tile ID into index
+		move.w	MC_BlockProperties(pc,d3.w),(a2)+	; Load the corresponding tile to the plane A buffer
 
-		move.w	#$8F02,(a6)				; set auto-incremement size to word
-		rts						; return
+		addq.b	#1,d2			; Increment the index with wrap-around within the current row
+		dbf	d7,.renderRow		; Loop until the entire visible row is rendered
+
+.endRenderRow:
+		adda.w	#(64-41)*2,a2		; Skip the rest of the row in the plane buffer
+		add.w	#$100,d1		; Increment to the next row
+		cmpi.w	#$3F00,d1		; Check to make sure we're still in bounds
+		bhi.s	.inBounds		; If so, branch
+		move.w	#$3F00,d1		; If not, render the last row for the rest of the screen (Bedrock)
+
+.inBounds:	
+		dbf	d6,.renderScreen	; Loop until the entire screen is rendered
+		rts
+
 ; ---------------------------------------------------------------------------
-
-; ===========================================================================
-; ---------------------------------------------------------------------------
-; Load the Background
-; ---------------------------------------------------------------------------
-MC_LoadBackground:
-	dma68k	MC_BGArt,vramBackground,MC_BGArt_End-MC_BGArt,VRAM	; load in the background art
-
-	vdpCmd	move.l, VRAM_PLANE_B, VRAM, WRITE, (a6)		; Set up VDP to write data to the plane B nametable location
-		lea	MC_BGMap(pc),a0
-		move.w	#(32*64)-1,d7				; Set loop count to plane size - 1
-
-.loop:
-		move.w	(a0)+,d0
-		beq.s	.empty
-		add.w	#(vramBackground>>5),d0
-		ori.w	#(3<<13),d0
-
-.empty:
-		move.w	d0,-4(a6)
-		dbf	d7,.loop
-
-		rts						; return
-; ---------------------------------------------------------------------------
-MC_BGMap:
-	incbin	"minecraft\assets\bin\bgMap.bin"
-MC_BGMap_End:
-	even
-; ---------------------------------------------------------------------------
-
 block_entry	macro	tileID, palLine, priority
 	if (narg<3)
 		dc.w	(palLine<<13)|tileID
@@ -130,7 +113,7 @@ block_entry	macro	tileID, palLine, priority
 	endif
 		endm
 
-MC_BlockRender:
+MC_BlockProperties:
 	block_entry	$00,0,1			; 00 Air
 	block_entry	$01,1			; 01 Stone
 	block_entry	$02,1			; 02 Dirt
@@ -182,16 +165,98 @@ MC_BlockRender:
 
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
+; Clear The Screen
+; ---------------------------------------------------------------------------
+MC_ClearScreen:
+		move.w	#$8F01,(a6)				; set auto-incremement size to byte
+
+		move.l	#$94FF93FF,(a6)				; clear the VRAM
+		move.w	#$9780,(a6)				; ^
+		move.l	#$40000080,(a6)				; ^
+		move.w	#0,-4(a6)				; ^
+
+.waitVRAMClr:	move.w	(a6),ccr				; is a DMA in progress?
+		bvs.s	.waitVRAMClr				; if so, loop until DMA is complete
+
+		move.l	#$9400937F,(a6)				; clear the CRAM
+		move.w	#$9780,(a6)				; ^
+		move.l	#$C0000080,(a6)				; ^
+		move.w	#0,-4(a6)				; ^
+
+.waitCRAMClr:	move.w	(a6),ccr				; is a DMA in progress?
+		bvs.s	.waitCRAMClr				; if so, loop until DMA is complete
+
+		move.l	#$9400935F,(a6)				; clear the VSRAM
+		move.w	#$9780,(a6)				; ^
+		move.l	#$40000090,(a6)				; ^
+		move.w	#0,-4(a6)				; ^
+
+.waitVSRAMClr:	move.w	(a6),ccr				; is a DMA in progress?
+		bvs.s	.waitVSRAMClr				; if so, loop until DMA is complete
+
+		move.w	#$8F02,(a6)				; set auto-incremement size to word
+		rts						; return
+; ---------------------------------------------------------------------------
+
+; ===========================================================================
+; ---------------------------------------------------------------------------
+; Load the Background
+; ---------------------------------------------------------------------------
+MC_LoadBackground:
+	dma68k	MC_BGArt,vramBackground,MC_BGArt_End-MC_BGArt,VRAM	; load in the background art
+
+	vdpCmd	move.l, VRAM_PLANE_B, VRAM, WRITE, (a6)		; Set up VDP to write data to the plane B nametable location
+		lea	MC_BGMap,a0
+		move.w	#(32*64)-1,d7				; Set loop count to plane size - 1
+
+.loop:
+		move.w	(a0)+,d0
+		beq.s	.empty
+		add.w	#(vramBackground>>5),d0
+		ori.w	#(3<<13),d0
+
+.empty:
+		move.w	d0,-4(a6)
+		dbf	d7,.loop
+		rts						; return
+
+; ===========================================================================
+; ---------------------------------------------------------------------------
+; Load the World
+; ---------------------------------------------------------------------------
+MC_LoadWorld:
+		lea	MC_TestMap,a0
+		lea	mapWallBlocks,a1
+		move.w	#((MC_TestMap_End-MC_TestMap)>>2)-1,d7
+
+.loadWalls:
+		move.l	(a0)+,(a1)+
+		dbf	d7,.loadWalls
+
+		lea	MC_TestMap,a0
+		lea	mapCollBlocks,a1
+		move.w	#((MC_TestMap_End-MC_TestMap)>>2)-1,d7
+
+.loadBlocks:
+		move.l	(a0)+,(a1)+
+		dbf	d7,.loadBlocks
+		rts						; return
+
+; ===========================================================================
+; ---------------------------------------------------------------------------
 ; VBlank Interrupt
 ; ---------------------------------------------------------------------------
 MC_VInt:
-	dma68k	planeBuffer,VRAM_PLANE_A,PLANE_BUFF_SIZE,VRAM		; transfer the entire FG tileplane buffer
+	dma68k	planeBuffer,VRAM_PLANE_A,PLANE_BUFF_SIZE,VRAM	; transfer the entire FG tileplane buffer
 
-		addq.w	#1,(camXPosFG).w			; update scrolling
+		move.w	(camXPosFG).w,d0			; update scrolling
+		andi.w	#7,d0					; ^
+		neg.w	d0					; ^
 	vdpCmd	move.l, VRAM_HSCROLL, VRAM, WRITE, (a6)		; ^
-		move.w	(camXPosFG).w,-4(a6)			; ^
+		move.w	d0,-4(a6)				; ^
 
-
+		addq.w	#1,(camXPosFG).w			
+		sf.b	(vblankWait).w
 		rte						; return
 ; ---------------------------------------------------------------------------
 
@@ -212,3 +277,47 @@ MC_BGArt:
 MC_BGArt_End:
 	even
 ; ---------------------------------------------------------------------------
+MC_BGMap:
+	incbin	"minecraft\assets\bin\bgMap.bin"
+MC_BGMap_End:
+	even
+; ---------------------------------------------------------------------------
+MC_TestMap:
+	dcb.b	256,$00	; Row 00
+	dcb.b	256,$00	; Row 01
+	dcb.b	256,$00	; Row 02
+	dcb.b	256,$00	; Row 03
+	dcb.b	256,$00	; Row 04
+	dcb.b	256,$00	; Row 05
+	dcb.b	256,$00	; Row 06
+	dcb.b	256,$00	; Row 07
+	dcb.b	256,$00	; Row 09
+	dcb.b	256,$00	; Row 0A
+	dcb.b	256,$00	; Row 0B
+	dcb.b	256,$00	; Row 0C
+	dcb.b	256,$00	; Row 0E
+	
+	dcb.b	32,$01	; Row 0F
+	dcb.b	32,$02	; Row 0F
+	dcb.b	32,$03	; Row 0F
+	dcb.b	32,$04	; Row 0F
+	dcb.b	32,$05	; Row 0F
+	dcb.b	32,$06	; Row 0F
+	dcb.b	32,$07	; Row 0F
+	dcb.b	32,$08	; Row 0F
+
+	dcb.b	256,$03	; Row 10
+	dcb.b	256,$02	; Row 11
+	dcb.b	256,$02	; Row 12
+	dcb.b	256,$02	; Row 13
+	dcb.b	256,$01	; Row 14
+	dcb.b	256,$01	; Row 15
+	dcb.b	256,$01	; Row 16
+	dcb.b	256,$01	; Row 17
+	dcb.b	256,$01	; Row 19
+	dcb.b	256,$01	; Row 1A
+	dcb.b	256,$01	; Row 1B
+	dcb.b	256,$01	; Row 1C
+	dcb.b	256,$01	; Row 1E
+	dcb.b	256,$01	; Row 1F
+MC_TestMap_End:
