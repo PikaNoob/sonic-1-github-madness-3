@@ -21,3 +21,19 @@ camYposBG	rs.w	1			; camera background layout y position
 
 		rsset	__rs&$FFFFFF
 mcRAM_End	rs.b	0
+
+; VRAM Definitions
+TILE		equ	32			; number of bytes a single tile occupies in VRAM
+
+		rsreset
+
+vramEmptyTile	rs.b	TILE
+vramTerrain	rs.b	255*TILE
+vramBackground	rs.b	384*TILE
+
+VRAM_PLANE_A	equ	$C000
+VRAM_PLANE_W	equ	$D000
+VRAM_PLANE_B	equ	$E000
+
+VRAM_SPR_LIST	equ	$F800
+VRAM_HSCROLL	equ	$FC00
