@@ -1,23 +1,24 @@
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - index
 ; ---------------------------------------------------------------------------
-	dc.w PLC_Main-ArtLoadCues, PLC_Main2-ArtLoadCues
-	dc.w PLC_Explode-ArtLoadCues, PLC_GameOver-ArtLoadCues
-	dc.w PLC_GHZ-ArtLoadCues, PLC_GHZ2-ArtLoadCues
+	dc.w PLC_Main-ArtLoadCues, PLC_Main2-ArtLoadCues	; 0
+	dc.w PLC_Explode-ArtLoadCues, PLC_GameOver-ArtLoadCues	; 2
+	dc.w PLC_GHZ-ArtLoadCues, PLC_GHZ2-ArtLoadCues		; 4
 	dc.w PLC_LZ-ArtLoadCues, PLC_LZ2-ArtLoadCues
 	dc.w PLC_MZ-ArtLoadCues, PLC_MZ2-ArtLoadCues
 	dc.w PLC_SLZ-ArtLoadCues, PLC_SLZ2-ArtLoadCues
 	dc.w PLC_SYZ-ArtLoadCues, PLC_SYZ2-ArtLoadCues
 	dc.w PLC_SBZ-ArtLoadCues, PLC_SBZ2-ArtLoadCues
-	dc.w PLC_BHZ-ArtLoadCues, PLC_BHZ2-ArtLoadCues
-	dc.w PLC_TitleCard-ArtLoadCues,	PLC_Boss-ArtLoadCues
+	dc.w PLC_TitleCard-ArtLoadCues,	PLC_Boss-ArtLoadCues	; $10
 	dc.w PLC_Signpost-ArtLoadCues, PLC_Warp-ArtLoadCues
 	dc.w PLC_SpeStage-ArtLoadCues, PLC_GHZAnimals-ArtLoadCues
 	dc.w PLC_LZAnimals-ArtLoadCues,	PLC_MZAnimals-ArtLoadCues
 	dc.w PLC_SLZAnimals-ArtLoadCues, PLC_SYZAnimals-ArtLoadCues
-	dc.w PLC_SBZAnimals-ArtLoadCues, PLC_GHZAnimals-ArtLoadCues, PLC_SpeStResult-ArtLoadCues
+	dc.w PLC_SBZAnimals-ArtLoadCues, PLC_SpeStResult-ArtLoadCues
 	dc.w PLC_Ending-ArtLoadCues, PLC_TryAgain-ArtLoadCues
 	dc.w PLC_EggmanSBZ2-ArtLoadCues, PLC_FZBoss-ArtLoadCues
+
+	dc.w PLC_BHZ-ArtLoadCues, PLC_BHZ2-ArtLoadCues		; $20
 	dc.w Plc_TetoBoss-ArtLoadCues
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - standard block 1

@@ -15616,12 +15616,23 @@ Obj34_ChangeArt:			; XREF: Obj34_ChkPos2
 		jsr	(LoadPLC).l	; load explosion patterns
 		moveq	#0,d0
 		move.b	($FFFFFE10).w,d0
-		addi.w	#$15,d0
+		move.b	Obj34_AnimalPLC(pc,d0.w),d0
 		jsr	(LoadPLC).l	; load animal patterns
 
 Obj34_Delete:
 		bra.w	DeleteObject
+
 ; ===========================================================================
+Obj34_AnimalPLC:
+		dc.b $15	; "GHZ"
+		dc.b $16
+		dc.b $17
+		dc.b $18
+		dc.b $19
+		dc.b $1A	; "SBZ"
+		dc.b $15	; Ending (placeholder?
+		dc.b $1A	; MAKOTO
+	even
 Obj34_ItemData:	dc.w $D0	; y-axis position
 		dc.b 2,	0	; routine number, frame	number (changes)
 		dc.w $E4
