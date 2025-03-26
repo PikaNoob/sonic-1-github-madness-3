@@ -39770,6 +39770,10 @@ Sound_ExIndex:
 ; ---------------------------------------------------------------------------
 
 Sound_E1:				  
+		move.b	#$2B,($A04000).l		; $A04000 = $2B -> Write to DAC enable
+		move.b	#$80,($A04001).l		; enable DAC
+		move.w	#127,d0				; delay so the YM doesn't crap itself
+		dbf	d0,*
 		lea	(SegaPCM).l,a2			; Load the SEGA PCM sample into a2. It's important that we use a2 since a0 and a1 are going to be used up ahead when reading the joypad ports 
 		move.l	#(SegaPCM_End-SegaPCM),d3			; Load the size of the SEGA PCM sample into d3 
 		move.b	#$2A,($A04000).l		; $A04000 = $2A -> Write to DAC channel	  
@@ -39786,6 +39790,7 @@ PlayPCM_Loop:
 		bne.s	return_PlayPCM			; If start is pressed, stop playing, leave this loop, and unfreeze the 68K 
 		bra.s	PlayPCM_Loop			; Otherwise, continue playing PCM sample 
 return_PlayPCM: 
+		move.b	#$80,($A04001).l		; silence PCM to avoid an awful sounding click
 		addq.w	#4,sp 
 		rts
 		
@@ -39796,6 +39801,9 @@ return_PlayPCM:
 
 Sound_E5: 
 		jsr	ClearScreen
+		move.b	#$2B,($A04000).l		; $A04000 = $2B -> Write to DAC enable
+		move.b	#$80,($A04001).l		; enable DAC
+
 		;control port on a5
 		move.l	#$94000000+((($280>>1)&$FF00)<<8)+$9300+(($280>>1)&$FF),(a5)
 		move.l	#$96000000+((($FFFFF800>>1)&$FF00)<<8)+$9500+(($FFFFF800>>1)&$FF),(a5)
@@ -39819,39 +39827,45 @@ Sound_E5:
 		jsr	ShowVDPGraphics
 		moveq	#20,d0
 		jsr	PalLoad2	; load pallet
-		
+
+
+		lea	($C00004).l,a5
+		st.b	($FFFFFE25).w			; start with -1, so the NOT makes it 0
+		moveq	#0,d3				; make @palett jump to @start when done
+		bra.s	@palett
+@start:
 		lea	(IdiotPCM).l,a2			; Load the idiot PCM sample into a2. It's important that we use a2 since a0 and a1 are going to be used up ahead when reading the joypad ports 
-		move.l	#(IdiotPCM_End-IdiotPCM),d3			; Load the size of the idiot PCM sample into d3 
-		move.b	#$2A,($A04000).l		; $A04000 = $2A -> Write to DAC channel	  
-		
-		bsr.s	SfxE5SwapPalette
-		
-Sound_E5_StartPCM:
-		lea	(IdiotPCM).l,a2			; Load the idiot PCM sample into a2. It's important that we use a2 since a0 and a1 are going to be used up ahead when reading the joypad ports 
-		move.l	#(IdiotPCM_End-IdiotPCM),d3			; Load the size of the idiot PCM sample into d3 
-		move.b	#$2A,($A04000).l		; $A04000 = $2A -> Write to DAC channel	  
-PlayPCM_LoopE5:	  
+		move.l	#IdiotPCM_End-IdiotPCM,d3	; Load the size of the idiot PCM sample into d3 
+		move.b	#$2A,($A04000).l		; $A04000 = $2A -> Write to DAC channel
+@loop:
+		move.w	(a5),ccr
+		bmi.s	@vblank
 
 		move.b	(a2)+,($A04001).l		; Write the PCM data (contained in a2) to $A04001 (YM2612 register D0) 
-		
-		addq.w	#1,($FFFFFE24).w
-		
-		move.b	($FFFFFE24).w,d0
-		andi.b	#$F,d0
-		beq.s	SfxE5SwapPalette
-		
-		move.w	#$58-2,d0				; Write the pitch ($58 in this case) to d0  (-28 from the check before)
+		move.w	#$58-2,d0			; Write the pitch ($58 in this case) to d0  (-28 from the check before)
 		dbf	d0,*				; Decrement d0; jump to itself if not 0. (for pitch control, avoids playing the sample too fast)   (14 cycles)
-		sub.l	#1,d3				; Subtract 1 from the PCM sample size 
-		beq.s	Sound_E5_StartPCM			; If d3 = 0, we finished playing the PCM sample, DONT STOP
-		bra.s	PlayPCM_LoopE5
-		
-SfxE5SwapPalette:
-		
+		subq.l	#1,d3				; Subtract 1 from the PCM sample size 
+		bne.s	@loop				; if not zero, loop
+		bra.s	@start
+@vblank:
+		cmp.b	#15,($FFFFFE24).w
+		beq.s	@palett
+		addq.b	#1,($FFFFFE24).w
+@loop_vblank:
+		move.w	(a5),ccr
+		bpl.s	@loop
+
+		move.b	(a2)+,($A04001).l		; Write the PCM data (contained in a2) to $A04001 (YM2612 register D0) 
+		move.w	#$58-2,d0			; Write the pitch ($58 in this case) to d0  (-28 from the check before)
+		dbf	d0,*				; Decrement d0; jump to itself if not 0. (for pitch control, avoids playing the sample too fast)   (14 cycles)
+		subq.l	#1,d3				; Subtract 1 from the PCM sample size 
+		bne.s	@loop_vblank			; if not zero, loop
+		bra.s	@start
+@palett:
 		move.l	#$94000000+((($10>>1)&$FF00)<<8)+$9300+(($10>>1)&$FF),(a5) ; len
-		
-		
-		btst	#4,($FFFFFE24).w
+
+		clr.b	($FFFFFE24).w
+		not.b	($FFFFFE25).w
 		beq.s	@not_black
 		move.l	#$96000000+((($FFFFFB30>>1)&$FF00)<<8)+$9500+(($FFFFFB30>>1)&$FF),(a5)	; source	
 		bra.s	@merge
@@ -39860,13 +39874,14 @@ SfxE5SwapPalette:
 	@merge:
 		move.w	#$9700+(((($FFFFFB20>>1)&$FF0000)>>16)&$7F),(a5) ; source
 		move.w	#$C000+(0&$3FFF),(a5) ; dest
-		move.w	#$80+((0&$C000)>>14),($FFFFF640).w ;dest
-		move.w	($FFFFF640).w,(a5)
+		move.w	#$80+((0&$C000)>>14),-(sp) ;dest
+		move.w	(sp)+,(a5)
 		
 		move.w	#$58-11,d0				; attempt at removing the little jumps
 		dbf	d0,*				; (14 cycles)
-		bra.s	PlayPCM_LoopE5
-		
+		tst.l	d3
+		bne.s	@loop_vblank
+		bra.w	@start
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Play music track $81-$9F
@@ -41701,10 +41716,12 @@ SoundCF:	incbin	sound\soundCF.bin
 SoundD0:	incbin	sound\soundD0.bin
 		even
 SegaPCM:	incbin	sound\segapcm.bin
-SegaPCM_end:	even
+SegaPCM_end:
+	even
 
 IdiotPCM:	incbin	sound\youare.bin
-IdiotPCM_end:	even
+IdiotPCM_end:
+	even
 
 Minecraft:	include	minecraft\code\main.asm
 ; end of 'ROM'
