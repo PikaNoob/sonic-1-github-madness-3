@@ -39162,10 +39162,11 @@ ObjPos_Null:	dc.b $FF, $FF, 0, 0, 0,	0
 		even
 
 Go_SoundTypes:	dc.l SoundTypes		; XREF: Sound_Play
-Go_SoundD0:	dc.l SoundD0Index	; XREF: Sound_D0toDF
-Go_MusicIndex:	dc.l MusicIndex		; XREF: Sound_81to9F
-Go_SoundIndex:	dc.l SoundIndex		; XREF: Sound_A0toCF
-off_719A0:	dc.l byte_71A94		; XREF: Sound_81to9F
+Go_SoundD0:	dc.l SoundD0Index	; XREF: Sound_D0
+Go_MusicIndex:	dc.l MusicIndex-4		; XREF: Sound_Music
+Go_MusicIndex80:	dc.l MusicIndex80-4		; XREF: Sound_Music
+Go_SoundIndex:	dc.l SoundIndex		; XREF: Sound_SFX
+off_719A0:	dc.l byte_71A94		; XREF: Sound_Music
 Go_PSGIndex:	dc.l PSG_Index		; XREF: sub_72926
 ; ---------------------------------------------------------------------------
 ; PSG instruments used in music
@@ -39204,7 +39205,12 @@ byte_71A94:	dc.b 7,	$72, $73, $26, $15, 8, $FF, 5
 ; ---------------------------------------------------------------------------
 ; Music	Pointers
 ; ---------------------------------------------------------------------------
-MusicIndex:	dc.l Music81, Music82
+MusicIndex:	
+		dc.l Music9F ; test
+		dc.l Music92 ; test
+
+MusicIndex80:
+		dc.l Music81, Music82
 		dc.l Music83, Music84
 		dc.l Music85, Music86
 		dc.l Music87, Music88
@@ -39291,11 +39297,6 @@ loc_71BB2:
 		jsr	Sound_Play(pc)
 
 loc_71BBC:
-		cmpi.b	#$80,9(a6)
-		beq.s	loc_71BC8
-		jsr	Sound_ChkValue(pc)
-
-loc_71BC8:
 		lea	$40(a6),a5
 		tst.b	(a5)
 		bpl.s	loc_71BD4
@@ -39741,10 +39742,6 @@ loc_71F12:
 		clr.b	(a1)+
 		subi.b	#$81,d0
 		bcs.s	loc_71F3E
-		cmpi.b	#$80,9(a6)
-		beq.s	loc_71F2C
-		move.b	d1,$A(a6)
-		bra.s	loc_71F3E
 ; ===========================================================================
 
 loc_71F2C:
@@ -39759,41 +39756,31 @@ loc_71F3E:
 		dbf	d4,loc_71F12
 
 		tst.b	d3
-		bmi.s	locret_71F4A
+		bmi.s	Sound_ChkValue
 		move.b	d3,0(a6)
-
-locret_71F4A:
-		rts	
 ; End of function Sound_Play
 
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-
+; no checks if you play something fucked up it's your fault
 Sound_ChkValue:				; XREF: sub_71B4C
 		moveq	#0,d7
 		move.b	9(a6),d7
 		beq.w	Sound_E4
-		bpl.s	locret_71F8C
 		move.b	#$80,9(a6)	; reset	music flag
-		cmpi.b	#$9F,d7
-		bls.w	Sound_81to9F	; music	$81-$9F
 		cmpi.b	#$A0,d7
-		bcs.w	locret_71F8C
-		cmpi.b	#$CF,d7
-		bls.w	Sound_A0toCF	; sound	$A0-$CF
+		blo.w	Sound_Music	; music	$81-$9F
+		
 		cmpi.b	#$D0,d7
-		bcs.w	locret_71F8C
+		beq.w	Sound_D0
 		cmpi.b	#$E0,d7
-		bcs.w	Sound_D0toDF	; sound	$D0-$DF
-		cmpi.b	#$E5,d7
-		bls.s	Sound_E0toE5	; sound	$E0-$E5
-
-locret_71F8C:
-		rts	
+		blo.w	Sound_SFX	; sound	$A0-$CF
+		
+		; falls to command
 ; ===========================================================================
 
-Sound_E0toE5				; XREF: Sound_ChkValue
+Sound_Command				; XREF: Sound_ChkValue
 		subi.b	#$E0,d7
 		lsl.w	#2,d7
 		jmp	Sound_ExIndex(pc,d7.w)
@@ -39934,7 +39921,7 @@ Sound_E5:
 ; Play music track $81-$9F
 ; ---------------------------------------------------------------------------
 
-Sound_81to9F:				; XREF: Sound_ChkValue
+Sound_Music:				; XREF: Sound_ChkValue
 		cmpi.b	#$88,d7		; is "extra life" music	played?
 		bne.s	loc_72024	; if not, branch
 		tst.b	$27(a6)
@@ -39975,9 +39962,18 @@ loc_72024:
 loc_7202C:
 		jsr	sub_725CA(pc)
 		movea.l	(off_719A0).l,a4
-		subi.b	#$81,d7
+		
+		cmpi.b	#$80,d7
+		blt.s	@zeroindex
+		
+		subi.b	#$80,d7
+		move.b	(a4,d7.w),$29(a6)
+		movea.l	(Go_MusicIndex80).l,a4
+		bra.s @continue
+	@zeroindex:
 		move.b	(a4,d7.w),$29(a6)
 		movea.l	(Go_MusicIndex).l,a4
+	@continue:
 		lsl.w	#2,d7
 		movea.l	(a4,d7.w),a4
 		moveq	#0,d0
@@ -40137,7 +40133,7 @@ byte_721C2:	dc.b $80, $A0, $C0, 0
 ; Play normal sound effect
 ; ---------------------------------------------------------------------------
 
-Sound_A0toCF:				; XREF: Sound_ChkValue
+Sound_SFX:				; XREF: Sound_ChkValue
 		tst.b	$27(a6)
 		bne.w	loc_722C6
 		tst.b	4(a6)
@@ -40264,7 +40260,7 @@ dword_722EC:	dc.l $FFF220
 ; Play GHZ waterfall sound
 ; ---------------------------------------------------------------------------
 
-Sound_D0toDF:				; XREF: Sound_ChkValue
+Sound_D0:				; XREF: Sound_ChkValue
 		tst.b	$27(a6)
 		bne.w	locret_723C6
 		tst.b	4(a6)
@@ -41664,6 +41660,7 @@ SoundIndex:	dc.l SoundA0, SoundA1, SoundA2
 		dc.l SoundCA, SoundCB, SoundCC
 		dc.l SoundCD, SoundCE, SoundCF
 SoundD0Index:	dc.l SoundD0
+		dc.l SoundD1, SoundD2
 SoundA0:	include	sound\jump.asm
 		even
 SoundA1:	incbin	sound\soundA1.bin
@@ -41761,6 +41758,10 @@ SoundCE:	incbin	sound\soundCE.bin
 SoundCF:	incbin	sound\soundCF.bin
 		even
 SoundD0:	incbin	sound\soundD0.bin
+		even
+SoundD1:	incbin	sound\MenuBIT.bin
+		even
+SoundD2:	incbin	sound\MenuAffirm.bin
 		even
 SegaPCM:	incbin	sound\segapcm.bin
 SegaPCM_end:
