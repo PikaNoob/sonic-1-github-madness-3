@@ -8852,7 +8852,7 @@ loc_6F4A:
 		bsr.w	PlaySound	; play boss music
 		move.b	#1,($FFFFF7AA).w ; lock	screen
 		addq.b	#2,($FFFFF742).w
-		moveq	#$20,d0
+		moveq	#$22,d0
 		bra.w	LoadPLC		; load boss patterns
 ; ===========================================================================
 
