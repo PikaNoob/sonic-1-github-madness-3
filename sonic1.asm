@@ -8817,11 +8817,11 @@ off_6FB2:	dc.w loc_6FBA-off_6FB2
 ; ===========================================================================
 
 loc_6FBA:
-		move.w	#$1D0,($FFFFF726).w
+		move.w	#$200,($FFFFF726).w
 		cmpi.w	#$700,($FFFFF700).w
 		bcs.s	locret_6FE8
 		move.w	#$220,($FFFFF726).w
-		cmpi.w	#$D00,($FFFFF700).w
+		cmpi.w	#$9A0,($FFFFF700).w
 		bcs.s	locret_6FE8
 		move.w	#$340,($FFFFF726).w
 		cmpi.w	#$340,($FFFFF704).w
