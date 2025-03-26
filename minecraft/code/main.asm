@@ -13,14 +13,14 @@ MC_Init:
 		lea	($C00004).l,a6				; load the address of the VDP control port into a6
 		move.w	#$8134,(a6)				; disable display
 
-		move.w	#$8200+(VRAM_PLANE_A>>10),(a6)		; set plane A address
-		move.w	#$8300+(VRAM_PLANE_W>>10),(a6)		; set plane W address
-		move.w	#$8400+(VRAM_PLANE_B>>13),(a6)		; set plane B address
-		move.w	#$8500+(VRAM_SPR_LIST>>9),(a6)		; set sprite table address
+		move.w	#$8200+($C000>>10),(a6)			; set plane A address
+		move.w	#$8300+($D000>>10),(a6)			; set plane W address
+		move.w	#$8400+($E000>>13),(a6)			; set plane B address
+		move.w	#$8500+($F800>>9),(a6)			; set sprite table address
 		
 		move.w	#$8B00,(a6)				; EXT-INT off, VScroll by screen, HScroll by screen
 		move.w	#$8C89,(a6)				; set screen size and enable shadow/highlight mode
-		move.w	#$8D00+(VRAM_HSCROLL>>10),(a6)		; set HScroll table address
+		move.w	#$8D00+($FC00>>10),(a6)			; set HScroll table address
 		move.w	#$8F02,(a6)				; set auto-incremement size to word
 		move.w	#$9001,(a6)				; set plane size 64x32
 
@@ -31,9 +31,8 @@ MC_Init:
 		move.w	(a6),ccr				; is v-blank active?
 		bpl.s	.waitVBlank				; if not, wait for it to start
 
-	dma68k	MC_Palette,$0000,$40*2,CRAM				; load in the palette
-	dma68k	MC_Terrain,vramTerrain,MC_Terrain_End-MC_Terrain,VRAM	; load in the block art
-		bsr.w	MC_LoadBackground
+	dma68k	MC_Palette,$0000,$40*2,CRAM			; load in the palette
+	dma68k	MC_Terrain,$0020,MC_Terrain_End-MC_Terrain,VRAM	; load in the block art	
 
 		move.w	#$8174,(a6)				; enable display
 		intsOn						; enable CPU interrupts
@@ -95,31 +94,17 @@ MC_ClearScreen:
 
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
-; Load the Background
+; VBlank Interrupt
 ; ---------------------------------------------------------------------------
-MC_LoadBackground:
-	dma68k	MC_BGArt,vramBackground,MC_BGArt_End-MC_BGArt,VRAM	; load in the background art
+MC_VInt:
+	dma68k	planeBuffer,$C000,PLANE_BUFF_SIZE,VRAM		; transfer the entire FG tileplane buffer
 
-	vdpCmd	move.l, VRAM_PLANE_B, VRAM, WRITE, (a6)		; Set up VDP to write data to the plane B nametable location
-		lea	MC_BGMap(pc),a0
-		move.w	#(32*64)-1,d7				; Set loop count to plane size - 1
+		addq.w	#1,(camXPosFG).w			; update scrolling
+	vdpCmd	move.l, $FC00, VRAM, WRITE, (a6)		; ^
+		move.w	(camXPosFG).w,-4(a6)			; ^
 
-.loop:
-		move.w	(a0)+,d0
-		beq.s	.empty
-		add.w	#(vramBackground>>5),d0
-		ori.w	#(3<<13),d0
 
-.empty:
-		move.w	d0,-4(a6)
-		dbf	d7,.loop
-
-		rts						; return
-; ---------------------------------------------------------------------------
-MC_BGMap:
-	incbin	"minecraft\assets\bin\bgMap.bin"
-MC_BGMap_End:
-	even
+		rte						; return
 ; ---------------------------------------------------------------------------
 
 block_entry	macro	tileID, palLine, priority
@@ -180,35 +165,14 @@ MC_BlockRender:
 	block_entry	$1E,2			; 2D Violet Wool
 	block_entry	$20,1			; 2E Cacao Wool
 
-; ===========================================================================
-; ---------------------------------------------------------------------------
-; VBlank Interrupt
-; ---------------------------------------------------------------------------
-MC_VInt:
-	dma68k	planeBuffer,VRAM_PLANE_A,PLANE_BUFF_SIZE,VRAM		; transfer the entire FG tileplane buffer
-
-		addq.w	#1,(camXPosFG).w			; update scrolling
-	vdpCmd	move.l, VRAM_HSCROLL, VRAM, WRITE, (a6)		; ^
-		move.w	(camXPosFG).w,-4(a6)			; ^
-
-
-		rte						; return
-; ---------------------------------------------------------------------------
-
 ; ---------------------------------------------------------------------------
 MC_Palette:
-	dc.w	$E84, $8AE, $68E, $46C, $EE0, $CC0, $AA0, $E68, $C46, $824, $444, $222, $000, $EEE, $246, $024
+	dc.w	$E86, $8AE, $68E, $46C, $EE0, $CC0, $AA0, $E68, $C46, $824, $444, $222, $000, $EEE, $246, $024
 	dc.w	$000, $CCC, $AAA, $888, $666, $444, $222, $4E6, $2C4, $0A2, $080, $6AE, $48C, $26A, $048, $026
 	dc.w	$000, $EEE, $CCC, $AAA, $4CE, $2AC, $08A, $E6C, $C4A, $A08, $44E, $22C, $00A, $EE0, $888, $666
-	dc.w	$000, $EEE, $CAA, $A88, $866, $644, $422, $46A, $448, $226, $6C4, $680, $8CE, $6AC, $EA6, $E44
+	dc.w	$EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE
 ; ---------------------------------------------------------------------------
 MC_Terrain:
 	incbin	"minecraft\assets\bin\terrain.bin"
 MC_Terrain_End:
-	even
-; ---------------------------------------------------------------------------
-MC_BGArt:
-	incbin	"minecraft\assets\bin\bgArt.bin"
-MC_BGArt_End:
-	even
 ; ---------------------------------------------------------------------------
