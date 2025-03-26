@@ -39191,6 +39191,8 @@ SoundTypes:	dc.b $90, $90, $90, $90, $90, $90, $90,	$90, $90, $90, $90, $90, $90
 
 sub_71B4C:				; XREF: loc_B10; PalToCRAM
 ; every 5th frame, update a second time (same technique as most SMPS versions, but more scuffed)
+		btst	#6,($FFFFFFF8).w	; if in an NTSC region(!), branch ; TODO: use the VDP pal value instead
+		beq.s	@main
 		moveq	#0,d0			; PAL song timer "optimization"
 		move.w	($FFFFFE0E).w,d0	; TODO: proper timer, this is prone to overflow and cause slight variations
 		divu.w	#5,d0			;       also divisions are generally slow
