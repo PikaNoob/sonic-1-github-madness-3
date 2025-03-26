@@ -1,5 +1,5 @@
 Mus91_Credits_Header:
-	smpsHeaderStartSong 1
+smpsHeaderStartSong = 1
 	smpsHeaderVoice     Mus91_Credits_Voices
 	smpsHeaderChan      $06, $03
 	smpsHeaderTempo     $01, $33
