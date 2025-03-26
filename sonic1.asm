@@ -23501,8 +23501,7 @@ loc_12460:				; XREF: Obj63_Main
 		bne.w	DeleteObject
 		add.w	d0,d0
 		andi.w	#$1E,d0
-		addi.w	#$70,d0
-		lea	(ObjPos_Index).l,a2
+		lea	(ObjPos_LZxpf_Index).l,a2
 		adda.w	(a2,d0.w),a2
 		move.w	(a2)+,d1
 		movea.l	a0,a1
@@ -29233,8 +29232,7 @@ loc_16380:				; XREF: Obj6F_Main
 loc_1639A:
 		add.w	d0,d0
 		andi.w	#$1E,d0
-		addi.w	#$80,d0
-		lea	(ObjPos_Index).l,a2
+		lea	(ObjPos_SBZ1pf_Index).l,a2
 		adda.w	(a2,d0.w),a2
 		move.w	(a2)+,d1
 		movea.l	a0,a1
@@ -39047,14 +39045,17 @@ ObjPos_Index:	dc.w ObjPos_GHZ1-ObjPos_Index, ObjPos_Null-ObjPos_Index
 		dc.w ObjPos_BHZ2-ObjPos_Index, ObjPos_Null-ObjPos_Index
 		dc.w ObjPos_BHZ3-ObjPos_Index, ObjPos_Null-ObjPos_Index
 		dc.w ObjPos_BHZ1-ObjPos_Index, ObjPos_Null-ObjPos_Index
-		dc.w ObjPos_LZ1pf1-ObjPos_Index, ObjPos_LZ1pf2-ObjPos_Index
-		dc.w ObjPos_LZ2pf1-ObjPos_Index, ObjPos_LZ2pf2-ObjPos_Index
-		dc.w ObjPos_LZ3pf1-ObjPos_Index, ObjPos_LZ3pf2-ObjPos_Index
-		dc.w ObjPos_LZ1pf1-ObjPos_Index, ObjPos_LZ1pf2-ObjPos_Index
-		dc.w ObjPos_SBZ1pf1-ObjPos_Index, ObjPos_SBZ1pf2-ObjPos_Index
-		dc.w ObjPos_SBZ1pf3-ObjPos_Index, ObjPos_SBZ1pf4-ObjPos_Index
-		dc.w ObjPos_SBZ1pf5-ObjPos_Index, ObjPos_SBZ1pf6-ObjPos_Index
-		dc.w ObjPos_SBZ1pf1-ObjPos_Index, ObjPos_SBZ1pf2-ObjPos_Index
+ObjPos_LZxpf_Index:
+		dc.w ObjPos_LZ1pf1-ObjPos_LZxpf_Index, ObjPos_LZ1pf2-ObjPos_LZxpf_Index
+		dc.w ObjPos_LZ2pf1-ObjPos_LZxpf_Index, ObjPos_LZ2pf2-ObjPos_LZxpf_Index
+		dc.w ObjPos_LZ3pf1-ObjPos_LZxpf_Index, ObjPos_LZ3pf2-ObjPos_LZxpf_Index
+		dc.w ObjPos_LZ1pf1-ObjPos_LZxpf_Index, ObjPos_LZ1pf2-ObjPos_LZxpf_Index
+
+ObjPos_SBZ1pf_Index:
+		dc.w ObjPos_SBZ1pf1-ObjPos_SBZ1pf_Index, ObjPos_SBZ1pf2-ObjPos_SBZ1pf_Index
+		dc.w ObjPos_SBZ1pf3-ObjPos_SBZ1pf_Index, ObjPos_SBZ1pf4-ObjPos_SBZ1pf_Index
+		dc.w ObjPos_SBZ1pf5-ObjPos_SBZ1pf_Index, ObjPos_SBZ1pf6-ObjPos_SBZ1pf_Index
+		dc.w ObjPos_SBZ1pf1-ObjPos_SBZ1pf_Index, ObjPos_SBZ1pf2-ObjPos_SBZ1pf_Index
 		dc.b $FF, $FF, 0, 0, 0,	0
 ObjPos_GHZ1:	incbin	objpos\ghz1.bin
 		even
