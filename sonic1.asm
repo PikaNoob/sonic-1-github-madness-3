@@ -47,29 +47,26 @@ v_character = $FFFFFFE8
 
 
 StartOfRom:
-Vectors:	dc.l $FFFE00, EntryPoint, BusError, AddressError
-		dc.l IllegalInstr, ZeroDivide, ChkInstr, TrapvInstr
-		dc.l PrivilegeViol, Trace, Line1010Emu,	Line1111Emu
-		dc.l ErrorExcept, ErrorExcept, ErrorExcept, ErrorExcept
-		dc.l ErrorExcept, ErrorExcept, ErrorExcept, ErrorExcept
-		dc.l ErrorExcept, ErrorExcept, ErrorExcept, ErrorExcept
-		dc.l ErrorExcept, ErrorTrap, ErrorTrap,	ErrorTrap
-		dc.l PalToCRAM,	ErrorTrap, vBlankRoutine, ErrorTrap
-		dc.l ErrorTrap,	ErrorTrap, ErrorTrap, ErrorTrap
-		dc.l ErrorTrap,	ErrorTrap, ErrorTrap, ErrorTrap
-		dc.l ErrorTrap,	ErrorTrap, ErrorTrap, ErrorTrap
-		dc.l ErrorTrap,	ErrorTrap, ErrorTrap, ErrorTrap
-		dc.l ErrorTrap,	ErrorTrap, ErrorTrap, ErrorTrap
-		dc.l ErrorTrap,	ErrorTrap, ErrorTrap, ErrorTrap
-		dc.l ErrorTrap,	ErrorTrap, ErrorTrap, ErrorTrap
-		dc.l ErrorTrap,	ErrorTrap, ErrorTrap, ErrorTrap
-Console:	dc.b 'SEGA MEGA DRIVE ' ; Hardware system ID
-Date:		dc.b '(C)IDK 2001.SEP '
-Title_Local:	dc.b 'how to disassemble vhs tapes on a slab of wood  ' ; Domestic name
-Title_Int:	dc.b 'how to disassemble vhs tapes on a slab of wood  '
-Serial:		dc.b 'GM 00001009-00'   ; Serial/version number
+Vectors:	dc.l 'P'<<24|$FFFE00,		'O'<<24|EntryPoint,	'Y'<<24|BusError,	'S'<<24|AddressError
+		dc.l 'U'<<24|IllegalInstr,	'F'<<24|ZeroDivide,	'O'<<24|ChkInstr,	'K'<<24|TrapvInstr
+		dc.l 'L'<<24|PrivilegeViol,	'F'<<24|Trace,		'U'<<24|Line1010Emu,	'I'<<24|Line1111Emu
+		dc.l 'L'<<24|ErrorExcept,	' '<<24|ErrorExcept,	'R'<<24|ErrorExcept,	'N'<<24|ErrorExcept
+		dc.l ' '<<24|ErrorExcept,	' '<<24|ErrorExcept,	' '<<24|ErrorExcept,	' '<<24|'H'<<24|ErrorExcept
+		dc.l 'B'<<24|ErrorExcept,	'O'<<24|ErrorExcept,	'I'<<24|ErrorExcept,	'L'<<24|ErrorExcept
+		dc.l 'H'<<24|ErrorExcept,	'I'<<24|ErrorTrap,	'M'<<24|ErrorTrap,	' '<<24|ErrorTrap
+		dc.l ' '<<24|PalToCRAM,		' '<<24|PalToCRAM,	' '<<24|vBlankRoutine,	' '<<24|ErrorTrap
+		dc.b 'What is a hex editor? A miserable little detector of secrets!   But enough talk,fuck off you!'
+		dcb.b $100-*,' '
+Console:	dc.b ' SEGAAAAAAAAAAAA' ; NOTE: " SEGA" is valid for the TMSS, but not for some other stuff, namely the game genie
+Date:		dc.b 'AAAAAAAAAAAAAAAA'
+Title_Local:	dc.b 'If you can see this, your emulator is homoerotic' ; Domestic name
+		dcb.b $150-*,' '
+Title_Int:	dc.b 'how to disassemble vhs tapes on a slab of wood'
+		dcb.b $180-*,' '
+Serial:		dc.b 'GM 00001009-00'	; Serial/version number
 Checksum:	dc.w 0
-		dc.b 'J               ' ; I/O support
+		dc.b 'J'	; I/O support
+		dcb.b $1A0-*,'J'
 RomStartLoc:	dc.l StartOfRom		; ROM start
 RomEndLoc:	dc.l EndOfRom-1		; ROM end
 RamStartLoc:	dc.l $FF0000		; RAM start
@@ -77,9 +74,10 @@ RamEndLoc:	dc.l $FFFFFF		; RAM end
 SRAMSupport:	dc.l $20202020		; change to $5241E020 to create	SRAM
 		dc.l $20202020		; SRAM start
 		dc.l $20202020		; SRAM end
-Notes:		dc.b '                                                    '
-Region:		dc.b 'JUE             ' ; Region
-
+Notes:		dc.b 'idk i spent all my  mental budget on the other stuff'
+		dcb.b $1F0-*,' '
+Region:		dc.b 'GIT OWT-'		; Region
+		dcb.b $200-*,' '
 ; ===========================================================================
 
 ErrorTrap:
@@ -233,7 +231,6 @@ loc_348:
 		ror.b	#1,d1
 		or.b	d1,d0
 		move.b	d0,($FFFFFFF8).w
-		move.l	#'init',($FFFFFFFC).w ; set flag so checksum won't be run again
 
 GameInit:
 		lea	($FF0000).l,a6
@@ -251,11 +248,15 @@ GameClrRAM:
 		bsr.w	SoundDriverLoad
 		bsr.w	JoypadInit
 
+		cmp.l	#'init',($FFFFFFFC).w		; ideally, don't show splash screens twice
+		beq.s	@nosplashscreens
+		move.l	#'init',($FFFFFFFC).w		; set flag so checksum won't be run again (you can soft reset to skip them all)
 		move.b	($FFFFFFF8).w,d0
 		and.w	#$F,d0
 		beq.s	@notmss
 		jsr	GM_AntiTMSS
 @notmss:
+@nosplashscreens:
 		move.b	#0,($FFFFF600).w ; set Game Mode to Sega Screen
 	;	move.b	#$20,($FFFFF600).w ; set Game Mode to Minecraft
 
