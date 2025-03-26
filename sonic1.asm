@@ -26,12 +26,14 @@ lsrow1size: equ (LMTSecondRow-LevelMenuText)/16
 lsrow2size: equ (LMTEnd-LMTSecondRow)/16
 lsselectable: equ ((LMTSelectableEnd-LevelMenuText)/16)-1 ; last selectable item
 ; level select item constants
-lssndtest: equ lsrow2size+8
-lswifi: equ lsrow2size+9
+lssndtest: equ lsrow1size+8
+lswifi: equ lsrow1size+9
 
 vBlankRoutine equ $FFFFFFC4 ; VBlank Routine Jump Instruction (6 bytes)
 vBlankJump equ vBlankRoutine
 vBlankAdress equ vBlankRoutine+2
+; options menu
+optamm: equ ((OMTEnd-OptionMenuText)/16)-1
 
 ; NOTES FOR ANYONE MAKING CHARACTERS
 v_character = $FFFFFFE8
@@ -2065,6 +2067,7 @@ PalCycle:	dc.w PalCycle_GHZ-PalCycle
 		dc.w PalCycle_SYZ-PalCycle
 		dc.w PalCycle_SBZ-PalCycle
 		dc.w PalCycle_GHZ-PalCycle
+		dc.w PalCycle_GHZ-PalCycle
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -2890,6 +2893,7 @@ Pal_SBZ3:	incbin	pallet\sbz_act3.bin	; SBZ act 3 pallets
 Pal_SBZ3Water:	incbin	pallet\sbz_a3uw.bin	; SBZ act 3 (underwater) pallets
 Pal_LZSonWater:	incbin	pallet\son_lzuw.bin	; Sonic (underwater in LZ) pallet
 Pal_SBZ3SonWat:	incbin	pallet\son_sbzu.bin	; Sonic (underwater in SBZ act 3) pallet
+Pal_BHZ:	incbin	pallet\bhz.bin
 Pal_SpeResult:	incbin	pallet\ssresult.bin	; special stage results screen pallets
 Pal_SpeContinue:incbin	pallet\sscontin.bin	; special stage results screen continue pallet
 Pal_Ending:	incbin	pallet\ending.bin	; ending sequence pallets
@@ -3169,6 +3173,7 @@ Title_ClrObjRam:
 		move.w	#0,d0
 		bsr.w	EniDec
 ; help how the fuck can i do this IT SHOWS NOTHING
+		bsr.w	Pal_FadeTo
 		lea	($FF0000).l,a1
 		move.l	#$40000003,d0
 		moveq	#$27,d1
@@ -3181,7 +3186,6 @@ Title_ClrObjRam:
 		moveq	#$27,d1
 		moveq	#$1B,d2
 
-		bsr.w	Pal_FadeTo
 		bsr.w	Pal_FadeFrom
 
 
@@ -3392,8 +3396,6 @@ loc_3230:
 		beq.w	loc_317C	; if not, branch
 
 Title_ChkLevSel:
-		tst.b	($FFFFFFE0).w	; check	if level select	code is	on
-		beq.w	PlayLevel	; if not, play level
 		btst	#6,($FFFFF604).w ; check if A is pressed
 		beq.w	PlayLevel	; if not, play level
 		
@@ -3417,6 +3419,9 @@ Title_ClrScroll:
 Title_ClrVram:
 		move.l	d0,(a6)
 		dbf	d1,Title_ClrVram ; fill	VRAM with 0
+
+		tst.b	($FFFFFFE0).w	; check	if level select	code is	on
+		beq.w	GotoOptions	; if not, play level
 
 		bsr.w	LevSelTextLoad
 		
@@ -3444,6 +3449,7 @@ Title_ClrVram:
 	@issndtst2:
 		lea	(Controls_SND).l,a1
 		bsr.w	CStringSlop
+		
 ; ---------------------------------------------------------------------------
 ; Level	Select
 ; ---------------------------------------------------------------------------
@@ -3503,7 +3509,7 @@ LevSel_Level_SS:			; XREF: LevelSelect
 		add.w	d0,d0
 		move.w	LSelectPointers(pc,d0.w),d0 ; load level number
 		bmi.w	LevelSelect
-		cmpi.w	#$700,d0	; check	if level is 0700 (Special Stage)
+		cmpi.w	#$FFFF,d0	; check	if level is 0700 (Special Stage)
 		bne.s	LevSel_Level	; if not, branch
 		move.b	#$10,($FFFFF600).w ; set screen	mode to	$10 (Special Stage)
 		clr.w	($FFFFFE10).w	; clear	level
@@ -3539,8 +3545,32 @@ PlayLevel:				; XREF: ROM:00003246j ...
 ; Level	select - level pointers
 ; ---------------------------------------------------------------------------
 LSelectPointers:
-		incbin	misc\ls_point.bin
+		dc.w $0000 ; crz
+		dc.w $0001
+		dc.w $0002
+		dc.w $0100 ; ilfez
+		dc.w $0101
+		dc.w $0102
+		dc.w $0200 ; mz
+		dc.w $0201
+		dc.w $0202
+		dc.w $0300 ; dgrotz
+		dc.w $0301 
+		dc.w $0302 
+		dc.w $0700 ; the other mz...
+		dc.w $0701 
+		dc.w $0702 
+		dc.w $0400 ; tpfbz
+		dc.w $0401
+		dc.w $0402
+		dc.w $0500 ; zzzzz
+		dc.w $0501 
+		dc.w $0103 
+		dc.w $0502 ; fz
+		dc.w $FFFF ; special
+		dc.w $8000 ; sound test
 		even
+; --------------------------------------
 ; ---------------------------------------------------------------------------
 ; Level	select codes
 ; ---------------------------------------------------------------------------
@@ -3881,6 +3911,9 @@ LevelMenuText:
         dc.b    "DONTGETRIDOTHIS1"
         dc.b    "               2"
         dc.b    "               3"
+        dc.b    "MAKOTO         1"
+        dc.b    "               2"
+        dc.b    "               3"
 LMTSecondRow:
         dc.b    "THE PIG FROM   1"
         dc.b    " BARNYARD      2"
@@ -3939,6 +3972,63 @@ Controls_Normal:
 Controls_SND:
 		dc.b	"A: -10  B: +10  C: PLAY  START: QUIT",0
 		even
+		
+OptionMenuText:	
+		dc.b    "PLAY THE GAME!!!"
+        dc.b    "CHARACTER       "
+OMTEnd:
+		
+; ---------------------------------------------------------------------------
+; Level	Select
+; ---------------------------------------------------------------------------
+GotoOptions:
+		lea	(OptionMenuText).l,a1
+		lea	($C00000).l,a6
+		move.w	#$E680-$21,d3	; VRAM setting
+		move.l	#lsscrpos,d4	; screen position (text)
+		
+		move.w	#optamm-1,d1		; number of lines of text (first row)
+		bsr.w	LevSelTextLoad_loop
+
+OptionsMenu:
+		move.b	#4,($FFFFF62A).w
+		bsr.w	DelayProgram
+		bsr.w	OptControls
+		bsr.w	RunPLC_RAM
+		tst.l	($FFFFF680).w
+		bne.s	OptionsMenu
+		andi.b	#$F0,($FFFFF605).w ; is	A, B, C, or Start pressed?
+		beq.s	OptionsMenu	; if not, branch
+		nop
+		bra.s	OptionsMenu
+		
+OptReturn:
+		rts
+OptControls:				; XREF: LevelSelect
+		move.b	($FFFFF605).w,d1
+		andi.b	#3,d1		; is up/down pressed and held?
+		bne.s	Opt_UpDown	; if yes, branch
+		subq.w	#1,($FFFFFF80).w ; subtract 1 from time	to next	move
+		bpl.s	OptReturn	; if time remains, branch
+Opt_UpDown:
+		move.w	#$B,($FFFFFF80).w ; reset time delay
+		move.b	($FFFFF604).w,d1
+		move.w	($FFFFFF82).w,d6
+		btst	#0,d1		; is up	pressed?
+		beq.s	Opt_Down	; if not, branch
+		subq.w	#1,d6		; move up 1 selection
+		bcc.s	Opt_Down
+		moveq	#lsselectable,d6		; if selection moves below 0, jump to last selection
+
+Opt_Down:
+		btst	#1,d1		; is down pressed?
+		beq.s	Opt_Refresh	; if not, branch
+		addq.w	#1,d6		; move down 1 selection
+		cmpi.w	#lsselectable+1,d6
+		bcs.s	Opt_Refresh
+		moveq	#0,d6		; if selection moves above last selectable,	jump to	selection 0
+Opt_Refresh:
+		
 ; ---------------------------------------------------------------------------
 ; Music	playlist
 ; ---------------------------------------------------------------------------
@@ -4051,8 +4141,8 @@ Player_Palette:
 		; normal, lz, sbz, blank
 		dc.w	3,$F,$10,0 ; Sonic 
 		
-		dc.w	21,22,23,0 ; Pal_Gronic 
-		dc.w	24,22,23,0 ; Pal_Anakama 
+		dc.w	22,23,24,0 ; Pal_Gronic 
+		dc.w	25,23,24,0 ; Pal_Anakama 
         dc.w	3,$F,$10,0 ; LimitedSonic 
 
 		; add more player palettes
@@ -6795,10 +6885,12 @@ LevelSizeArray:        ; GHZ
         dc.w $0004, $0000, $0DC0, $0110, $0110, $0060 ; Act 2 (Bad Ending)
         dc.w $0004, $0000, $2FFF, $0000, $0320, $0060 ; Act 3 (Unused)
         dc.w $0004, $0000, $2FFF, $0000, $0320, $0060 ; Act 4 (Unused)
+        ; BHZ
+        dc.w $0004, $0000, $24BF, $0000, $0300, $0060 ; Act 1
+        dc.w $0004, $0000, $1EBF, $0000, $0300, $0060 ; Act 2
+        dc.w $0004, $0000, $2960, $0000, $0300, $0060 ; Act 3
+        dc.w $0004, $0000, $2ABF, $0000, $0300, $0060 ; Act 4 (Unused)
         even
-EndingStLocArray:
-		incbin	misc\sloc_end.bin
-		even
 
 ; ===========================================================================
 
@@ -6808,8 +6900,9 @@ LevSz_ChkLamp:				; XREF: LevelSizeLoad
 		jsr	Obj79_LoadInfo
 		move.w	($FFFFD008).w,d1
 		move.w	($FFFFD00C).w,d0
-		bra.s	loc_60D0
+		bra.w	loc_60D0
 ; ===========================================================================
+
 
 LevSz_StartLoc:				; XREF: LevelSizeLoad
 		move.w	($FFFFFE10).w,d0
@@ -6817,11 +6910,23 @@ LevSz_StartLoc:				; XREF: LevelSizeLoad
 		lsr.w	#4,d0
 		lea	StartLocArray(pc,d0.w),a1 ; load Sonic's start location
 		tst.w	($FFFFFFF0).w	; is demo mode on?
-		bpl.s	LevSz_SonicPos	; if not, branch
+		bpl.w	LevSz_SonicPos	; if not, branch
 		move.w	($FFFFFFF4).w,d0
 		subq.w	#1,d0
 		lsl.w	#2,d0
 		lea	EndingStLocArray(pc,d0.w),a1 ; load Sonic's start location
+		bra.w	LevSz_SonicPos
+
+EndingStLocArray:
+		incbin	misc\sloc_end.bin
+		even
+		
+; ===========================================================================
+; ---------------------------------------------------------------------------
+; Sonic	start location array
+; ---------------------------------------------------------------------------
+StartLocArray:	incbin	misc\sloc_lev.bin
+		even
 
 LevSz_SonicPos:
 		moveq	#0,d1
@@ -6861,12 +6966,6 @@ loc_60F8:
 		lsl.b	#2,d0
 		move.l	LoopTileNums(pc,d0.w),($FFFFF7AC).w
 		bra.w	LevSz_Unk
-; ===========================================================================
-; ---------------------------------------------------------------------------
-; Sonic	start location array
-; ---------------------------------------------------------------------------
-StartLocArray:	incbin	misc\sloc_lev.bin
-		even
 
 ; ---------------------------------------------------------------------------
 ; Which	256x256	tiles contain loops or roll-tunnels
@@ -6876,7 +6975,8 @@ StartLocArray:	incbin	misc\sloc_lev.bin
 ; ---------------------------------------------------------------------------
 LoopTileNums:	incbin	misc\loopnums.bin
 		even
-
+; this is from the cwa source code i will share kaito x gakupo mpreg if this does not work i swear t ogod if this does not
+; ITS GONJE HELP
 ; ===========================================================================
 
 LevSz_Unk:				; XREF: LevelSizeLoad
@@ -6927,7 +7027,7 @@ loc_6206:
 BgScroll_Index:	dc.w BgScroll_GHZ-BgScroll_Index, BgScroll_LZ-BgScroll_Index
 		dc.w BgScroll_MZ-BgScroll_Index, BgScroll_SLZ-BgScroll_Index
 		dc.w BgScroll_SYZ-BgScroll_Index, BgScroll_SBZ-BgScroll_Index
-		dc.w BgScroll_End-BgScroll_Index
+		dc.w BgScroll_End-BgScroll_Index, BgScroll_GHZ-BgScroll_Index
 ; ===========================================================================
 
 BgScroll_GHZ:				; XREF: BgScroll_Index
@@ -7022,7 +7122,7 @@ loc_628E:
 Deform_Index:	dc.w Deform_GHZ-Deform_Index, Deform_LZ-Deform_Index
 		dc.w Deform_MZ-Deform_Index, Deform_SLZ-Deform_Index
 		dc.w Deform_SYZ-Deform_Index, Deform_SBZ-Deform_Index
-		dc.w Deform_GHZ-Deform_Index
+		dc.w Deform_GHZ-Deform_Index, Deform_GHZ-Deform_Index
 ; ---------------------------------------------------------------------------
 ; Green	Hill Zone background layer deformation code
 ; ---------------------------------------------------------------------------
@@ -8491,7 +8591,7 @@ loc_6DC4:
 Resize_Index:	dc.w Resize_GHZ-Resize_Index, Resize_LZ-Resize_Index
 		dc.w Resize_MZ-Resize_Index, Resize_SLZ-Resize_Index
 		dc.w Resize_SYZ-Resize_Index, Resize_SBZ-Resize_Index
-		dc.w Resize_Ending-Resize_Index
+		dc.w Resize_Ending-Resize_Index, Resize_GHZ-Resize_Index
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Green	Hill Zone dynamic screen resizing
@@ -11515,7 +11615,7 @@ Obj28_Index:	dc.w Obj28_Ending-Obj28_Index, loc_912A-Obj28_Index
 		dc.w loc_9314-Obj28_Index, loc_9370-Obj28_Index
 		dc.w loc_92D6-Obj28_Index
 
-Obj28_VarIndex:	dc.b 0,	5, 2, 3, 6, 3, 4, 5, 4,	1, 0, 1
+Obj28_VarIndex:	dc.b 0,	5, 2, 3, 6, 3, 4, 5, 4,	1, 0, 1, 0,	5, 0,	5
 
 Obj28_Variables:dc.w $FE00, $FC00
 		dc.l Map_obj28
@@ -15392,7 +15492,6 @@ Map_obj33:
 ; ---------------------------------------------------------------------------
 ; Object 34 - zone title cards
 ; ---------------------------------------------------------------------------
-
 Obj34:					; XREF: Obj_Index
 		moveq	#0,d0
 		move.b	$24(a0),d0
@@ -15544,6 +15643,8 @@ Obj34_ConData:	dc.w 0,	$120, $FEFC, $13C, $414, $154, $214, $154 ; GHZ
 		dc.w 0,	$120, $FF04, $144, $41C, $15C, $21C, $15C ; SYZ
 		dc.w 0,	$120, $FF04, $144, $41C, $15C, $21C, $15C ; SBZ
 		dc.w 0,	$120, $FEE4, $124, $3EC, $3EC, $1EC, $12C ; FZ
+		dc.w 0,	$120, $FEFC, $13C, $414, $154, $214, $154 ; GHZ
+		dc.w 0,	$120, $FEFC, $13C, $414, $154, $214, $154 ; GHZ
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Object 39 - "GAME OVER" and "TIME OVER"
@@ -16075,145 +16176,8 @@ Obj7F_Display:
 ; ---------------------------------------------------------------------------
 ; Sprite mappings - zone title cards
 ; ---------------------------------------------------------------------------
-Map_obj34:	dc.w byte_C9FE-Map_obj34
-		dc.w byte_CA2C-Map_obj34
-		dc.w byte_CA5A-Map_obj34
-		dc.w byte_CA7A-Map_obj34
-		dc.w byte_CAA8-Map_obj34
-		dc.w byte_CADC-Map_obj34
-		dc.w byte_CB10-Map_obj34
-		dc.w byte_CB26-Map_obj34
-		dc.w byte_CB31-Map_obj34
-		dc.w byte_CB3C-Map_obj34
-		dc.w byte_CB47-Map_obj34
-		dc.w byte_CB8A-Map_obj34
-byte_C9FE:	dc.b $C	;  GREEN HILL | CRUNCHY ROLL
-		dc.b $F8, 5, 0, 8, $80		; C
-		dc.b $F8, 5, 0, $3A, $90	; R
-		dc.b $F8, 5, 0, $46, $A0	; U
-		dc.b $F8, 5, 0, $2E, $B0	; N
-		dc.b $F8, 5, 0, 8, $C0		; C
-		dc.b $F8, 5, 0, $1C, $D0	; H
-		dc.b $F8, 5, 0, $4A, $E0	; Y
-		dc.b $F8, 0, 0, $56, $F0	; Space
-		dc.b $F8, 5, 0, $3A, $0	; R
-		dc.b $F8, 5, 0, $32, $10	; O
-		dc.b $F8, 5, 0, $26, $20	; L
-		dc.b $F8, 5, 0, $26, $30	; L
-byte_CA2C:	dc.b $16	;  LABYRINTH | I LIKE FILE EGGSPLORER
-		dc.b $F8, 1, 0, $20, $80	; I
-		dc.b $F8, 0, 0, $56, $88	; Space
-		dc.b $F8, 5, 0, $26, $98	; L
-		dc.b $F8, 1, 0, $20, $A8	; I
-		dc.b $F8, 5, 0, $22, $B0	; K
-		dc.b $F8, 5, 0, $10, $C0	; E
-		dc.b $F8, 0, 0, $56, $D0	; Space
-		dc.b $F8, 5, 0, $14, $E0	; F
-		dc.b $F8, 1, 0, $20, $F0	; I
-		dc.b $F8, 5, 0, $26, $F8	; L
-		dc.b $F8, 5, 0, $10, $8	; E
-		dc.b $F8, 0, 0, $56, $18	; Space
-		dc.b $F8, 5, 0, $10, $28	; E
-		dc.b $F8, 5, 0, $18, $38	; G
-		dc.b $F8, 5, 0, $18, $48	; G
-		dc.b $F8, 5, 0, $3E, $58	; S
-		dc.b $F8, 5, 0, $36, $68	; P
-		dc.b $F8, 5, 0, $26, $78	; L
-		dc.b $F8, 5, 0, $32, $88	; O
-		dc.b $F8, 5, 0, $3A, $98	; R
-		dc.b $F8, 5, 0, $10, $A8	; E
-		dc.b $F8, 5, 0, $3A, $B8	; R
-byte_CA5A:	dc.b 5	;  MARBLE | MARBL
-		dc.b $F8, 5, 0, $2A, $80	; M
-		dc.b $F8, 5, 0, 0, $90		; A
-		dc.b $F8, 5, 0, $3A, $A0	; R
-		dc.b $F8, 5, 0, 4, $B0		; B
-		dc.b $F8, 5, 0, $26, $C0	; L
-byte_CA7A:	dc.b $11	;  STAR LIGHT | DONT GET RIDOTHIS
-		dc.b $F8, 5, 0, $0C, $80	; D
-		dc.b $F8, 5, 0, $32, $90	; O
-		dc.b $F8, 5, 0, $2E, $A0	; N
-		dc.b $F8, 5, 0, $42, $B0	; T
-		dc.b $F8, 0, 0, $56, $C0	; Space
-		dc.b $F8, 5, 0, $18, $D0	; G
-		dc.b $F8, 5, 0, $10, $E0	; E
-		dc.b $F8, 5, 0, $42, $F0	; T
-		dc.b $F8, 0, 0, $56, $0	; Space
-		dc.b $F8, 5, 0, $3A, $10	; R
-		dc.b $F8, 1, 0, $20, $20	; I
-		dc.b $F8, 5, 0, $0C, $28	; D
-		dc.b $F8, 5, 0, $32, $38	; O
-		dc.b $F8, 5, 0, $42, $48	; T
-		dc.b $F8, 5, 0, $1C, $58	; H
-		dc.b $F8, 1, 0, $20, $68	; I
-		dc.b $F8, 5, 0, $3E, $70	; S
-byte_CAA8:	dc.b $15	;  SPRING YARD | THE PIG FROM BARNYARD
-		dc.b $F8, 5, 0, $42, $80	; T
-		dc.b $F8, 5, 0, $1C, $90	; H
-		dc.b $F8, 5, 0, $10, $A0	; E
-		dc.b $F8, 0, 0, $56, $B0	; Space
-		dc.b $F8, 5, 0, $36, $C0	; P
-		dc.b $F8, 1, 0, $20, $D0	; I
-		dc.b $F8, 5, 0, $18, $D8	; G
-		dc.b $F8, 0, 0, $56, $E8	; Space
-		dc.b $F8, 5, 0, $14, $F8	; F
-		dc.b $F8, 5, 0, $3A, $8	; R
-		dc.b $F8, 5, 0, $32, $18	; O
-		dc.b $F8, 5, 0, $2A, $28	; M
-		dc.b $F8, 0, 0, $56, $38	; Space
-		dc.b $F8, 5, 0, 4, $48		; B
-		dc.b $F8, 5, 0, 0, $58		; A
-		dc.b $F8, 5, 0, $3A, $68	; R
-		dc.b $F8, 5, 0, $2E, $78	; N
-		dc.b $F8, 5, 0, $4A, $88	; Y
-		dc.b $F8, 5, 0, 0, $98		; A
-		dc.b $F8, 5, 0, $3A, $A8	; R
-		dc.b $F8, 5, 0, $0C, $B8	; D
-byte_CADC:	dc.b 7	;  SCRAP BRAIN | Z Z Z Z
-		dc.b $F8, 5, 0, $4E, $80	; Z
-		dc.b $F8, 0, 0, $56, $90	; Space
-		dc.b $F8, 5, 0, $4E, $A0	; Z
-		dc.b $F8, 0, 0, $56, $B0	; Space
-		dc.b $F8, 5, 0, $4E, $C0	; Z
-		dc.b $F8, 0, 0, $56, $D0	; Space
-		dc.b $F8, 5, 0, $4E, $E0	; Z
-byte_CB10:	dc.b 4			; ZONE
-		dc.b $F8, 5, 0,	$4E, $E0
-		dc.b $F8, 5, 0,	$32, $F0
-		dc.b $F8, 5, 0,	$2E, 0
-		dc.b $F8, 5, 0,	$10, $10
-		dc.b 0
-byte_CB26:	dc.b 2			; ACT 1
-		dc.b 4,	$C, 0, $53, $EC
-		dc.b $F4, 2, 0,	$57, $C
-byte_CB31:	dc.b 2			; ACT 2
-		dc.b 4,	$C, 0, $53, $EC
-		dc.b $F4, 6, 0,	$5A, 8
-byte_CB3C:	dc.b 2			; ACT 3
-		dc.b 4,	$C, 0, $53, $EC
-		dc.b $F4, 6, 0,	$60, 8
-byte_CB47:	dc.b $D			; Oval
-		dc.b $E4, $C, 0, $70, $F4
-		dc.b $E4, 2, 0,	$74, $14
-		dc.b $EC, 4, 0,	$77, $EC
-		dc.b $F4, 5, 0,	$79, $E4
-		dc.b $14, $C, $18, $70,	$EC
-		dc.b 4,	2, $18,	$74, $E4
-		dc.b $C, 4, $18, $77, 4
-		dc.b $FC, 5, $18, $79, $C
-		dc.b $EC, 8, 0,	$7D, $FC
-		dc.b $F4, $C, 0, $7C, $F4
-		dc.b $FC, 8, 0,	$7C, $F4
-		dc.b 4,	$C, 0, $7C, $EC
-		dc.b $C, 8, 0, $7C, $EC
-		dc.b 0
-byte_CB8A:	dc.b 5			; FINAL
-		dc.b $F8, 5, 0,	$14, $DC
-		dc.b $F8, 1, 0,	$20, $EC
-		dc.b $F8, 5, 0,	$2E, $F4
-		dc.b $F8, 5, 0,	0, 4
-		dc.b $F8, 5, 0,	$26, $14
-		even
+Map_obj34:
+        include "_maps\obj34.asm"
 ; ---------------------------------------------------------------------------
 ; Sprite mappings - "GAME OVER"	and "TIME OVER"
 ; ---------------------------------------------------------------------------
@@ -16228,10 +16192,10 @@ Map_obj3A:	dc.w byte_CBEA-Map_obj3A
 		dc.w byte_CC32-Map_obj3A
 		dc.w byte_CC51-Map_obj3A
 		dc.w byte_CC75-Map_obj3A
-		dc.w byte_CB47-Map_obj3A
-		dc.w byte_CB26-Map_obj3A
-		dc.w byte_CB31-Map_obj3A
-		dc.w byte_CB3C-Map_obj3A
+		;dc.w byte_CB47-Map_obj3A
+		;dc.w byte_CB26-Map_obj3A
+		;dc.w byte_CB31-Map_obj3A
+		;dc.w byte_CB3C-Map_obj3A
 byte_CBEA:	dc.b $F	;  SONIC HAS | CADNIUM SULFIDE
 		dc.b $F8, 5, 0, 8, $7C		; C
 		dc.b $F8, 5, 0, 0, $8C		; A
@@ -16285,7 +16249,7 @@ byte_CC75:	dc.b 7			; RING BONUS
 Map_obj7E:	dc.w byte_CCAC-Map_obj7E
 		dc.w byte_CCEE-Map_obj7E
 		dc.w byte_CD0D-Map_obj7E
-		dc.w byte_CB47-Map_obj7E
+		;dc.w byte_CB47-Map_obj7E
 		dc.w byte_CD31-Map_obj7E
 		dc.w byte_CD46-Map_obj7E
 		dc.w byte_CD5B-Map_obj7E
@@ -25630,12 +25594,12 @@ locret_13914:
 
 
 Sonic_Loops:				; XREF: Obj01_Control
-		cmpi.b	#3,($FFFFFE10).w ; is level SLZ	?
-		beq.s	loc_13926	; if yes, branch
-		tst.b	($FFFFFE10).w	; is level GHZ ?
-		bne.w	locret_139C2	; if not, branch
-
-loc_13926:
+;		cmpi.b	#3,($FFFFFE10).w ; is level SLZ	?
+;		beq.s	loc_13926	; if yes, branch
+;		tst.b	($FFFFFE10).w	; is level GHZ ?
+;		bne.w	locret_139C2	; if not, branch
+;		this is commented out, please do more plane messups id love that
+;loc_13926:
 		move.w	$C(a0),d0
 		lsr.w	#1,d0
 		andi.w	#$380,d0
@@ -36966,7 +36930,7 @@ AniArt_Pause:
 AniArt_Index:	dc.w AniArt_GHZ-AniArt_Index, AniArt_none-AniArt_Index
 		dc.w AniArt_MZ-AniArt_Index, AniArt_none-AniArt_Index
 		dc.w AniArt_none-AniArt_Index, AniArt_SBZ-AniArt_Index
-		dc.w AniArt_Ending-AniArt_Index
+		dc.w AniArt_Ending-AniArt_Index, AniArt_GHZ-AniArt_Index
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Animated pattern routine - Green Hill
@@ -38795,6 +38759,14 @@ Nem_SBZ:	incbin	artnem\8x8sbz.bin	; SBZ primary patterns
 		even
 Blk256_SBZ:	incbin	map256\sbz.bin
 		even
+Blk16_BHZ:	incbin	map16\bhz.bin
+		even
+Nem_BHZ_1st:	incbin	artnem\8x8bhz1.bin	; GHZ primary patterns
+		even
+Nem_BHZ_2nd:	incbin	artnem\8x8bhz2.bin	; GHZ secondary patterns
+		even
+Blk256_BHZ:	incbin	map256\bhz.bin
+		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - bosses and ending sequence
 ; ---------------------------------------------------------------------------
@@ -38854,6 +38826,8 @@ Col_SLZ:	incbin	collide\slz.bin		; SLZ index
 Col_SYZ:	incbin	collide\syz.bin		; SYZ index
 		even
 Col_SBZ:	incbin	collide\sbz.bin		; SBZ index
+		even
+Col_BHZ:	incbin	collide\bhz.bin		; GHZ index
 		even
 ; ---------------------------------------------------------------------------
 ; Special layouts
@@ -38919,6 +38893,10 @@ Level_Index:	dc.w Level_GHZ1-Level_Index, Level_GHZbg-Level_Index, byte_68D70-Le
 		dc.w Level_End-Level_Index, Level_GHZbg-Level_Index, byte_6A320-Level_Index
 		dc.w byte_6A320-Level_Index, byte_6A320-Level_Index, byte_6A320-Level_Index
 		dc.w byte_6A320-Level_Index, byte_6A320-Level_Index, byte_6A320-Level_Index
+		dc.w Level_BHZ1-Level_Index, Level_BHZbg-Level_Index, byte_68D70-Level_Index
+		dc.w Level_BHZ2-Level_Index, Level_BHZbg-Level_Index, byte_68E3C-Level_Index
+		dc.w Level_BHZ3-Level_Index, Level_BHZbg-Level_Index, byte_68F84-Level_Index
+		dc.w byte_68F88-Level_Index, byte_68F88-Level_Index, byte_68F88-Level_Index
 
 Level_GHZ1:	incbin	levels\ghz1.bin
 		even
@@ -39000,7 +38978,16 @@ byte_6A2FC:	dc.b 0,	0, 0, 0
 Level_End:	incbin	levels\ending.bin
 		even
 byte_6A320:	dc.b 0,	0, 0, 0
+Level_BHZ1:	incbin	levels\bhz1.bin
+		even
 
+Level_BHZ2:	incbin	levels\bhz2.bin
+		even
+
+Level_BHZ3:	incbin	levels\bhz3.bin
+		even
+Level_BHZbg:	incbin	levels\bhzbg.bin
+		even
 ; ---------------------------------------------------------------------------
 ; Animated uncompressed giant ring graphics
 ; ---------------------------------------------------------------------------
@@ -39041,6 +39028,10 @@ ObjPos_Index:	dc.w ObjPos_GHZ1-ObjPos_Index, ObjPos_Null-ObjPos_Index
 		dc.w ObjPos_End-ObjPos_Index, ObjPos_Null-ObjPos_Index
 		dc.w ObjPos_End-ObjPos_Index, ObjPos_Null-ObjPos_Index
 		dc.w ObjPos_End-ObjPos_Index, ObjPos_Null-ObjPos_Index
+		dc.w ObjPos_BHZ1-ObjPos_Index, ObjPos_Null-ObjPos_Index
+		dc.w ObjPos_BHZ2-ObjPos_Index, ObjPos_Null-ObjPos_Index
+		dc.w ObjPos_BHZ3-ObjPos_Index, ObjPos_Null-ObjPos_Index
+		dc.w ObjPos_BHZ1-ObjPos_Index, ObjPos_Null-ObjPos_Index
 		dc.w ObjPos_LZ1pf1-ObjPos_Index, ObjPos_LZ1pf2-ObjPos_Index
 		dc.w ObjPos_LZ2pf1-ObjPos_Index, ObjPos_LZ2pf2-ObjPos_Index
 		dc.w ObjPos_LZ3pf1-ObjPos_Index, ObjPos_LZ3pf2-ObjPos_Index
@@ -39113,6 +39104,12 @@ ObjPos_SBZ1pf5:	incbin	objpos\sbz1pf5.bin
 ObjPos_SBZ1pf6:	incbin	objpos\sbz1pf6.bin
 		even
 ObjPos_End:	incbin	objpos\ending.bin
+		even
+ObjPos_BHZ1:	incbin	objpos\bhz1.bin
+		even
+ObjPos_BHZ2:	incbin	objpos\bhz2.bin
+		even
+ObjPos_BHZ3:	incbin	objpos\bhz3.bin
 		even
 ObjPos_Null:	dc.b $FF, $FF, 0, 0, 0,	0
 ; ---------------------------------------------------------------------------
@@ -39822,6 +39819,12 @@ Sound_E5:
 		jsr	ShowVDPGraphics
 		moveq	#20,d0
 		jsr	PalLoad2	; load pallet
+		
+		lea	(IdiotPCM).l,a2			; Load the idiot PCM sample into a2. It's important that we use a2 since a0 and a1 are going to be used up ahead when reading the joypad ports 
+		move.l	#(IdiotPCM_End-IdiotPCM),d3			; Load the size of the idiot PCM sample into d3 
+		move.b	#$2A,($A04000).l		; $A04000 = $2A -> Write to DAC channel	  
+		
+		bsr.s	SfxE5SwapPalette
 		
 Sound_E5_StartPCM:
 		lea	(IdiotPCM).l,a2			; Load the idiot PCM sample into a2. It's important that we use a2 since a0 and a1 are going to be used up ahead when reading the joypad ports 

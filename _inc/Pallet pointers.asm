@@ -64,6 +64,9 @@
 	dc.l Pal_Idiot
 	dc.w $FB20
 	dc.w 7
+	dc.l Pal_BHZ
+	dc.w $FB20
+	dc.w $17
 	dc.l Pal_Gronic
 	dc.w $FB00
 	dc.w 7

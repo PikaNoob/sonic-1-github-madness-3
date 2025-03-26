@@ -1,5 +1,5 @@
 @echo off
-
+echo get a job
 :: anakama or anyone else please don't touch this one...
 
 :: My name is Yoshikage Kira. I'm 33 years old.

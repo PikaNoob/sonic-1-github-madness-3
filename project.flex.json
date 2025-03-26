@@ -1,7 +1,7 @@
 {
     "Flex": 2,
     "name": "",
-    "node": "3b933959-6263-4958-b487-ca0d225026da",
+    "node": "84dacbf1-a489-4e5d-95f1-29272959b29e",
     "objects": [
         {
             "format": "Sonic 1.js",
@@ -295,7 +295,8 @@
                 "customDefinition": "",
                 "label": ""
             },
-            "uuid": "84dacbf1-a489-4e5d-95f1-29272959b29e"
+            "uuid": "84dacbf1-a489-4e5d-95f1-29272959b29e",
+            "format": "Sonic 1.js"
         },
         {
             "name": "Credits Text",
@@ -318,7 +319,8 @@
                 "customDefinition": "",
                 "label": ""
             },
-            "uuid": "c5e02c60-bf44-489e-8767-8f359839fecb"
+            "uuid": "c5e02c60-bf44-489e-8767-8f359839fecb",
+            "format": "Sonic 1.js"
         }
     ]
 }
