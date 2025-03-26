@@ -1049,6 +1049,10 @@ VDP_Loop:
 		dbf	d7,VDP_Loop	; set the VDP registers
 
 		move.w	(VDPSetupArray+2).l,d0
+		btst	#6,($FFFFFFF8).w	; Is this a PAL console?
+		beq.s	.UseV28			; If not, skip
+		bset	#3,d0			; set v30 and pretend nothing happened
+.UseV28:
 		move.w	d0,($FFFFF60C).w
 		move.w	#$8ADF,($FFFFF624).w
 		moveq	#0,d0
