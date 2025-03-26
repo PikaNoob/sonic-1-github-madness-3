@@ -29,6 +29,7 @@ lsselectable: equ ((LMTSelectableEnd-LevelMenuText)/16)-1 ; last selectable item
 ; level select item constants
 lssndtest: equ lsrow1size+8
 lswifi: equ lsrow1size+9
+lsminecraft: equ lsrow1size+11
 
 vBlankRoutine equ $FFFFFFC4 ; VBlank Routine Jump Instruction (6 bytes)
 vBlankJump equ vBlankRoutine
@@ -3512,6 +3513,8 @@ LevelSelect:
 		move.b	#4,($FFFFF62A).w
 		bsr.w	DelayProgram
 	@dont:
+		cmpi.w	#lsminecraft,d0 ; is play minecraft
+		beq.s	LevSel_Minecraft
 		cmpi.w	#lssndtest,d0		; have you selected item $14 (sound test)?
 		bne.s	LevSel_Level_SS	; if not, go to	Level/SS subroutine
 		
@@ -3531,6 +3534,15 @@ LevelSelect:
 LevSel_SEGA:				; XREF: LevelSelect
 		move.b	#$0,($FFFFF600).w ; set screen	mode to	$0 SEGA
 		rts	
+; ===========================================================================
+		
+LevSel_Minecraft:
+		move.b	#$E4,($FFFFF00B).w ; PlaySound_Special but faster
+		move.b	#4,($FFFFF62A).w
+		bsr.w	DelayProgram
+		
+		move.b	#$20,($FFFFF600).w ; set Game Mode to Minecraft
+		rts
 ; ===========================================================================
 
 LevSel_Ending:				; XREF: LevelSelect
@@ -3725,9 +3737,9 @@ LevSel_Down:
 LevSel_LR:
 		btst	#2,d1		; is left pressed?
 		beq.s	LevSel_Right	; if not, branch
-		sub.w	#lsrow2size,d6
+		sub.w	#lsrow1size,d6
 		bcc.s	LevSel_Down
-		add.w	#lsrow2size,d6	; don't jump
+		add.w	#lsrow1size,d6	; don't jump
 LevSel_Right:
 		btst	#3,d1		; is right pressed?
 		beq.s	LevSel_Refresh	; if not, branch
@@ -3968,6 +3980,7 @@ LMTSecondRow:
         dc.b    "SOUND TEST $    "
 		dc.b	"FREE WIFI       "
 		dc.b	"OPTIONS LATER   "
+		dc.b	"PLAY MINECRAFT  "
 LMTSelectableEnd:
 		dc.b	"CANT TOUCH ME XD"
 LMTEnd:
