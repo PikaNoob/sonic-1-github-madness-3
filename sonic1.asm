@@ -220,8 +220,17 @@ CheckSumCheck:
 loc_348:
 		move.l	d7,(a6)+
 		dbf	d6,loc_348
+; HzMd NT/PL MCD JP/OV TMSS TMSS TMSS TMSS
+		moveq	#$EF,d0
 		move.b	($A10001).l,d0
-		andi.b	#$C0,d0
+		bclr	#7,d0
+		beq.s	@jap
+		or.b	#1<<4,d0
+@jap:
+		moveq	#1,d1
+		and.w	($C00004).l,d1
+		ror.b	#1,d1
+		or.b	d1,d0
 		move.b	d0,($FFFFFFF8).w
 		move.l	#'init',($FFFFFFFC).w ; set flag so checksum won't be run again
 
@@ -240,8 +249,13 @@ GameClrRAM:
 		bsr.w	VDPSetupGame
 		bsr.w	SoundDriverLoad
 		bsr.w	JoypadInit
-		move.b	#0,($FFFFF600).w ; set Game Mode to Sega Screen
 
+;		move.b	($FFFFFFF8).w,d0
+;		and.w	#$F,d0
+;		beq.s	@notmss
+;		jsr	GM_AntiTMSS
+@notmss:
+		move.b	#0,($FFFFF600).w ; set Game Mode to Sega Screen
 	;	move.b	#$20,($FFFFF600).w ; set Game Mode to Minecraft
 
 MainGameLoop:
@@ -623,7 +637,12 @@ loc_CB0:				; XREF: loc_C76
 loc_CD4:				; XREF: loc_C76
 		move.w	($FFFFF624).w,(a5)
 		lea	($C00004).l,a5
-		move.l	#$940193C0,(a5)
+		move.l	#$940193C0,d0		; 224
+		tst.b	($FFFFFFF8).w		; hscroll
+		bpl.s	@60hz
+		move.w	#$93E0,d0		; 240
+@60hz:
+		move.l	d0,(a5)
 		move.l	#$96E69500,(a5)
 		move.w	#$977F,(a5)
 		move.w	#$7C00,(a5)
@@ -703,7 +722,12 @@ loc_DAE:
 		move.w	#$83,($FFFFF640).w
 		move.w	($FFFFF640).w,(a5)
 		lea	($C00004).l,a5
-		move.l	#$940193C0,(a5)
+		move.l	#$940193C0,d0		; 224
+		tst.b	($FFFFFFF8).w		; hscroll
+		bpl.s	@60hz
+		move.w	#$93E0,d0		; 240
+@60hz:
+		move.l	d0,(a5)
 		move.l	#$96E69500,(a5)
 		move.w	#$977F,(a5)
 		move.w	#$7C00,(a5)
@@ -762,10 +786,13 @@ loc_EB4:				; XREF: loc_E7A
 loc_ED8:				; XREF: loc_E7A
 		move.w	($FFFFF624).w,(a5)
 		lea	($C00004).l,a5
-		move.l	#$940193C0,(a5)
+		move.l	#$940193C0,d0		; 224
+		tst.b	($FFFFFFF8).w		; hscroll
+		bpl.s	@60hz
+		move.w	#$93E0,d0		; 240
+@60hz:
+		move.l	d0,(a5)
 		move.l	#$96E69500,(a5)
-
-loc_EEE:
 		move.w	#$977F,(a5)
 		move.w	#$7C00,(a5)
 		move.w	#$83,($FFFFF640).w
@@ -836,7 +863,12 @@ loc_FAE:
 		move.w	#$83,($FFFFF640).w
 		move.w	($FFFFF640).w,(a5)
 		lea	($C00004).l,a5
-		move.l	#$940193C0,(a5)
+		move.l	#$940193C0,d0		; 224
+		tst.b	($FFFFFFF8).w		; hscroll
+		bpl.s	@60hz
+		move.w	#$93E0,d0		; 240
+@60hz:
+		move.l	d0,(a5)
 		move.l	#$96E69500,(a5)
 		move.w	#$977F,(a5)
 		move.w	#$7C00,(a5)
@@ -872,9 +904,9 @@ loc_1076:
 		btst	#0,($A11100).l	; has Z80 stopped?
 		bne.s	loc_1076	; if not, branch
 		bsr.w	ReadJoypads
+		lea	($C00004).l,a5
 		tst.b	($FFFFF64E).w
 		bne.s	loc_10B0
-		lea	($C00004).l,a5
 		move.l	#$94009340,(a5)
 		move.l	#$96FD9580,(a5)
 		move.w	#$977F,(a5)
@@ -885,7 +917,6 @@ loc_1076:
 ; ===========================================================================
 
 loc_10B0:				; XREF: sub_106E
-		lea	($C00004).l,a5
 		move.l	#$94009340,(a5)
 		move.l	#$96FD9540,(a5)
 		move.w	#$977F,(a5)
@@ -894,15 +925,19 @@ loc_10B0:				; XREF: sub_106E
 		move.w	($FFFFF640).w,(a5)
 
 loc_10D4:				; XREF: sub_106E
-		lea	($C00004).l,a5
-		move.l	#$94019340,(a5)
+		move.l	#$94019340,(a5)		; sprites
 		move.l	#$96FC9500,(a5)
 		move.w	#$977F,(a5)
 		move.w	#$7800,(a5)
 		move.w	#$83,($FFFFF640).w
 		move.w	($FFFFF640).w,(a5)
-		lea	($C00004).l,a5
-		move.l	#$940193C0,(a5)
+
+		move.l	#$940193C0,d0		; 224
+		tst.b	($FFFFFFF8).w		; hscroll
+		bpl.s	@60hz
+		move.w	#$93E0,d0		; 240
+@60hz:
+		move.l	d0,(a5)
 		move.l	#$96E69500,(a5)
 		move.w	#$977F,(a5)
 		move.w	#$7C00,(a5)
@@ -1041,15 +1076,15 @@ Joypad_Read:
 VDPSetupGame:				; XREF: GameClrRAM; ChecksumError
 		lea	($C00004).l,a0
 		lea	($C00000).l,a1
-		lea	(VDPSetupArray).l,a2
+		lea	VDPSetupArray(pc),a2
 		moveq	#$12,d7
 
 VDP_Loop:
 		move.w	(a2)+,(a0)
 		dbf	d7,VDP_Loop	; set the VDP registers
 
-		move.w	(VDPSetupArray+2).l,d0
-		btst	#6,($FFFFFFF8).w	; Is this a PAL console?
+		move.w	VDPSetupArray+2(pc),d0
+		btst	#7,($FFFFFFF8).w	; Is this a PAL console?
 		beq.s	.UseV28			; If not, skip
 		bset	#3,d0			; set v30 and pretend nothing happened
 .UseV28:
@@ -3332,9 +3367,9 @@ loc_317C:
 ; ===========================================================================
 
 Title_ChkRegion:
-		tst.b	($FFFFFFF8).w	; check	if the machine is US or	Japanese
-		bpl.s	Title_RegionJ	; if Japanese, branch
-		lea	(LevelSelectCode_US).l,a0 ; load US code
+		btst	#4,($FFFFFFF8).w		; check	if the machine is US or	Japanese
+		beq.s	Title_RegionJ			; if Japanese, branch
+		lea	(LevelSelectCode_US).l,a0	; load US code
 		bra.s	Title_EnterCheat
 ; ===========================================================================
 
@@ -3356,8 +3391,8 @@ Title_EnterCheat:			; XREF: Title_ChkRegion
 		lsr.w	#1,d1
 		andi.w	#3,d1
 		beq.s	Title_PlayRing
-		tst.b	($FFFFFFF8).w
-		bpl.s	Title_PlayRing
+		btst	#4,($FFFFFFF8).w
+		beq.s	Title_PlayRing
 		moveq	#1,d1
 		move.b	d1,1(a0,d1.w)
 
@@ -3408,7 +3443,7 @@ Title_ChkLevSel:
 		bsr.w	PalLoad2	; load level select pallet
 		lea	($FFFFCC00).w,a1
 		moveq	#0,d0
-		move.w	#$DF,d1
+		move.w	#$FF,d1
 
 Title_ClrScroll:
 		move.l	d0,(a1)+
@@ -7112,6 +7147,7 @@ loc_628E:
 		move.w	($FFFFF70C).w,($FFFFF618).w
 		move.w	($FFFFF718).w,($FFFFF620).w
 		move.w	($FFFFF71C).w,($FFFFF61E).w
+		pea	Deform_Ripple
 		moveq	#0,d0
 		move.b	($FFFFFE10).w,d0
 		add.w	d0,d0
@@ -7220,7 +7256,11 @@ Deform_LZ:				; XREF: Deform_Index
 		bsr.w	ScrollBlock1
 		move.w	($FFFFF70C).w,($FFFFF618).w
 		lea	($FFFFCC00).w,a1
-		move.w	#$DF,d1
+		move.w	#224-1,d1
+		tst.b	($FFFFFFF8).w
+		bpl.s	@60hz
+		move.w	#240-1,d1
+@60hz:
 		move.w	($FFFFF700).w,d0
 		neg.w	d0
 		swap	d0
@@ -7266,7 +7306,11 @@ loc_6402:
 		bsr.w	ScrollBlock3
 		move.w	($FFFFF70C).w,($FFFFF618).w
 		lea	($FFFFCC00).w,a1
-		move.w	#$DF,d1
+		move.w	#224-1,d1
+		tst.b	($FFFFFFF8).w
+		bpl.s	@60hz
+		move.w	#240-1,d1
+@60hz:
 		move.w	($FFFFF700).w,d0
 		neg.w	d0
 		swap	d0
@@ -7495,7 +7539,11 @@ Deform_SYZ:				; XREF: Deform_Index
 		bsr.w	ScrollBlock1
 		move.w	($FFFFF70C).w,($FFFFF618).w
 		lea	($FFFFCC00).w,a1
-		move.w	#$DF,d1
+		move.w	#224-1,d1
+		tst.b	($FFFFFFF8).w
+		bpl.s	@60hz
+		move.w	#240-1,d1
+@60hz:
 		move.w	($FFFFF700).w,d0
 		neg.w	d0
 		swap	d0
@@ -7526,7 +7574,11 @@ Deform_SBZ:				; XREF: Deform_Index
 		bsr.w	ScrollBlock1
 		move.w	($FFFFF70C).w,($FFFFF618).w
 		lea	($FFFFCC00).w,a1
-		move.w	#$DF,d1
+		move.w	#224-1,d1
+		tst.b	($FFFFFFF8).w
+		bpl.s	@60hz
+		move.w	#240-1,d1
+@60hz:
 		move.w	($FFFFF700).w,d0
 		neg.w	d0
 		swap	d0
@@ -7538,7 +7590,45 @@ loc_6576:
 		dbf	d1,loc_6576
 		rts	
 ; End of function Deform_SBZ
-
+; ---------------------------------------------------------------------------
+; guys, ripple effects are cheap AF they just coded it badly
+Deform_Ripple:
+		lea	($FFFFCC00).w,a0	; hscroll line buffer
+		move.w	#224-1,d1
+		tst.b	($FFFFFFF8).w
+		bpl.s	@60hz
+		move.w	#240-1,d1
+@60hz:
+		clr.w	d0
+		move.b	($FFFFFE0F).w,d0	; vblank timer
+;		addq.b	#1,($FFFF8000).w
+		lea	@ripple(pc,d0.w),a1
+@loop:
+		move.b	(a1)+,d0
+		ext.w	d0
+		add.w	d0,(a0)+
+		addq.w	#2,a0
+		dbf	d1,@loop
+		rts
+@ripple:
+	rept 2
+	dc.b  0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2
+	dc.b  2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3
+	dc.b  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2
+	dc.b  2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0
+	dc.b  0,-1,-1,-1,-1,-1,-2,-2,-2,-2,-2,-3,-3,-3,-3,-3
+	dc.b -3,-3,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4
+	dc.b -4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-3
+	dc.b -3,-3,-3,-3,-3,-3,-2,-2,-2,-2,-2,-1,-1,-1,-1,-1
+	dc.b  0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2
+	dc.b  2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3
+	dc.b  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2
+	dc.b  2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0
+	dc.b  0,-1,-1,-1,-1,-1,-2,-2,-2,-2,-2,-3,-3,-3,-3,-3
+	dc.b -3,-3,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4
+	dc.b -4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-3
+	dc.b -3,-3,-3,-3,-3,-3,-2,-2,-2,-2,-2,-1,-1,-1,-1,-1
+	endr
 ; ---------------------------------------------------------------------------
 ; Subroutine to	scroll the level horizontally as Sonic moves
 ; ---------------------------------------------------------------------------
@@ -8762,7 +8852,7 @@ loc_6F4A:
 		bsr.w	PlaySound	; play boss music
 		move.b	#1,($FFFFF7AA).w ; lock	screen
 		addq.b	#2,($FFFFF742).w
-		moveq	#$22,d0
+		moveq	#$20,d0
 		bra.w	LoadPLC		; load boss patterns
 ; ===========================================================================
 
@@ -9199,7 +9289,8 @@ Resize_FZmain:
 		addq.b	#2,($FFFFF742).w
 		moveq	#$1F,d0
 		bsr.w	LoadPLC		; load FZ boss patterns
-
+		move.b	#$E0,d0		; fade song
+		jsr	PlaySound_Special
 loc_72F4:
 		bra.s	loc_72C2
 ; ===========================================================================
@@ -11499,8 +11590,7 @@ Obj27_Animate:				; XREF: Obj27_Index
 		beq.w	DeleteObject	; if yes, branch
 
 Obj27_Display:
-		jsr	SpeedToPos	; GMZ
-		addi.w	#$38,$12(a0)	; GMZ: Explosion Gravity
+		jsr	ObjectFall
 		bra.w	DisplaySprite
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -11774,8 +11864,8 @@ loc_91AE:
 ; ===========================================================================
 
 loc_91C0:				; XREF: Obj28_Index
-		bsr.w	SpeedToPos
-		addi.w	#$18,$12(a0)
+		moveq	#$18,d1
+		jsr	ObjectFallCustom
 		tst.w	$12(a0)
 		bmi.s	loc_91FC
 		jsr	ObjHitFloor
@@ -11848,8 +11938,8 @@ loc_9280:				; XREF: Obj28_Index
 		bpl.s	loc_92B6
 		clr.w	$10(a0)
 		clr.w	$32(a0)
-		bsr.w	SpeedToPos
-		addi.w	#$18,$12(a0)
+		moveq	#$18,d1
+		jsr	ObjectFallCustom
 		bsr.w	loc_93C4
 		bsr.w	loc_93EC
 		subq.b	#1,$1E(a0)
@@ -11929,8 +12019,8 @@ loc_936C:
 loc_9370:				; XREF: Obj28_Index
 		bsr.w	sub_9404
 		bpl.s	loc_93C0
-		bsr.w	SpeedToPos
-		addi.w	#$18,$12(a0)
+		moveq	#$18,d1
+		jsr	ObjectFallCustom
 		tst.w	$12(a0)
 		bmi.s	loc_93AA
 		jsr	ObjHitFloor
@@ -12019,9 +12109,8 @@ Obj29_Main:				; XREF: Obj29_Index
 Obj29_Slower:				; XREF: Obj29_Index
 		tst.w	$12(a0)		; is object moving?
 		bpl.w	DeleteObject	; if not, branch
-		bsr.w	SpeedToPos
-		addi.w	#$18,$12(a0)	; reduce object	speed
-		rts	
+		moveq	#$18,d1
+		jmp	ObjectFallCustom
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Sprite mappings - animals
@@ -12739,8 +12828,9 @@ Obj37_ResetCounter:			; XREF: Obj37_Loop
 
 Obj37_Bounce:				; XREF: Obj37_Index
 		move.b	($FFFFFEC7).w,$1A(a0)
-		bsr.w	SpeedToPos
-		addi.w	#$18,$12(a0)
+		moveq	#$18,d1
+		jsr	ObjectFallCustom
+		tst.w	$12(a0)
 		bmi.s	Obj37_ChkDel
 		move.b	($FFFFFE0F).w,d0
 		add.b	d7,d0
@@ -13159,9 +13249,8 @@ Obj2E_Main:				; XREF: Obj2E_Index
 Obj2E_Move:				; XREF: Obj2E_Index
 		tst.w	$12(a0)		; is object moving?
 		bpl.w	Obj2E_ChkEggman	; if not, branch
-		bsr.w	SpeedToPos
-		addi.w	#$18,$12(a0)	; reduce object	speed
-		rts	
+		moveq	#$18,d1
+		jmp	ObjectFallCustom
 ; ===========================================================================
 
 Obj2E_ChkEggman:			; XREF: Obj2E_Move
@@ -13571,8 +13660,8 @@ Obj2B_Main:				; XREF: Obj2B_Index
 Obj2B_ChgSpeed:				; XREF: Obj2B_Index
 		lea	(Ani_obj2B).l,a1
 		bsr.w	AnimateSprite
-		bsr.w	SpeedToPos
-		addi.w	#$18,$12(a0)	; reduce speed
+		moveq	#$18,d1
+		jsr	ObjectFallCustom
 		move.w	$30(a0),d0
 		cmp.w	$C(a0),d0
 		bcc.s	Obj2B_ChgAni
@@ -13759,8 +13848,9 @@ loc_ADA4:
 ; ===========================================================================
 
 Obj2D_Jump:				; XREF: Obj2D_Index2
-		bsr.w	SpeedToPos
-		addi.w	#$18,$12(a0)
+		moveq	#$18,d1
+		jsr	ObjectFallCustom
+		tst.w	$12(a0)
 		bmi.s	locret_ADF0
 		move.b	#3,$1C(a0)
 		jsr	ObjHitFloor
@@ -15376,8 +15466,8 @@ loc_C1A4:
 loc_C1AA:
 		subq.b	#2,d0
 		bne.s	loc_C1F2
-		bsr.w	SpeedToPos
-		addi.w	#$18,$12(a0)
+		moveq	#$18,d1
+		jsr	ObjectFallCustom
 		jsr	ObjHitFloor
 		tst.w	d1
 		bpl.w	locret_C1F0
@@ -16683,12 +16773,11 @@ Obj3C_Smash:
 		bsr.s	SmashObject
 
 Obj3C_FragMove:				; XREF: Obj3C_Index
-		bsr.w	SpeedToPos
-		addi.w	#$70,$12(a0)	; make fragment	fall faster
-		bsr.w	DisplaySprite
 		tst.b	1(a0)
 		bpl.w	DeleteObject
-		rts	
+		moveq	#$70,d1
+		jsr	ObjectFallCustom
+		bra.w	DisplaySprite	
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	smash a	block (GHZ walls and MZ	blocks)
@@ -16836,20 +16925,24 @@ Obj_Index:
 
 
 ObjectFall:
-		move.l	8(a0),d2
-		move.l	$C(a0),d3
-		move.w	$10(a0),d0
-		ext.l	d0
-		asl.l	#8,d0
-		add.l	d0,d2
-		move.w	$12(a0),d0
-		addi.w	#$38,$12(a0)	; increase vertical speed
-		ext.l	d0
-		asl.l	#8,d0
-		add.l	d0,d3
-		move.l	d2,8(a0)
-		move.l	d3,$C(a0)
-		rts	
+		moveq	#$38,d1
+
+ObjectFallCustom:
+		bsr.s	SpeedToPos
+		add.w	d1,$12(a0)
+		tst.b	($FFFFFFF8).w
+		bpl.s	@62hz
+		tst.w	d1
+		bmi.s	@upward
+		lsr.w	#2,d1
+		add.w	d1,$12(a0)
+@62hz:
+		rts
+@upward:
+		neg.w	d1
+		lsr.w	#2,d1
+		sub.w	d1,$12(a0)
+		rts
 ; End of function ObjectFall
 
 ; ---------------------------------------------------------------------------
@@ -16860,21 +16953,12 @@ ObjectFall:
 
 
 ObjectFallNoJump:
-		move.l	8(a0),d2
-		move.l	$C(a0),d3
-		move.w	$10(a0),d0
-		ext.l	d0
-		asl.l	#8,d0
-		add.l	d0,d2
-;		cmpi.b	#1,obID(a0)
-;		beq.s	ObjectFallSonic
-		move.w	$C(a0),d0
-		addi.w	#4,$C(a0)	; increase vertical speed
-;		ext.l	d0
-;		asl.l	#8,d0
-;		add.l	d0,d3
-		move.l	d2,$8(a0)
-;		move.l	d3,obY(a0)
+		movem.w	$10(a0),d0/d2	; load horizontal speed
+		asl.l	#8,d0		; multiply speed by $100
+		asl.l	#8,d2		; multiply speed by $100
+		add.l	d0,8(a0)	; update x-axis	position
+		add.l	d2,$C(a0)	; update y-axis	position
+		addq.w	#4,$C(a0)	; increase vertical speed
 		rts	
 
 ; End of function ObjectFall
@@ -16905,18 +16989,35 @@ JumpFallSonic:
 
 
 SpeedToPos:
-		move.l	8(a0),d2
-		move.l	$C(a0),d3
-		move.w	$10(a0),d0	; load horizontal speed
-		ext.l	d0
+		movem.w	$10(a0),d0/d2	; load horizontal speed
 		asl.l	#8,d0		; multiply speed by $100
-		add.l	d0,d2		; add to x-axis	position
-		move.w	$12(a0),d0	; load vertical	speed
-		ext.l	d0
-		asl.l	#8,d0		; multiply by $100
-		add.l	d0,d3		; add to y-axis	position
-		move.l	d2,8(a0)	; update x-axis	position
-		move.l	d3,$C(a0)	; update y-axis	position
+		asl.l	#8,d2		; multiply speed by $100
+
+		tst.b	($FFFFFFF8).w
+		bpl.s	@60hz
+		move.l	d0,d3
+		bpl.s	@xflip
+		neg.l	d3
+		lsr.l	#2,d3
+		sub.l	d3,d0
+		bra.s	@xcont
+@xflip:
+		lsr.l	#2,d3
+		add.l	d3,d0
+@xcont:
+		move.l	d2,d3
+		bpl.s	@yflip
+		neg.l	d3
+		lsr.l	#2,d3
+		sub.l	d3,d2
+		bra.s	@ycont
+@yflip:
+		lsr.l	#2,d3
+		add.l	d3,d2
+@ycont:
+@60hz:
+		add.l	d0,8(a0)	; update x-axis	position
+		add.l	d2,$C(a0)	; update y-axis	position
 		rts	
 ; End of function SpeedToPos
 
@@ -17922,8 +18023,7 @@ loc_DEA2:
 ; ===========================================================================
 
 Obj42_Speed:				; XREF: Obj42_Index2
-		bsr.w	SpeedToPos
-		rts	
+		bra.w	SpeedToPos
 ; ===========================================================================
 
 Obj42_Type01:				; XREF: Obj42_Index2
@@ -18577,8 +18677,8 @@ loc_E8A8:
 ; ===========================================================================
 
 Obj46_Type03:				; XREF: Obj46_TypeIndex
-		bsr.w	SpeedToPos
-		addi.w	#$18,$12(a0)	; increase falling speed
+		moveq	#$18,d1
+		bsr.w	ObjectFallCustom
 		bsr.w	ObjHitFloor
 		tst.w	d1		; has the block	hit the	floor?
 		bpl.w	locret_E8EE	; if not, branch
@@ -20087,8 +20187,7 @@ loc_FD98:
 		move.b	d2,$1A(a1)
 
 Obj51_Display:				; XREF: Obj51_Index
-		bsr.w	SpeedToPos
-		addi.w	#$38,$12(a0)
+		bsr.w	ObjectFall
 		bsr.w	DisplaySprite
 		tst.b	1(a0)
 		bpl.w	DeleteObject
@@ -20266,8 +20365,8 @@ Obj52_05_End:
 ; ===========================================================================
 
 Obj52_Type06:				; XREF: Obj52_TypeIndex
-		bsr.w	SpeedToPos
-		addi.w	#$18,$12(a0)	; make the platform fall
+		moveq	#$18,d1
+		bsr.w	ObjectFallCustom
 		bsr.w	ObjHitFloor
 		tst.w	d1		; has platform hit the floor?
 		bpl.w	locret_FFA0	; if not, branch
@@ -20432,8 +20531,8 @@ Obj55_NoDrop:
 ; ===========================================================================
 
 Obj55_DropFly:				; XREF: Obj55_Index2
-		bsr.w	SpeedToPos
-		addi.w	#$18,$12(a0)	; make basaran fall
+		moveq	#$18,d1
+		bsr.w	ObjectFallCustom
 		move.w	#$80,d2
 		bsr.w	Obj55_ChkSonic
 		move.w	$36(a0),d0
@@ -20484,8 +20583,8 @@ locret_101C6:
 ; ===========================================================================
 
 Obj55_FlyUp:				; XREF: Obj55_Index2
-		bsr.w	SpeedToPos
-		subi.w	#$18,$12(a0)	; make basaran fly upwards
+		moveq	#-$18,d1
+		jsr	ObjectFallCustom
 		bsr.w	ObjHitCeiling
 		tst.w	d1		; has basaran hit the ceiling?
 		bpl.s	locret_101F4	; if not, branch
@@ -20512,13 +20611,7 @@ Obj55_ChkSonic:				; XREF: Obj55_ChkDrop
 
 loc_10214:
 		cmp.w	d2,d0
-		rts	
-; ===========================================================================
-		bsr.w	SpeedToPos
-		bsr.w	DisplaySprite
-		tst.b	1(a0)
-		bpl.w	DeleteObject
-		rts	
+		rts
 ; ===========================================================================
 Ani_obj55:
 	include "_anim\obj55.asm"
@@ -22681,8 +22774,7 @@ Obj5F_Wait:				; XREF: Obj5F_Index2
 		bsr.w	Obj5F_ChkSonic
 		subq.w	#1,$30(a0)	; subtract 1 from time delay
 		bmi.s	loc_11AA8
-		bsr.w	SpeedToPos
-		rts	
+		bra.w	SpeedToPos
 ; ===========================================================================
 
 loc_11AA8:
@@ -22758,8 +22850,7 @@ Obj5F_Display:				; XREF: Obj5F_Index
 loc_11B70:
 		subq.w	#1,$30(a0)
 		bmi.s	loc_11B7C
-		bsr.w	SpeedToPos
-		rts	
+		bra.w	SpeedToPos
 ; ===========================================================================
 
 loc_11B7C:
@@ -22793,8 +22884,8 @@ loc_11BCE:
 		move.b	#6,$24(a0)
 
 Obj5F_End:				; XREF: Obj5F_Index
-		bsr.w	SpeedToPos
-		addi.w	#$18,$12(a0)
+		moveq	#$18,d1
+		bsr.w	ObjectFallCustom
 		lea	(Ani_obj5F).l,a1
 		bsr.w	AnimateSprite
 		tst.b	1(a0)
@@ -23002,9 +23093,9 @@ Obj60_Circle:				; XREF: Obj60_MoveOrb
 ; ===========================================================================
 
 Obj60_ChkDel2:				; XREF: Obj60_Index
-		bsr.w	SpeedToPos
 		tst.b	1(a0)
 		bpl.w	DeleteObject
+		bsr.w	SpeedToPos
 		bra.w	DisplaySprite
 ; ===========================================================================
 Ani_obj60:
@@ -23179,8 +23270,8 @@ loc_120D6:
 ; ===========================================================================
 
 Obj61_Type02:				; XREF: Obj61_TypeIndex
-		bsr.w	SpeedToPos
-		addq.w	#8,$12(a0)	; make object fall
+		moveq	#8,d1
+		jsr	ObjectFallCustom
 		bsr.w	ObjHitFloor
 		tst.w	d1
 		bpl.w	locret_12106
@@ -23194,8 +23285,8 @@ locret_12106:
 ; ===========================================================================
 
 Obj61_Type04:				; XREF: Obj61_TypeIndex
-		bsr.w	SpeedToPos
-		subq.w	#8,$12(a0)	; make object rise
+		moveq	#-8,d1
+		jsr	ObjectFallCustom
 		bsr.w	ObjHitCeiling
 		tst.w	d1
 		bpl.w	locret_12126
@@ -25488,13 +25579,13 @@ loc_137E4:
 ; ---------------------------------------------------------------------------
 
 Obj01_Hurt:				; XREF: Obj01_Index
-		jsr	SpeedToPos
-		addi.w	#$30,$12(a0)
+		moveq	#$30,d1
 		btst	#6,$22(a0)
 		beq.s	loc_1380C
-		subi.w	#$20,$12(a0)
-
+		moveq	#$20,d1
 loc_1380C:
+		jsr	ObjectFallCustom
+
 		bsr.w	Sonic_HurtStop
 		bsr.w	Sonic_LevelBound
 		bsr.w	Sonic_RecordPos
@@ -26160,8 +26251,8 @@ loc_13F86:
 loc_13F94:
 		move.l	a0,-(sp)
 		lea	($FFFFD000).w,a0
-		jsr	SpeedToPos
-		addi.w	#$10,$12(a0)
+		moveq	#$10,d1
+		jsr	ObjectFallCustom
 		movea.l	(sp)+,a0
 		bra.s	loc_13FAC
 ; ===========================================================================
@@ -33957,9 +34048,10 @@ loc_19E90:				; XREF: off_19E80
 		tst.l	($FFFFF680).w
 		bne.s	loc_19EA2
 		cmpi.w	#$2450,($FFFFF700).w
-		bcs.s	loc_19EA2
+		blo.s	loc_19EA2
 		addq.b	#2,$34(a0)
-
+		move.b	#$81,d0
+		jsr	PlaySound_Special
 loc_19EA2:
 		addq.l	#1,($FFFFF636).w
 		rts	
@@ -34110,9 +34202,9 @@ loc_1A020:
 loc_1A02A:				; XREF: off_19E80
 		move.b	#$30,$17(a0)
 		bset	#0,$22(a0)
-		jsr	SpeedToPos
+		moveq	#$10,d1
+		jsr	ObjectFallCustom
 		move.b	#6,$1A(a0)
-		addi.w	#$10,$12(a0)
 		cmpi.w	#$59C,$C(a0)
 		bcs.s	loc_1A070
 		move.w	#$59C,$C(a0)
@@ -34129,8 +34221,8 @@ loc_1A070:
 loc_1A074:				; XREF: off_19E80
 		bset	#0,$22(a0)
 		move.b	#4,$1C(a0)
-		jsr	SpeedToPos
-		addi.w	#$10,$12(a0)
+		moveq	#$10,d1
+		jsr	ObjectFallCustom
 		cmpi.w	#$5A3,$C(a0)
 		bcs.s	loc_1A09A
 		move.w	#-$40,$12(a0)
@@ -39207,8 +39299,8 @@ SoundTypes:	dc.b $90, $90, $90, $90, $90, $90, $90,	$90, $90, $90, $90, $90, $90
 
 sub_71B4C:				; XREF: loc_B10; PalToCRAM
 ; every 5th frame, update a second time (same technique as most SMPS versions, but more scuffed)
-		btst	#6,($FFFFFFF8).w	; if in an NTSC region(!), branch ; TODO: use the VDP pal value instead
-		beq.s	@main
+		tst.b	($FFFFFFF8).w		; if in 60hz mode, branch
+		bpl.s	@main
 		moveq	#0,d0			; PAL song timer "optimization"
 		move.w	($FFFFFE0E).w,d0	; TODO: proper timer, this is prone to overflow and cause slight variations
 		divu.w	#5,d0			;       also divisions are generally slow
