@@ -19713,7 +19713,7 @@ loc_F9FE:
 
 loc_FA12:
 		move.w	d4,d2
-		;bsr.w	MvSonicOnPtfm Causes an error in building (Come back to this)
+		jsr	MvSonicOnPtfm 
 		moveq	#0,d4
 		rts	
 ; ===========================================================================
