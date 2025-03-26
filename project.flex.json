@@ -1,8 +1,32 @@
 {
     "Flex": 2,
     "name": "",
+<<<<<<< Updated upstream
     "node": "db436497-8172-4473-ab1a-116ba31d78a9",
+=======
+    "node": "69dae7d7-6fb5-4d39-a4e6-4009f9a259c5",
+>>>>>>> Stashed changes
     "objects": [
+        {
+            "uuid": "69dae7d7-6fb5-4d39-a4e6-4009f9a259c5",
+            "format": "Sonic 1.js",
+            "name": "HUD",
+            "palettes": [],
+            "art": {
+                "path": "artnem\\hud.bin",
+                "compression": "Nemesis",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "_maps\\obj21.asm",
+                "label": ""
+            },
+            "dplcs": {
+                "enabled": false,
+                "path": "",
+                "label": ""
+            }
+        },
         {
             "format": "Sonic 1.js",
             "name": "ballhog",
