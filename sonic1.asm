@@ -3137,7 +3137,7 @@ Sega_WaitEnd:
 		beq.s	Sega_WaitEnd	; if not, branch
 
 Sega_GotoTitle:
-		move.b	#$24,($FFFFF600).w ; go to title screen
+		move.b	#$4,($FFFFF600).w ; go to title screen
 		rts	
 ; ===========================================================================
 
