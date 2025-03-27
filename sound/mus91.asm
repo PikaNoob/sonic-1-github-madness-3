@@ -16,8 +16,8 @@ smpsHeaderStartSong = 1
 ;	this is just a rip of the track
 ;	ripper, 	part,		joke
 ;	undecided, 	intro,		undecided
-;	coninight, 	ghz,		luka luka night fever
-;	coninight, 	lz,		the cleveland show (callback)
+;	coninight, 	ghz,		luka luka night fever -FM1 done
+;	coninight, 	lz,		the cleveland show (callback) - COMPLETE!
 ;	undecided, 	mz,		undecided
 ;	carlos, 	slz,		meltdown
 ;	undecided, 	sbz,		undecided
@@ -36,22 +36,43 @@ Mus91_Credits_FM1:
 	smpsNoteFill        $00
 	smpsSetvoice        $03
 	smpsModSet          $0D, $01, $07, $04
-	dc.b	nRst, $30
-	smpsCall            Mus91_Credits_Call12
-	dc.b	nE6, nD6, $18, nC6, $0C, nB5, $18, nC6, $0C, nB5, $18, nG5
-	dc.b	$54
-	smpsCall            Mus91_Credits_Call12
-	dc.b	$0C, nF5, $18, nA5, $0C, nG5, $18, nA5, $0C, nG5, $18, nC5
-	dc.b	$24, nRst, $60, nRst, nRst, nRst
+; conis turn
+	smpsCall            Mus91_Credits_Call12	;ruka ruka
+	dc.b	nG5, $0C, nAb5, nBb5, $18, nAb5, $30	;★ naito fiibaa
+
+	smpsCall            Mus91_Credits_Call12	;watashi wa 
+	dc.b	nEb6, $0C, nCs6, nC6, nCs6		;koko ni
+	dc.b	nC6, nC6, nBb5, nAb5, nRst		;iru kara
+
+	dc.b	nF5, nF5, nG5, nAb5, nBb5, $18		;sukoshi de mo
+	dc.b	nG5, nAb5, $0C, nBb5, $18, nAb5, nRst	;shisen o
+
+	dc.b	nF5, nG5, nAb5, nBb5, $0C		;sorashicha
+	smpsCall           Mus91_Credits_DameDameYo	;dame dame yo
+	dc.b	nRst, $60, $60, $60, $18
+	smpsCall           Mus91_Credits_DameDameYo	;dame dame yo
+;	dc.b	nRst, $30
+; conis turn again
 	smpsModOff
 	smpsNop             $01
-	smpsSetTempoMod     $0F
 	smpsSetvoice        $05
 	smpsAlterVol        $02
-	dc.b	nRst, $06, nE5, nG5, nE5, nG5, $09, nA5, nB5, $0C, nC6, $06
-	dc.b	nB5, nA5, nG5, $09, nA5, $06, nG5, $03, nE5, $06, nRst, $06
-	dc.b	nA5, nC6, nA5, nC6, $09, nD6, nE6, $0C, nF6, $06, nE6, nD6
-	dc.b	nC6, $0C, nA5, $0C, nD6, $04, nC6, nD6, nC6, $24
+	dc.b	nE5, $0C, nG5, nE5			;My name is
+;cut for tempo change
+	smpsSetTempoMod     $0F
+;perfect now continue
+	dc.b	nG5, $09, nG5, nA5, $0C			;Cleveland Brown
+
+	dc.b	nE5, $06, nE5, $03, nD5, nC5, $06	;and I am
+	dc.b	nC5, $09, nC5, nA4, $06, nRst		;proud to be
+
+	dc.b	nE6, $06, nD6, nB5			; and silence
+	dc.b	nD6, $09, nC6, nA5, $0C
+
+	dc.b	nB5, $06, nA5, $03, nG5, nA5, $06
+	dc.b	nA5, $09, nA5, nB5, $06, nRst, $0C
+
+	dc.b	nC6, nD6, $04, nC6, nD6, nC6, $24	;welcome back to labyrinth zone from sonic 1
 	smpsAlterPitch      $F4
 	smpsAlterVol        $09
 	smpsSetvoice        $08
@@ -99,8 +120,14 @@ Mus91_Credits_FM1:
 	smpsStop
 
 Mus91_Credits_Call12:
-	dc.b	nC6, $0C, nA5, $18, nC6, $0C, nB5, $18, nC6, $0C, nB5, $18
-	dc.b	nG5, $48, nA5, $0C
+	;whats the name of the pink haired vocaloid just askin'
+	;and twice as well
+	;them:
+	dc.b	nF5, $18, nC6, nF5, nC6
+	smpsReturn
+
+Mus91_Credits_DameDameYo:
+	dc.b	nG5, $18, nAb5, $0C, nG5, nAb5, nF5	
 	smpsReturn
 
 Mus91_Credits_Call07:
@@ -631,7 +658,7 @@ Mus91_Credits_Loop2A:
 	smpsNoteFill        $00
 	dc.b	nE5, $60, smpsNoAttack, $3C
 	smpsModOff
-	smpsPSGvoice        fTone_09
+	smpsPSGvoice        fTone_08 ; changed from 9 to 8 for cleveland rip
 	smpsPSGAlterVol     $01
 
 Mus91_Credits_Loop2B:
@@ -688,7 +715,6 @@ Mus91_Credits_PSG2:
 	smpsPSGvoice        fTone_01
 	dc.b	nRst, $16, nE6, $06, nRst, $1E, nE6, $0C, nRst, $18, nRst, $18
 	dc.b	nD6, $06, nRst, $1E, nD6, $0C, nRst, $18
-
 Mus91_Credits_Loop24:
 	dc.b	nRst, $18, nE6, $06, nRst, $1E, nE6, $0C, nRst, $18, nRst, $18
 	dc.b	nD6, $06, nRst, $1E, nD6, $0C, nRst, $18
@@ -702,7 +728,7 @@ Mus91_Credits_Loop25:
 	dc.b	nC7, $0C, nB6, nA6, nG6
 	smpsLoop            $00, $08, Mus91_Credits_Loop25
 	smpsNoteFill        $00
-	smpsPSGvoice        fTone_09
+	smpsPSGvoice        fTone_08 ; changed from 9 to 8 for cleveland rip
 	smpsPSGAlterVol     $01
 
 Mus91_Credits_Loop26:
@@ -738,11 +764,12 @@ Mus91_Credits_Loop29:
 	smpsLoop            $00, $04, Mus91_Credits_Loop29
 	smpsLoop            $01, $02, Mus91_Credits_Loop27
 	dc.b	nRst, $60, nRst, nRst, nRst, nRst, nRst
-	; These rests are unnecessary, and cause the following notes to play way too late.
-	; Delete these three notes to fix this.
-	dc.b	nRst, nRst, nRst
-	; This erroneous FM-only command causes the following notes to be inaudible.
-	smpsAlterVol        $0C
+;	; These rests are unnecessary, and cause the following notes to play way too late.
+;	; Delete these three notes to fix this.
+;	dc.b	nRst, nRst, nRst
+;	; This erroneous FM-only command causes the following notes to be inaudible.
+;	smpsAlterVol        $0C
+; there we go i fixed it - coni
 	smpsAlterNote       $02
 	smpsPSGAlterVol     $02
 	dc.b	nRst, $0C, nE6, $06, nRst, nB6, nE6, $06, nRst, $0C, nE6, $06

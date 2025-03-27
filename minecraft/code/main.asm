@@ -18,7 +18,7 @@ MC_Init:
 		move.w	#$8400+(VRAM_PLANE_B>>13),(a6)		; set plane B address
 		move.w	#$8500+(VRAM_SPR_LIST>>9),(a6)		; set sprite table address
 		
-		move.w	#$8B00,(a6)				; EXT-INT off, VScroll by screen, HScroll by screen
+		move.w	#$8B03,(a6)				; EXT-INT off, VScroll by screen, HScroll by line
 		move.w	#$8D00+(VRAM_HSCROLL>>10),(a6)		; set HScroll table address
 		move.w	#$8F02,(a6)				; set auto-incremement size to word
 		move.w	#$9001,(a6)				; set plane size 64x32
@@ -39,14 +39,18 @@ MC_Init:
 		move.w	#$8174,(a6)				; enable display
 		intsOn						; enable CPU interrupts
 
+		clr.w	(cloudFrameCnt).w		
+
 .gameLoop:
 		st.b	(vblankWait).w
+		bsr.w	MC_UpdateScrollBuffer
 		bsr.s	MC_RenderBlocks
 
 .spin:
 		tst.b	(vblankWait).w
 		beq.s	.gameLoop
 		bra.s	.spin
+; ---------------------------------------------------------------------------
 
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -78,7 +82,7 @@ MC_RenderBlocks:
 
 		move.w	#$8000,d4			; Set the priority bit
 		add.w	d3,d3				; Turn tile ID into index
-		or.w	MC_BlockProperties(pc,d3.w),d4	; Combine with the tile render properties
+		or.w	.renderProperties(pc,d3.w),d4	; Combine with the tile render properties
 		move.w	d4,(a2)+			; Load the corresponding tile to the plane A buffer
 		
 		addq.b	#1,d2			; Increment the index with wrap-around within the current row
@@ -86,9 +90,9 @@ MC_RenderBlocks:
 		bra.s	.endRenderRow		; Branch
 
 .renderWall:
-		move.b	(a1,d2.w),d3		; Get the block ID at the current wall layout coordinates
-		add.w	d3,d3				; Turn tile ID into index
-		move.w	MC_BlockProperties(pc,d3.w),(a2)+	; Load the corresponding tile to the plane A buffer
+		move.b	(a1,d2.w),d3				; Get the block ID at the current wall layout coordinates
+		add.w	d3,d3					; Turn tile ID into index
+		move.w	.renderProperties(pc,d3.w),(a2)+	; Load the corresponding tile to the plane A buffer
 
 		addq.b	#1,d2			; Increment the index with wrap-around within the current row
 		dbf	d7,.renderRow		; Loop until the entire visible row is rendered
@@ -113,7 +117,7 @@ block_entry	macro	tileID, palLine, priority
 	endif
 		endm
 
-MC_BlockProperties:
+.renderProperties:
 	block_entry	$00,0,1			; 00 Air
 	block_entry	$01,1			; 01 Stone
 	block_entry	$02,1			; 02 Dirt
@@ -162,6 +166,65 @@ MC_BlockProperties:
 	block_entry	$1E,0			; 2C Indigo Wool
 	block_entry	$1E,2			; 2D Violet Wool
 	block_entry	$20,1			; 2E Cacao Wool
+; ---------------------------------------------------------------------------
+
+; ===========================================================================
+; ---------------------------------------------------------------------------
+; Update Foreground and Background Scrolling
+; ---------------------------------------------------------------------------
+CLOUD_SCROLL_RATE	equ	1280
+
+MC_UpdateScrollBuffer:
+		lea	(scrollBuffer).w,a0
+		moveq	#20-1,d7
+		move.w	(camXPosFG).w,d0			; update scrolling
+		andi.w	#7,d0					; ^
+		neg.w	d0					; ^
+		swap	d0					; ^
+		clr.w	d0
+
+.blankBGSegment:
+		move.l	d0,(a0)+
+		dbf	d7,.blankBGSegment
+
+		lea	(cloudSkew).w,a1
+		moveq	#0,d1
+		moveq	#36-1,d7
+
+		subq.w	#1,(cloudFrameCnt).w
+		bpl.s	.cloudBGSegment
+	
+		move.w	#CLOUD_SCROLL_RATE-1,(cloudFrameCnt).w
+
+.resetClouds:
+		move.l	d0,(a0)+
+		clr.l	(a1)+
+		dbf	d7,.resetClouds
+		bra.s	.return
+
+.cloudBGSegment:
+		move.l	(a1),d2
+		add.l	.cloudSkewFactor(pc,d1.w),d2
+		move.l	d2,(a1)+
+
+		swap	d2
+		move.w	d2,d0
+		neg.w	d0
+		move.l	d0,(a0)+
+		
+		addq.w	#4,d1
+		dbf	d7,.cloudBGSegment
+
+.return:
+		rts
+; ---------------------------------------------------------------------------
+.cloudSkewFactor:
+	.i: = 128
+
+	rept	36
+	dc.l	(.i<<16)/CLOUD_SCROLL_RATE
+	.i: = .i-2
+	endr
 
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -219,6 +282,7 @@ MC_LoadBackground:
 		move.w	d0,-4(a6)
 		dbf	d7,.loop
 		rts						; return
+; ---------------------------------------------------------------------------
 
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -241,6 +305,7 @@ MC_LoadWorld:
 		move.l	(a0)+,(a1)+
 		dbf	d7,.loadBlocks
 		rts						; return
+; ---------------------------------------------------------------------------
 
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -248,14 +313,15 @@ MC_LoadWorld:
 ; ---------------------------------------------------------------------------
 MC_VInt:
 	dma68k	planeBuffer,VRAM_PLANE_A,PLANE_BUFF_SIZE,VRAM	; transfer the entire FG tileplane buffer
+	dma68k	scrollBuffer,VRAM_HSCROLL,224*4,VRAM		; transfer the horizontal scroll data
 
-		move.w	(camXPosFG).w,d0			; update scrolling
-		andi.w	#7,d0					; ^
-		neg.w	d0					; ^
-	vdpCmd	move.l, VRAM_HSCROLL, VRAM, WRITE, (a6)		; ^
-		move.w	d0,-4(a6)				; ^
+;		move.w	(camXPosFG).w,d0			; update scrolling
+;		andi.w	#7,d0					; ^
+;		neg.w	d0					; ^
+;	vdpCmd	move.l, VRAM_HSCROLL, VRAM, WRITE, (a6)		; ^
+;		move.w	d0,-4(a6)				; ^
 
-		addq.w	#1,(camXPosFG).w			
+;		addq.w	#1,(camXPosFG).w			
 		sf.b	(vblankWait).w
 		rte						; return
 ; ---------------------------------------------------------------------------
@@ -297,27 +363,27 @@ MC_TestMap:
 	dcb.b	256,$00	; Row 0C
 	dcb.b	256,$00	; Row 0E
 	
-	dcb.b	32,$01	; Row 0F
-	dcb.b	32,$02	; Row 0F
-	dcb.b	32,$03	; Row 0F
-	dcb.b	32,$04	; Row 0F
-	dcb.b	32,$05	; Row 0F
-	dcb.b	32,$06	; Row 0F
-	dcb.b	32,$07	; Row 0F
-	dcb.b	32,$08	; Row 0F
+;	dcb.b	32,$01	; Row 0F
+;	dcb.b	32,$02	; Row 0F
+;	dcb.b	32,$03	; Row 0F
+;	dcb.b	32,$04	; Row 0F
+;	dcb.b	32,$05	; Row 0F
+;	dcb.b	32,$06	; Row 0F
+;	dcb.b	32,$07	; Row 0F
+;	dcb.b	32,$08	; Row 0F
 
-	dcb.b	256,$03	; Row 10
-	dcb.b	256,$02	; Row 11
-	dcb.b	256,$02	; Row 12
-	dcb.b	256,$02	; Row 13
-	dcb.b	256,$01	; Row 14
-	dcb.b	256,$01	; Row 15
-	dcb.b	256,$01	; Row 16
-	dcb.b	256,$01	; Row 17
-	dcb.b	256,$01	; Row 19
-	dcb.b	256,$01	; Row 1A
-	dcb.b	256,$01	; Row 1B
-	dcb.b	256,$01	; Row 1C
-	dcb.b	256,$01	; Row 1E
-	dcb.b	256,$01	; Row 1F
+;	dcb.b	256,$03	; Row 10
+;	dcb.b	256,$02	; Row 11
+;	dcb.b	256,$02	; Row 12
+;	dcb.b	256,$02	; Row 13
+;	dcb.b	256,$01	; Row 14
+;	dcb.b	256,$01	; Row 15
+;	dcb.b	256,$01	; Row 16
+;	dcb.b	256,$01	; Row 17
+;	dcb.b	256,$01	; Row 19
+;	dcb.b	256,$01	; Row 1A
+;	dcb.b	256,$01	; Row 1B
+;	dcb.b	256,$01	; Row 1C
+;	dcb.b	256,$01	; Row 1E
+;	dcb.b	256,$01	; Row 1F
 MC_TestMap_End:
