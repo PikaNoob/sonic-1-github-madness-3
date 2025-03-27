@@ -25148,7 +25148,7 @@ loc_13490:
 
 Sonic_JumpHeight:			; XREF: Obj01_MdJump; Obj01_MdJump2
 		tst.b	$3C(a0)
-		beq.s	loc_134C4
+		beq.w	loc_134C4
 		move.w	#-$400,d1
 		btst	#6,$22(a0)
 		beq.s	loc_134AE
@@ -25156,11 +25156,53 @@ Sonic_JumpHeight:			; XREF: Obj01_MdJump; Obj01_MdJump2
 
 loc_134AE:
 		cmp.w	$12(a0),d1
-		ble.s	locret_134C2
+		ble.s	locret_134C22
 		move.b	($FFFFF602).w,d0
 		andi.b	#$70,d0		; is A,	B or C pressed?
 		bne.s	locret_134C2	; if yes, branch
 		move.w	d1,$12(a0)
+locret_134C22:
+;VARIBLES TO NOT MESS UP BUILDING
+v_player:		equ $FFFFD000	; object variable space for Conic ($40 bytes)
+v_conspeedmax:		equ $FFFFF760	; Conic's maximum speed (2 bytes)
+v_conspeedacc:		equ $FFFFF762	; Conic's acceleration (2 bytes)
+v_conspeeddec:		equ $FFFFF764	; Conic's deceleration (2 bytes)
+f_playerctrl:		equ $FFFFF7C8	; Player control override flags (object ineraction, control enable)
+f_timecount:		equ $FFFFFE1E	; time counter update flag
+v_rings:		equ $FFFFFE20	; rings (2 bytes)
+v_invinc:		equ $FFFFFE2D	; invinciblity status (00 = no; 01 = yes)
+v_emeralds:		equ $FFFFFE57	; number of chaos emeralds
+f_superconic:		equ $FFFFFF48	; we are so super!
+v_superpal:		equ $FFFFFF49
+v_supertime:		equ $FFFFFF4A
+v_superpaltime:		equ $FFFFFF4C
+v_superpalframe:	equ $FFFFFF4E
+invtime:	equ $32	; time left for invincibility
+;THIS CHECKS SUICIDE BARNEY
+;ignore that its conic lmao
+	tst.b	(f_superconic).w	; is Conic already Super?
+	bne.s	locret_134C2	; if yes, branch
+	cmpi.b	#6,(v_emeralds).w	; does Conic have exactly 6 emeralds?
+	bne.s	locret_134C2	; if not, branch
+	cmpi.w	#50,(v_rings).w		; does Conic have at least 50 rings?
+	blo.s	locret_134C2	; if not, branch
+	tst.b	(f_timecount).w	; has Conic reached the end of the act?
+	beq.s	locret_134C2	; if yes, branch
+	move.b	#1,(v_superpal).w
+	move.b	#$F,(v_superpaltime).w
+	move.b	#1,(f_superconic).w
+	move.b	#$81,(f_playerctrl).w	; lock controls
+	move.b	#$12,$1C(a0)	; use transformation animation
+	move.w	#$A00,(v_conspeedmax).w
+	move.w	#$30,(v_conspeedacc).w
+	move.w	#$100,(v_conspeeddec).w
+; change them to your liking
+	clr.b	(v_player+invtime).w
+	bset	#$1,(v_invinc).w	; make Conic invincible
+;	move.w	#bgm_SuperConic,d0
+;	jsr	(PlaySound).l	; load the Super Conic song and return
+;	move.w	#sfx_Transform,d0
+;	jsr	(PlaySound_SFX).l	; Play transformation sound effect.
 
 locret_134C2:
 		rts	
