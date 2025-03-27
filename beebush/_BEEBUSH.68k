@@ -87,6 +87,10 @@ objSlot1F:      rs.b    OBJSZ
 objsAlloc:              rs.b    OBJSZ*96
 OBJECTRAME:
 
+; ---------------------------------------------------------------------------
+; Start of main "beebush" program
+; ---------------------------------------------------------------------------
+
 GM_BEEBUSH:  
       	move.b  submode.w,d0
         andi.w  #$1C,d0
@@ -280,7 +284,7 @@ BEEBUSH_INITMAIN:
         move.l  d0,(a1)+
         dbf     d1,.ClearObjects
         move.b  #BBUSH_OBJNO_PLAYER,objSlot00.w
-        move.l  #$12345678,distance
+        move.l  #$100,distance
         move.b  #SMNO_BEEBUSH_MAIN,submode.w ; Move to next mode
         rts
 
