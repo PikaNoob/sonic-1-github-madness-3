@@ -11,12 +11,17 @@
 		lea	@eni(pc),a0		; load mappings for Gomer credits
 		moveq	#0,d0
 		jsr	EniDec
-		lea	($FF0000).l,a1
+		lea	($FF0000).l,a1		; FG load
 		move.l	#$40000003,d0
-		moveq	#$27,d1
-		moveq	#$1B,d2
+		moveq	#40-1,d1
+		moveq	#30-1,d2
 		jsr	ShowVDPGraphics
-		lea	@pal(pc),a0
+		lea	($FF0000).l,a1		; BG load
+		move.l	#$60000003,d0
+		moveq	#40-1,d1
+		moveq	#30-1,d2
+		jsr	ShowVDPGraphics
+		lea	@pal(pc),a0		; calars
 		lea	($FFFFFB80).w,a1
 		moveq	#$1F,d0
 @palset:
@@ -36,11 +41,15 @@
 
 		move.w	($FFFFF60C).w,d0
 		ori.b	#$40,d0
-		bclr	#3,d0
+		btst	#3,d0
+		bne.s	@v30
+		move.w	#8,($FFFFF616).w	; adjusts planes for v28
+		move.w	#8,($FFFFF618).w
+@v30:
 		move.w	d0,($C00004).l
 		move.b	#2,($FFFFF62A).w	; SMPS needs a frame to init
 		jsr	DelayProgram
-		move.w	#$86,d0			; play title screen music
+		move.w	#$86,d0			; play music
 		jsr	PlaySound
 
 		jsr	Pal_FadeTo
