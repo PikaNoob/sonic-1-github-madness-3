@@ -60,7 +60,7 @@ Vectors:	dc.l 'P'<<24|$FFFE00,		'O'<<24|EntryPoint,	'Y'<<24|BusError,	'S'<<24|Ad
 		dc.l ' '<<24|PalToCRAM,		PalToCRAM,		' '<<24|vBlankRoutine,	vBlankRoutine
 		dc.b 'What is a hex editor? A miserable little detector of secrets!   But enough talk,fuck off you!'
 		dcb.b $100-*,' '
-Console:	dc.b ' SEGAAAAAAAAAAAA' ; NOTE: " SEGA" is valid for the TMSS, but not for some other stuff, namely the game genie
+Console:	dc.b 'SEGAAAAAAAAAAAAA'
 Date:		dc.b 'AAAAAAAAAAAAAAAA'
 Title_Local:	dc.b 'If you can see this, your emulator is homoerotic' ; Domestic name
 		dcb.b $150-*,' '
