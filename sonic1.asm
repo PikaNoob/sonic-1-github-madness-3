@@ -2055,10 +2055,15 @@ loc_1938:				; XREF: loc_1928
 PalCycle_Load:				; XREF: Demo; Level_MainLoop; End_MainLoop
 		moveq	#0,d2
 		moveq	#0,d0
+		tst.b	($FFFFFFF9).w	; GMZ: Is truth nuke flag set?
+		bne.s	PalCycle_Stop	; GMZ: If yes, branch
 		move.b	($FFFFFE10).w,d0 ; get level number
 		add.w	d0,d0		; multiply by 2
 		move.w	PalCycle(pc,d0.w),d0 ; load animated pallets offset index into d0
 		jmp	PalCycle(pc,d0.w) ; jump to PalCycle + offset index
+
+PalCycle_Stop:
+		rts
 ; End of function PalCycle_Load
 
 ; ===========================================================================
@@ -4280,6 +4285,7 @@ loc_39E8:
 		move.w	d0,($FFFFFE08).w
 		move.w	d0,($FFFFFE02).w
 		move.w	d0,($FFFFFE04).w
+		move.b	d0,($FFFFFFF9).w	; GMZ: Clear truth nuke flag
 		bsr.w	OscillateNumInit
 		move.b	#1,($FFFFFE1F).w ; update score	counter
 		move.b	#1,($FFFFFE1D).w ; update rings	counter
@@ -7114,6 +7120,11 @@ loc_628E:
 		move.w	($FFFFF718).w,($FFFFF620).w
 		move.w	($FFFFF71C).w,($FFFFF61E).w
 		moveq	#0,d0
+		tst.b	($FFFFFFF9).w	; GMZ
+		beq.s	GetDeformRoutine	; GMZ
+		jmp	Deform_LZ	; GMZ
+
+GetDeformRoutine:	; GMZ
 		move.b	($FFFFFE10).w,d0
 		add.w	d0,d0
 		move.w	Deform_Index(pc,d0.w),d0
@@ -24975,13 +24986,18 @@ loc_13336:
 
 Boundary_Bottom:
 		cmpi.w	#$501,($FFFFFE10).w ; is level SBZ2 ?
-		bne.w	KillSonic	; if not, kill Sonic
+		; bne.w	KillSonic	; if not, kill Sonic
+		bne.w	CallKillSonic	; GMZ
 		cmpi.w	#$2000,($FFFFD008).w
-		bcs.w	KillSonic
+		; bcs.w	KillSonic
+		bcs.w	CallKillSonic	; GMZ
 		clr.b	($FFFFFE30).w	; clear	lamppost counter
 		move.w	#1,($FFFFFE02).w ; restart the level
 		move.w	#$103,($FFFFFE10).w ; set level	to SBZ3	(LZ4)
 		rts	
+
+CallKillSonic:
+		jmp	KillSonic	; GMZ
 ; ===========================================================================
 
 Boundary_Sides:
@@ -35066,12 +35082,29 @@ Obj3E_Switched:				; XREF: Obj3E_Index
 		move.w	$30(a0),$C(a0)
 		tst.b	$25(a0)
 		beq.s	locret_1AC60
+		tst.b	($FFFFFE10).w	; GMZ: Are we in GHZ?
+		bne.s	Obj3E_SkipScrPosChk	; GMZ: If not, branch
+		cmpi.w	#$2AC0,($FFFFF700).w	; GMZ: Is screen X pos 2AC0?
+		bne.s	locret_1AC60	; GMZ: If not, branch
+
+Obj3E_SkipScrPosChk:
 		addq.w	#8,$C(a0)
 		move.b	#$A,$24(a0)
-		move.w	#$3C,$1E(a0)
+		; move.w	#$3C,$1E(a0)
+		tst.b	($FFFFFE10).w	; GMZ: Are we in GHZ?
+		bne.s	Obj3E_SetNormalTimer	; GMZ: If not, branch
+		move.w	#$100,$1E(a0)	; GMZ: Timer for "Sonic Got Through"
+		bra.s	Obj3E_LockCtrl	; GMZ
+
+Obj3E_SetNormalTimer:	; GMZ
+		move.w	#$3C,$1E(a0)	; GMZ
+
+Obj3E_LockCtrl:	; GMZ
 		clr.b	($FFFFFE1E).w	; stop time counter
 		clr.b	($FFFFF7AA).w	; lock screen position
 		move.b	#1,($FFFFF7CC).w ; lock	controls
+		tst.b	($FFFFFE10).w	; GMZ: Are we in GHZ?
+		beq.s	Obj3E_NoCtrl	; GMZ: If yes, branch
 		btst	#0,($FFFFFE2F).w	; GMZ: Have we got a reverse control power up?
 		beq.s	Obj3E_MoveLeft	; GMZ: If not, branch
 		move.w	#$400,($FFFFF602).w ; make Sonic run to	the right
@@ -35080,16 +35113,103 @@ Obj3E_Switched:				; XREF: Obj3E_Index
 Obj3E_MoveLeft:
 		move.w	#$800,($FFFFF602).w ; make Sonic run to	the right
 
+Obj3E_NoCtrl:	; GMZ
 Obj3E_ContinueCode:
 		clr.b	$25(a0)
+		tst.b	($FFFFFE10).w	; GMZ: Are we in GHZ?
+		beq.s	Obj3E_LoadTruthNuke	; GMZ: If yes, branch
 		bclr	#3,($FFFFD022).w
 		bset	#1,($FFFFD022).w
 
 locret_1AC60:
 		rts	
+
+Obj3E_LoadTruthNuke:	; GMZ
+		move.l	a0,a2	; GMZ
+		move.l	#$FFFFD000,a0
+		jsr	DeleteObject	; GMZ: Delete Sonic's object
+		move.l	#$FFFFD040,a0
+		jsr	DeleteObject	; GMZ: Delete the HUD object
+		move.l	a2,a0
+		move.w	#$E4,d0
+		jsr	PlaySound_Special	; GMZ: Stop music
+		move.w	#$CD,d0
+		jsr	PlaySound	; GMZ: Play a button sound
+		move.b	#1,($FFFFFFF9).w	; GMZ: Set truth nuke flag
+		movem.l	d0-d7/a0,-(sp)
+		jsr	Pal_MakeFlash
+		movem.l	(sp)+,d0-d7/a0
+		move.w	#$0000,($FFFFFBC0).w	; GMZ: Make BG color black
+		; lea	(Obj3E_TNScrPos).l,a1
+		; moveq	#0,d2
+		; move.b	($FFFFFE10).w,d2
+		; lsl.l	#3,d2
+		; move.l	(a1,d2.w),d0
+		; move.l	4(a1,d2.w),d1
+		; move.l	d0,($FFFFF700).w
+		; move.l	d1,($FFFFF704).w
+		; cmpi.b	#8,d2
+		; ; beq.s	Obj3E_IsLZ
+		; ; move.l	#$00000000,($FFFFF704).w	; GMZ: Set camera to the top of the stage
+		; ; bra.s	Obj3E_IsntLZ
+		; bne.s	Obj3E_IsntLZ
+
+; Obj3E_IsLZ:
+		; move.l	#$01600000,($FFFFD00C).w
+		; move.l	#$01000000,($FFFFF704).w
+		; move.l	#$20300000,($FFFFF700).w
+		; move.l	#0,($FFFFF646).w
+		; move.l	#0,($FFFFF64A).w
+		; move.b	#0,($FFFFF64E).w
+		move.l	#$2AC00000,($FFFFF700).w	; GMZ
+		move.l	#$00000000,($FFFFF704).w	; GMZ
+
+Obj3E_IsntLZ:
+		lea	($FF0000).l,a1
+		moveq	#0,d0
+		moveq	#0,d1
+		move.w	#$A40,d0
+
+Obj3E_ClearChunks:
+		move.l	d1,(a1)+
+		move.l	d1,(a1)+
+		move.l	d1,(a1)+
+		move.l	d1,(a1)+	; GMZ: Clear chunks to prevent garbage from appearing
+		dbf	d0,Obj3E_ClearChunks
+		lea	($FFA400).l,a1
+		move.w	#$100,d0
+
+Obj3E_ClearLayout:
+		move.l	d1,(a1)+	; GMZ: Clear layout to prevent garbage from appearing
+		dbf	d0,Obj3E_ClearLayout
+
+		jsr	ClearScreen
+		jsr	ClearPLC
+		moveq	#$23,d0
+		jsr	LoadPLC	; GMZ: Load art
+		move.l	a0,a2	; Save a0 to a2
+		lea	($FFB010).l,a1
+		lea	(Eni_TruthNuke).l,a0
+		move.w	#0,d0
+		jsr	EniDec
+		lea	($FFB010).l,a1
+		move.l	#$40000003,d0
+		moveq	#0,d1
+		move.w	($FFFFF700).w,d1
+		andi.w	#$1F8,d1
+		lsl.l	#8,d1
+		lsl.l	#6,d1
+		add.l	d1,d0	; GMZ: Get correct plane position
+		moveq	#$27,d1
+		moveq	#$1B,d2
+		jsr	ShowVDPGraphics	; GMZ: Load plane mappings
+		move.l	a2,a0	; GMZ: Recover a0 from a2
+		rts	
 ; ===========================================================================
 
 Obj3E_Explosion:			; XREF: Obj3E_Index
+		tst.b	($FFFFFE10).w	; GMZ: Are we in GHZ?
+		beq.s	Obj3E_TNExplosion	; GMZ: If yes, branch
 		moveq	#7,d0
 		and.b	($FFFFFE0F).w,d0
 		bne.s	loc_1ACA0
@@ -35111,6 +35231,21 @@ Obj3E_Explosion:			; XREF: Obj3E_Index
 loc_1ACA0:
 		subq.w	#1,$1E(a0)
 		beq.s	Obj3E_MakeAnimal
+		rts	
+
+Obj3E_TNExplosion:
+		move.w	#$C1,d0
+		jsr	PlaySound	; GMZ: Play multiple explosion sounds while we wait
+		subq.w	#1,$1E(a0)
+		beq.w	Obj3E_TNExplTimerOver	; GMZ: If timer is 0, branch
+		rts
+
+Obj3E_TNExplTimerOver:	; GMZ
+		movem.l	d0-d7/a0,-(sp)
+		jsr	Pal_MakeWhite	; GMZ: Fade out from black
+		movem.l	(sp)+,d0-d7/a0
+		move.w	#$80,$1E(a0)	; GMZ: Set new timer
+		move.b	#$E,$24(a0)	; GMZ: Set routine to 0E (End Act)
 		rts	
 ; ===========================================================================
 
@@ -35171,6 +35306,8 @@ locret_1AD48:
 ; ===========================================================================
 
 Obj3E_EndAct:				; XREF: Obj3E_Index
+		tst.b	($FFFFFE10).w	; GMZ: Are we in GHZ?
+		beq.s	Obj3E_TNEndAct	; GMZ: If yes, branch
 		moveq	#$3E,d0
 		moveq	#$28,d1
 		moveq	#$40,d2
@@ -35181,6 +35318,13 @@ Obj3E_FindObj28:
 		beq.s	Obj3E_Obj28Found ; if yes, branch
 		adda.w	d2,a1		; next object RAM
 		dbf	d0,Obj3E_FindObj28 ; repeat $3E	times
+
+		jsr	GotThroughAct
+		jmp	DeleteObject
+
+Obj3E_TNEndAct:
+		subq.w	#1,$1E(a0)	; GMZ: Wait some frames
+		bne.s	Obj3E_Obj28Found	; GMZ: If timer isn't 0, branch
 
 		jsr	GotThroughAct
 		jmp	DeleteObject
@@ -36956,6 +37100,8 @@ Obj10:					; XREF: Obj_Index
 
 
 AniArt_Load:				; XREF: Demo_Time; loc_F54
+		tst.b	($FFFFFFF9).w	; GMZ: Is truth nuke flag enabled?
+		bne.s	AniArt_Pause	; GMZ: If yes, branch
 		tst.w	($FFFFF63A).w	; is the game paused?
 		bne.s	AniArt_Pause	; if yes, branch
 		lea	($C00000).l,a6
@@ -38444,6 +38590,10 @@ Nem_JapNames:	incbin	artnem\japcreds.bin	; Japanese credits
 Eni_Idiot:	incbin	mapeni\idiot.bin	; Idiot (mappings)
 		even
 Nem_Idiot:	incbin	artnem\idiot.bin	; Idiot
+		even
+Eni_TruthNuke:	incbin	mapeni\truthnuke.bin	; GMZ
+		even
+Nem_TruthNuke:	incbin	artnem\truthnuke.bin	; GMZ: TRVTH NVKE
 		even
 ; ---------------------------------------------------------------------------
 ; Sprite mappings - Sonic
