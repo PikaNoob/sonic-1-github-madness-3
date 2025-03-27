@@ -393,7 +393,7 @@ loc_478:
 ShowErrorMsg:				; XREF: loc_43A; loc_462
 		lea	($C00000).l,a6
 		move.l	#$78000003,($C00004).l
-		lea	(Art_Text).l,a0
+		lea	(Art_ErrText).l,a0
 		move.w	#$27F,d1
 
 Error_LoadGfx:
@@ -478,7 +478,8 @@ ErrorWaitForC:				; XREF: loc_478
 ; End of function ErrorWaitForC
 
 ; ===========================================================================
-
+Art_ErrText:	incbin	artunc\menutext.bin	; text used in level select and debug mode
+Art_ErrText_end:		even
 Art_Text:	incbin	artunc\menutext.bin	; text used in level select and debug mode
 Art_Text_end:		even
 
