@@ -250,7 +250,8 @@ BEEBUSH_INTRO:
         move.b  #SMNO_BEEBUSH_STATIC,submode.w ; Move to next mode
         move.w  #60,genericTimer.w
         bsr.w   _beebushClrSprites
-
+        move.b  #$CB,d0
+        jsr    PlaySound_Special
 .NoChg: 
         rts 
 
