@@ -28465,9 +28465,9 @@
 00013648 117C 0002 0018             		move.b	#2,$18(a0)
 0001364E 117C 0018 0019             		move.b	#$18,$19(a0)
 00013654 117C 0004 0001             		move.b	#4,1(a0)
-0001365A 31FC 0600 F760             		move.w	#$600,($FFFFF760).w ; Sonic's top speed
-00013660 31FC 000C F762             		move.w	#$C,($FFFFF762).w ; Sonic's acceleration
-00013666 31FC 0080 F764             		move.w	#$80,($FFFFF764).w ; Sonic's deceleration
+0001365A 31FC 0FFF F760             		move.w	#$FFF,($FFFFF760).w ; Sonic's top speed
+00013660 31FC 000F F762             		move.w	#$F,($FFFFF762).w ; Sonic's acceleration
+00013666 31FC 0AAA F764             		move.w	#$AAA,($FFFFF764).w ; Sonic's deceleration
 0001366C                            
 0001366C                            Obj01_Control:				; XREF: Obj01_Index
 0001366C 4A78 FFFA                  		tst.w	($FFFFFFFA).w	; is debug cheat enabled?
