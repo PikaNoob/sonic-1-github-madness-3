@@ -24,11 +24,13 @@
 		dbf	d0,@palset
 
 		move.w	#$8C8B,($C00004).l	; S/H mode, single res interlace
-		move.b	#0,($FFFFF600).w	; make sure not to be assumed to be the title screen
+		move.b	($FFFFF600).w,d7	; save game mode
+		move.b	#0,($FFFFF600).w	; make sure it's not using title screen code
 		move.w	#$B,($FFFFFFF4).w	; set frame
 		lea	($FFFFD080).w,a0
 		move.b	#1,(a0)
 		jsr	Obj8A
+		move.b	d7,($FFFFF600).w	; restore game mode
 		or.w	#$E000,2(a0)		; S/H brightness, palette 4
 		jsr	BuildSprites
 

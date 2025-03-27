@@ -49,27 +49,25 @@ v_character = $FFFFFFE8
 StartOfRom:
 Vectors:	dc.l $FFFE00, EntryPoint, BusError, AddressError
 		dc.l IllegalInstr, ZeroDivide, ChkInstr, TrapvInstr
-		dc.l PrivilegeViol, Trace, Line1010Emu,	Line1111Emu
-		dc.l ErrorExcept, ErrorExcept, ErrorExcept, ErrorExcept
-		dc.l ErrorExcept, ErrorExcept, ErrorExcept, ErrorExcept
-		dc.l ErrorExcept, ErrorExcept, ErrorExcept, ErrorExcept
-		dc.l ErrorExcept, ErrorTrap, ErrorTrap,	ErrorTrap
-		dc.l PalToCRAM,	ErrorTrap, vBlankRoutine, ErrorTrap
-		dc.l ErrorTrap,	ErrorTrap, ErrorTrap, ErrorTrap
-		dc.l ErrorTrap,	ErrorTrap, ErrorTrap, ErrorTrap
-		dc.l ErrorTrap,	ErrorTrap, ErrorTrap, ErrorTrap
-		dc.l ErrorTrap,	ErrorTrap, ErrorTrap, ErrorTrap
-		dc.l ErrorTrap,	ErrorTrap, ErrorTrap, ErrorTrap
-		dc.l ErrorTrap,	ErrorTrap, ErrorTrap, ErrorTrap
-		dc.l ErrorTrap,	ErrorTrap, ErrorTrap, ErrorTrap
-		dc.l ErrorTrap,	ErrorTrap, ErrorTrap, ErrorTrap
-Console:	dc.b 'SEGA MEGA DRIVE ' ; Hardware system ID
-Date:		dc.b '(C)IDK 2001.SEP '
-Title_Local:	dc.b 'how to disassemble vhs tapes on a slab of wood  ' ; Domestic name
-Title_Int:	dc.b 'how to disassemble vhs tapes on a slab of wood  '
-Serial:		dc.b 'GM 00001009-00'   ; Serial/version number
+Vectors:	dc.l 'P'<<24|$FFFE00,		'O'<<24|EntryPoint,	'Y'<<24|BusError,	'S'<<24|AddressError
+		dc.l 'U'<<24|IllegalInstr,	'F'<<24|ZeroDivide,	'O'<<24|ChkInstr,	'K'<<24|TrapvInstr
+		dc.l 'L'<<24|PrivilegeViol,	'F'<<24|Trace,		'U'<<24|Line1010Emu,	'I'<<24|Line1111Emu
+		dc.l 'L'<<24|ErrorExcept,	' '<<24|ErrorExcept,	'R'<<24|ErrorExcept,	'N'<<24|ErrorExcept
+		dc.l ' '<<24|ErrorExcept,	' '<<24|ErrorExcept,	' '<<24|ErrorExcept,	' '<<24|'H'<<24|ErrorExcept
+		dc.l 'B'<<24|ErrorExcept,	'O'<<24|ErrorExcept,	'I'<<24|ErrorExcept,	'L'<<24|ErrorExcept
+		dc.l 'H'<<24|ErrorExcept,	'I'<<24|ErrorTrap,	'M'<<24|ErrorTrap,	' '<<24|ErrorTrap
+		dc.l ' '<<24|PalToCRAM,		PalToCRAM,		' '<<24|vBlankRoutine,	vBlankRoutine
+		dc.b 'What is a hex editor? A miserable little detector of secrets!   But enough talk,fuck off you!'
+		dcb.b $100-*,' '
+Console:	dc.b ' SEGAAAAAAAAAAAA' ; NOTE: " SEGA" is valid for the TMSS, but not for some other stuff, namely the game genie
+Date:		dc.b 'AAAAAAAAAAAAAAAA'
+Title_Local:	dc.b 'If you can see this, your emulator is homoerotic' ; Domestic name
+		dcb.b $150-*,' '
+Title_Int:	dc.b 'how to disassemble vhs tapes on a slab of wood'
+		dcb.b $180-*,' '
+Serial:		dc.b 'GM 00001009-00'	; Serial/version number
 Checksum:	dc.w 0
-		dc.b 'J               ' ; I/O support
+		dcb.b $1A0-*,'J'	; I/O support
 RomStartLoc:	dc.l StartOfRom		; ROM start
 RomEndLoc:	dc.l EndOfRom-1		; ROM end
 RamStartLoc:	dc.l $FF0000		; RAM start
@@ -77,9 +75,10 @@ RamEndLoc:	dc.l $FFFFFF		; RAM end
 SRAMSupport:	dc.l $20202020		; change to $5241E020 to create	SRAM
 		dc.l $20202020		; SRAM start
 		dc.l $20202020		; SRAM end
-Notes:		dc.b '                                                    '
+Notes:		dc.b 'idk i spent all my  mental budget on the other stuff'
+		dcb.b $1F0-*,' '
 Region:		dc.b 'JUE             ' ; Region
-
+	even
 ; ===========================================================================
 
 ErrorTrap:
@@ -224,8 +223,6 @@ loc_348:
 		move.b	($A10001).l,d0
 		andi.b	#$C0,d0
 		move.b	d0,($FFFFFFF8).w
-		move.l	#'init',($FFFFFFFC).w ; set flag so checksum won't be run again
-
 GameInit:
 		lea	($FF0000).l,a6
 		moveq	#0,d7
@@ -243,6 +240,15 @@ GameClrRAM:
 		bsr.w	JoypadInit
 		move.b	#0,($FFFFF600).w ; set Game Mode to Sega Screen
 
+		cmpi.l	#'init',($FFFFFFFC).w	; has checksum routine already run?
+		beq.w	@nosplashscreens	; if yes, branch
+		move.l	#'init',($FFFFFFFC).w	; set flag so checksum won't be run again
+		move.b	($A10001).l,d0
+		and.w	#$F,d0
+		beq.s	@notmss
+		jsr	GM_AntiTMSS
+@notmss:
+@nosplashscreens:
 	;	move.b	#$20,($FFFFF600).w ; set Game Mode to Minecraft
 
 MainGameLoop:
@@ -273,7 +279,7 @@ GameModeArray:
 		bra.w	Credits		; Credits ($1C)
 ; ===========================================================================
 		bra.w	jmpto_Minecraft	; Minecraft ($20)
-; ===========================================================================	
+; ===========================================================================
 		bra.w	jmpto_BeeBush   ; BeeBush ($24)	
 ; ===========================================================================
 ; uuuuuuuuuuuuuuuuuuuuuuuuuuuuu
@@ -3113,6 +3119,7 @@ SegaScreen:				; XREF: GameModeArray
 		move.w	#$8407,(a6)
 		move.w	#$8700,(a6)
 		move.w	#$8B00,(a6)
+		move.w	#$8C81,(a6)
 		clr.b	($FFFFF64E).w
 		move	#$2700,sr
 		move.w	($FFFFF60C).w,d0
@@ -41960,6 +41967,7 @@ SegaPCM_end:
 IdiotPCM:	incbin	sound\youare.bin
 IdiotPCM_end:
 	even
+GM_AntiTMSS:	include _inc\GM_AntiTMSS.asm
 
 Minecraft:	include	minecraft\code\main.asm
 		
