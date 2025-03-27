@@ -20,6 +20,7 @@ SampleTable:
 	dcSample	TYPE_PCM,		Vanish,		0, FLAGS_SFX		; $8F	; TODO: DPCM?
 	dcSample	TYPE_PCM,		Gomer,		0, FLAGS_SFX		; $90
 	dcSample	TYPE_PCM,		OhYeah,		0, FLAGS_SFX		; $91
+	dcSample	TYPE_PCM,		Deagh,		0, FLAGS_SFX		; $92
 	dc.w	-1	; end marker
 
 ; ---------------------------------------------------------------
@@ -33,4 +34,5 @@ SampleTable:
 	incdac	Vanish, "sound/dac/VScream_1.wav"
 	incdac	Gomer, "sound/dac/Gomer.wav"
 	incdac	OhYeah, "sound/dac/OH YEAH.wav"
+	incdac	Deagh, "sound/dac/deagh.wav"
 	even

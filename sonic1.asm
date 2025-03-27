@@ -35726,6 +35726,8 @@ KillSonic:
 
 Kill_Sound:
 		jsr	(PlaySound_Special).l
+		move.b  #$92, d0
+		jsr     MegaPCM_PlaySample
 
 Kill_NoDeath:
 		moveq	#-1,d0
