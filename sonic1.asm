@@ -3132,7 +3132,7 @@ Sega_WaitPallet:
 		bsr.w	PlaySound_Special ; play "SEGA"	sound
 		move.b	#$14,($FFFFF62A).w
 		bsr.w	DelayProgram
-                move.w  #$1E+2*60,($FFFFF614).w         ; was $1E
+                move.w  #$1E+7*60,($FFFFF614).w         ; was $1E
 
 Sega_WaitEnd:
 		move.b	#2,($FFFFF62A).w
