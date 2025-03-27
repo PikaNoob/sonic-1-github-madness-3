@@ -40033,6 +40033,7 @@ return_PlayPCM:
 Sound_E5: 
 		move	#$2700,sr
 		jsr	ClearScreen
+		move.w	#$100,($A11100).l		; stop Z80 so MegaPCM2 isn't idiot-proof
 		move.b	#$2B,($A04000).l		; $A04000 = $2B -> Write to DAC enable
 		move.b	#$80,($A04001).l		; enable DAC
 
