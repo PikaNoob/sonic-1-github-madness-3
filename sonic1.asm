@@ -18,23 +18,26 @@ align macro
 		include "MapMacros.asm"
 
 ;level select constants (to not give the foward reference warning this was moved here)
-lsscrpos = $60860003 ; level select screen position
-lsoff = $240000 ; second row jump
-lsstpos = lsscrpos+$43C0000 ; sound test
-lsnppos = $6C820003	; now playing
-lsctrlpos = $6D020003 ; control help
-lsrow1size: equ (LMTSecondRow-LevelMenuText)/16
-lsrow2size: equ (LMTEnd-LMTSecondRow)/16
-lsselectable: equ ((LMTSelectableEnd-LevelMenuText)/16)-1 ; last selectable item
-; level select item constants
-lssndtest: equ lsrow1size+8
-lswifi: equ lsrow1size+9
 
-vBlankRoutine equ $FFFFFFC4 ; VBlank Routine Jump Instruction (6 bytes)
-vBlankJump equ vBlankRoutine
-vBlankAdress equ vBlankRoutine+2
+lsscrpos 	= $60860003 ; level select screen position
+lsoff 		= $240000 ; second row jump
+lsstpos 	= lsscrpos+$43C0000 ; sound test
+lsnppos 	= $6C820003	; now playing
+lsctrlpos 	= $6D020003 ; control help
+lsrow1size: 	equ (LMTSecondRow-LevelMenuText)/16
+lsrow2size: 	equ (LMTEnd-LMTSecondRow)/16
+lsselectable: 	equ ((LMTSelectableEnd-LevelMenuText)/16)-1 ; last selectable item
+
+; level select item constants
+
+lssndtest: 	equ lsrow1size+8
+lswifi: 	equ lsrow1size+9
+lsjackass:	equ lsrow1size+11
+vBlankRoutine 	equ $FFFFFFC4 ; VBlank Routine Jump Instruction (6 bytes)
+vBlankJump 	equ vBlankRoutine
+vBlankAdress 	equ vBlankRoutine+2
 ; options menu
-optamm: equ ((OMTEnd-OptionMenuText)/16)-1
+optamm: 	equ ((OMTEnd-OptionMenuText)/16)-1
 
 ; NOTES FOR ANYONE MAKING CHARACTERS
 v_character = $FFFFFFE8
@@ -3474,9 +3477,29 @@ LevelSelect:
 		bsr.w	RunPLC_RAM
 		tst.l	($FFFFF680).w
 		bne.s	LevelSelect
-		andi.b	#$F0,($FFFFF605).w ; is	A, B, C, or Start pressed?
-		beq.s	LevelSelect	; if not, branch
-		move.w	($FFFFFF82).w,d0
+		andi.b	#$F0,($FFFFF605).w 	; is	A, B, C, or Start pressed?
+		beq.s	LevelSelect		; if not, branch
+
+		move.w	($FFFFFF82).w,d0 	; d0 = current entry
+
+		cmpi.w	#lsjackass,d0		; have you selected item $16 (jackass/beebush)
+		bne.s	@waitbees		; if not, we're just waiting for the bees. 
+
+		move.b	#$24,($FFFFF600).w 	; set screen	mode to	$24 BEEBUSH
+		rts	
+
+
+
+
+
+
+
+
+
+
+
+		; giggity
+	@waitbees:
 		cmpi.w	#lswifi,d0		; have you selected item $15 (free wifi)?
 		bne.s	@dont	; if not, dont blow this place up
 			
@@ -3938,21 +3961,22 @@ LMTSecondRow:
         dc.b    "FINAL ZONE      "
         dc.b    "SPECIAL STAGE   "
         dc.b    "SOUND TEST $    "
-		dc.b	"FREE WIFI       "
-		dc.b	"OPTIONS LATER   "
+	dc.b	"FREE WIFI       "
+	dc.b	"OPTIONS LATER   "
+	dc.b	"JACKASS         "
 LMTSelectableEnd:
-		dc.b	"CANT TOUCH ME XD"
+	dc.b	"CANT TOUCH ME XD"
 LMTEnd:
 
 Now_Playing:
-		dc.b	">>>NOW PLAYING ",0
-		even
+	dc.b	">>>NOW PLAYING ",0
+	even
 NP_Track:
-		dc.b	"TRACK $",0
-		even
+	dc.b	"TRACK $",0
+	even
 NP_SFX:
-		dc.b	"SOUND $",0
-		even
+	dc.b	"SOUND $",0
+	even
 
 ShowNow_Playing:
 		move.b	d0,d6
@@ -12852,9 +12876,6 @@ Obj4B_Main:				; XREF: Obj4B_Index
 		bpl.s	Obj4B_Animate
 		cmpi.b	#6,($FFFFFE57).w ; do you have 6 emeralds?
 		beq.w	Obj4B_Delete	; if yes, branch
-		cmpi.w	#50,($FFFFFE20).w ; do you have	at least 50 rings?
-		bcc.s	Obj4B_Okay	; if yes, branch
-		rts	
 ; ===========================================================================
 
 Obj4B_Okay:				; XREF: Obj4B_Main

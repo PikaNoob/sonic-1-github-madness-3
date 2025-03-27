@@ -119,10 +119,13 @@ SMNO_BEEBUSH_MAIN       = 4*4   ; Main game
 ; ---------------------------------------------------------------------------
 
 BEEBUSH_INIT:   
-	move    #$2700,sr  		; interrupt disable               
+	move    #$2700,sr  		; interrupt disable    
+        move.b  #$E4,d0
+        jsr     PlaySound_Special ; stop music           
         jsr     ClearArtListQueue	; clr art lists, we're not using them
         jsr     PalFadeOut		; fade palette out
         jsr     InitScreen		
+        bsr.w   _beebushClrSprites
         lea     VDPCTRL,a6		; init regs
         move.w  displayMode.w,d0	; Get mode reg. 1 info
         andi.b  #%10111111,d0           ; Mask display enable bit
