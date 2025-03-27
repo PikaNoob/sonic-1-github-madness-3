@@ -17,6 +17,7 @@ SampleTable:
 	dcSample	TYPE_PCM,		SegaPCM,	0, FLAGS_SFX		; $8C	NOTE: sample rate is auto-detected from WAV file
 	dcSample	TYPE_PCM,		BeeBush1,	0, FLAGS_SFX		; $8D
 	dcSample	TYPE_PCM,		BeeBush2,	0, FLAGS_LOOP		; $8E
+	dcSample	TYPE_PCM,		Vanish,		0, FLAGS_SFX		; $8F	; TODO: DPCM?
 	dc.w	-1	; end marker
 
 ; ---------------------------------------------------------------
@@ -27,4 +28,5 @@ SampleTable:
 	incdac	SegaPCM, "sound/dac/sega.wav"
 	incdac	BeeBush1, "sound/dac/beebush_smp1.wav"
 	incdac	BeeBush2, "sound/dac/beebush_smp2.wav"
+	incdac	Vanish, "sound/dac/VScream_1.wav"
 	even

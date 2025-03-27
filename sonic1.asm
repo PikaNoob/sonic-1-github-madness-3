@@ -34951,7 +34951,7 @@ Obj86_Ball_Homing:
 		bhs.s	@homer
 		cmp.b	#$E0,$28(a0)
 		bhs.s	Obj86_Ball_Vanish
-		subq.b	#1,$28(a0)
+		subq.b	#4,$28(a0)
 		bcc.s	@nomorehoming
 		move.w	($FFFFD008).w,d0
 		sub.w	8(a0),d0
@@ -34976,8 +34976,8 @@ Obj86_Ball_Speed:
 ; ===========================================================================
 
 Obj86_Ball_Vanish:
-		move.w	#$E1,d0
-		jsr	(PlaySound_Special).l
+		move.w	#$8F,d0			; play Vanish sample
+		jsr	MegaPCM_PlaySample
 		bra.w	loc_1AA34
 ; ===========================================================================
 
