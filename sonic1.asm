@@ -3194,8 +3194,8 @@ Title_ClrObjRam:
 		moveq	#$27,d1
 		moveq	#$1B,d2
 		bsr.w	ShowVDPGraphics
-                moveq   #$FFFFFF91,d0          ; play otis
-                jsr     MegaPCM_PlaySample     ; "OH YEAH!"
+                moveq   #$FFFFFF90,d0          ; play gomer
+                jsr     MegaPCM_PlaySample     ; "gomer!"
 		bsr.w	Pal_FadeTo
 		bsr.w	Pal_FadeFrom
 
