@@ -14,12 +14,17 @@ planeBuffer	rs.w	29*64			; foreground plane buffer
 planeBuffer_End	rs.b	0
 PLANE_BUFF_SIZE	equ	planeBuffer_End-planeBuffer
 
+scrollBuffer	rs.l	256
+
 camXPosFG	rs.w	1			; camera foreground layout x position
 camYposFG	rs.w	1			; camera foreground layout y position
 camXPosBG	rs.w	1			; camera background layout x position
 camYposBG	rs.w	1			; camera background layout y position
 
 vblankWait	rs.w	1
+cloudFrameCnt	rs.w	1
+cloudSkew	rs.l	36
+
 
 		rsset	__rs&$FFFFFF
 mcRAM_End	rs.b	0
@@ -28,10 +33,9 @@ mcRAM_End	rs.b	0
 TILE		equ	32			; number of bytes a single tile occupies in VRAM
 
 		rsreset
-
 vramEmptyTile	rs.b	TILE
 vramTerrain	rs.b	255*TILE
-vramBackground	rs.b	384*TILE
+vramBackground	rs.b	408*TILE
 
 VRAM_PLANE_A	equ	$C000
 VRAM_PLANE_W	equ	$D000

@@ -243,7 +243,7 @@ GameClrRAM:
 		bsr.w	JoypadInit
 		move.b	#0,($FFFFF600).w ; set Game Mode to Sega Screen
 
-	;	move.b	#$20,($FFFFF600).w ; set Game Mode to Minecraft
+		move.b	#$20,($FFFFF600).w ; set Game Mode to Minecraft
 
 MainGameLoop:
 		moveq	#$7E,d0
