@@ -79,7 +79,13 @@ QuagmireHead_Init:
 QuagmireHead_Display:  
         move.b  #3,(membushEyes+obj.Frame)
         move.w  bbush.orgX(a0),obj.X(a0)
-        move.w  bbush.orgY(a0),obj.Y(a0)                    
+        move.w  bbush.orgY(a0),obj.Y(a0)  
+        move.w  obj.X(a0),(membushEyes+obj.X)
+        move.w  obj.Y(a0),(membushEyes+obj.Y)
+        sub.w   #22,(membushEyes+obj.Y)
+        move.w  obj.X(a0),(membushMouth+obj.X)
+        move.w  obj.Y(a0),(membushMouth+obj.Y)
+        add.w   #10,(membushMouth+obj.Y)                   
         jsr     _objectDraw  
         rts
 
@@ -96,16 +102,8 @@ QuagmireHead_MoveBck:
 
 
         asr.w   #4,d0
-        cmpi.w  #$B0,obj.X(a0)
-
         move.w  bbush.orgX(a0),d2
         sub.w   d0,d2
-
-        cmpi.w  #$B0,d2
-        bhi.s   .SkipSet
-        cmpi.w  #$91,d2
-        blo.s   .SkipSet
-
         move.w  d2,obj.X(a0)
 
 
@@ -113,8 +111,12 @@ QuagmireHead_MoveBck:
         move.w  bbush.orgY(a0),d3
         add.w   d0,d3
         move.w  d3,obj.Y(a0) 
-
-.SkipSet:
+        move.w  obj.X(a0),(membushEyes+obj.X)
+        move.w  obj.Y(a0),(membushEyes+obj.Y)
+        sub.w   #22,(membushEyes+obj.Y)
+        move.w  obj.X(a0),(membushMouth+obj.X)
+        move.w  obj.Y(a0),(membushMouth+obj.Y)
+        add.w   #10,(membushMouth+obj.Y) 
         jsr     _objectDraw 
         sub.b   #1,bbush.Timer(a0) 
         beq.s   .Exit
@@ -160,11 +162,7 @@ QuagmireEyes_Init:
         move.b  #5,obj.Priority(a0)
         move.b  #3,obj.Frame(a0)
 
-QuagmireEyes_Display:   
-        lea     membushHead,a1
-        move.w  obj.X(a1),obj.X(a0)
-        move.w  obj.Y(a1),obj.Y(a0)
-        sub.w   #22,obj.Y(a0)                        
+QuagmireEyes_Display:                          
         jsr     _objectDraw  
         rts
 
@@ -195,7 +193,6 @@ QuagmireMouth_Init1:
         move.b  #8,obj.Frame(a0)
 
 QuagmireMouth_Speak1:   
-        bsr.w   _quagEyeAdjToHead
         lea     AniSpr_QuagmireMouth,a1
         bsr.w   _objectAnimate
         jsr     _objectDraw  
@@ -207,18 +204,10 @@ QuagmireMouth_Init2:
         add.b   #2,(membushHead+obj.Action)
 
 QuagmireMouth_Speak2:
-        bsr.w   _quagEyeAdjToHead
         lea     AniSpr_QuagmireMouth,a1
         bsr.w   _objectAnimate
         jsr     _objectDraw  
         rts        
-
-_quagEyeAdjToHead:
-        lea     membushHead,a1
-        move.w  obj.X(a1),obj.X(a0)
-        move.w  obj.Y(a1),obj.Y(a0)
-        add.w   #10,obj.Y(a0)   
-        rts
 
 ; ---------------------------------------------------------------------------
 AniSpr_QuagmireMouth:
