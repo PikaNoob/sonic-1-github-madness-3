@@ -47,8 +47,6 @@ v_character = $FFFFFFE8
 
 
 StartOfRom:
-Vectors:	dc.l $FFFE00, EntryPoint, BusError, AddressError
-		dc.l IllegalInstr, ZeroDivide, ChkInstr, TrapvInstr
 Vectors:	dc.l 'P'<<24|$FFFE00,		'O'<<24|EntryPoint,	'Y'<<24|BusError,	'S'<<24|AddressError
 		dc.l 'U'<<24|IllegalInstr,	'F'<<24|ZeroDivide,	'O'<<24|ChkInstr,	'K'<<24|TrapvInstr
 		dc.l 'L'<<24|PrivilegeViol,	'F'<<24|Trace,		'U'<<24|Line1010Emu,	'I'<<24|Line1111Emu
