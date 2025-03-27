@@ -20,6 +20,7 @@
 
 	dc.w PLC_BHZ-ArtLoadCues, PLC_BHZ2-ArtLoadCues		; $20
 	dc.w Plc_TetoBoss-ArtLoadCues
+	dc.w PLC_TruthNuke-ArtLoadCues	; GMZ
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - standard block 1
 ; ---------------------------------------------------------------------------
@@ -563,4 +564,11 @@ PLC_TetoBoss:	dc.w 2
 		dc.w $93A0
 		dc.l Nem_Peartobomb		; bomb enemy (gets overwritten)
 		dc.w $9000
+		; even
+; ---------------------------------------------------------------------------
+; Pattern load cues - Truth Nuke
+; ---------------------------------------------------------------------------
+PLC_TruthNuke:	dc.w 0
+		dc.l Nem_TruthNuke	; GMZ
+		dc.w 0
 		even
