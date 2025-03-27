@@ -1,0 +1,41 @@
+Mono runtime detected.
+Operating system: Microsoft Windows NT 6.2.9200.0
+Opening INI file "C:\users\katsushimi\Documents\GitHub\MARK-V\Katsu-Engine\GM BEEBUSH\SonPLN.ini"...
+Game type is S1.
+Loading Screen A (Cam overlay)...
+Loading 8x8 tiles from file "Data/BEEBUSH_ART.NEM", using compression Nemesis...
+Loading plane mappings from file "Data/BEEBUSH_SCR_A.MAP", using compression Uncompressed...
+Loading palette file "Data/BEEBUSH.PAL"...
+Source: 0 Destination: 0 Length: 64
+Mappings data size does not match given width/height. Expected: 96 (12x4*2) Actual: 448.
+Unable to read file "Data/BEEBUSH_ART.NEM" with compression Nemesis:
+System.AggregateException: One or more errors occurred. (Attempted to read past the end of the stream.) ---> System.IO.EndOfStreamException: Attempted to read past the end of the stream.
+  at SonicRetro.KensSharp.BigEndian.Read2 (System.IO.Stream stream) [0x00013] in <ca63925af47a42b489227dee09420f03>:0 
+  at SonicRetro.KensSharp.Nemesis.Decode (System.IO.Stream input, System.IO.Stream output) [0x00006] in <33a8bdb15e9a4ad8b5d0c26fa3228fcf>:0 
+  at SonicRetro.KensSharp.Nemesis.Decompress (System.IO.Stream input, System.IO.Stream output) [0x0001c] in <33a8bdb15e9a4ad8b5d0c26fa3228fcf>:0 
+  at SonicRetro.KensSharp.Nemesis.Decompress (System.String sourceFilePath) [0x0000d] in <33a8bdb15e9a4ad8b5d0c26fa3228fcf>:0 
+  at SonicRetro.SonLVL.API.Compression.Decompress (System.String file, SonicRetro.SonLVL.API.CompressionType cmp) [0x0010e] in <89015e8f6f9d4917996c815e2a005a23>:0 
+  at SonicRetro.SonLVL.SonPLN.MainForm.LoadLevelTiles () [0x001a0] in <d1e8af73a9cb4cd08c2047236bc0a9d3>:0 
+  at System.Threading.Tasks.Task.InnerInvoke () [0x0000f] in <de4d51d88e3b4eea89a8d6a3a9854818>:0 
+  at System.Threading.Tasks.Task.Execute () [0x00000] in <de4d51d88e3b4eea89a8d6a3a9854818>:0 
+   --- End of inner exception stack trace ---
+  at System.Threading.Tasks.Task.WaitAll (System.Threading.Tasks.Task[] tasks, System.Int32 millisecondsTimeout, System.Threading.CancellationToken cancellationToken) [0x001c8] in <de4d51d88e3b4eea89a8d6a3a9854818>:0 
+  at System.Threading.Tasks.Task.WaitAll (System.Threading.Tasks.Task[] tasks, System.Int32 millisecondsTimeout) [0x00000] in <de4d51d88e3b4eea89a8d6a3a9854818>:0 
+  at System.Threading.Tasks.Task.WaitAll (System.Threading.Tasks.Task[] tasks) [0x00000] in <de4d51d88e3b4eea89a8d6a3a9854818>:0 
+  at System.Threading.Tasks.Parallel.Invoke (System.Threading.Tasks.ParallelOptions parallelOptions, System.Action[] actions) [0x0029c] in <de4d51d88e3b4eea89a8d6a3a9854818>:0 
+--- End of stack trace from previous location where exception was thrown ---
+
+  at System.Threading.Tasks.Parallel.ThrowSingleCancellationExceptionOrOtherException (System.Collections.ICollection exceptions, System.Threading.CancellationToken cancelToken, System.Exception otherException) [0x0000b] in <de4d51d88e3b4eea89a8d6a3a9854818>:0 
+  at System.Threading.Tasks.Parallel.Invoke (System.Threading.Tasks.ParallelOptions parallelOptions, System.Action[] actions) [0x002b9] in <de4d51d88e3b4eea89a8d6a3a9854818>:0 
+  at System.Threading.Tasks.Parallel.Invoke (System.Action[] actions) [0x00000] in <de4d51d88e3b4eea89a8d6a3a9854818>:0 
+  at SonicRetro.SonLVL.SonPLN.MainForm.backgroundLevelLoader_DoWork (System.Object sender, System.ComponentModel.DoWorkEventArgs e) [0x00029] in <d1e8af73a9cb4cd08c2047236bc0a9d3>:0 
+---> (Inner Exception #0) System.IO.EndOfStreamException: Attempted to read past the end of the stream.
+  at SonicRetro.KensSharp.BigEndian.Read2 (System.IO.Stream stream) [0x00013] in <ca63925af47a42b489227dee09420f03>:0 
+  at SonicRetro.KensSharp.Nemesis.Decode (System.IO.Stream input, System.IO.Stream output) [0x00006] in <33a8bdb15e9a4ad8b5d0c26fa3228fcf>:0 
+  at SonicRetro.KensSharp.Nemesis.Decompress (System.IO.Stream input, System.IO.Stream output) [0x0001c] in <33a8bdb15e9a4ad8b5d0c26fa3228fcf>:0 
+  at SonicRetro.KensSharp.Nemesis.Decompress (System.String sourceFilePath) [0x0000d] in <33a8bdb15e9a4ad8b5d0c26fa3228fcf>:0 
+  at SonicRetro.SonLVL.API.Compression.Decompress (System.String file, SonicRetro.SonLVL.API.CompressionType cmp) [0x0010e] in <89015e8f6f9d4917996c815e2a005a23>:0 
+  at SonicRetro.SonLVL.SonPLN.MainForm.LoadLevelTiles () [0x001a0] in <d1e8af73a9cb4cd08c2047236bc0a9d3>:0 
+  at System.Threading.Tasks.Task.InnerInvoke () [0x0000f] in <de4d51d88e3b4eea89a8d6a3a9854818>:0 
+  at System.Threading.Tasks.Task.Execute () [0x00000] in <de4d51d88e3b4eea89a8d6a3a9854818>:0 <---
+

@@ -1,0 +1,552 @@
+; ---------------------------------------------------------------------------
+; I'm Glenn Quagmire, and this is Code Bush.
+; ---------------------------------------------------------------------------
+
+        include "beebush/Mega Drive.inc"
+        include "beebush/Macros.inc"
+
+        opt     l.
+hscroll =       $FFFFCC00
+vdpSprites =    $FFFFF800
+palette =       $FFFFFB00
+frameCntr =     $FFFFFE04
+        rsset   $FFFFF600
+
+gamemode:               rs.b 1  
+submode                 rs.b 1
+joypadMirr:             rs.b 1    
+joypadPressMirr:        rs.b 1  
+joypad:                 rs.b 1    
+joypadPress:            rs.b 1  
+                        rs.b 2  
+distance:               rs.b 4
+displayMode:            rs.b 2    
+                        rs.b 6
+genericTimer:           rs.b 2    
+mainAPosY:              rs.b 2    
+mainBPosY:              rs.b 2    
+mainAPosX:              rs.b 2    
+mainBPosX:              rs.b 2    
+mainZPosY:              rs.b 2    
+mainZPosX:              rs.b 2    
+mainCPosX:              rs.b 2    
+mainCPosY:              rs.b 2    
+palFadeArgs:            rs.b 0
+palFadeOff:             rs.b 1    
+palFadeSize:            rs.b 1    
+vblankUnk1:             rs.b 1    
+vblankUnk2:             rs.b 1    
+vblankCmd:              rs.b 1   
+        rsset   $FFFFF700
+cameraAPosX:            rs.b 4                  
+cameraAPosY:            rs.b 4                  
+cameraBPosX:            rs.b 4                  
+cameraBPosY:            rs.b 4                  
+cameraCPosX:            rs.b 4                  
+cameraCPosY:            rs.b 4                  
+cameraZPosX:            rs.b 4                  
+cameraZPosY:            rs.b 4  
+
+OBJECTRAM               EQU $FFFFD000 
+OBJSZ                   EQU 64
+OBJECTRAMSZ             EQU OBJECTRAME-OBJECTRAM    
+
+        rsset           $FFFFD000 
+objSlot00:      rs.b    OBJSZ
+objSlot01:      rs.b    OBJSZ
+objSlot02:      rs.b    OBJSZ
+objSlot03:      rs.b    OBJSZ
+objSlot04:      rs.b    OBJSZ
+objSlot05:      rs.b    OBJSZ
+objSlot06:      rs.b    OBJSZ
+objSlot07:      rs.b    OBJSZ  
+objSlot08:      rs.b    OBJSZ  
+objSlot09:      rs.b    OBJSZ  
+objSlot0A:      rs.b    OBJSZ  
+objSlot0B:      rs.b    OBJSZ  
+objSlot0C:      rs.b    OBJSZ
+objSlot0D:      rs.b    OBJSZ
+objSlot0E:      rs.b    OBJSZ
+objSlot0F:      rs.b    OBJSZ
+objSlot10:      rs.b    OBJSZ  
+objSlot11:      rs.b    OBJSZ
+objSlot12:      rs.b    OBJSZ
+objSlot13:      rs.b    OBJSZ
+objSlot14:      rs.b    OBJSZ  
+objSlot15:      rs.b    OBJSZ
+objSlot16:      rs.b    OBJSZ
+objSlot17:      rs.b    OBJSZ
+objSlot18:      rs.b    OBJSZ  
+objSlot19:      rs.b    OBJSZ
+objSlot1A:      rs.b    OBJSZ
+objSlot1B:      rs.b    OBJSZ
+objSlot1C:      rs.b    OBJSZ
+objSlot1D:      rs.b    OBJSZ
+objSlot1E:      rs.b    OBJSZ
+objSlot1F:      rs.b    OBJSZ
+objsAlloc:              rs.b    OBJSZ*96
+OBJECTRAME:
+
+GM_BEEBUSH:  
+      	move.b  submode.w,d0
+        andi.w  #$1C,d0
+        jsr     .Index(pc,d0.w)
+        rts
+
+; ---------------------------------------------------------------------------
+
+SMNO_BEEBUSH_INIT       = 0*4   ; Init 
+SMNO_BEEBUSH_INTRO      = 1*4   ; Intro seq.
+SMNO_BEEBUSH_STATIC     = 2*4   ; Static scr.
+SMNO_BEEBUSH_INITMAIN   = 3*4   ; Main Init
+SMNO_BEEBUSH_MAIN       = 4*4   ; Main game
+
+.Index:      
+        bra.w   BEEBUSH_INIT
+        bra.w   BEEBUSH_INTRO
+        bra.w   BEEBUSH_STATIC
+        bra.w   BEEBUSH_INITMAIN
+        bra.w   BEEBUSH_MAIN
+.Null:
+        rts 
+
+; ---------------------------------------------------------------------------
+; Initialization
+; ---------------------------------------------------------------------------
+
+BEEBUSH_INIT:   
+	move    #$2700,sr  		; interrupt disable               
+        jsr     ClearArtListQueue	; clr art lists, we're not using them
+        jsr     PalFadeOut		; fade palette out
+        jsr     InitScreen		
+        lea     VDPCTRL,a6		; init regs
+        move.w  displayMode.w,d0	; Get mode reg. 1 info
+        andi.b  #%10111111,d0           ; Mask display enable bit
+        move.w  d0,VDPCTRL              ; Set mode reg. 1 
+        move.w  #$8000+%00000100,(a6)
+        move.w  #$8230,(a6)
+        move.w  #$8407,(a6)
+        move.w  #$857C,(a6)
+        move.w  #$8720,(a6)
+        move.w  #$8B00+%00000000,(a6)
+        lea     OBJECTRAM.w,a1
+        moveq   #0,d0
+        move.w  #((OBJSZ*20)/4)-1,d1
+
+.ClearObjects:                         
+        move.l  d0,(a1)+
+        dbf     d1,.ClearObjects
+        lea     cameraAPosX.w,a1
+        moveq   #0,d0
+        move.w  #$8-1,d1
+
+.ClearCams:                            
+        move.l  d0,(a1)+
+        dbf     d1,.ClearCams
+
+        move.b  #VBLNO_BEEBUSH,vblankCmd.w
+        jsr     VSync
+
+        move.b  #BBUSH_OBJNO_BODY,objSlot00.w        
+        move.b  #BBUSH_OBJNO_HEAD,objSlot01.w      
+        move.b  #BBUSH_OBJNO_EYES,objSlot02.w     
+        move.b  #BBUSH_OBJNO_MOUTH,objSlot03.w   
+        move.b  #BBUSH_OBJNO_DBUG,objSlot04.w
+
+membushBody  = objSlot00
+membushHead  = objSlot01       
+membushEyes  = objSlot02
+membushMouth = objSlot03    
+                        
+        move.w  #0,joypadMirr.w
+        move.w  #0,joypad.w
+
+        ; Load art direct
+
+        VDPCMD  move.l,$0000,VRAM,WRITE,VDPCTRL         ; Set VRAM write address
+        lea     ArtNem_BEEBUSH,a0                       ; Get compressed bitstream
+        jsr     NemDec
+
+        VDPCMD  move.l,$6000,VRAM,WRITE,VDPCTRL         ; Set VRAM write address
+        lea     ArtNem_QUAGMIRE,a0                      ; Get compressed bitstream
+        jsr     NemDec
+
+        VDPCMD  move.l,$4000,VRAM,WRITE,VDPCTRL         ; Set VRAM write address
+        move.w  #(8*64)-1,d7
+
+.FillStatic:
+        jsr     CalcRandom
+        move.l  d0,VDPDATA
+        add.l   d0,d1
+        move.l  d1,VDPDATA
+
+        dbf     d7,.FillStatic
+
+        ; Load screen A tilemap
+
+        lea     MapScrA_BEEBUSH,a1
+        VDPCMD  move.l,$C000,VRAM,WRITE,d0   ; Set VRAM write address
+        moveq   #40-1,d1                     ; Set Width
+        moveq   #28-1,d2                     ; Set Height
+        jsr     DrawTileMap                  ; Draw Tilemap to location
+
+        ; Load screen B tilemap
+
+        lea     MapScrB_BEEBUSH,a1
+        VDPCMD  move.l,$E000,VRAM,WRITE,d0   ; Set VRAM write address
+        moveq   #40-1,d1                     ; Set Width
+        moveq   #28-1,d2                     ; Set Height
+        jsr     DrawTileMap                  ; Draw Tilemap to location
+
+        ; Load palette into buffer directly
+
+        moveq   #64-1,d7
+        lea     Pal_BEEBUSH,a2
+        lea     palette,a3
+
+.LoadToBuffer:                         
+        move.l  (a2)+,(a3)+
+        dbf     d7,.LoadToBuffer
+
+        ; !!!DEBUG!!!
+
+        jsr     _beebushDbugLoad
+
+        move.w  displayMode.w,d0          
+        ori.b   #%1000000,d0
+
+        move.w  d0,VDPCTRL		     ; Enable display when ready
+        move.b  #SMNO_BEEBUSH_INTRO,submode.w ; Move to next mode
+        rts
+
+; ---------------------------------------------------------------------------
+; Main cutscene loop
+; ---------------------------------------------------------------------------
+
+BEEBUSH_INTRO:                              
+        move.b  #VBLNO_BEEBUSH,vblankCmd.w
+        jsr     VSync
+        addq.w  #1,frameCntr.w
+        bsr.w   _beebushCamShake
+        bsr.w   _beebushRunObjects    
+        jsr     DrawObjects
+
+        tst.b   membushHead+$30
+        beq.s   .NoChg
+        move.b  #SMNO_BEEBUSH_STATIC,submode.w ; Move to next mode
+        move.w  #60,genericTimer.w
+        bsr.w   _beebushClrSprites
+
+.NoChg: 
+        rts 
+
+; ---------------------------------------------------------------------------
+; Static Transition sequence
+; ---------------------------------------------------------------------------
+
+BEEBUSH_STATIC:                              
+        move.b  #VBLNO_BEEBUSH,vblankCmd.w
+        jsr     VSync
+        addq.w  #1,frameCntr.w
+        bsr.w   _beebushDrawStatic
+        subq.w  #1,genericTimer.w
+        bne.w   .Exit
+        move.b  #SMNO_BEEBUSH_INITMAIN,submode.w ; Move to next mode
+        rts
+.Exit:
+
+        rts
+
+; ---------------------------------------------------------------------------
+; Initialize main sequence
+; ---------------------------------------------------------------------------
+
+membushPlayer = objSlot00
+
+BEEBUSH_INITMAIN:                              
+        move.b  #VBLNO_BEEBUSH,vblankCmd.w
+        jsr     VSync
+        lea     MapScrB_BEEBUSHMAIN,a1
+        move.w  #$8B00+%00000000,VDPCTRL
+        VDPCMD  move.l,$E000,VRAM,WRITE,d0   ; Set VRAM write address
+        moveq   #64-1,d1                     ; Set Width
+        moveq   #28-1,d2                     ; Set Height
+        jsr     DrawTileMap                  ; Draw Tilemap to location
+        lea     OBJECTRAM.w,a1
+        moveq   #0,d0
+        move.w  #((OBJSZ*20)/4)-1,d1
+
+.ClearObjects:                         
+        move.l  d0,(a1)+
+        dbf     d1,.ClearObjects
+        move.b  #BBUSH_OBJNO_PLAYER,objSlot00.w
+        move.l  #$12345678,distance
+        move.b  #SMNO_BEEBUSH_MAIN,submode.w ; Move to next mode
+        rts
+
+; ---------------------------------------------------------------------------
+; Main    lGod wfyuck ioff
+; ---------------------------------------------------------------------------
+
+BEEBUSH_MAIN:                              
+        move.b  #VBLNO_BEEBUSHSCR,vblankCmd.w
+        jsr     VSync
+        addq.w  #1,frameCntr.w
+        bsr.w   _beebushScroll
+        bsr.w   _beebushRunObjects    
+        jsr     DrawObjects
+        rts
+
+; ---------------------------------------------------------------------------
+
+Pal_BEEBUSH:
+        incbin	"beebush/Data/BEEBUSH.PAL"
+        even
+
+MapScrA_BEEBUSH:
+        incbin  "beebush/Data/BEEBUSH_SCR_A.MAP"
+        even
+
+MapScrB_BEEBUSH:
+        incbin  "beebush/Data/BEEBUSH_SCR_B.MAP"
+        even
+
+MapScrB_BEEBUSHMAIN:
+        incbin  "beebush/Data/BEEBUSH_MAIN_B.MAP"
+        even
+
+ArtNem_BEEBUSH:
+        incbin  "beebush/Data/BEEBUSH_ART.NEM"
+        even
+
+ArtNem_QUAGMIRE:
+        incbin  "beebush/Data/QUAGMIRE_ART.NEM"
+        even
+
+; ---------------------------------------------------------------------------
+; Do camera unsteadiness movement
+;
+; camera A = REC. and camera overlay
+; camera B = background (moves)
+; ---------------------------------------------------------------------------
+
+beeSinCntr = $FFFFF760
+beeSin     = $FFFFF762      
+beeCos     = $FFFFF764
+
+_beebushCamShake:
+        add.b   #2,beeSinCntr.w
+        move.b  beeSinCntr.w,d0
+        jsr     CalcSinCos
+        move.w  d0,beeCos.w
+        move.w  d1,beeSin.w
+        asr.w   #7,d0
+        asr.w   #6,d1
+
+        
+        move.w  d0,mainBPosX
+        neg.w   d0
+        move.w  d0,cameraBPosX
+
+        move.w  d1,mainBPosY
+        move.w  d1,cameraBPosY
+        rts
+
+; ---------------------------------------------------------------------------
+; Main scrolling for gameplay
+; ---------------------------------------------------------------------------
+
+
+_beebushScroll:                    
+        lea     hscroll.w,a1
+
+        move.w  cameraAPosX.w,d1
+        asr.w   #1,d1
+        move.w  d1,cameraBPosX
+
+        move.w  cameraCPosX.w,d1
+        add.w   d1,d1
+        move.w  d1,cameraZPosX.w
+
+        move.w  cameraBPosX.w,d0
+
+        ; Far away BG segment
+
+        move.w  #72-1,d1
+        asr.l   #2,d0
+.FarBG:                         
+        move.l  d0,(a1)+
+        dbf     d1,.FarBG
+
+        ; Sidewalk perspective effect
+
+        move.w  cameraCPosX.w,d0
+        asr.w   #2,d0
+        move.w  d0,mainCPosX.w
+        cmp.w   #32+1,d0
+        bne.s   .SkipBRes
+        move.w  #0,cameraCPosX.w
+        move.w  #0,cameraZPosX.w
+        move.w  #0,d0
+.SkipBRes
+        neg     d0
+        move.w  cameraZPosX.w,d2
+        asr.w   #2,d2
+        move.w  d2,mainZPosX.w
+        neg     d2
+        sub.w   d0,d2
+        ext.l   d2
+        asl.l   #8,d2
+        divs.w  #$68,d2
+        ext.l   d2
+        asl.l   #8,d2
+        move.w  d0,d3
+        move.w  #32-1,d1
+
+.Road:                                                    
+        move.w  d3,d0
+        neg.w   d0
+        move.l  d0,(a1)+
+        swap    d3
+        add.l   d2,d3
+        swap    d3
+        dbf     d1,.Road
+
+        ; Grass (far away)
+
+        move.w  cameraBPosX.w,d0
+        move.l  d0,d2
+        asr.l   #2,d2
+        sub.l   d2,d0
+        move.w  #32-1,d1
+
+.GrassFar
+
+        move.l  d0,(a1)+
+        dbf     d1,.GrassFar
+
+        move.w  cameraBPosX.w,d0
+        move.w  #32-1,d1
+        
+.GrassMid
+
+        move.l  d0,(a1)+
+        dbf     d1,.GrassMid
+
+        move.w  cameraBPosX.w,d0
+        move.l  d0,d2
+        asr.l   #2,d2
+        add.l   d2,d0
+        move.w  #32-1,d1
+
+.GrassClose
+
+        move.l  d0,(a1)+
+        dbf     d1,.GrassClose
+        move.w  cameraAPosX.w,mainAPosX
+        move.w  cameraBPosX.w,mainBPosX
+        rts
+
+; ---------------------------------------------------------------------------
+; Clear screen sprites
+; ---------------------------------------------------------------------------
+
+_beebushClrSprites:
+        move.l  #0,mainAPosY.w
+        move.l  #0,mainAPosX.w
+
+        lea     vdpSprites.w,a1
+        moveq   #0,d0
+        move.w  #$A0-1,d1               ; Clear all sprites
+
+.ClearSprites:
+        move.l  d0,(a1)+
+        dbf     d1,.ClearSprites
+        lea     hscroll.w,a1
+        moveq   #0,d0
+        move.w  #$100,d1
+
+.ClearHScroll:
+        move.l  d0,(a1)+
+        dbf     d1,.ClearHScroll
+        rts
+
+; ---------------------------------------------------------------------------
+; Draw tilemap static for transitory sequences
+; Draws 2 "random" tiles out of a memory space location (document later idk)
+; ---------------------------------------------------------------------------
+
+_beebushDrawStatic:
+        lea     VDPDATA,a6                      ; a6 = VDPDATA        
+        VDPCMD  move.l,$E20A,VRAM,WRITE,d3      ; d3 = initial address
+        move.w  #(30/2)-1,d4                    ; d4 = width / 2
+        move.w  #20-1,d5                        ; d5 = height
+        move.l  #$800000,d6                     ; d6 = cmd row delta 
+
+.LoopRow:                              
+        move.l  d3,VDPCTRL-VDPDATA(a6)          ; set addr
+        move.w  d4,d7                           ; copy width to d7
+
+.LoopColumn:            
+        jsr     CalcRandom                      ; get rand
+        andi.w  #$003F,d0                       ; mask high bits of tile no.
+        ori.w   #$2200,d0                       ; set line 2 and id $1XX
+        move.w  d0,(a6)                         ; write 1 tile
+        add.b   d7,d0                           ; add whatever d7 is to d0
+        andi.w  #$003F,d0                       ; do the same to it
+        ori.w   #$2200,d0
+        move.w  d0,(a6)                         ; write 1 tile
+
+        dbf     d7,.LoopColumn                  ; loop for width
+        add.l   d6,d3                           ; move to next row
+        dbf     d5,.LoopRow                     ; loop for height
+        rts
+
+; ---------------------------------------------------------------------------
+; local memory usage derived from global (this sucks)
+
+
+        include 'beebush/Objects.asm'
+
+; ---------------------------------------------------------------------------
+
+_beebushDbugLoad:
+        rts
+; ---------------------------------------------------------------------------   
+; VBlank code relocation from main file (called from Jmptos)
+; ---------------------------------------------------------------------------
+
+VBLANK_BEEBUSH:                               
+        jsr   ReadJoypads
+
+        move.w  #$100,Z80BUS
+.WaitZ80:                              
+        btst    #0,Z80BUS
+        bne.s   .WaitZ80
+
+        move.w  #$8B00+%0000,VDPCTRL
+        VDPDMA  palette,$0000,$80,CRAM,a5        ; Palette DMA
+        VDPDMA  vdpSprites,$F800,$280,VRAM,a5    ; Sprite DMA
+        VDPCMD  move.l,$FC00,VRAM,WRITE,VDPCTRL
+        move.l  mainAPosX.w,VDPDATA
+
+        move.w  #0,Z80BUS
+        rts
+
+; ---------------------------------------------------------------------------
+
+VBLANK_BEEBUSHSCR:                               
+        jsr  ReadJoypads
+
+        move.w  #$100,Z80BUS
+.WaitZ80:                              
+        btst    #0,Z80BUS
+        bne.s   .WaitZ80
+
+        move.w  #$8B00+%0011,VDPCTRL
+        VDPDMA  palette,$0000,$80,CRAM,a5        ; Palette DMA
+        VDPDMA  vdpSprites,$F800,$280,VRAM,a5    ; Sprite DMA
+        VDPDMA  hscroll,$FC00,$380,VRAM,a5    ; Hscroll DMA
+
+        move.w  #0,Z80BUS
+        rts

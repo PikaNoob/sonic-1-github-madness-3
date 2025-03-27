@@ -245,6 +245,7 @@ GameClrRAM:
 
 	;	move.b	#$20,($FFFFF600).w ; set Game Mode to Minecraft
 
+	;	move.b	#$24,($FFFFF600).w ; and this is bee bush
 MainGameLoop:
 		moveq	#$7E,d0
 		and.b	($FFFFF600).w,d0 ; load	Game Mode
@@ -262,7 +263,7 @@ GameModeArray:
 ; ===========================================================================
 		bra.w	Level		; Demo Mode ($08)
 ; ===========================================================================
-		bra.w	Level		; Normal Level ($0C)
+		bra.w	Level	; Normal Level ($0C)
 ; ===========================================================================
 		bra.w	SpecialStage	; Special Stage	($10)
 ; ===========================================================================
@@ -272,8 +273,18 @@ GameModeArray:
 ; ===========================================================================
 		bra.w	Credits		; Credits ($1C)
 ; ===========================================================================
-		jmp	Minecraft	; Minecraft ($20)	
+		bra.w	jmpto_Minecraft	; Minecraft ($20)
+; ===========================================================================	
+		bra.w	jmpto_BeeBush   ; BeeBush ($24)	
 ; ===========================================================================
+; uuuuuuuuuuuuuuuuuuuuuuuuuuuuu
+
+jmpto_Minecraft:
+		jmp     Minecraft
+
+jmpto_BeeBush:
+		jmp     GM_BEEBUSH
+
 
 CheckSumError:
 		bsr.w	VDPSetupGame
@@ -500,6 +511,10 @@ loc_B64:				; XREF: loc_D50
 		movem.l	(sp)+,d0-a6
 		rte	
 ; ===========================================================================
+; THIS SUCKS
+VBLNO_BEEBUSH        EQU         13*2
+VBLNO_BEEBUSHSCR     EQU         14*2
+
 off_B6E:	dc.w loc_B88-off_B6E, loc_C32-off_B6E
 		dc.w loc_C44-off_B6E, loc_C5E-off_B6E
 		dc.w loc_C6E-off_B6E, loc_DA6-off_B6E
@@ -507,6 +522,9 @@ off_B6E:	dc.w loc_B88-off_B6E, loc_C32-off_B6E
 		dc.w loc_C64-off_B6E, loc_F9A-off_B6E
 		dc.w loc_C36-off_B6E, loc_FA6-off_B6E
 		dc.w loc_E72-off_B6E
+		dc.w jmpto_VBLANK_BEEBUSH-off_B6E
+		dc.w jmpto_VBLANK_BEEBUSHSCR-off_B6E
+
 ; ===========================================================================
 
 loc_B88:				; XREF: loc_B10; off_B6E
@@ -582,6 +600,18 @@ loc_C44:				; XREF: off_B6E
 
 locret_C5C:
 		rts	
+
+; ---------------------------------------------------------------------------
+; SOOOO GROSS!!!
+; ---------------------------------------------------------------------------
+jmpto_VBLANK_BEEBUSH:
+	jmp VBLANK_BEEBUSH
+
+jmpto_VBLANK_BEEBUSHSCR:
+	jmp VBLANK_BEEBUSHSCR
+
+; ---------------------------------------------------------------------------
+
 ; ===========================================================================
 
 loc_C5E:				; XREF: off_B6E
@@ -1097,7 +1127,7 @@ VDPSetupArray:	dc.w $8004, $8134, $8230, $8328	; XREF: VDPSetupGame
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-
+InitScreen:
 ClearScreen:
 		lea	($C00004).l,a5
 		move.w	#$8F01,(a5)
@@ -1272,7 +1302,7 @@ Pause_SlowMo:				; XREF: PauseGame
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-
+DrawTileMap:
 ShowVDPGraphics:			; XREF: SegaScreen; TitleScreen; SS_BGLoad
 		lea	($C00000).l,a6
 		move.l	#$800000,d4
@@ -1491,7 +1521,7 @@ loc_1574:
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-
+LoadArtList: 
 LoadPLC:
 		movem.l	a1-a2,-(sp)
 		lea	(ArtLoadCues).l,a1
@@ -1524,7 +1554,7 @@ loc_15AC:
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-
+InitArtList: 
 LoadPLC2:
 		movem.l	a1-a2,-(sp)
 		lea	(ArtLoadCues).l,a1
@@ -1552,7 +1582,7 @@ loc_15D8:
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-
+ClearArtListQueue:
 ClearPLC:				; XREF: LoadPLC2
 		lea	($FFFFF680).w,a2
 		moveq	#$1F,d0
@@ -1569,7 +1599,7 @@ ClearPLC_Loop:
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-
+ProcessArtLoading: 
 RunPLC_RAM:				; XREF: Pal_FadeTo
 		tst.l	($FFFFF680).w
 		beq.s	locret_1640
@@ -2423,7 +2453,7 @@ loc_1E4E:				; XREF: Pal_AddColor
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-
+PalFadeOut:
 Pal_FadeFrom:
 		move.w	#$3F,($FFFFF626).w
 		move.w	#$15,d4
@@ -2914,7 +2944,7 @@ Pal_Anakama:incbin	pallet\anakama.bin	; anakama char
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-
+VSync:
 DelayProgram:				; XREF: PauseGame
 		move	#$2300,sr
 
@@ -2930,7 +2960,7 @@ loc_29AC:
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-
+CalcRandom: 
 RandomNumber:
 		move.l	($FFFFF636).w,d1
 		bne.s	loc_29C0
@@ -2954,7 +2984,7 @@ loc_29C0:
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-
+CalcSinCos:
 CalcSine:				; XREF: SS_BGAnimate; et al
 		andi.w	#$FF,d0
 		add.w	d0,d0
@@ -3133,7 +3163,7 @@ Sega_WaitEnd:
 		beq.s	Sega_WaitEnd	; if not, branch
 
 Sega_GotoTitle:
-		move.b	#4,($FFFFF600).w ; go to title screen
+		move.b	#$24,($FFFFF600).w ; go to title screen
 		rts	
 ; ===========================================================================
 
@@ -16866,7 +16896,7 @@ Obj_Index:
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-
+_objectFall: 
 ObjectFall:
 		move.l	8(a0),d2
 		move.l	$C(a0),d3
@@ -16935,7 +16965,7 @@ JumpFallSonic:
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-
+_objectSetSpeed:
 SpeedToPos:
 		move.l	8(a0),d2
 		move.l	$C(a0),d3
@@ -16958,7 +16988,7 @@ SpeedToPos:
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-
+_objectDraw:
 DisplaySprite:
 		lea	($FFFFAC00).w,a1
 		move.w	$18(a0),d0
@@ -16981,7 +17011,7 @@ locret_D620:
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-
+_objectDrawChild: 
 DisplaySprite2:
 		lea	($FFFFAC00).w,a2
 		move.w	$18(a1),d0
@@ -17004,7 +17034,7 @@ locret_D63E:
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-
+_objectDelete: 
 DeleteObject:
 		movea.l	a0,a1
 
@@ -17029,7 +17059,7 @@ BldSpr_ScrPos:	dc.l 0			; blank
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-
+DrawObjects:
 BuildSprites:				; XREF: TitleScreen; et al
 		lea	($FFFFF800).w,a2 ; set address for sprite table
 		moveq	#0,d5
@@ -41783,6 +41813,8 @@ IdiotPCM_end:
 	even
 
 Minecraft:	include	minecraft\code\main.asm
+		
+		include beebush\_BEEBUSH.68k
 ; end of 'ROM'
 EndOfRom:
 
