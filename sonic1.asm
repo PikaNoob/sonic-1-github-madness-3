@@ -3179,30 +3179,24 @@ Title_ClrObjRam:
 		dbf	d1,Title_ClrObjRam ; fill object RAM ($D000-$EFFF) with	$0
 
 ; gomer
+
+		moveq	#3,d0		; load Sonic's pallet
+		bsr.w	PalLoad1
 		move.l	#$40000000,($C00004).l
 		lea	(Nem_Gomer).l,a0 ; load Gomer patterns
 		bsr.w	NemDec
-		moveq	#3,d0		; load Sonic's pallet
-		bsr.w	PalLoad1
-
 		lea	($FF0000).l,a1
 		lea	(Eni_Gomer).l,a0 ; load mappings for	Gomer credits
 		move.w	#0,d0
 		bsr.w	EniDec
-; help how the fuck can i do this IT SHOWS NOTHING
-		bsr.w	Pal_FadeTo
 		lea	($FF0000).l,a1
 		move.l	#$40000003,d0
 		moveq	#$27,d1
 		moveq	#$1B,d2
 		bsr.w	ShowVDPGraphics
-
-
-		lea	($FF0000).l,a1
-		move.l	#$60000003,d0
-		moveq	#$27,d1
-		moveq	#$1B,d2
-
+                moveq   #$FFFFFF91,d0          ; play otis
+                jsr     MegaPCM_PlaySample     ; "OH YEAH!"
+		bsr.w	Pal_FadeTo
 		bsr.w	Pal_FadeFrom
 
 
@@ -12722,6 +12716,8 @@ CollectRing:				; XREF: Obj25_Collect
 loc_9CA4:
 		addq.b	#1,($FFFFFE12).w ; add 1 to the	number of lives	you have
 		addq.b	#1,($FFFFFE1C).w ; add 1 to the	lives counter
+                moveq   #$FFFFFF91,d0          ; play otis
+                jsr     MegaPCM_PlaySample     ; "OH YEAH!"
 		move.w	#$88,d0		; play extra life music
 
 Obj25_PlaySnd:
@@ -13249,6 +13245,8 @@ Obj2E_ChkSonic:
 ExtraLife:
 		addq.b	#1,($FFFFFE12).w ; add 1 to the	number of lives	you have
 		addq.b	#1,($FFFFFE1C).w ; add 1 to the	lives counter
+                moveq   #$FFFFFF91,d0          ; play otis
+                jsr     MegaPCM_PlaySample     ; "OH YEAH!"
 		move.w	#$88,d0
 		jmp	(PlaySound).l	; play extra life music
 ; ===========================================================================
@@ -15926,6 +15924,8 @@ Obj3A_RingBonus:
 Obj3A_ChkBonus:
 		tst.w	d0		; is there any bonus?
 		bne.s	Obj3A_AddBonus	; if yes, branch
+                moveq   #$FFFFFF91,d0          ; play otis
+                jsr     MegaPCM_PlaySample     ; "OH YEAH!"
 		move.w	#$C5,d0
 		jsr	(PlaySound_Special).l ;	play "ker-ching" sound
 		addq.b	#2,$24(a0)
@@ -36915,6 +36915,8 @@ Obj09_Chk1Up:
 Obj09_Get1Up:
 		addq.b	#1,($FFFFFE12).w ; add 1 to number of lives
 		addq.b	#1,($FFFFFE1C).w ; add 1 to lives counter
+                moveq   #$FFFFFF91,d0          ; play otis
+                jsr     MegaPCM_PlaySample     ; "OH YEAH!"
 		move.w	#$88,d0
 		jsr	(PlaySound).l	; play extra life music
 		moveq	#0,d4
