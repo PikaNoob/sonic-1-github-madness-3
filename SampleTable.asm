@@ -2,6 +2,7 @@
 ; ---------------------------------------------------------------
 SampleTable:
 	;			type			pointer		Hz
+;	dcSample	TYPE_PCM, 		VeryDumb, 	0				; idiocrity test
 	dcSample	TYPE_DPCM, 		Kick, 		8000				; $81
 	dcSample	TYPE_PCM,		Snare,		24000				; $82
 	dcSample	TYPE_DPCM, 		Timpani, 	7250				; $83
@@ -19,6 +20,7 @@ SampleTable:
 	dc.w	-1	; end marker
 
 ; ---------------------------------------------------------------
+;	incdac	VeryDumb, "superbowl.mp4"
 	incdac	Kick, "sound/dac/kick.dpcm"
 	incdac	Snare, "sound/dac/snare.pcm"
 	incdac	Timpani, "sound/dac/timpani.dpcm"

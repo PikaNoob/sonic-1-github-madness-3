@@ -234,7 +234,14 @@ GameClrRAM:
 		move.l	#loc_B10,(vBlankAdress).w		; Set the V-INT pointer to the standard V-INT routine
 
 		bsr.w	VDPSetupGame
-		bsr.w	SoundDriverLoad
+	;	bsr.w	SoundDriverLoad
+                jsr     MegaPCM_LoadDriver
+                lea     SampleTable, a0
+                jsr     MegaPCM_LoadSampleTable
+		tst.w	d0
+		beq.s	@mpcmsucc
+		jmp	Sound_E5
+@mpcmsucc:
 		bsr.w	JoypadInit
 		move.b	#0,($FFFFF600).w ; set Game Mode to Sega Screen
 
@@ -248,9 +255,7 @@ GameClrRAM:
 @notmss:
 @nosplashscreens:
 	;	move.b	#$20,($FFFFF600).w ; set Game Mode to Minecraft
-                jsr     MegaPCM_LoadDriver
-                lea     SampleTable, a0
-                jsr     MegaPCM_LoadSampleTable
+	;	move.b	#$24,($FFFFF600).w ; set Game Mode to Bee Bush
 MainGameLoop:
 		moveq	#$7E,d0
 		and.b	($FFFFF600).w,d0 ; load	Game Mode
@@ -39416,27 +39421,27 @@ sub_71B4C:				; XREF: loc_B10; PalToCRAM
 		bne.s	@main
 		bsr.w	@main
 @main:
-		move.w	#$100,($A11100).l ; stop the Z80
-		nop
-		nop
-		nop
+;		move.w	#$100,($A11100).l ; stop the Z80
+;		nop
+;		nop
+;		nop
 ; loc_71B5A:
 @wait:
-		btst	#0,($A11100).l
-		bne.s	@wait
+;		btst	#0,($A11100).l
+;		bne.s	@wait
 
-		btst	#7,($A01FFD).l
-		beq.s	loc_71B82
-		move.w	#0,($A11100).l	; start	the Z80
-		nop
-		nop
-		nop
-		nop
-		nop
-		bra.s	@main		; if you want really funky sound, use sub_71B4C instead ;)
+;		btst	#7,($A01FFD).l
+;		beq.s	loc_71B82
+;		move.w	#0,($A11100).l	; start	the Z80
+;		nop
+;		nop
+;		nop
+;		nop
+;		nop
+;		bra.s	@main		; if you want really funky sound, use sub_71B4C instead ;)
 ; ===========================================================================
 
-loc_71B82:
+; loc_71B82:
 		lea	($FFF000).l,a6
 		clr.b	$E(a6)
 		tst.b	3(a6)		; is music paused?
@@ -39525,7 +39530,7 @@ loc_71C38:
 		jsr	sub_72850(pc)
 
 loc_71C44:
-		move.w	#0,($A11100).l	; start	the Z80
+;		move.w	#0,($A11100).l	; start	the Z80
 		rts	
 ; End of function sub_71B4C
 
@@ -40005,9 +40010,14 @@ return_PlayPCM:
 ; ---------------------------------------------------------------------------
 
 Sound_E5: 
+		move	#$2700,sr
 		jsr	ClearScreen
 		move.b	#$2B,($A04000).l		; $A04000 = $2B -> Write to DAC enable
 		move.b	#$80,($A04001).l		; enable DAC
+
+		move.w	($FFFFF60C).w,d0
+		ori.b	#$40,d0
+		move.w	d0,(a5)
 
 		;control port on a5
 		move.l	#$94000000+((($280>>1)&$FF00)<<8)+$9300+(($280>>1)&$FF),(a5)
@@ -41435,7 +41445,7 @@ loc_72B78:
 		move.b	#$80,$24(a6)
 		move.b	#$28,$26(a6)
 		clr.b	$27(a6)
-		move.w	#0,($A11100).l
+;		move.w	#0,($A11100).l
 		addq.w	#8,sp
 		rts	
 ; ===========================================================================
