@@ -2918,7 +2918,7 @@ Pal_Gronic:	incbin	pallet\gronic.bin	; gronic char
 Pal_LZGroWater:	incbin	pallet\groniclzuw.bin	; Gronic (underwater in SBZ act 3) pallet
 Pal_SBZ3GroWat:	incbin	pallet\gronicsbz3uw.bin	; Gronic (underwater in SBZ act 3) pallet
 Pal_Anakama:incbin	pallet\anakama.bin	; anakama char
-
+Pal_neru:incbin	pallet\neru.bin	; kosaku  kosaku  kosaku  kosaku  kosaku 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	delay the program by ($FFFFF62A) frames
 ; ---------------------------------------------------------------------------
@@ -3402,7 +3402,7 @@ loc_3230:
 		beq.s	@notc
 
 		add.b	#1,(v_character).w ; sonic/gronic 
-		cmpi.b	#3,(v_character).w
+		cmpi.b	#5,(v_character).w
 		blt.s	@notoverflow
 		move.b	#0,(v_character).w
 	@notoverflow:
@@ -4182,6 +4182,7 @@ Player_Palette:
 		dc.w	22,23,24,0 ; Pal_Gronic 
 		dc.w	25,23,24,0 ; Pal_Anakama 
         dc.w	3,$F,$10,0 ; LimitedSonic 
+        dc.w	26,$F,$10,0 ; neru
 
 		; add more player palettes
 Level_LoadPal:
@@ -24128,6 +24129,7 @@ Player_Maps:
 	dc.l	Map_Sonic ; gronic
 	dc.l	Map_Sonic ; anakama
 	dc.l	Map_Sonic ; LimitedSonic
+	dc.l    map_neru
 	; insert player mapping here
 	
 Obj01_Main:				; XREF: Obj01_Index
@@ -25148,7 +25150,7 @@ loc_13490:
 
 Sonic_JumpHeight:			; XREF: Obj01_MdJump; Obj01_MdJump2
 		tst.b	$3C(a0)
-		beq.w	loc_134C4
+		beq.s	loc_134C4
 		move.w	#-$400,d1
 		btst	#6,$22(a0)
 		beq.s	loc_134AE
@@ -25156,53 +25158,11 @@ Sonic_JumpHeight:			; XREF: Obj01_MdJump; Obj01_MdJump2
 
 loc_134AE:
 		cmp.w	$12(a0),d1
-		ble.s	locret_134C22
+		ble.s	locret_134C2
 		move.b	($FFFFF602).w,d0
 		andi.b	#$70,d0		; is A,	B or C pressed?
 		bne.s	locret_134C2	; if yes, branch
 		move.w	d1,$12(a0)
-locret_134C22:
-;VARIBLES TO NOT MESS UP BUILDING
-v_player:		equ $FFFFD000	; object variable space for Conic ($40 bytes)
-v_conspeedmax:		equ $FFFFF760	; Conic's maximum speed (2 bytes)
-v_conspeedacc:		equ $FFFFF762	; Conic's acceleration (2 bytes)
-v_conspeeddec:		equ $FFFFF764	; Conic's deceleration (2 bytes)
-f_playerctrl:		equ $FFFFF7C8	; Player control override flags (object ineraction, control enable)
-f_timecount:		equ $FFFFFE1E	; time counter update flag
-v_rings:		equ $FFFFFE20	; rings (2 bytes)
-v_invinc:		equ $FFFFFE2D	; invinciblity status (00 = no; 01 = yes)
-v_emeralds:		equ $FFFFFE57	; number of chaos emeralds
-f_superconic:		equ $FFFFFF48	; we are so super!
-v_superpal:		equ $FFFFFF49
-v_supertime:		equ $FFFFFF4A
-v_superpaltime:		equ $FFFFFF4C
-v_superpalframe:	equ $FFFFFF4E
-invtime:	equ $32	; time left for invincibility
-;THIS CHECKS SUICIDE BARNEY
-;ignore that its conic lmao
-	tst.b	(f_superconic).w	; is Conic already Super?
-	bne.s	locret_134C2	; if yes, branch
-	cmpi.b	#6,(v_emeralds).w	; does Conic have exactly 6 emeralds?
-	bne.s	locret_134C2	; if not, branch
-	cmpi.w	#50,(v_rings).w		; does Conic have at least 50 rings?
-	blo.s	locret_134C2	; if not, branch
-	tst.b	(f_timecount).w	; has Conic reached the end of the act?
-	beq.s	locret_134C2	; if yes, branch
-	move.b	#1,(v_superpal).w
-	move.b	#$F,(v_superpaltime).w
-	move.b	#1,(f_superconic).w
-	move.b	#$81,(f_playerctrl).w	; lock controls
-	move.b	#$12,$1C(a0)	; use transformation animation
-	move.w	#$A00,(v_conspeedmax).w
-	move.w	#$30,(v_conspeedacc).w
-	move.w	#$100,(v_conspeeddec).w
-; change them to your liking
-	clr.b	(v_player+invtime).w
-	bset	#$1,(v_invinc).w	; make Conic invincible
-;	move.w	#bgm_SuperConic,d0
-;	jsr	(PlaySound).l	; load the Super Conic song and return
-;	move.w	#sfx_Transform,d0
-;	jsr	(PlaySound_SFX).l	; Play transformation sound effect.
 
 locret_134C2:
 		rts	
@@ -25803,6 +25763,7 @@ Player_Anim:
 	dc.l	SonicAniData ; gronic
 	dc.l	SonicAniData ; anakama
 	dc.l	SonicAniData ; LimitedSonic
+	dc.l	SonicAniData ; neru
 
 	; Insert more animation data for other characters here
 	
@@ -25994,12 +25955,16 @@ Player_DPLC:
 	dc.l	SonicDynPLC ; gronic
 	dc.l	SonicDynPLC ; anakama
 	dc.l	SonicDynPLC ; LimitedSonic
+	dc.l	NeruDynPLC ; neru
+
 	; add pointers for player dplc here
 Player_Art:
 	dc.l	Art_Sonic
 	dc.l	Art_Sonic ; gronic
 	dc.l	Art_Sonic ; anakama
 	dc.l	Art_Sonic ; LimitedSonic
+	dc.l	Art_neru ; neru
+
 	; add pointers for player art here
 
 LoadSonicDynPLC:			; XREF: Obj01_Control; et al
@@ -38663,21 +38628,25 @@ Eni_TruthNuke:	incbin	mapeni\truthnuke.bin	; GMZ
 Nem_TruthNuke:	incbin	artnem\truthnuke.bin	; GMZ: TRVTH NVKE
 		even
 ; ---------------------------------------------------------------------------
-; Sprite mappings - Sonic
+; Sprite mappings - players
 ; ---------------------------------------------------------------------------
 Map_Sonic:
 	include "_maps\Sonic.asm"
-
+map_neru:
+	include "_maps\neru.asm"
 ; ---------------------------------------------------------------------------
-; Uncompressed graphics	loading	array for Sonic
+; Uncompressed graphics	loading	array for the players
 ; ---------------------------------------------------------------------------
 SonicDynPLC:
 	include "_inc\Sonic dynamic pattern load cues.asm"
-
+NeruDynPLC:
+	include "_inc\NeruDPLC.asm"
 ; ---------------------------------------------------------------------------
-; Uncompressed graphics	- Sonic
+; Uncompressed graphics	- players
 ; ---------------------------------------------------------------------------
 Art_Sonic:	incbin	artunc\sonic.bin	; Sonic
+		even
+Art_neru:	incbin	artunc\neru.bin	; gocha gocha urusee!
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
@@ -39382,13 +39351,13 @@ ObjPos_Null:	dc.b $FF, $FF, 0, 0, 0,	0
                 include "MegaPCM.asm"                   ; ++ ADD THIS LINE
                 include "SampleTable.asm"               ; ++ ADD THIS LINE
 
-Go_SoundTypes:		dc.l SoundTypes		; XREF: Sound_Play
-Go_SoundD0:		dc.l SoundD0Index	; XREF: Sound_D0
-Go_MusicIndex:		dc.l MusicIndex-4		; XREF: Sound_Music
+Go_SoundTypes:	dc.l SoundTypes		; XREF: Sound_Play
+Go_SoundD0:	dc.l SoundD0Index	; XREF: Sound_D0
+Go_MusicIndex:	dc.l MusicIndex-4		; XREF: Sound_Music
 Go_MusicIndex80:	dc.l MusicIndex80-4		; XREF: Sound_Music
-Go_SoundIndex:		dc.l SoundIndex		; XREF: Sound_SFX
-off_719A0:		dc.l byte_71A94		; XREF: Sound_Music
-Go_PSGIndex:		dc.l PSG_Index		; XREF: sub_72926
+Go_SoundIndex:	dc.l SoundIndex		; XREF: Sound_SFX
+off_719A0:	dc.l byte_71A94		; XREF: Sound_Music
+Go_PSGIndex:	dc.l PSG_Index		; XREF: sub_72926
 ; ---------------------------------------------------------------------------
 ; PSG instruments used in music
 ; ---------------------------------------------------------------------------
