@@ -524,10 +524,10 @@ _beebushDbugLoad:
 VBLANK_BEEBUSH:                               
         jsr   ReadJoypads
 
-        move.w  #$100,Z80BUS
-.WaitZ80:                              
-        btst    #0,Z80BUS
-        bne.s   .WaitZ80
+;        move.w  #$100,Z80BUS
+;.WaitZ80:                              
+;        btst    #0,Z80BUS
+;        bne.s   .WaitZ80
 
         move.w  #$8B00+%0000,VDPCTRL
         VDPDMA  palette,$0000,$80,CRAM,a5        ; Palette DMA
@@ -535,7 +535,7 @@ VBLANK_BEEBUSH:
         VDPCMD  move.l,$FC00,VRAM,WRITE,VDPCTRL
         move.l  mainAPosX.w,VDPDATA
 
-        move.w  #0,Z80BUS
+;        move.w  #0,Z80BUS
         rts
 
 ; ---------------------------------------------------------------------------
@@ -543,15 +543,15 @@ VBLANK_BEEBUSH:
 VBLANK_BEEBUSHSCR:                               
         jsr  ReadJoypads
 
-        move.w  #$100,Z80BUS
-.WaitZ80:                              
-        btst    #0,Z80BUS
-        bne.s   .WaitZ80
+;        move.w  #$100,Z80BUS
+;.WaitZ80:                              
+;        btst    #0,Z80BUS
+;        bne.s   .WaitZ80
 
         move.w  #$8B00+%0011,VDPCTRL
         VDPDMA  palette,$0000,$80,CRAM,a5        ; Palette DMA
         VDPDMA  vdpSprites,$F800,$280,VRAM,a5    ; Sprite DMA
         VDPDMA  hscroll,$FC00,$380,VRAM,a5    ; Hscroll DMA
 
-        move.w  #0,Z80BUS
+;        move.w  #0,Z80BUS
         rts
