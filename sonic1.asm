@@ -251,12 +251,6 @@ GameClrRAM:
                 jsr     MegaPCM_LoadDriver
                 lea     SampleTable, a0
                 jsr     MegaPCM_LoadSampleTable
-                tst.w   d0                      ; was sample table loaded successfully?
-                beq.s   @SampleTableOk          ; if yes, branch
-                moveq   #$FFFFFF8C, d0          ; request SEGA PCM sample
-                jsr     MegaPCM_PlaySample
-                bra.s   *                       ; FREEZE, BECAUSE IT'S A TEST
-@SampleTableOk:
 MainGameLoop:
 		moveq	#$7E,d0
 		and.b	($FFFFF600).w,d0 ; load	Game Mode

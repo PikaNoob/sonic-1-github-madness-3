@@ -151,16 +151,15 @@ BEEBUSH_INIT:
         move.b  #VBLNO_BEEBUSH,vblankCmd.w
         jsr     VSync
 
-        move.b  #BBUSH_OBJNO_BODY,objSlot00.w        
-        move.b  #BBUSH_OBJNO_HEAD,objSlot01.w      
-        move.b  #BBUSH_OBJNO_EYES,objSlot02.w     
-        move.b  #BBUSH_OBJNO_MOUTH,objSlot03.w   
-        move.b  #BBUSH_OBJNO_DBUG,objSlot04.w
+        move.b  #BBUSH_OBJNO_BODY,objSlot03.w        
+        move.b  #BBUSH_OBJNO_HEAD,objSlot02.w      
+        move.b  #BBUSH_OBJNO_EYES,objSlot01.w     
+        move.b  #BBUSH_OBJNO_MOUTH,objSlot00.w   
 
-membushBody  = objSlot00
-membushHead  = objSlot01       
-membushEyes  = objSlot02
-membushMouth = objSlot03    
+membushBody  = objSlot03
+membushHead  = objSlot02       
+membushEyes  = objSlot01
+membushMouth = objSlot00    
                         
         move.w  #0,joypadMirr.w
         move.w  #0,joypad.w
@@ -212,15 +211,12 @@ membushMouth = objSlot03
         move.l  (a2)+,(a3)+
         dbf     d7,.LoadToBuffer
 
-        ; !!!DEBUG!!!
-
-        jsr     _beebushDbugLoad
-
         move.w  displayMode.w,d0          
         ori.b   #%1000000,d0
-
         move.w  d0,VDPCTRL		     ; Enable display when ready
         move.b  #SMNO_BEEBUSH_INTRO,submode.w ; Move to next mode
+        moveq   #$FFFFFF8D, d0          ; request SEGA PCM sample
+        jsr     MegaPCM_PlaySample
         rts
 
 ; ---------------------------------------------------------------------------
@@ -286,6 +282,8 @@ BEEBUSH_INITMAIN:
         move.b  #BBUSH_OBJNO_PLAYER,objSlot00.w
         move.l  #$100,distance
         move.b  #SMNO_BEEBUSH_MAIN,submode.w ; Move to next mode
+        moveq   #$FFFFFF8E, d0          ; request SEGA PCM sample
+        jsr     MegaPCM_PlaySample
         rts
 
 ; ---------------------------------------------------------------------------
