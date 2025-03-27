@@ -70,7 +70,7 @@ REND.ONSCREEN:   equ 7
 
 _beebushRunObjects:                             
         lea     OBJECTRAM.w,a0
-        moveq   #96-1,d7
+        moveq   #8-1,d7
         moveq   #0,d0
 
 .RunObjLoop:                       
@@ -95,7 +95,7 @@ BBUSH_OBJNO_BODY        = 2
 BBUSH_OBJNO_HEAD        = 3
 BBUSH_OBJNO_EYES        = 4
 BBUSH_OBJNO_MOUTH       = 5
-BBUSH_OBJNO_DBUG        = 6
+BBUSH_OBJNO_BEES        = 6
 
 
 .ObjectIndex:    
@@ -104,7 +104,7 @@ BBUSH_OBJNO_DBUG        = 6
         dc.l BbushObj_QuagmireHead
         dc.l BbushObj_QuagmireEyes
         dc.l BbushObj_QuagmireMouth
-        dc.l BbushObj_Dbug
+        dc.l BbushObj_Bees
 .Null:
         rts 
 

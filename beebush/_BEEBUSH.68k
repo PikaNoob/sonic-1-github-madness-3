@@ -6,10 +6,15 @@
         include "beebush/Macros.inc"
 
         opt     l.
-hscroll =       $FFFFCC00
-vdpSprites =    $FFFFF800
-palette =       $FFFFFB00
-frameCntr =     $FFFFFE04
+
+hscroll         = $FFFFCC00
+vdpSprites      = $FFFFF800
+palette         = $FFFFFB00
+frameCntr       = $FFFFFE04
+beeSinCntr      = $FFFFF760
+beeSin          = $FFFFF762      
+beeCos          = $FFFFF764
+
         rsset   $FFFFF600
 
 gamemode:               rs.b 1  
@@ -138,19 +143,25 @@ BEEBUSH_INIT:
         move.w  #$8B00+%00000000,(a6)
         lea     OBJECTRAM.w,a1
         moveq   #0,d0
-        move.w  #((OBJSZ*20)/4)-1,d1
+        move.w  #((OBJSZ*128)/4)-1,d1
 
 .ClearObjects:                         
         move.l  d0,(a1)+
         dbf     d1,.ClearObjects
         lea     cameraAPosX.w,a1
         moveq   #0,d0
-        move.w  #$8-1,d1
+        move.w  #($100/4)-1,d1
 
 .ClearCams:                            
         move.l  d0,(a1)+
         dbf     d1,.ClearCams
+        lea     mainAPosX.w,a1
+        moveq   #0,d0
+        move.w  #$4-1,d1
 
+.ClearSysCams:                            
+        move.l  d0,(a1)+
+        dbf     d1,.ClearSysCams
         move.b  #VBLNO_BEEBUSH,vblankCmd.w
         jsr     VSync
 
@@ -216,9 +227,9 @@ membushMouth = objSlot00
 
         move.w  displayMode.w,d0          
         ori.b   #%1000000,d0
-        move.w  d0,VDPCTRL		     ; Enable display when ready
+        move.w  d0,VDPCTRL		      ; Enable display when ready
         move.b  #SMNO_BEEBUSH_INTRO,submode.w ; Move to next mode
-        moveq   #$FFFFFF8D, d0          ; request SEGA PCM sample
+        moveq   #$FFFFFF8D, d0                ; request SEGA PCM sample
         jsr     MegaPCM_PlaySample
         rts
 
@@ -264,7 +275,9 @@ BEEBUSH_STATIC:
 ; Initialize main sequence
 ; ---------------------------------------------------------------------------
 
-membushPlayer = objSlot00
+membushPlayer = objSlot02
+membushBees   = objSlot01
+membushHive   = objSlot00
 
 BEEBUSH_INITMAIN:                              
         move.b  #VBLNO_BEEBUSH,vblankCmd.w
@@ -282,7 +295,8 @@ BEEBUSH_INITMAIN:
 .ClearObjects:                         
         move.l  d0,(a1)+
         dbf     d1,.ClearObjects
-        move.b  #BBUSH_OBJNO_PLAYER,objSlot00.w
+        move.b  #BBUSH_OBJNO_PLAYER,objSlot02.w
+        move.b  #BBUSH_OBJNO_BEES,objSlot01.w
         move.l  #$100,distance
         move.b  #SMNO_BEEBUSH_MAIN,submode.w ; Move to next mode
         moveq   #$FFFFFF8E, d0          ; request SEGA PCM sample
@@ -335,9 +349,7 @@ ArtNem_QUAGMIRE:
 ; camera B = background (moves)
 ; ---------------------------------------------------------------------------
 
-beeSinCntr = $FFFFF760
-beeSin     = $FFFFF762      
-beeCos     = $FFFFF764
+
 
 _beebushCamShake:
         add.b   #2,beeSinCntr.w
@@ -507,16 +519,11 @@ _beebushDrawStatic:
         dbf     d5,.LoopRow                     ; loop for height
         rts
 
-; ---------------------------------------------------------------------------
-; local memory usage derived from global (this sucks)
 
+; --------------------------------------------------------------------------- 
 
         include 'beebush/Objects.asm'
 
-; ---------------------------------------------------------------------------
-
-_beebushDbugLoad:
-        rts
 ; ---------------------------------------------------------------------------   
 ; VBlank code relocation from main file (called from Jmptos)
 ; ---------------------------------------------------------------------------

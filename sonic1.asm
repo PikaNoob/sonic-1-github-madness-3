@@ -39382,13 +39382,13 @@ ObjPos_Null:	dc.b $FF, $FF, 0, 0, 0,	0
                 include "MegaPCM.asm"                   ; ++ ADD THIS LINE
                 include "SampleTable.asm"               ; ++ ADD THIS LINE
 
-Go_SoundTypes:	dc.l SoundTypes		; XREF: Sound_Play
-Go_SoundD0:	dc.l SoundD0Index	; XREF: Sound_D0
-Go_MusicIndex:	dc.l MusicIndex-4		; XREF: Sound_Music
+Go_SoundTypes:		dc.l SoundTypes		; XREF: Sound_Play
+Go_SoundD0:		dc.l SoundD0Index	; XREF: Sound_D0
+Go_MusicIndex:		dc.l MusicIndex-4		; XREF: Sound_Music
 Go_MusicIndex80:	dc.l MusicIndex80-4		; XREF: Sound_Music
-Go_SoundIndex:	dc.l SoundIndex		; XREF: Sound_SFX
-off_719A0:	dc.l byte_71A94		; XREF: Sound_Music
-Go_PSGIndex:	dc.l PSG_Index		; XREF: sub_72926
+Go_SoundIndex:		dc.l SoundIndex		; XREF: Sound_SFX
+off_719A0:		dc.l byte_71A94		; XREF: Sound_Music
+Go_PSGIndex:		dc.l PSG_Index		; XREF: sub_72926
 ; ---------------------------------------------------------------------------
 ; PSG instruments used in music
 ; ---------------------------------------------------------------------------
