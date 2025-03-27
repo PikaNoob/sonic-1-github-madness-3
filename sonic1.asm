@@ -3727,6 +3727,7 @@ LevSel_Right:
 ; ===========================================================================
 LevSel_Refresh:
 		
+		move.b	#$D1,($FFFFF00B).w ; menu sfx
 		move.w	#$E680-$21,d3	; VRAM setting
 		bsr.w	LevSelHighlightCode	; refresh text
 		
@@ -3785,6 +3786,7 @@ SndTest_B:
 		addq.b	#8,d0
 
 SndTest_Refresh:
+		move.b	#$D1,($FFFFF00B).w ; menu sfx
 		move.w	#$C680-$21,d3
 		move.b	d0,($FFFFFF84).w ; set sound test number
 		bra.w	LevSelSndTest	; refresh text
