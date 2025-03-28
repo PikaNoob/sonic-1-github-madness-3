@@ -82,3 +82,6 @@
 	dc.l Pal_neru
 	dc.w $FB00
 	dc.w 7
+	dc.l Pal_Limit
+	dc.w $FB00
+	dc.w 7

@@ -2920,6 +2920,8 @@ Pal_LZGroWater:	incbin	pallet\groniclzuw.bin	; Gronic (underwater in SBZ act 3) 
 Pal_SBZ3GroWat:	incbin	pallet\gronicsbz3uw.bin	; Gronic (underwater in SBZ act 3) pallet
 Pal_Anakama:incbin	pallet\anakama.bin	; anakama char
 Pal_neru:incbin	pallet\neru.bin	; kosaku  kosaku  kosaku  kosaku  kosaku 
+Pal_Limit:incbin pallet\LimitedSonic.bin	;	Soo limited-core
+
 ; ---------------------------------------------------------------------------
 ; Subroutine to	delay the program by ($FFFFF62A) frames
 ; ---------------------------------------------------------------------------
@@ -4180,7 +4182,7 @@ Player_Palette:
 		
 		dc.w	22,23,24,0 ; Pal_Gronic 
 		dc.w	25,23,24,0 ; Pal_Anakama 
-        dc.w	3,$F,$10,0 ; LimitedSonic 
+        dc.w	27,27,27,0 ; LimitedSonic 
         dc.w	26,$F,$10,0 ; neru
 
 		; add more player palettes
@@ -24204,7 +24206,7 @@ Player_Maps:
 	dc.l	Map_Sonic
 	dc.l	Map_Sonic ; gronic
 	dc.l	Map_Sonic ; anakama
-	dc.l	Map_Sonic ; LimitedSonic
+	dc.l	Map_Limit ; LimitedSonic
 	dc.l    map_neru
 	; insert player mapping here
 	
@@ -25841,7 +25843,7 @@ Player_Anim:
 	dc.l	SonicAniData
 	dc.l	SonicAniData ; gronic
 	dc.l	SonicAniData ; anakama
-	dc.l	SonicAniData ; LimitedSonic
+	dc.l	LimitedSonicAniData ; LimitedSonic
 	dc.l	SonicAniData ; neru
 
 	; Insert more animation data for other characters here
@@ -26024,6 +26026,9 @@ loc_13B26:
 SonicAniData:
 	include "_anim\Sonic.asm"
 
+LimitedSonicAniData:
+	include "_anim\LimitedSonic.asm"
+
 ; ---------------------------------------------------------------------------
 ; Sonic	pattern	loading	subroutine
 ; ---------------------------------------------------------------------------
@@ -26033,7 +26038,7 @@ Player_DPLC:
 	dc.l	SonicDynPLC
 	dc.l	SonicDynPLC ; gronic
 	dc.l	SonicDynPLC ; anakama
-	dc.l	SonicDynPLC ; LimitedSonic
+	dc.l	LimitDynPLC ; LimitedSonic
 	dc.l	NeruDynPLC ; neru
 
 	; add pointers for player dplc here
@@ -26041,7 +26046,7 @@ Player_Art:
 	dc.l	Art_Sonic
 	dc.l	Art_Sonic ; gronic
 	dc.l	Art_Sonic ; anakama
-	dc.l	Art_Sonic ; LimitedSonic
+	dc.l	Art_Limit ; LimitedSonic
 	dc.l	Art_neru ; neru
 
 	; add pointers for player art here
@@ -38717,6 +38722,8 @@ Nem_TruthNuke:	incbin	artnem\truthnuke.bin	; GMZ: TRVTH NVKE
 ; ---------------------------------------------------------------------------
 Map_Sonic:
 	include "_maps\Sonic.asm"
+Map_Limit:
+	include "_maps\LimitedSonic.asm"
 map_neru:
 	include "_maps\neru.asm"
 ; ---------------------------------------------------------------------------
@@ -38724,12 +38731,16 @@ map_neru:
 ; ---------------------------------------------------------------------------
 SonicDynPLC:
 	include "_inc\Sonic dynamic pattern load cues.asm"
+LimitDynPLC:
+	include "_inc\limitedsonic dynamic pattern load cues.asm"
 NeruDynPLC:
 	include "_inc\NeruDPLC.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	- players
 ; ---------------------------------------------------------------------------
 Art_Sonic:	incbin	artunc\sonic.bin	; Sonic
+		even
+Art_Limit:	incbin	artunc\limitedsonic.bin ; LimitedSonic
 		even
 Art_neru:	incbin	artunc\neru.bin	; gocha gocha urusee!
 		even
