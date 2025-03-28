@@ -200,7 +200,13 @@ GameProgram:
 		beq.s	CheckSumCheck
 		cmpi.l	#'init',($FFFFFFFC).w ; has checksum routine already run?
 		beq.w	GameInit	; if yes, branch
-
+; init stuff for hard reset
+		lea	($FFFFFE00).w,a6
+		moveq	#0,d7
+		move.w	#$7F,d6
+loc_348:
+		move.l	d7,(a6)+
+		dbf	d6,loc_348
 CheckSumCheck:
 		movea.l	#ErrorTrap,a0	; start	checking bytes after the header	($200)
 		movea.l	#RomEndLoc,a1	; stop at end of ROM
@@ -214,14 +220,6 @@ loc_32C:
 		movea.l	#Checksum,a1	; read the checksum
 		cmp.w	(a1),d1		; compare correct checksum to the one in ROM
 		sne	(f_checksum).w	; if they don't match, set this flag. if they do, clear it
-; init stuff for hard reset
-		lea	($FFFFFE00).w,a6
-		moveq	#0,d7
-		move.w	#$7F,d6
-loc_348:
-		move.l	d7,(a6)+
-		dbf	d6,loc_348
-AfterERR:
 		move.b	($A10001).l,d0
 		andi.b	#$C0,d0
 		move.b	d0,($FFFFFFF8).w
