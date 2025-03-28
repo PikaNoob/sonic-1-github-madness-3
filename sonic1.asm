@@ -657,7 +657,7 @@ loc_CB0:				; XREF: loc_C76
 loc_CD4:				; XREF: loc_C76
 		move.w	($FFFFF624).w,(a5)
 		lea	($C00004).l,a5
-		move.l	#$940193C0,(a5)
+		move.l	#$940193E0,(a5)	; 240 lines, V30
 		move.l	#$96E69500,(a5)
 		move.w	#$977F,(a5)
 		move.w	#$7C00,(a5)
@@ -731,7 +731,7 @@ loc_DA6:				; XREF: off_B6E
 		move.w	#$83,($FFFFF640).w
 		move.w	($FFFFF640).w,(a5)
 		lea	($C00004).l,a5
-		move.l	#$940193C0,(a5)
+		move.l	#$940193E0,(a5)	; 240 lines, V30
 		move.l	#$96E69500,(a5)
 		move.w	#$977F,(a5)
 		move.w	#$7C00,(a5)
@@ -784,7 +784,7 @@ loc_EB4:				; XREF: loc_E7A
 loc_ED8:				; XREF: loc_E7A
 		move.w	($FFFFF624).w,(a5)
 		lea	($C00004).l,a5
-		move.l	#$940193C0,(a5)
+		move.l	#$940193E0,(a5)	; 240 lines, V30
 		move.l	#$96E69500,(a5)
 
 loc_EEE:
@@ -852,7 +852,7 @@ loc_FA6:				; XREF: off_B6E
 		move.w	#$83,($FFFFF640).w
 		move.w	($FFFFF640).w,(a5)
 		lea	($C00004).l,a5
-		move.l	#$940193C0,(a5)
+		move.l	#$940193E0,(a5)	; 240 lines, V30
 		move.l	#$96E69500,(a5)
 		move.w	#$977F,(a5)
 		move.w	#$7C00,(a5)
@@ -912,7 +912,7 @@ loc_10D4:				; XREF: sub_106E
 		move.w	#$83,($FFFFF640).w
 		move.w	($FFFFF640).w,(a5)
 		lea	($C00004).l,a5
-		move.l	#$940193C0,(a5)
+		move.l	#$940193E0,(a5)	; 240 lines, V30
 		move.l	#$96E69500,(a5)
 		move.w	#$977F,(a5)
 		move.w	#$7C00,(a5)
@@ -3415,7 +3415,7 @@ Title_ChkLevSel:
 		bsr.w	PalLoad2	; load level select pallet
 		lea	($FFFFCC00).w,a1
 		moveq	#0,d0
-		move.w	#$DF,d1
+		move.w	#$FF,d1
 
 Title_ClrScroll:
 		move.l	d0,(a1)+
@@ -4489,9 +4489,9 @@ LZMoveWater:
 		move.b	#1,($FFFFF64E).w
 
 loc_3C1A:
-		cmpi.w	#$DF,d0
-		bcs.s	loc_3C24
-		move.w	#$DF,d0
+		cmpi.w	#240-1,d0	; check of water is onscreen
+		bls.s	loc_3C24
+		move.w	#$FF,d0		; don't render the water
 
 loc_3C24:
 		move.b	d0,($FFFFF625).w
@@ -7151,6 +7151,7 @@ loc_628E:
 		jmp	Deform_LZ	; GMZ
 
 GetDeformRoutine:	; GMZ
+		pea	Deform_Ripple
 		move.b	($FFFFFE10).w,d0
 		add.w	d0,d0
 		move.w	Deform_Index(pc,d0.w),d0
@@ -7227,7 +7228,7 @@ loc_6356:
 		asl.l	#8,d2
 		moveq	#0,d3
 		move.w	d0,d3
-		move.w	#$47,d1
+		move.w	#72+16-1,d1	; v30
 		add.w	d4,d1
 
 loc_6384:
@@ -7239,6 +7240,7 @@ loc_6384:
 		swap	d3
 		dbf	d1,loc_6384
 		rts	
+; 32+16+16+48+40+72 = 224
 ; End of function Deform_GHZ
 
 ; ---------------------------------------------------------------------------
@@ -7258,7 +7260,7 @@ Deform_LZ:				; XREF: Deform_Index
 		bsr.w	ScrollBlock1
 		move.w	($FFFFF70C).w,($FFFFF618).w
 		lea	($FFFFCC00).w,a1
-		move.w	#$DF,d1
+		move.w	#240-1,d1	; V30
 		move.w	($FFFFF700).w,d0
 		neg.w	d0
 		swap	d0
@@ -7304,7 +7306,7 @@ loc_6402:
 		bsr.w	ScrollBlock3
 		move.w	($FFFFF70C).w,($FFFFF618).w
 		lea	($FFFFCC00).w,a1
-		move.w	#$DF,d1
+		move.w	#240-1,d1	; V30
 		move.w	($FFFFF700).w,d0
 		neg.w	d0
 		swap	d0
@@ -7533,7 +7535,7 @@ Deform_SYZ:				; XREF: Deform_Index
 		bsr.w	ScrollBlock1
 		move.w	($FFFFF70C).w,($FFFFF618).w
 		lea	($FFFFCC00).w,a1
-		move.w	#$DF,d1
+		move.w	#240-1,d1	; V30
 		move.w	($FFFFF700).w,d0
 		neg.w	d0
 		swap	d0
@@ -7564,7 +7566,7 @@ Deform_SBZ:				; XREF: Deform_Index
 		bsr.w	ScrollBlock1
 		move.w	($FFFFF70C).w,($FFFFF618).w
 		lea	($FFFFCC00).w,a1
-		move.w	#$DF,d1
+		move.w	#240-1,d1	; V30
 		move.w	($FFFFF700).w,d0
 		neg.w	d0
 		swap	d0
@@ -7594,7 +7596,7 @@ Deform_BHZ:				; XREF: Deform_Index
 		bsr.w	ScrollBlock1
 		move.w	($FFFFF70C).w,($FFFFF618).w
 		lea	($FFFFCC00).w,a1
-		move.w	#$DF,d1
+		move.w	#240-1,d1	; V30
 		move.w	($FFFFF700).w,d0
 		neg.w	d0
 		swap	d0
@@ -7608,6 +7610,67 @@ loc_63COCK6:
 		sub.w	($FFFFF704).w,d0
 		rts	
 ; End of function Deform_BHZ
+; ---------------------------------------------------------------------------
+; guys, ripple effects are cheap AF they just coded it badly
+Deform_Ripple:
+		lea	($FFFFCC00).w,a0	; hscroll line buffer
+		move.w	#240-1,d1	; V30
+		clr.w	d0
+		move.b	($FFFFFE0F).w,d0	; LSB vblank timer
+		move.w	d0,d2
+		add.b	($FFFFF705).w,d0	; LSB fg screen ypos
+		add.b	($FFFFF70B).w,d2	; LSB bg screen ypos
+;		addq.b	#1,($FFFF8000).w
+		lea	@bgrip(pc),a2
+		lea	(a2,d2.w),a2
+		lea	@fgrip(pc,d0.w),a1
+@loop:
+		move.b	(a1)+,d0
+		ext.w	d0
+		add.w	d0,(a0)+
+		move.b	(a2)+,d0
+		ext.w	d0
+		add.w	d0,(a0)+
+		dbf	d1,@loop
+		rts
+@fgrip:
+	rept 2
+	dc.b  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0
+	dc.b  0, 0, 0, 0, 0, 0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+	dc.b -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 0, 0, 0, 0
+	dc.b  0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+	dc.b  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0
+	dc.b  0, 0, 0, 0, 0, 0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+	dc.b -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 0, 0, 0, 0
+	dc.b  0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+	dc.b  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0
+	dc.b  0, 0, 0, 0, 0, 0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+	dc.b -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 0, 0, 0, 0
+	dc.b  0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+	dc.b  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0
+	dc.b  0, 0, 0, 0, 0, 0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+	dc.b -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 0, 0, 0, 0
+	dc.b  0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+	endr
+@bgrip:
+	rept 2
+	dc.b  0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2
+	dc.b  2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3
+	dc.b  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2
+	dc.b  2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0
+	dc.b  0,-1,-1,-1,-1,-1,-2,-2,-2,-2,-2,-3,-3,-3,-3,-3
+	dc.b -3,-3,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4
+	dc.b -4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-3
+	dc.b -3,-3,-3,-3,-3,-3,-2,-2,-2,-2,-2,-1,-1,-1,-1,-1
+	dc.b  0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2
+	dc.b  2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3
+	dc.b  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2
+	dc.b  2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0
+	dc.b  0,-1,-1,-1,-1,-1,-2,-2,-2,-2,-2,-3,-3,-3,-3,-3
+	dc.b -3,-3,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4
+	dc.b -4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-3
+	dc.b -3,-3,-3,-3,-3,-3,-2,-2,-2,-2,-2,-1,-1,-1,-1,-1
+	endr
 ; ---------------------------------------------------------------------------
 ; Subroutine to	scroll the level horizontally as Sonic moves
 ; ---------------------------------------------------------------------------
