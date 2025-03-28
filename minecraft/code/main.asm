@@ -13,6 +13,7 @@ MC_Init:
 		lea	($C00004).l,a6				; load the address of the VDP control port into a6
 		move.w	#$8134,(a6)				; disable display
 
+		move.w	#$8004,(a6)
 		move.w	#$8200+(VRAM_PLANE_A>>10),(a6)		; set plane A address
 		move.w	#$8300+(VRAM_PLANE_W>>10),(a6)		; set plane W address
 		move.w	#$8400+(VRAM_PLANE_B>>13),(a6)		; set plane B address
@@ -45,6 +46,32 @@ MC_Init:
 		st.b	(vblankWait).w
 		bsr.w	MC_UpdateScrollBuffer
 		bsr.s	MC_RenderBlocks
+
+	; Camera Test
+.checkUp:
+		btst.b	#BIT_UP,(ctrlHoldP1).w
+		beq.s	.checkDown
+		subq.w	#1,(camYposFG).w
+
+.checkDown:
+		btst.b	#BIT_DOWN,(ctrlHoldP1).w
+		beq.s	.checkLeft
+		addq.w	#1,(camYposFG).w
+
+.checkLeft:
+		btst.b	#BIT_LEFT,(ctrlHoldP1).w
+		beq.s	.checkRight
+		subq.w	#1,(camXposFG).w
+
+.checkRight:
+		btst.b	#BIT_RIGHT,(ctrlHoldP1).w
+		beq.s	.updateBGPos
+		addq.w	#1,(camXposFG).w
+
+.updateBGPos:
+		move.w	(camXposFG).w,d0
+		lsr.w	#1,d0
+		move.w	d0,(camXposBG).w
 
 .spin:
 		tst.b	(vblankWait).w
@@ -177,10 +204,10 @@ CLOUD_SCROLL_RATE	equ	1280
 MC_UpdateScrollBuffer:
 		lea	(scrollBuffer).w,a0
 		moveq	#20-1,d7
-		move.w	(camXPosFG).w,d0			; update scrolling
-		andi.w	#7,d0					; ^
-		neg.w	d0					; ^
-		swap	d0					; ^
+		move.w	(camXPosFG).w,d0
+		andi.w	#7,d0
+		neg.w	d0
+		swap	d0
 		clr.w	d0
 
 .blankBGSegment:
@@ -200,7 +227,7 @@ MC_UpdateScrollBuffer:
 		move.l	d0,(a0)+
 		clr.l	(a1)+
 		dbf	d7,.resetClouds
-		bra.s	.return
+		bra.s	.doneClouds
 
 .cloudBGSegment:
 		move.l	(a1),d2
@@ -215,8 +242,16 @@ MC_UpdateScrollBuffer:
 		addq.w	#4,d1
 		dbf	d7,.cloudBGSegment
 
-.return:
+.doneClouds:
+		move.w	(camXPosBG).w,d0
+		neg.w	d0
+		move.w	#200-1,d7
+
+.hillsBGSegment:
+		move.l	d0,(a0)+
+		dbf	d7,.blankBGSegment
 		rts
+
 ; ---------------------------------------------------------------------------
 .cloudSkewFactor:
 	.i: = 128
@@ -321,9 +356,42 @@ MC_VInt:
 ;	vdpCmd	move.l, VRAM_HSCROLL, VRAM, WRITE, (a6)		; ^
 ;		move.w	d0,-4(a6)				; ^
 
-;		addq.w	#1,(camXPosFG).w			
+;		addq.w	#1,(camXPosFG).w
+
+	;	bsr.s	MC_ReadJoypad
+
 		sf.b	(vblankWait).w
 		rte						; return
+; ---------------------------------------------------------------------------
+
+; ===========================================================================
+; ---------------------------------------------------------------------------
+; Read Joypad Input
+; ---------------------------------------------------------------------------
+MC_ReadJoypad:
+		lea	(ctrlHoldP1).w,a0 ; address where joypad states are written
+		lea	($A10002).l,a1	; first	joypad port
+		bsr.s	.read		; do the first joypad
+		addq.w	#2,a1		; do the second	joypad
+
+.read:
+		move.b	#0,(a1)
+		moveq	#$30,d0
+		moveq	#$3F,d1
+		and.b	(a1),d0
+		move.b	#$40,(a1)
+		add.b	d0,d0
+		add.b	d0,d0
+		and.b	(a1),d1
+
+		or.b	d1,d0
+		not.b	d0
+		move.b	(a0),d1
+		eor.b	d0,d1
+		move.b	d0,(a0)+
+		and.b	d0,d1
+		move.b	d1,(a0)+
+		rts
 ; ---------------------------------------------------------------------------
 
 ; ---------------------------------------------------------------------------

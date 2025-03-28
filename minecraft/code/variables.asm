@@ -25,6 +25,10 @@ vblankWait	rs.w	1
 cloudFrameCnt	rs.w	1
 cloudSkew	rs.l	36
 
+ctrlHoldP1	rs.b	1
+ctrlPressP1	rs.b	1
+ctrlHoldP2	rs.b	1
+ctrlPressP2	rs.b	1
 
 		rsset	__rs&$FFFFFF
 mcRAM_End	rs.b	0
@@ -43,3 +47,22 @@ VRAM_PLANE_B	equ	$E000
 
 VRAM_SPR_LIST	equ	$F800
 VRAM_HSCROLL	equ	$FC00
+
+; Joypad Button Definitions
+MASK_START	equ %10000000 
+MASK_A		equ %01000000
+MASK_C		equ %00100000
+MASK_B		equ %00010000
+MASK_RIGHT	equ %00001000
+MASK_LEFT	equ %00000100
+MASK_DOWN	equ %00000010
+MASK_UP		equ %00000001
+
+BIT_START	equ 7
+BIT_A		equ 6
+BIT_C		equ 5
+BIT_B		equ 4
+BIT_RIGHT	equ 3
+BIT_LEFT	equ 2
+BIT_DOWN	equ 1
+BIT_UP		equ 0

@@ -262,7 +262,7 @@ GameClrRAM:
 @notmss:
 		jsr	GM_SplashScreensIG
 @nosplashscreens:
-	;	move.b	#$20,($FFFFF600).w ; set Game Mode to Minecraft
+		move.b	#$20,($FFFFF600).w ; set Game Mode to Minecraft
 	;	move.b	#$24,($FFFFF600).w ; set Game Mode to Bee Bush
 MainGameLoop:
 		moveq	#$7E,d0
