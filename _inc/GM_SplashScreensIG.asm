@@ -100,9 +100,10 @@ GM_CustomSplashScreensIG:
 		rts
 @timelut:
 	dc.w 0
-	dc.w 20
+	dc.w 30
 GM_SplashScreensListIG:
 	dc.l $89<<24|@nem_pillow,$00<<24|@enifg_pillow,$94<<24|@enibg_pillow,$00<<24|@pal_pillow
+	dc.l $81<<24|@nem_fnaf,$01<<24|@enifg_fnaf,$82<<24|@enibg_fnaf,$00<<24|@pal_fnaf
 	dc.l 0	; terminator 2
 	even
 ; -----------------------------------------------------------------------------
@@ -112,4 +113,11 @@ GM_SplashScreensListIG:
 @enibg_pillow:	incbin mapeni\splash_pillow.bin
 	even
 @pal_pillow:	incbin pallet\splash_pillow.bin
+	even
+@nem_fnaf:	incbin artnem\splash_fnaf.bin
+	even
+@enifg_fnaf:
+@enibg_fnaf:	incbin mapeni\splash_fnaf.bin
+	even
+@pal_fnaf:	incbin pallet\splash_fnaf.bin
 	even
