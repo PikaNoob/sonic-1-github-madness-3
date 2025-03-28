@@ -96,7 +96,7 @@ echo  [ 3 ] go back to menu
 echo.
 echo.
 set /p choice= Game: 
-goto:8BitRemakes
+goto:Menu
 if %choice%==1 goto:repo
 if %choice%==2 goto:deleteHAHAHA
 if %choice%==3 goto:Menu
