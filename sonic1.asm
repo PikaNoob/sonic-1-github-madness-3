@@ -1027,7 +1027,7 @@ Joypad_Read:
 		and.w	(a1)+,d1	; increment a1 to next controller
 		or.b	d1,d0
 		not.b	d0
-		move.b	(a0)+,d1
+		move.b	(a0),d1
 		eor.b	d0,d1
 		move.b	d0,(a0)+
 		and.b	d0,d1
