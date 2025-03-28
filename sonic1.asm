@@ -3404,7 +3404,8 @@ Title_ChkLevSel:
 		btst	#6,($FFFFF604).w ; check if A is pressed
 		beq.w	PlayLevel	; if not, play level
 		
-		
+		move.b	#$01,d0		; play level select music (DAX: Using New Bark Town as placeholder)
+		bsr.w	PlaySound_Special
 		moveq	#2,d0
 		bsr.w	PalLoad2	; load level select pallet
 		lea	($FFFFCC00).w,a1
