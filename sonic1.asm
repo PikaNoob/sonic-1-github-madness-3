@@ -488,7 +488,7 @@ ErrorWaitForC:				; XREF: loc_478
 ; End of function ErrorWaitForC
 
 ; ===========================================================================
-Art_ErrText:	incbin	artunc\menutext.bin	; text used in level select and debug mode
+Art_ErrText:	incbin	artunc\errortext.bin	; text used in level select and debug mode
 Art_ErrText_end:		even
 Art_Text:	incbin	artunc\menutext.bin	; text used in level select and debug mode
 Art_Text_end:		even
