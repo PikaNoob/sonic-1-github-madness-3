@@ -39640,6 +39640,11 @@ loc_71BB2:
 		jsr	Sound_Play(pc)
 
 loc_71BBC:
+		cmpi.b	#$80,9(a6)
+		beq.s	loc_71BC8
+		jsr	Sound_ChkValue(pc)
+
+loc_71BC8:
 		lea	$40(a6),a5
 		tst.b	(a5)
 		bpl.s	loc_71BD4
@@ -40081,10 +40086,15 @@ Sound_Play:				; XREF: sub_71B4C
 		moveq	#0,d0
 loc_71F12:
 		move.b	(a1),d0		; move track number to d0
-		move.b	d0,d1
 		clr.b	(a1)+
+		move.b	d0,d1
+		beq.s	loc_71F3E
 ;		subi.b	#$81,d0
 ;		bcs.s	loc_71F3E
+		cmpi.b	#$80,9(a6)
+		beq.s	loc_71F2C
+		move.b	d1,$A(a6)
+		bra.s	loc_71F3E
 ; ===========================================================================
 
 loc_71F2C:
@@ -40098,8 +40108,10 @@ loc_71F3E:
 		dbf	d4,loc_71F12
 
 		tst.b	d3
-		bmi.s	Sound_ChkValue
+		bmi.s	locret_71F4A
 		move.b	d3,0(a6)
+locret_71F4A:
+		rts
 ; End of function Sound_Play
 
 
@@ -40112,8 +40124,8 @@ Sound_ChkValue:				; XREF: sub_71B4C
 
 ;		cmp.b	#$00,d7		; driver init (SMPS is ass)
 		beq.w	Sound_E4
-		cmp.b	#$80,d7		; free slot
-		beq.w	locret_71E48
+;		cmp.b	#$80,d7		; free slot
+;		beq.w	locret_71E48
 		move.b	#$80,9(a6)	; reset	music flag
 
 		cmpi.b	#$A0,d7		; music	$81-$9F

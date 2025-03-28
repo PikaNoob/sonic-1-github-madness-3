@@ -104,6 +104,7 @@ GM_CustomSplashScreensIG:
 GM_SplashScreensListIG:
 	dc.l $89<<24|@nem_pillow,$00<<24|@enifg_pillow,$94<<24|@enibg_pillow,$00<<24|@pal_pillow
 	dc.l $81<<24|@nem_fnaf,$01<<24|@enifg_fnaf,$82<<24|@enibg_fnaf,$00<<24|@pal_fnaf
+	dc.l $81<<24|@nem_fartboy,$00<<24|@enifg_fartboy,$00<<24|@enibg_fartboy,$81<<24|@pal_fartboy
 	dc.l 0	; terminator 2
 	even
 ; -----------------------------------------------------------------------------
@@ -114,10 +115,19 @@ GM_SplashScreensListIG:
 	even
 @pal_pillow:	incbin pallet\splash_pillow.bin
 	even
+
 @nem_fnaf:	incbin artnem\splash_fnaf.bin
 	even
 @enifg_fnaf:
 @enibg_fnaf:	incbin mapeni\splash_fnaf.bin
 	even
 @pal_fnaf:	incbin pallet\splash_fnaf.bin
+	even
+
+@nem_fartboy:	incbin artnem\splash_fartboy.bin
+	even
+@enifg_fartboy:
+@enibg_fartboy:	incbin mapeni\splash_fartboy.bin
+	even
+@pal_fartboy:	incbin pallet\splash_fartboy.bin
 	even
