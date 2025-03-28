@@ -1012,25 +1012,22 @@ JoypadInit:				; XREF: GameClrRAM
 
 ReadJoypads:
 		lea	($FFFFF604).w,a0 ; address where joypad	states are written
-		lea	($A10003).l,a1	; first	joypad port
-		bsr.s	Joypad_Read	; do the first joypad
-		addq.w	#2,a1		; do the second	joypad
+		lea	($A10002).l,a1	; first	joypad port
+		bsr.w	Joypad_Read	; do the first joypad
+;		bra.w	Joypad_Read	; do the second	joypad
 
 Joypad_Read:
-		move.b	#0,(a1)
-		nop	
-		nop	
-		move.b	(a1),d0
-		lsl.b	#2,d0
-		andi.b	#$C0,d0
-		move.b	#$40,(a1)
-		nop	
-		nop	
-		move.b	(a1),d1
-		andi.b	#$3F,d1
+		move.w	#0<<6,(a1)
+		moveq	#$30,d0		; 4(1,0)
+		moveq	#$3F,d1		; 4(1,0)
+		and.w	(a1),d0
+		move.w	#1<<6,(a1)
+		add.b	d0,d0		; 4(1,0)
+		add.b	d0,d0		; 4(1,0)
+		and.w	(a1)+,d1	; increment a1 to next controller
 		or.b	d1,d0
 		not.b	d0
-		move.b	(a0),d1
+		move.b	(a0)+,d1
 		eor.b	d0,d1
 		move.b	d0,(a0)+
 		and.b	d0,d1
@@ -1149,18 +1146,10 @@ loc_134A:
 ; End of function ClearScreen
 
 ; ---------------------------------------------------------------------------
-; Subroutine to	load the sound driver
+; Subroutine to	load the legacy SMPS PCM driver
 ; ---------------------------------------------------------------------------
 
-; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
-
-
 SoundDriverLoad:			; XREF: GameClrRAM; TitleScreen
-		rts
-
-; work around this if you need to, other stops are redundant anyway
-
-		nop	
 		move.w	#$100,($A11100).l ; stop the Z80
 		move.w	#$100,($A11200).l ; reset the Z80
 		lea	(Kos_Z80).l,a0	; load sound driver
@@ -3163,7 +3152,6 @@ TitleScreen:				; XREF: GameModeArray
 		bsr.w	Pal_FadeFrom
 		bsr.w	ClearPLC
 		move	#$2700,sr
-		bsr.w	SoundDriverLoad
 		lea	($C00004).l,a6
 		move.w	#$8004,(a6)
 		move.w	#$8230,(a6)
@@ -3183,7 +3171,9 @@ Title_ClrObjRam:
 		dbf	d1,Title_ClrObjRam ; fill object RAM ($D000-$EFFF) with	$0
 
 ; gomer
-
+		move.w	($FFFFF60C).w,d0
+		ori.b	#$40,d0
+		move.w	d0,($C00004).l
 		moveq	#3,d0		; load Sonic's pallet
 		bsr.w	PalLoad1
 		move.l	#$40000000,($C00004).l

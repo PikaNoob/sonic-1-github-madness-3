@@ -1,6 +1,7 @@
 ;GM_SplashScreensIG:
-		lea	@list(pc),a6		; up here so it's interchangeable
+		lea	GM_SplashScreensListIG(pc),a6
 
+GM_CustomSplashScreensIG:
 		move.l	a6,-(sp)
 		move.w	#$E4,d0			; fade music
 		jsr	PlaySound_Special
@@ -86,7 +87,7 @@
 		beq.s	@mainloop
 @loadnext:
 		move.w	#$E4,d0
-		jsr	PlaySound_Special	; stop music
+		jsr	PlaySound_Special	; fade music
 		jsr     MegaPCM_StopPlayback
 		jsr	Pal_FadeFrom
 		move.l	(sp)+,a6
@@ -97,13 +98,13 @@
 		bra.s	@loadnext
 @exit:
 		rts
-@list:
-;	dc.l $81<<24|@nem_pillow,$00<<24|@enifg_pillow,$00<<24|@enibg_pillow,$81<<24|@pal_pillow
-	dc.l $89<<24|@nem_pillow,$01<<24|@enifg_pillow,$8F<<24|@enibg_pillow,$00<<24|@pal_pillow
-	dc.l 0	; terminator 2
 @timelut:
 	dc.w 0
 	dc.w 20
+GM_SplashScreensListIG:
+;	dc.l $81<<24|@nem_pillow,$00<<24|@enifg_pillow,$00<<24|@enibg_pillow,$81<<24|@pal_pillow
+	dc.l $89<<24|@nem_pillow,$01<<24|@enifg_pillow,$8F<<24|@enibg_pillow,$00<<24|@pal_pillow
+	dc.l 0	; terminator 2
 	even
 ; -----------------------------------------------------------------------------
 @nem_pillow:	incbin artnem\splash_pillow.bin
