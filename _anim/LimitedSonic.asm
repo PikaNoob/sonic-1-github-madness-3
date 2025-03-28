@@ -49,7 +49,7 @@ LimitAni_Balance:	dc.b $1F, 1, $FF
 		even
 LimitAni_LookUp:	dc.b $3F, 1, $FF
 		even
-LimitAni_Duck:	dc.b $3F, $32, $FF
+LimitAni_Duck:	dc.b $3F, $39, $FF
 		even
 LimitAni_Warp1:	dc.b $3F, 1, $FF
 		even

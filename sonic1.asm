@@ -25855,6 +25855,9 @@ Sonic_Animate:				; XREF: Obj01_Control; et al
 		lea 	Player_Anim(pc),a1
 		
 		movea.l	(a1,d0.w),a1	; load Sonic dplc
+
+		cmpi.b	#3,(v_character)
+		beq.w	Limit_Animate
 	
 		moveq	#0,d0
 		move.b	$1C(a0),d0
@@ -26021,6 +26024,8 @@ loc_13B26:
 		or.b	d1,1(a0)
 		bra.w	SAnim_Do2
 ; End of function Sonic_Animate
+
+	include	"_inc\LimitedSonic\Limit_Animate.asm"
 
 ; ===========================================================================
 SonicAniData:
