@@ -35,6 +35,7 @@ echo.
 echo  [ 1 ] Open sonic.asm
 echo  [ 2 ] Build and start the game
 echo  [ 3 ] See contrictubers or smth
+echo  [ 7 ] open real pizza tower game
 echo  [ 4 ] join official discord s official server
 
 echo.
@@ -47,6 +48,7 @@ if %choice%==1 goto:sonicasm
 if %choice%==2 goto:build
 if %choice%==3 goto:cont
 if %choice%==4 goto:diiscord
+if %choice%==7 goto:pizzatower
 if %choice%==/ goto:setting
 if %choice%==- goto:exit
 
@@ -55,6 +57,11 @@ title discord ahh opening w anakama
 start https://discord.gg/tDYpbpvmet
 msg * alr bbg
 goto:Menu
+
+:pizzatower
+title ANAKAMA 2 TOWERS
+start /wait pizza-tower.exe
+msg * alr bbg finish
 
 :cont
 start https://github.com/PikaNoob/sonic-1-github-madness-3/graphs/contributors
