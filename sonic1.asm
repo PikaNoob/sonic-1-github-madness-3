@@ -16990,7 +16990,7 @@ ObjectFall:
 ; End of function ObjectFall
 
 ; ---------------------------------------------------------------------------
-; Subroutine to	make an	object fall downwards, increasingly fast
+; The funny Subroutine to make LimitedSonic have a set falling/rising speed
 ; ---------------------------------------------------------------------------
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
@@ -24443,7 +24443,15 @@ Obj01_MdJump:				; XREF: Obj01_Modes
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_ChgJumpDir
 		bsr.w	Sonic_LevelBound
+		cmpi.b	#3,(v_character)
+		bne.s	NormalPhysics
+		jsr JumpFallSonic
+		bra.s	LimitedFall
+
+NormalPhysics:
 		jsr	ObjectFall
+
+LimitedFall:
 		btst	#6,$22(a0)
 		beq.s	loc_12E5C
 		subi.w	#$28,$12(a0)
@@ -24469,8 +24477,16 @@ Obj01_MdJump2:				; XREF: Obj01_Modes
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_ChgJumpDir
 		bsr.w	Sonic_LevelBound
+		cmpi.b	#3,(v_character)
+		bne.s	NormalPhysics2
+		jsr JumpFallSonic
+		bra.s	LimitedFall2
+
+NormalPhysics2:
 		bsr.w	Sonic_AirUnroll
 		jsr	ObjectFall
+
+LimitedFall2:
 		btst	#6,$22(a0)
 		beq.s	loc_12EA6
 		subi.w	#$28,$12(a0)
@@ -24487,6 +24503,8 @@ loc_12EA6:
 
 
 Sonic_Move:				; XREF: Obj01_MdNormal
+		cmpi.b	#3,(v_character)
+		beq.w	Limit_Move
 		move.w	($FFFFF760).w,d6
 		move.w	($FFFFF762).w,d5
 		move.w	($FFFFF764).w,d4
@@ -24778,6 +24796,8 @@ locret_1314E:
 		rts	
 ; End of function Sonic_MoveRight
 
+		include	"_inc\LimitedSonic\Limit Move.asm"
+
 ; ---------------------------------------------------------------------------
 ; Subroutine to	change Sonic's speed as he rolls
 ; ---------------------------------------------------------------------------
@@ -24786,6 +24806,8 @@ locret_1314E:
 
 
 Sonic_RollSpeed:			; XREF: Obj01_MdRoll
+		cmpi.b	#3,(v_character)
+		beq.w	Limit_RollSpeed
 		move.w	($FFFFF760).w,d6
 		asl.w	#1,d6
 		move.w	($FFFFF762).w,d5
@@ -24912,6 +24934,8 @@ loc_13242:
 		rts	
 ; End of function Sonic_RollRight
 
+		include	"_inc\LimitedSonic\Limit RollSpeed.asm"
+
 Sonic_AirUnroll:
 		
 		tst.b	$3A(a0) ; check jump height control
@@ -24943,6 +24967,8 @@ Sonic_AirUnroll:
 
 
 Sonic_ChgJumpDir:			; XREF: Obj01_MdJump; Obj01_MdJump2
+		cmpi.b	#3,(v_character)
+		beq.w	Limit_JumpDirection
 		move.w	($FFFFF760).w,d6
 		move.w	($FFFFF762).w,d5
 		asl.w	#1,d5
@@ -25024,6 +25050,8 @@ loc_132CE:
 locret_132D2:
 		rts	
 ; End of function Sonic_ChgJumpDir
+
+		include	"_inc\LimitedSonic\Limit JumpDirection.asm"
 
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -25228,6 +25256,8 @@ Sonic_JumpHeight:			; XREF: Obj01_MdJump; Obj01_MdJump2
 		move.w	#-$200,d1
 
 loc_134AE:
+		cmpi.b	#3,(v_character)
+		beq.s	locret_134C2
 		cmp.w	$12(a0),d1
 		ble.s	locret_134C2
 		move.b	($FFFFF602).w,d0
@@ -25330,6 +25360,8 @@ locret_13544:
 
 Sonic_SlopeRepel:			; XREF: Obj01_MdNormal; Obj01_MdRoll
 		nop	
+		cmpi.b	#3,(v_character)
+		beq.s	locret_13580
 		tst.b	$38(a0)
 		bne.s	locret_13580
 		tst.w	$3E(a0)
@@ -25619,7 +25651,15 @@ loc_137AE:
 		bclr	#2,$22(a0)
 		move.b	#$13,$16(a0)
 		move.b	#9,$17(a0)
+		cmpi.b	#3,(v_character)
+		beq.s	LimitedFloor
 		move.b	#0,$1C(a0)	; use running/walking animation
+		bra.s	NormalFloor
+
+LimitedFloor:
+		move.b	#5,$1C(a0)	; use running/walking animation
+
+NormalFloor:
 		subq.w	#5,$C(a0)
 
 loc_137E4:
@@ -25682,7 +25722,15 @@ locret_13860:
 
 Obj01_Death:				; XREF: Obj01_Index
 		bsr.w	GameOver
+		cmpi.b	#3,(v_character)
+		bne.s	NormalPhysics3
+		jsr JumpFallSonic
+		bra.s	LimitedFall3
+
+NormalPhysics3:
 		jsr	ObjectFall
+
+LimitedFall3:
 		bsr.w	Sonic_RecordPos
 		bsr.w	Sonic_Animate
 		bsr.w	LoadSonicDynPLC
@@ -25692,7 +25740,7 @@ Obj01_Death:				; XREF: Obj01_Index
 
 
 GameOver:				; XREF: Obj01_Death
-		move.w	($FFFFF72E).w,d0
+		move.w	($FFFFF704).w,d0	;	DAX: Trust me, it saves a lot of time on death
 		addi.w	#$100,d0
 		cmp.w	$C(a0),d0
 		bcc.w	locret_13900
@@ -35728,6 +35776,8 @@ Touch_Hurt:				; XREF: Touch_ChkHurt
 
 
 HurtSonic:
+		cmpi.b	#3,(v_character)
+		beq.w	KillLimitedSonic
 		tst.b	($FFFFFE2C).w	; does Sonic have a shield?
 		bne.s	Hurt_Shield	; if yes, branch
 		tst.w	($FFFFFE20).w	; does Sonic have any rings?
@@ -35788,6 +35838,8 @@ Hurt_NoRings:
 KillSonic:
 		tst.w	($FFFFFE08).w	; is debug mode	active?
 		bne.s	Kill_NoDeath	; if yes, branch
+
+KillLimitedSonic:
 		move.b	#0,($FFFFFE2D).w ; remove invincibility
 		move.b	#6,$24(a0)
 		bsr.w	Sonic_ResetOnFloor
