@@ -22,6 +22,7 @@ SampleTable:
 	dcSample	TYPE_PCM,		OhYeah,		0, FLAGS_SFX		; $91
 	dcSample	TYPE_PCM,		Deagh,		0, FLAGS_SFX		; $92
 	dcSample	TYPE_PCM,		Deaghp,		0, FLAGS_SFX		; $93
+	dcSample	TYPE_DPCM,		Cocktail,	11025, FLAGS_LOOP		; $94
 	dc.w	-1	; end marker
 
 ; ---------------------------------------------------------------
@@ -37,4 +38,5 @@ SampleTable:
 	incdac	OhYeah, "sound/dac/OH YEAH.wav"
 	incdac	Deagh, "sound/dac/deagh.wav"
 	incdac	Deaghp, "sound/dac/pit fall.wav"
+	incdac	Cocktail, "sound/dac/hawaiian-cocktail.dpcm"
 	even

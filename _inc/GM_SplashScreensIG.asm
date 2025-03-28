@@ -102,8 +102,7 @@ GM_CustomSplashScreensIG:
 	dc.w 0
 	dc.w 20
 GM_SplashScreensListIG:
-;	dc.l $81<<24|@nem_pillow,$00<<24|@enifg_pillow,$00<<24|@enibg_pillow,$81<<24|@pal_pillow
-	dc.l $89<<24|@nem_pillow,$01<<24|@enifg_pillow,$8F<<24|@enibg_pillow,$00<<24|@pal_pillow
+	dc.l $89<<24|@nem_pillow,$00<<24|@enifg_pillow,$94<<24|@enibg_pillow,$00<<24|@pal_pillow
 	dc.l 0	; terminator 2
 	even
 ; -----------------------------------------------------------------------------
