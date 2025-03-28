@@ -256,6 +256,7 @@ GameClrRAM:
 		beq.s	@notmss
 		jsr	GM_AntiTMSS
 @notmss:
+		jsr	GM_SplashScreensIG
 @nosplashscreens:
 	;	move.b	#$20,($FFFFF600).w ; set Game Mode to Minecraft
 	;	move.b	#$24,($FFFFF600).w ; set Game Mode to Bee Bush
@@ -42116,6 +42117,7 @@ IdiotPCM:	incbin	sound\youare.bin
 IdiotPCM_end:
 	even
 GM_AntiTMSS:	include _inc\GM_AntiTMSS.asm
+GM_SplashScreensIG:	include _inc\GM_SplashScreensIG.asm
 
 Minecraft:	include	minecraft\code\main.asm
 		
