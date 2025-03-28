@@ -18,7 +18,7 @@ align macro
 		include "MapMacros.asm"
 
 ;level select constants (to not give the foward reference warning this was moved here)
-
+f_checksum	= $FFFFFF8E
 lsscrpos 	= $60860003 ; level select screen position
 lsoff 		= $240000 ; second row jump
 lsstpos 	= lsscrpos+$43C0000 ; sound test
