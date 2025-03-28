@@ -2,10 +2,6 @@
 		lea	GM_SplashScreensListIG(pc),a6
 
 GM_CustomSplashScreensIG:
-		tst.b	(f_checksum).w	; Is checksum incorrect?
-		beq.s   gameforu		; if not, branch
-		jmp	GM_ANTITMSS ; should change to otis.exe creepypasta soon
-gameforu:
 		move.l	a6,-(sp)
 		move.w	#$E4,d0			; fade music
 		jsr	PlaySound_Special

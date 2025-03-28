@@ -210,15 +210,14 @@ CheckSumCheck:
 loc_32C:
 		add.w	(a0)+,d1
 		cmp.l	a0,d0
-		bcc.s	loc_32C
+		blo.s	loc_32C
 		movea.l	#Checksum,a1	; read the checksum
 		cmp.w	(a1),d1		; compare correct checksum to the one in ROM
-		bne.w	CheckSumError	; if they don't match, branch
-	CheckSumOk:
+		sne	(f_checksum).w	; if they don't match, set this flag. if they do, clear it
+; init stuff for hard reset
 		lea	($FFFFFE00).w,a6
 		moveq	#0,d7
 		move.w	#$7F,d6
-
 loc_348:
 		move.l	d7,(a6)+
 		dbf	d6,loc_348
@@ -248,14 +247,15 @@ GameClrRAM:
 		jmp	Sound_E5
 @mpcmsucc:
 		bsr.w	JoypadInit
-		move.b	#0,($FFFFF600).w ; set Game Mode to Sega Screen
 
+		tst.b	(f_checksum).w		; Is checksum incorrect?
+		bne.s   @validcheck		; if yes, branch
+		jmp	GM_ANTITMSS ; should change to otis.exe creepypasta soon
+@validcheck:
+		move.b	#0,($FFFFF600).w ; set Game Mode to Sega Screen
 		cmpi.l	#'init',($FFFFFFFC).w	; has checksum routine already run?
 		beq.w	@nosplashscreens	; if yes, branch
 		move.l	#'init',($FFFFFFFC).w	; set flag so checksum won't be run again
-
-		tst.b	(f_checksum).w	; Is checksum incorrect?
-		bne.s   @notmss		; if yes, branch
 
 		move.b	($A10001).l,d0
 		and.w	#$F,d0
@@ -308,9 +308,7 @@ jmpto_Otis:
 		jmp     GM_BEEBUSH
 
 CheckSumError:
-f_checksum: equ $FFFFFF8E	; Checksum Flag
-		move.b	#1,(f_checksum).w
-		jmp	AfterERR
+		illegal
 ; ===========================================================================
 
 BusError:
@@ -2421,7 +2419,6 @@ loc_1E4E:				; XREF: Pal_AddColor
 		rts	
 ; End of function Pal_AddColor
 
-
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 PalFadeOut:
@@ -2434,7 +2431,7 @@ loc_1E5C:
 		bsr.s	Pal_FadeOut
 		bsr.w	RunPLC_RAM
 		dbf	d4,loc_1E5C
-		rts	
+		rts
 ; End of function Pal_FadeFrom
 
 ; ---------------------------------------------------------------------------
