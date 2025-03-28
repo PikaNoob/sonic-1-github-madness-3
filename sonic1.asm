@@ -35662,7 +35662,7 @@ loc_1AF9C:
 
 TouchKE_Explode:
 		move.b	#$27,0(a1)	; change object	to points
-		move.b	#0,$24(a1)
+		move.b	#2,$24(a1)	; default to no animal spawn
 		move.b	d2,$28(a1)	; GMZ: Set subtype
 
 TouchKE_NextExplosion:
@@ -35674,6 +35674,7 @@ TouchKE_NextExplosion:
 		dbf	d1,TouchKE_Explode
 
 TouchKE_NoExplosion:
+		move.b	#0,$24(a2)	; spawn one animal
 		move.l	a2,a1	; GMZ: Restore original a1 address
 		tst.w	$12(a0)
 		bmi.s	loc_1AFC2
@@ -39477,11 +39478,11 @@ byte_71A94:	dc.b 7,	$72, $73, $26, $15, 8, $FF, 5
 ; ---------------------------------------------------------------------------
 ; Music	Pointers
 ; ---------------------------------------------------------------------------
-MusicIndex:	
+MusicIndex:	; $01-$7F
 		dc.l Music9F ; test
 		dc.l Music92 ; test
 
-MusicIndex80:
+MusicIndex80:	; $81-$9F
 		dc.l Music81, Music82
 		dc.l Music83, Music84
 		dc.l Music85, Music86
@@ -39501,24 +39502,19 @@ MusicIndex80:
 ; ---------------------------------------------------------------------------
 ; Type of sound	being played ($00 = music; $70 = normal	sound effect)
 ; ---------------------------------------------------------------------------
-SoundTypes:			
-		dc.b     $90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90	; $01
-		dc.b $90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90	; $10
-		dc.b $90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90	; $20
-		dc.b $90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90	; $30
-		dc.b $90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90	; $40
-		dc.b $90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90	; $50
-		dc.b $90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90	; $60
-		dc.b $90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90	; $70
-		dc.b $90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90	; $80
-		dc.b $90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90	; $90
-		dc.b $80,$70,$70,$70,$70,$70,$70,$70,$70,$70,$68,$70,$70,$70,$60,$70	; $A0
-		dc.b $70,$60,$70,$60,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$7F	; $B0
-		dc.b $60,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70	; $C0
-		dc.b $70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70	; $D0
-		dc.b $90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90	; $E0
-		dc.b $90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90	; $F0
-		even
+SoundTypes:	
+	dc.b 0		; $00
+	dcb.b $9F,$90	; $01-$9F
+
+	dc.b $80,$70,$70,$70,$70,$70,$70,$70,$70,$70,$68,$70,$70,$70,$60,$70	; $A0
+	dc.b $70,$60,$70,$60,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$7F	; $B0
+	dc.b $60,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70	; $C0
+
+	dc.b $70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70	; $D0
+
+	dc.b $90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90	; $E0
+	dc.b $90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90,$90	; $F0
+	even
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -39575,7 +39571,9 @@ loc_71BA8:
 		jsr	sub_7267C(pc)
 
 loc_71BB2:
-		tst.w	$A(a6)		; is music or sound being played?
+		move.w	$A(a6),d0
+	;	or.b	$C(a6),d0
+		tst.w	d0		; is music or sound being played?
 		beq.s	loc_71BBC	; if not, branch
 		jsr	Sound_Play(pc)
 
@@ -39692,9 +39690,7 @@ loc_71C88:
 		;btst	#3,d0
 		;bne.s	loc_71CAC
 		;move.b	d0,($A01FFF).l
-		MPCM_stopZ80                            ; ++ --- MEGAPCM2 GUIDE ADDITION
-                move.b  d0, $A00000+Z_MPCM_CommandInput ; ++ send DAC sample to Mega PCM
-                MPCM_startZ80                           ; ++
+		jmp	MegaPCM_PlaySample
 locret_71CAA:
 		rts	
 ; ===========================================================================
@@ -39708,7 +39704,7 @@ locret_71CAA:
 ; End of function sub_71C4E
 
 ; ===========================================================================
-byte_71CC4:	dc.b $12, $15, $1C, $1D, $FF, $FF
+;byte_71CC4:	dc.b $12, $15, $1C, $1D, $FF, $FF
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -40019,20 +40015,20 @@ Sound_Play:				; XREF: sub_71B4C
 		movea.l	(Go_SoundTypes).l,a0
 		lea	$A(a6),a1	; load music track number
 		move.b	0(a6),d3
-		moveq	#2,d4
-
+		moveq	#3-1,d4
+		moveq	#0,d0
 loc_71F12:
 		move.b	(a1),d0		; move track number to d0
 		move.b	d0,d1
 		clr.b	(a1)+
-		subi.b	#$81,d0
-		bcs.s	loc_71F3E
+;		subi.b	#$81,d0
+;		bcs.s	loc_71F3E
 ; ===========================================================================
 
 loc_71F2C:
 		move.b	(a0,d0.w),d2
 		cmp.b	d3,d2
-		bcs.s	loc_71F3E
+		blo.s	loc_71F3E
 		move.b	d2,d3
 		move.b	d1,9(a6)	; set music flag
 
@@ -40051,21 +40047,24 @@ loc_71F3E:
 Sound_ChkValue:				; XREF: sub_71B4C
 		moveq	#0,d7
 		move.b	9(a6),d7
-		
+
+;		cmp.b	#$00,d7		; driver init (SMPS is ass)
 		beq.w	Sound_E4
+		cmp.b	#$80,d7		; free slot
+		beq.w	locret_71E48
 		move.b	#$80,9(a6)	; reset	music flag
-		cmpi.b	#$A0,d7
-		blo.w	Sound_Music	; music	$81-$9F
-		
-		cmpi.b	#$D0,d7
-		beq.w	Sound_D0
-		cmpi.b	#$E0,d7
-		blo.w	Sound_SFX	; sound	$A0-$CF
+
+		cmpi.b	#$A0,d7		; music	$81-$9F
+		blo.w	Sound_Music
+		cmpi.b	#$D0,d7		; sound	$A0-$CF
+		blo.w	Sound_SFX
+		cmpi.b	#$E0,d7		; special sound $D0-DF
+		blo.w	Sound_D0
 		
 		; falls to command
 ; ===========================================================================
 
-Sound_Command				; XREF: Sound_ChkValue
+Sound_Command:				; XREF: Sound_ChkValue
 		subi.b	#$E0,d7
 		lsl.w	#2,d7
 		jmp	Sound_ExIndex(pc,d7.w)
@@ -40073,15 +40072,10 @@ Sound_Command				; XREF: Sound_ChkValue
 
 Sound_ExIndex:
 		bra.w	Sound_E0
-; ===========================================================================
 		bra.w	Sound_E1
-; ===========================================================================
 		bra.w	Sound_E2
-; ===========================================================================
 		bra.w	Sound_E3
-; ===========================================================================
 		bra.w	Sound_E4
-; ===========================================================================
 		bra.w	Sound_E5
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -40257,15 +40251,16 @@ loc_72024:
 
 loc_7202C:
 		jsr	sub_725CA(pc)
-		movea.l	(off_719A0).l,a4
-		cmpi.b	#$80,d7
+
+		cmp.b	#$80,d7
 		blo.s	@zeroindex
-		
 		subi.b	#$80,d7
+		movea.l	(off_719A0).l,a4
 		move.b	(a4,d7.w),$29(a6)
 		movea.l	(Go_MusicIndex80).l,a4
-		bra.s @continue
+		bra.s	@continue
 	@zeroindex:
+		movea.l	(off_719A0).l,a4
 		move.b	(a4,d7.w),$29(a6)
 		movea.l	(Go_MusicIndex).l,a4
 	@continue:
@@ -41048,12 +41043,12 @@ locret_72714:
 ; ===========================================================================
 loc_72716:
                 btst    #2,(a5)                         ; Is track being overriden by sfx?
-                bne.s   @locret                         ; Return if yes
-                bra.w   sub_72722
+                bne.s   locret_72714                    ; Return if yes
+;                bra.w   sub_72722
 ; ===========================================================================
 ; locret_72720:
-@locret:
-                rts     
+;@locret:
+;                rts     
 
 ; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
 
