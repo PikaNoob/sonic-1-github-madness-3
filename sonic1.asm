@@ -16506,7 +16506,10 @@ Obj36_Hurt:				; XREF: Obj36_SideWays; Obj36_Upright
 		movea.l	a0,a2
 		lea	($FFFFD000).w,a0
 		cmpi.b	#4,$24(a0)
-		bcc.s	loc_CF20
+		bhs.s	loc_CF20
+		; This removes the infamous "spike feature"
+		tst.w	$30(a0)		; Is Sonic flashing after being hurt?
+		bne.s	Obj36_RemoveSpikeFeature	; If so, remove spike feature
 		move.l	$C(a0),d3
 		move.w	$12(a0),d0
 		ext.l	d0
@@ -16519,7 +16522,6 @@ loc_CF20:
 		movea.l	(sp)+,a0
 
 Obj36_Display:
-		bsr.w	DisplaySprite
 		move.w	$30(a0),d0
 		andi.w	#$FF80,d0
 		move.w	($FFFFF700).w,d1
@@ -16528,7 +16530,14 @@ Obj36_Display:
 		sub.w	d1,d0
 		cmpi.w	#$280,d0
 		bhi.w	DeleteObject
-		rts	
+		jmp	DisplaySprite
+
+Obj36_RemoveSpikeFeature:
+		bclr	#3,$22(a0)		; Snoc not touch spike, stop do glicth sloppe
+		movea.l	(sp)+,a0		; now back to spike
+		jsr	DeleteObject
+		move.w	#$8F,d0			; play Vanish sample
+		jmp	MegaPCM_PlaySample
 ; ===========================================================================
 
 Obj36_Type0x:				; XREF: Obj36_Solid
@@ -16629,12 +16638,6 @@ Obj3B_Main:				; XREF: Obj3B_Index
 		move.b	#4,$18(a0)
 
 Obj3B_Solid:				; XREF: Obj3B_Index
-		move.w	#$1B,d1
-		move.w	#$10,d2
-		move.w	#$10,d3
-		move.w	8(a0),d4
-		bsr.w	SolidObject
-		bsr.w	DisplaySprite
 		move.w	8(a0),d0
 		andi.w	#$FF80,d0
 		move.w	($FFFFF700).w,d1
@@ -16643,7 +16646,12 @@ Obj3B_Solid:				; XREF: Obj3B_Index
 		sub.w	d1,d0
 		cmpi.w	#$280,d0
 		bhi.w	DeleteObject
-		rts	
+		pea	DisplaySprite
+		move.w	#$1B,d1
+		move.w	#$10,d2
+		move.w	#$10,d3
+		move.w	8(a0),d4
+		bra.w	SolidObject
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Object 49 - waterfall	sound effect (GHZ)
@@ -34896,6 +34904,7 @@ loc_1A9E6:
 		jsr	RandomNumber
 		and.w	#7*2,d0
 		addq.w	#2*2,d0
+	;	move.b	#$E,d0		; homing test
 		move.b	d0,$25(a0)	; set routine
 		swap	d0
 		move.w	d0,$28(a0)	; set other number
