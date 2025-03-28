@@ -3134,7 +3134,7 @@ Sega_WaitPallet:
 		bsr.w	PlaySound_Special ; play "SEGA"	sound
 		move.b	#$14,($FFFFF62A).w
 		bsr.w	DelayProgram
-                move.w  #$1E+7*60,($FFFFF614).w         ; was $1E
+                move.w  #8*60,($FFFFF614).w         ; was $1E
 
 Sega_WaitEnd:
 		move.b	#2,($FFFFF62A).w
@@ -3145,6 +3145,7 @@ Sega_WaitEnd:
 		beq.s	Sega_WaitEnd	; if not, branch
 
 Sega_GotoTitle:
+		jsr     MegaPCM_StopPlayback
 		move.b	#$4,($FFFFF600).w ; go to title screen
 		rts	
 ; ===========================================================================
