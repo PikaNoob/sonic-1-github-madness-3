@@ -4090,6 +4090,7 @@ Level:					; XREF: GameModeArray
 loc_37B6:
 		bsr.w	ClearPLC
 		bsr.w	Pal_FadeFrom
+		move.b	#0,($FFFFF003).w ; unpause music (this is incase it was frozen by pit fall)
 		tst.w	($FFFFFFF0).w
 		bmi.s	Level_ClrRam
 		move	#$2700,sr
@@ -25026,7 +25027,10 @@ Boundary_Bottom:
 		rts	
 
 CallKillSonic:
-		jmp	KillSonic	; GMZ
+		move.b	#02,($FFFFF003).w ; pause music (this is for pit fall)
+		jsr	KillSonic	; GMZ
+		move.b  #$93, d0 ; scream in hell
+		jmp     MegaPCM_PlaySample
 ; ===========================================================================
 
 Boundary_Sides:
