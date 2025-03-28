@@ -39481,7 +39481,7 @@ byte_71A94:	dc.b 7,	$72, $73, $26, $15, 8, $FF, 5
 ; Music	Pointers
 ; ---------------------------------------------------------------------------
 MusicIndex:	; $01-$7F
-		dc.l Music9F ; test
+		dc.l Music01 ; New Bark Town
 		dc.l Music92 ; test
 
 MusicIndex80:	; $81-$9F
@@ -41926,6 +41926,8 @@ Kos_Z80:	incbin	sound\z80_1.bin
 		dc.b $21
 		dc.w (((EndOfRom-SegaPCM)&$FF)<<8)+(((EndOfRom-SegaPCM)&$FF00)>>8)
 		incbin	sound\z80_2.bin
+		even
+Music01:	include	sound\LimitedInvincibility.asm
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even

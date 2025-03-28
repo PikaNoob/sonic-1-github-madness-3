@@ -1,8 +1,8 @@
 Mus_NBT_Header:
-	smpsHeaderStartSong 3
+smpsHeaderStartSong = 1
 	smpsHeaderVoice     Mus_NBT_Voices
 	smpsHeaderChan      $06, $03
-	smpsHeaderTempo     $02, $0A
+	smpsHeaderTempo     $02, $26
 
 	smpsHeaderDAC       Mus_NBT_DAC
 	smpsHeaderFM        Mus_NBT_FM1,	$00, $0B
