@@ -13347,7 +13347,13 @@ Obj2E_ChkInvinc:
 		move.b	#4,($FFFFD2DC).w
 		tst.b	($FFFFF7AA).w	; is boss mode on?
 		bne.s	Obj2E_NoMusic	; if yes, branch
+		cmpi.b 	#3,(v_character)
+		beq.s	Obj2E_NewBarkTown
 		move.w	#$87,d0
+		jmp	(PlaySound).l	; play invincibility music
+
+Obj2E_NewBarkTown:
+		move.w	#$01,d0
 		jmp	(PlaySound).l	; play invincibility music
 ; ===========================================================================
 
