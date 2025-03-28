@@ -40530,6 +40530,7 @@ Sound_notA7:
 		move.w	(a1)+,d1
 		add.l	a3,d1
 		move.b	(a1)+,d5
+		moveq	#0,d7
 		move.b	(a1)+,d7
 		subq.b	#1,d7
 		moveq	#$30,d6
@@ -40641,6 +40642,7 @@ Sound_D0:				; XREF: Sound_ChkValue
 		add.l	a3,d0
 		move.l	d0,$20(a6)
 		move.b	(a1)+,d5
+		moveq	#0,d7
 		move.b	(a1)+,d7
 		subq.b	#1,d7
 		moveq	#$30,d6
@@ -40726,6 +40728,7 @@ loc_723EA:
 		bne.s	loc_72416
 		tst.b	$340(a6)
 		bpl.s	loc_72416
+		movea.l	a5,a3
 		lea	$340(a6),a5
 		movea.l	$20(a6),a1
 		bra.s	loc_72428
@@ -40742,6 +40745,7 @@ loc_72416:
 loc_72428:
 		bclr	#2,(a5)
 		bset	#1,(a5)
+		moveq	#0,d0
 		move.b	$B(a5),d0
 		jsr	sub_72C4E(pc)
 		movea.l	a3,a5
@@ -40791,6 +40795,7 @@ Snd_FadeOut2:				; XREF: Sound_E0
 		tst.b	(a5)
 		bpl.s	loc_724AE
 		movea.l	$18(a6),a1
+		moveq	#0,d0
 		move.b	$B(a5),d0
 		jsr	sub_72C4E(pc)
 
@@ -41704,6 +41709,7 @@ loc_72BF4:				; XREF: loc_72A64
 		movea.l	$18(a6),a1
 		bclr	#2,(a5)
 		bset	#1,(a5)
+		moveq	#0,d0
 		move.b	$B(a5),d0
 		jsr	sub_72C4E(pc)
 		movea.l	a3,a5
@@ -41790,7 +41796,7 @@ sub_72CB4:				; XREF: sub_72504; sub_7267C; loc_72BA4
 		movea.l	$18(a6),a1
 		tst.b	$E(a6)
 		beq.s	loc_72CD8
-		movea.l	$20(a6),a1
+		movea.l	$18(a6),a1
 		tst.b	$E(a6)
 		bmi.s	loc_72CD8
 		movea.l	$20(a6),a1
