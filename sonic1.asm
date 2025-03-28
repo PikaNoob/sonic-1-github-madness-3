@@ -202,18 +202,19 @@ GameProgram:
 		beq.w	GameInit	; if yes, branch
 
 CheckSumCheck:
-;		movea.l	#ErrorTrap,a0	; start	checking bytes after the header	($200)
-;		movea.l	#RomEndLoc,a1	; stop at end of ROM
-;		move.l	(a1),d0
-;		moveq	#0,d1
-;
-;loc_32C:
-;		add.w	(a0)+,d1
-;		cmp.l	a0,d0
-;		bcc.s	loc_32C
-;		movea.l	#Checksum,a1	; read the checksum
-;		cmp.w	(a1),d1		; compare correct checksum to the one in ROM
-;		bne.w	CheckSumError	; if they don't match, branch
+		movea.l	#ErrorTrap,a0	; start	checking bytes after the header	($200)
+		movea.l	#RomEndLoc,a1	; stop at end of ROM
+		move.l	(a1),d0
+		moveq	#0,d1
+
+loc_32C:
+		add.w	(a0)+,d1
+		cmp.l	a0,d0
+		bcc.s	loc_32C
+		movea.l	#Checksum,a1	; read the checksum
+		cmp.w	(a1),d1		; compare correct checksum to the one in ROM
+		bne.w	CheckSumError	; if they don't match, branch
+	CheckSumOk:
 		lea	($FFFFFE00).w,a6
 		moveq	#0,d7
 		move.w	#$7F,d6
@@ -221,6 +222,7 @@ CheckSumCheck:
 loc_348:
 		move.l	d7,(a6)+
 		dbf	d6,loc_348
+AfterERR:
 		move.b	($A10001).l,d0
 		andi.b	#$C0,d0
 		move.b	d0,($FFFFFFF8).w
@@ -251,6 +253,10 @@ GameClrRAM:
 		cmpi.l	#'init',($FFFFFFFC).w	; has checksum routine already run?
 		beq.w	@nosplashscreens	; if yes, branch
 		move.l	#'init',($FFFFFFFC).w	; set flag so checksum won't be run again
+
+		tst.b	(f_checksum).w	; Is checksum incorrect?
+		bne.s   @notmss		; if yes, branch
+
 		move.b	($A10001).l,d0
 		and.w	#$F,d0
 		beq.s	@notmss
@@ -298,19 +304,13 @@ jmpto_Minecraft:
 
 jmpto_BeeBush:
 		jmp     GM_BEEBUSH
-
+jmpto_Otis:
+		jmp     GM_BEEBUSH
 
 CheckSumError:
-		bsr.w	VDPSetupGame
-		move.l	#$C0000000,($C00004).l ; set VDP to CRAM write
-		moveq	#$3F,d7
-
-CheckSum_Red:
-		move.w	#$E,($C00000).l	; fill screen with colour red
-		dbf	d7,CheckSum_Red	; repeat $3F more times
-
-CheckSum_Loop:
-		bra.s	CheckSum_Loop
+f_checksum: equ $FFFFFF8E	; Checksum Flag
+		move.b	#1,(f_checksum).w
+		jmp	AfterERR
 ; ===========================================================================
 
 BusError:
