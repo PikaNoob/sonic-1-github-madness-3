@@ -40,10 +40,9 @@ echo  [ 4 ] join official discord s official server
 echo.
 echo  [ / ] Settings
 echo  [ - ] EXIT
-echo
 echo.
 set /p choice= Game: 
-goto:8BitRemakes
+goto:Menu
 if %choice%==1 goto:sonicasm
 if %choice%==2 goto:build
 if %choice%==3 goto:cont
