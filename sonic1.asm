@@ -3561,12 +3561,14 @@ LevSel_Level_SS:			; XREF: LevelSelect
 		cmpi.w	#$1000,d0	; check	if level is 0700 (Special Stage)
 		bne.s	LevSel_Level	; if not, branch
 		move.b	#$10,($FFFFF600).w ; set screen	mode to	$10 (Special Stage)
-		clr.w	($FFFFFE10).w	; clear	level
-		move.b	#39,($FFFFFE12).w ; set lives to	3
+		move.b	#39,($FFFFFE12).w ; set lives to 3
 		moveq	#0,d0
+		move.w	d0,($FFFFFE10).w ; clear level
 		move.w	d0,($FFFFFE20).w ; clear rings
 		move.l	d0,($FFFFFE22).w ; clear time
 		move.l	d0,($FFFFFE26).w ; clear score
+		moveq	#-1,d0		; go through stages linearly (juuuuust to be safe)
+		move.l	d0,(v_levelrandtracker).w
 		rts	
 ; ===========================================================================
 
@@ -16126,8 +16128,11 @@ Obj3A_AddBonus:				; XREF: Obj3A_ChkBonus
 
 Obj3A_NextLevel:			; XREF: Obj3A_Index
 		jsr	GetLevelRandom
+		tst.l	(v_levelrandtracker).w	; if level selection is random, ignore the SS
+		bpl.s	@random
 		tst.w	($FFFFFE10).w	; if level is GHZ1, go back to Sega screen(???)
 		bne.s	Obj3A_ChkSS
+@random:
 		move.b	#0,($FFFFF600).w ; set game mode to level (00)
 		bra.s	Obj3A_Display2
 ; ===========================================================================
