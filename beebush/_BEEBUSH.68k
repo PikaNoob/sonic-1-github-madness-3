@@ -267,9 +267,7 @@ BEEBUSH_STATIC:
         subq.w  #1,genericTimer.w
         bne.w   .Exit
         move.b  #SMNO_BEEBUSH_INITMAIN,submode.w ; Move to next mode
-        rts
 .Exit:
-
         rts
 
 ; ---------------------------------------------------------------------------
@@ -292,17 +290,48 @@ BEEBUSH_INITMAIN:
         lea     OBJECTRAM.w,a1
         moveq   #0,d0
         move.w  #((OBJSZ*20)/4)-1,d1
-
 .ClearObjects:                         
         move.l  d0,(a1)+
         dbf     d1,.ClearObjects
         move.b  #BBUSH_OBJNO_PLAYER,objSlot02.w
         move.b  #BBUSH_OBJNO_BEES,objSlot01.w
-        move.l  #$100,distance
+
+        move.w  $FFFFFE56.w,d0
+        lsl.w   #2,d0
+        btst    #6,$FFFFFFF8.w
+        bne.s   .PALHardware
+        move.l  DistanceTbl(pc,d0.w),distance
         move.b  #SMNO_BEEBUSH_MAIN,submode.w ; Move to next mode
         moveq   #$FFFFFF8E, d0          ; request SEGA PCM sample
         jsr     MegaPCM_PlaySample
         rts
+
+.PALHardware
+        move.l  DistanceTbl_PAL(pc,d0.w),distance
+        move.b  #SMNO_BEEBUSH_MAIN,submode.w ; Move to next mode
+        moveq   #$FFFFFF8E, d0          ; request SEGA PCM sample
+        jsr     MegaPCM_PlaySample
+        rts
+
+ ; ---------------------------------------------------------------------------   
+
+DistanceTbl:
+        dc.l    300
+        dc.l    500
+        dc.l   1000
+        dc.l   6000
+        dc.l  12000 
+        dc.l  36000
+
+ ; ---------------------------------------------------------------------------   
+
+DistanceTbl_PAL:
+        dc.l    252 
+        dc.l    420
+        dc.l    840
+        dc.l   5040
+        dc.l  10080  
+        dc.l  30240
 
 ; ---------------------------------------------------------------------------
 ; Main    lGod wfyuck ioff
@@ -315,7 +344,11 @@ BEEBUSH_MAIN:
         bsr.w   _beebushScroll
         bsr.w   _beebushRunObjects    
         jsr     DrawObjects
-        rts
+        move.l  distance,d0 
+        bne.s   .NoWin
+        move.b  #$10,gamemode.w
+.NoWin
+        rts     
 
 ; ---------------------------------------------------------------------------
 
