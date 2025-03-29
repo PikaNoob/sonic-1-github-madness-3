@@ -18,7 +18,7 @@ align macro
 		include "MapMacros.asm"
 
 ;level select constants (to not give the foward reference warning this was moved here)
-f_checksum	= $FFFF8000
+f_checksum	= $FFFFFFF9
 lsscrpos 	= $60860003 ; level select screen position
 lsoff 		= $240000 ; second row jump
 lsstpos 	= lsscrpos+$43C0000 ; sound test
@@ -204,22 +204,20 @@ GameProgram:
 ; init stuff for hard reset
 		lea	($FFFFFE00).w,a6
 		moveq	#0,d7
-		move.w	#$7F,d6
+		move.w	#$200/4-1,d6
 loc_348:
 		move.l	d7,(a6)+
 		dbf	d6,loc_348
 CheckSumCheck:
-		movea.l	#ErrorTrap,a0	; start	checking bytes after the header	($200)
-		movea.l	#RomEndLoc,a1	; stop at end of ROM
-		move.l	(a1),d0
-		moveq	#0,d1
-loc_32C:
-		add.w	(a0)+,d1
-		cmp.l	a0,d0
-		blo.s	loc_32C
-		movea.l	#Checksum,a1	; read the checksum
-		cmp.w	(a1),d1		; compare correct checksum to the one in ROM
-		sne	(f_checksum).w	; if they don't match, set this flag. if they do, clear it
+		lea	($200).w,a0		; start	checking bytes after the header	($200)
+		move.l	RomEndLoc-$200(a0),a1	; stop at end of ROM
+		move.w	Checksum-$200(a0),d0	; get rom comparison checksum
+		move.w	(a0)+,d1
+@cksm:		add.w	(a0)+,d1
+		cmp.l	a0,a1
+		bhs.s	@cksm
+		cmp.w	d0,d1			; compare correct checksum to the one in ROM
+		sne	(f_checksum).w		; if they don't match, set this flag. if they do, clear it
 
 		move.b	($A10001).l,d0
 		andi.b	#$C0,d0
@@ -227,7 +225,7 @@ loc_32C:
 GameInit:
 		lea	($FF0000).l,a6
 		moveq	#0,d7
-		move.w	#$3F7F,d6
+		move.w	#$FE00/4-1,d6
 
 GameClrRAM:
 		move.l	d7,(a6)+
