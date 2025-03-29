@@ -3558,7 +3558,7 @@ LevSel_Level_SS:			; XREF: LevelSelect
 		add.w	d0,d0
 		move.w	LSelectPointers(pc,d0.w),d0 ; load level number
 		bmi.w	LevelSelect
-		cmpi.w	#$FFFF,d0	; check	if level is 0700 (Special Stage)
+		cmpi.w	#$1000,d0	; check	if level is 0700 (Special Stage)
 		bne.s	LevSel_Level	; if not, branch
 		move.b	#$10,($FFFFF600).w ; set screen	mode to	$10 (Special Stage)
 		clr.w	($FFFFFE10).w	; clear	level
@@ -3621,7 +3621,7 @@ LSelectPointers:
 		dc.w $0501 
 		dc.w $0103 
 		dc.w $0502 ; fz
-		dc.w $FFFF ; special
+		dc.w $1000 ; special
 		dc.w $8000 ; sound test
 		even
 ; --------------------------------------
