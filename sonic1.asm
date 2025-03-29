@@ -2211,7 +2211,8 @@ locret_1AC6:
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 
-PalCycle_SBZ:				; XREF: PalCycle
+PalCycle_SBZ:	
+		rts 	; temporary disable, idk how this shit works
 		lea	(Pal_SBZCycList).l,a2
 		tst.b	($FFFFFE11).w
 		beq.s	loc_1ADA
