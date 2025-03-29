@@ -27,13 +27,13 @@ SampleTable:
 	dcSample	TYPE_PCM,		AmbO,		8000, FLAGS_LOOP	; $96
 	dcSample	TYPE_PCM,		Mikuingit,	8000, FLAGS_SFX		; $97
 ; SAILOR MERCURY
-	dcSample	TYPE_DPCM,		SM1,	11025, FLAGS_SFX	; $94
-	dcSample	TYPE_DPCM,		SM2,	11025, FLAGS_SFX	; $94
-	dcSample	TYPE_DPCM,		SM3,	11025, FLAGS_SFX	; $94
-	dcSample	TYPE_DPCM,		SM4,	11025, FLAGS_SFX	; $94
-	dcSample	TYPE_DPCM,		SM5,	11025, FLAGS_SFX	; $94
-	dcSample	TYPE_DPCM,		SM6,	11025, FLAGS_SFX	; $94
-	dcSample	TYPE_DPCM,		SM7,	11025, FLAGS_SFX	; $94
+	dcSample	TYPE_DPCM,		SM1,	11025, FLAGS_SFX	; $98
+	dcSample	TYPE_DPCM,		SM2,	11025, FLAGS_SFX	; $99
+	dcSample	TYPE_DPCM,		SM3,	11025, FLAGS_SFX	; $9A
+	dcSample	TYPE_DPCM,		SM4,	11025, FLAGS_SFX	; $9B
+	dcSample	TYPE_DPCM,		SM5,	11025, FLAGS_SFX	; $9C
+	dcSample	TYPE_DPCM,		SM6,	11025, FLAGS_SFX	; $9D
+	dcSample	TYPE_DPCM,		SM7,	11025, FLAGS_SFX	; $9E
 	dc.w	-1	; end marker
 
 ; ---------------------------------------------------------------

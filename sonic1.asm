@@ -4467,7 +4467,6 @@ Level_PlayDemoBgm:	; GMZ
 		move.b	#$34,($FFFFD080).w ; load title	card object
  
 ; NineKode ends here
-
 Level_TtlCard:
 		move.b	#$C,($FFFFF62A).w
 		bsr.w	DelayProgram
@@ -4607,6 +4606,17 @@ Level_ClrCardArt:
 Level_StartGame:
 		bclr	#7,($FFFFF600).w ; subtract 80 from screen mode
 
+;START SOUNDS
+		cmp.b	#5,(v_character).w ; has gomer spawned?
+		bne.s	SMCsoundCHKSRT
+		move.b  #$90,d0
+		jsr	MegaPCM_PlaySample
+		jmp	Level_MainLoop
+SMCsoundCHKSRT:
+		cmp.b	#6,(v_character).w ; has sailor mercury spawned?
+		bne.s	Level_MainLoop
+		move.b  #$98,d0
+		jsr	MegaPCM_PlaySample
 ; ---------------------------------------------------------------------------
 ; Main level loop (when	all title card and loading sequences are finished)
 ; ---------------------------------------------------------------------------
@@ -16260,7 +16270,7 @@ Obj3A_ChkSS:				; XREF: Obj3A_NextLevel
 		clr.b	($FFFFFE30).w	; clear	lamppost counter
 		tst.b	($FFFFF7CD).w	; has Sonic jumped into	a giant	ring?
 		beq.s	loc_C6EA	; if not, branch
-		move.b	#$24,($FFFFF600).w ; set game mode to Special Stage (10)
+		move.b	#$10,($FFFFF600).w ; set game mode to Special Stage (10)
 		bra.s	Obj3A_Display2
 ; ===========================================================================
 
@@ -24997,7 +25007,7 @@ loc_130BA:
 SMCsoundCHK1:
 		cmp.b	#6,(v_character).w ; is this sailor mercury?
 		bne.s	NormalsoundCHK1
-		move.b  #$90,d0
+		move.b  #$9A,d0
 		jmp	MegaPCM_PlaySample
 NormalsoundCHK1:
 		move.w	#$A4,d0
@@ -25054,7 +25064,7 @@ loc_13120:
 SMCsoundCHK2:
 		cmp.b	#6,(v_character).w ; is this sailor mercury?
 		bne.s	NormalsoundCHK2
-		move.b  #$90,d0
+		move.b  #$9A,d0
 		jmp	MegaPCM_PlaySample
 NormalsoundCHK2:
 		move.w	#$A4,d0
@@ -25224,7 +25234,7 @@ Sonic_AirUnroll:
 SMCsoundCHK3:
 		cmp.b	#6,(v_character).w ; is this sailor mercury?
 		bne.s	NormalsoundCHK3
-		move.b  #$90,d0
+		move.b  #$9A,d0
 		jsr	MegaPCM_PlaySample
 		jmp	NormalsoundCHK33
 NormalsoundCHK3:
@@ -25464,7 +25474,7 @@ Obj01_DoRoll:
 SMCsoundCHK4:
 		cmp.b	#6,(v_character).w ; is this sailor mercury?
 		bne.s	NormalsoundCHK4
-		move.b  #$90,d0
+		move.b  #$9A,d0
 		jsr	MegaPCM_PlaySample
 		jmp	NormalsoundCHK44
 NormalsoundCHK4:
@@ -25525,7 +25535,7 @@ loc_1341C:
 SMCsoundCHK5:
 		cmp.b	#6,(v_character).w ; is this sailor mercury?
 		bne.s	NormalsoundCHK5
-		move.b  #$90,d0
+		move.b  #$99,d0
 		jsr	MegaPCM_PlaySample
 		jmp	NormalsoundCHK55
 NormalsoundCHK5:
@@ -30023,16 +30033,17 @@ loc_1670E:
 		move.w	8(a0),8(a1)
 		move.w	$C(a0),$C(a1)
 		clr.b	$32(a0)
-		cmp.b	#5,(v_character).w ; is this gomer?
-		bne.s	SMCsoundCHK6
-		move.b  #$90,d0
-		jmp	MegaPCM_PlaySample
-SMCsoundCHK6:
-		cmp.b	#6,(v_character).w ; is this sailor mercury?
-		bne.s	NormalsoundCHK6
-		move.b  #$90,d0
-		jmp	MegaPCM_PlaySample
-NormalsoundCHK6:
+;		cmp.b	#5,(v_character).w ; is this gomer?
+;		bne.s	SMCsoundCHK6
+;		move.b  #$90,d0
+;		jmp	MegaPCM_PlaySample
+;SMCsoundCHK6:
+;		cmp.b	#6,(v_character).w ; is this sailor mercury?
+;		bne.s	NormalsoundCHK6
+;		move.b  #$9A,d0
+;		jmp	MegaPCM_PlaySample
+;NormalsoundCHK6:
+;THIS WAS ADDED BY ACCIDENT THINKING IT WAS A PART OF SONIC
 		move.w	#$BE,d0
 		jsr	(PlaySound_Special).l ;	play Sonic rolling sound
 
@@ -36171,7 +36182,7 @@ Hurt_Sound:
 SMCsoundCHKD:
 		cmp.b	#6,(v_character).w ; is this sailor mercury?
 		bne.s	NormalsoundCHKD
-		move.b  #$90,d0
+		move.b  #$9B,d0
 		jmp	MegaPCM_PlaySample
 NormalsoundCHKD:
 		rts	
@@ -36220,7 +36231,7 @@ Kill_Sound:
 SMCsoundCHK7:
 		cmp.b	#6,(v_character).w ; is this sailor mercury?
 		bne.s	NormalsoundCHK7
-		move.b  #$90,d0
+		move.b  #$9C,d0
 		jmp	NormalsoundCHK7
 NormalsoundCHK7:
 		jsr     MegaPCM_PlaySample
