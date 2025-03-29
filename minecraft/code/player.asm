@@ -27,7 +27,12 @@ MC_Player:
 		lea	(playerObjVars).w,a0
 	
 	; movement and collision
-		bsr.w	.blockCollision
+		;bsr.w	MC_PlayerControl
+		;bsr.w	MC_PlayerMove
+		;bsr.w	MC_PlayerCollision
+		;bsr.w	MC_PlayerAnimate
+		;bsr.w	MC_PlayerCursor
+		;bsr.w	MC_PlayerDraw
 
 .checkJump:
 		btst.b	#BIT_B,(ctrlPressP1).w
@@ -84,6 +89,8 @@ MC_Player:
 		clr.w	xVel(a0)
 
 .updateBGPos:
+		bsr.w	.blockCollision
+
 		move.w	xPos(a0),d0
 		sub.w	#160,d0
 		move.w	d0,(camXposFG).w
