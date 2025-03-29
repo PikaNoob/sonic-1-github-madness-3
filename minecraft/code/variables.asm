@@ -30,6 +30,8 @@ ctrlPressP1	rs.b	1
 ctrlHoldP2	rs.b	1
 ctrlPressP2	rs.b	1
 
+steveObjRam	rs.b	$40
+
 		rsset	__rs&$FFFFFF
 mcRAM_End	rs.b	0
 
