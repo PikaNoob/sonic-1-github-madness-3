@@ -24,7 +24,11 @@ GM_CustomSplashScreensIG:
 
 		moveq	#0,d0
 		move.b	(a6),d0
-		add.w	d0,d0
+		lsl.w	#2,d0
+		btst	#6,($FFFFFFF8).w
+		beq.s	@ntsctime
+		addq.w	#2,d0
+@ntsctime:
 		lea	@timelut(pc),a0
 		move.w	(a0,d0.w),($FFFFF614).w
 
@@ -105,9 +109,16 @@ GM_CustomSplashScreensIG:
 		bra.s	@loadnext
 @exit:
 		rts
+	; NTSC, PAL
 @timelut:
-	dc.w 0
-	dc.w 30
+	dc.w 0,0
+	dc.w 30,25
+	dc.w 8*60,8*50		; intro 1
+	dc.w 7*60,7*50		; intro 2
+	dc.w 9*60,9*50		; intro 3
+	dc.w 7*60,7*50		; intro 4
+	dc.w 10*60,10*50	; intro 5
+	dc.w 11*60,11*50	; intro 6
 
 GM_SplashScreensListIG:
 	dc.l $89<<24|@nem_pillow,$00<<24|@enifg_pillow,$94<<24|@enibg_pillow,$00<<24|@pal_pillow,0
@@ -176,12 +187,12 @@ GM_SplashScreensListIG:
 	even
 	
 IntroCutscene:		; no one fucking modify this or i swear to fucking god, except malachi :3
-	dc.l $81<<24|@nem_PicBatch,$00<<24|@enifg_Picture1,$82<<24|@enibg_Picture1,$1C<<24|@pal_monochrome,1
-	dc.l $81<<24|@nem_PicBatch,$00<<24|@enifg_Picture2,$8F<<24|@enibg_Picture2,$00<<24|@pal_monochrome,1	
-	dc.l $81<<24|@nem_PicBatch,$00<<24|@enifg_Picture3,$82<<24|@enibg_Picture3,$00<<24|@pal_monochrome,0
-	dc.l $81<<24|@nem_PicBatch2,$00<<24|@enifg_Picture4,$82<<24|@enibg_Picture4,$13<<24|@pal_monochrome,1
-	dc.l $81<<24|@nem_PicBatch2,$00<<24|@enifg_Picture5,$82<<24|@enibg_Picture5,$00<<24|@pal_monochrome,1
-	dc.l $81<<24|@nem_PicBatch2,$00<<24|@enifg_Picture6,$82<<24|@enibg_Picture6,$00<<24|@pal_monochrome,0
+	dc.l $81<<24|@nem_PicBatch,$02<<24|@enifg_Picture1,$9F<<24|@enibg_Picture1,$85<<24|@pal_monochrome,1
+	dc.l $81<<24|@nem_PicBatch,$03<<24|@enifg_Picture2,$A0<<24|@enibg_Picture2,$00<<24|@pal_monochrome,0	
+	dc.l $81<<24|@nem_PicBatch,$04<<24|@enifg_Picture3,$A1<<24|@enibg_Picture3,$00<<24|@pal_monochrome,0
+	dc.l $81<<24|@nem_PicBatch2,$05<<24|@enifg_Picture4,$A2<<24|@enibg_Picture4,$97<<24|@pal_monochrome,1
+	dc.l $81<<24|@nem_PicBatch2,$06<<24|@enifg_Picture5,$A3<<24|@enibg_Picture5,$00<<24|@pal_monochrome,1
+	dc.l $81<<24|@nem_PicBatch2,$07<<24|@enifg_Picture6,$A4<<24|@enibg_Picture6,$90<<24|@pal_monochrome,0
 	dc.l 0	; terminator 2
 	even
 	

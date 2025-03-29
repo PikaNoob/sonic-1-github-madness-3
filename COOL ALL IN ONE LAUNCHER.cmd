@@ -9,7 +9,7 @@ for /F "tokens=1,2 delims=#" %%a in ('"prompt #$H#$E# & echo on & for %%b in (1)
 
 if exist zARCHIVED BUILDS\thisdoesnothingeither.txt (set first=1) else goto:Menu
 del thisdoesnothingeither.txt
-echo The first one to run was COOL ALL IN ONE LAUNCHER was %username%>thisdoesnothing.txt
+echo The first one to run COOL ALL IN ONE LAUNCHER was %username%>thisdoesnothing.txt
 
 set name=Github Madness 3 Launcher by Anakama
 
@@ -17,25 +17,9 @@ echo The last user of cool all in one launcher is %username%>thisdoesnothing.txt
 
 title %name%
 
-echo Sup brother
-timeout 1 > NUL
-echo You got headache browsing the dissassembly?
-timeout 1 > NUL
-echo Yeah the code is fucking hell.
-timeout 1 > NUL
-echo Don't worry, I am here to help you
-timeout 1 > NUL
-echo I mean if you call it a help
-timeout 1 > NUL
-echo Now don't close
-timeout 1 > NUL
-echo You just wanna rest right?
-timeout 1 > NUL
-echo Or maybe edit some sonic.asm idk
-timeout 1 > NUL
-echo Thats what %name% is made for!
-timeout 1 > NUL
+echo %name%
 
+timeout 1 > NUL
 :Menu
 cls
 pushd %~dp0

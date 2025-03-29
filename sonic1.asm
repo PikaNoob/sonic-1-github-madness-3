@@ -217,14 +217,43 @@ loc_348:
 		move.l	d7,(a6)+
 		dbf	d6,loc_348
 CheckSumCheck:
-		lea	($200).w,a0		; start	checking bytes after the header	($200)
-		move.l	RomEndLoc-$200(a0),a1	; stop at end of ROM
-		move.w	Checksum-$200(a0),d0	; get rom comparison checksum
-		move.w	(a0)+,d1
-@cksm:		add.w	(a0)+,d1
-		cmp.l	a0,a1
-		bhs.s	@cksm
-		cmp.w	d0,d1			; compare correct checksum to the one in ROM
+; calculate checksum, makes sure cart is inserted properly and stalls hackers
+; traditional checksum
+; OUTPUT
+; d0 = calculated checksum
+; d1 = precalculated checksum
+; TRASHES
+; a0,a1,d2,d3
+@checksum	= $18E
+@end_addr	= $1A4
+@header_end	= $200
+	clr.w	d0
+	lea	(@header_end).w,a0
+	move.w	@checksum-@header_end(a0),d1	; get precalc checksum
+	move.l	@end_addr-@header_end(a0),d2	; get end address
+	addq.l	#1,d2		; speeds up properly padded roms a bit
+	movea.l	d2,a1		; romend
+	sub.l	a0,d2
+	lsr.l	#5,d2		; (romend-$200)/32
+	subq.l	#1,d2		; -1 for dbf
+	move.w	d2,d3		; copy word to d3
+	swap	d2		; swap to high word
+;	subq.w	#1,d3		; -1 for dbf
+@cksm_loop:
+	rept 32/2
+	add.w	(a0)+,d0	; 8
+	endr			; 128
+	dbra	d3,@cksm_loop	; 14, 10 for exit
+	dbra	d2,@cksm_loop	; 14
+; handle remaining bytes
+	cmp.l	a1,a0		; have we already hit the end?
+	bhs.s	@cksm_end	; if so, branch
+@cksm_remains:
+	add.w	(a0)+,d0
+	cmp.l	a1,a0
+	blo.s	@cksm_remains
+@cksm_end:
+	cmp.w	d1,d0
 		sne	(f_checksum).w		; if they don't match, set this flag. if they do, clear it
 
 		move.b	($A10001).l,d0
@@ -3189,6 +3218,8 @@ TitleScreen:				; XREF: GameModeArray
 		move.w	#$8720,(a6)
 		clr.b	($FFFFF64E).w
 		bsr.w	ClearScreen
+		jsr 	SHC21
+		jsr 	SHC
 		lea	($FFFFD000).w,a1
 		moveq	#0,d0
 		move.w	#$7FF,d1
@@ -16202,8 +16233,20 @@ loc_C61A:				; XREF: Obj3A_ChkPos
 		cmpi.b	#4,$1A(a0)
 		bne.s	loc_C5FE
 		addq.b	#2,$24(a0)
-		move.w	#180,$1E(a0)	; set time delay to 3 seconds
 
+		move.w	#180,$1E(a0)	; set time delay to 3 seconds
+CHAR_WIN_SND:
+		cmp.b	#5,(v_character).w ; has gomer spawned?
+		bne.s	SMCsoundCHKWN
+		move.b  #$90,d0
+		jsr	MegaPCM_PlaySample
+		jmp	NormalsoundCHKWN
+SMCsoundCHKWN:
+		cmp.b	#6,(v_character).w ; has sailor mercury spawned?
+		bne.s	NormalsoundCHKWN
+		move.b  #$9E,d0
+		jsr	MegaPCM_PlaySample
+NormalsoundCHKWN:
 Obj3A_Wait:				; XREF: Obj3A_Index
 		subq.w	#1,$1E(a0)	; subtract 1 from time delay
 		bne.s	Obj3A_Display
@@ -16270,7 +16313,7 @@ Obj3A_ChkSS:				; XREF: Obj3A_NextLevel
 		clr.b	($FFFFFE30).w	; clear	lamppost counter
 		tst.b	($FFFFF7CD).w	; has Sonic jumped into	a giant	ring?
 		beq.s	loc_C6EA	; if not, branch
-		move.b	#$10,($FFFFF600).w ; set game mode to Special Stage (10)
+		move.b	#$24,($FFFFF600).w ; set game mode to Special Stage (10)
 		bra.s	Obj3A_Display2
 ; ===========================================================================
 
@@ -31007,6 +31050,7 @@ loc_177E6:
 		tst.b	$3E(a0)
 		bne.s	Obj3D_ShipFlash
 		move.b	#$20,$3E(a0)	; set number of	times for ship to flash
+		jsr	CHAR_BOSSHIT_SND ;	play boss damage sound
 		move.w	#$AC,d0
 		jsr	(PlaySound_Special).l ;	play boss damage sound
 
@@ -31033,6 +31077,25 @@ loc_1784C:				; XREF: loc_177E6
 		move.b	#8,$25(a0)
 		move.w	#$B3,$3C(a0)
 		rts	
+
+; ---------------------------------------------------------------------------
+; Subroutine to	make a sound when hitting a boss
+; ---------------------------------------------------------------------------
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+CHAR_BOSSHIT_SND:
+		cmp.b	#5,(v_character).w ; did gomer hit?
+		bne.s	SMCsoundCHKBH
+		move.b  #$90,d0
+		jmp	MegaPCM_PlaySample
+SMCsoundCHKBH:
+		cmp.b	#6,(v_character).w ; did sailor mercury hit?
+		bne.s	NormalsoundCHKBH
+		move.b  #$9D,d0
+		jmp	MegaPCM_PlaySample
+NormalsoundCHKBH:
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Defeated boss	subroutine
@@ -31626,6 +31689,7 @@ loc2_177E6:
 		tst.b	$3E(a0)
 		bne.s	obj77_ShipFlash
 		move.b	#$60,$3E(a0)	; set number of	times for ship to flash
+		jsr	CHAR_BOSSHIT_SND ;	play boss damage sound
 		move.w	#$AC,d0
 		jsr	(PlaySound_Special).l ;	play boss damage sound
 
@@ -31945,6 +32009,7 @@ loc_1833E:
 		tst.b	$3E(a0)
 		bne.s	loc_18374
 		move.b	#$28,$3E(a0)
+		jsr	CHAR_BOSSHIT_SND ;	play boss damage sound
 		move.w	#$AC,d0
 		jsr	(PlaySound_Special).l ;	play boss damage sound
 
@@ -32618,6 +32683,7 @@ loc_189FE:
 		tst.b	$3E(a0)
 		bne.s	loc_18A28
 		move.b	#$20,$3E(a0)
+		jsr	CHAR_BOSSHIT_SND ;	play boss damage sound
 		move.w	#$AC,d0
 		jsr	(PlaySound_Special).l ;	play boss damage sound
 
@@ -33379,6 +33445,7 @@ loc_19202:
 		tst.b	$3E(a0)
 		bne.s	loc_1923A
 		move.b	#$20,$3E(a0)
+		jsr	CHAR_BOSSHIT_SND ;	play boss damage sound
 		move.w	#$AC,d0
 		jsr	(PlaySound_Special).l ;	play boss damage sound
 
@@ -34580,6 +34647,7 @@ loc_19F50:
 		clr.w	($FF7FFE).l
 @notoverflown:
 		move.b	#1,$35(a0)		; eye-frame timer
+		jsr	CHAR_BOSSHIT_SND ;	play boss damage sound
 		move.w	#$AC,d0
 		jsr	(PlaySound_Special).l ;	play boss damage sound
 
@@ -34789,6 +34857,7 @@ loc_1A1D4:				; XREF: off_19E80
 		tst.b	$20(a0)
 		bne.s	loc_1A216
 		move.w	#$1E,$30(a0)
+		jsr	CHAR_BOSSHIT_SND ;	play boss damage sound
 		move.w	#$AC,d0
 		jsr	(PlaySound_Special).l ;	play boss damage sound
 
@@ -42602,6 +42671,11 @@ IdiotPCM_end:
 	even
 GM_AntiTMSS:	include _inc\GM_AntiTMSS.asm
 GM_SplashScreensIG:	include _inc\GM_SplashScreensIG.asm
+SHC21:  incbin "SHC21_Lite_Sonic12.bin"
+                even
+SHC:    incbin "SHC_Sonic12.bin"
+                even
+
 
 Minecraft:	include	minecraft\code\main.asm
 		
