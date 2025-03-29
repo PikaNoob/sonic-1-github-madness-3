@@ -48,7 +48,7 @@ optcharpos = lsscrpos+$960000 ; character
 
 ; NOTES FOR ANYONE MAKING CHARACTERS
 v_character = $FFFFFFE8
-charcount = 6
+charcount = 7 ; 6, +1 for the check
 ; pointers for:
 ; PLAYER MAPPINGS -> Player_Maps
 ; PLAYER ANIM SCRIPTS -> Player_Anim
@@ -303,10 +303,9 @@ GameModeArray:
 ; ===========================================================================
 		bra.w	jmpto_BeeBush   ; BeeBush ($24)	
 ; ===========================================================================
-		bra.w	jmpto_Otis   ; otis.exe ($28)	
+		bra.w	jmpto_Otis   ; otis.exe ($2C)	
 ; ===========================================================================
-		bra.w	jmpto_IntroCutscene   ; Intro Cutscene($2C)	
-; ===========================================================================
+; uuuuuuuuuuuuuuuuuuuuuuuuuuuuu
 
 jmpto_Minecraft:
 		jmp     Minecraft
@@ -316,10 +315,6 @@ jmpto_BeeBush:
 jmpto_Otis:
 		jmp     GM_Otis
 
-jmpto_IntroCutscene:
-		lea	(IntroCutscene),a6
-		jsr	GM_CustomSplashScreensIG
-		jmp	PlayLevel
 CheckSumError:
 		illegal
 ; ===========================================================================
@@ -2937,6 +2932,7 @@ Pal_SBZ3GroWat:	incbin	pallet\gronicsbz3uw.bin	; Gronic (underwater in SBZ act 3
 Pal_Anakama:incbin	pallet\anakama.bin	; anakama char
 Pal_neru:incbin	pallet\neru.bin	; kosaku  kosaku  kosaku  kosaku  kosaku 
 Pal_Limit:incbin pallet\LimitedSonic.bin	;	Soo limited-core
+Pal_mercury:incbin	pallet\LimitedSonic.bin	; mercury power make up!
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	delay the program by ($FFFFF62A) frames
@@ -3215,8 +3211,8 @@ Title_ClrObjRam:
 		moveq	#$27,d1
 		moveq	#$1B,d2
 		bsr.w	ShowVDPGraphics
-        moveq   #$FFFFFF90,d0          ; play gomer
-        jsr     MegaPCM_PlaySample     ; "gomer!"
+                moveq   #$FFFFFF90,d0          ; play gomer
+                jsr     MegaPCM_PlaySample     ; "gomer!"
 		bsr.w	Pal_FadeTo
 		bsr.w	Pal_FadeFrom
 
@@ -3396,10 +3392,6 @@ Title_PlayRing:
 		bsr.w	PlaySound_Special
 		bra.s	Title_CountC
 ; ===========================================================================
-PlayIntro:
-		move.b	#$2C,($FFFFF600).w
-		rts
-; ===========================================================================
 
 loc_3210:				; XREF: Title_EnterCheat
 		tst.b	d0
@@ -3434,8 +3426,6 @@ loc_3230:
 		beq.w	loc_317C	; if not, branch
 
 Title_ChkLevSel:
-		btst	#6,($FFFFF604).w ; check if A is pressed
-		beq.w	PlayIntro	; if not, play level
 		
 		move.b	#$01,d0		; play level select music (DAX: Using New Bark Town as placeholder)
 		bsr.w	PlaySound_Special
@@ -4080,6 +4070,8 @@ Player_Names:
 		dc.b "ANAKAMA "
 		dc.b "LIMITED "
 		dc.b "NERU    "
+		dc.b "GOMER G."
+		dc.b "MERCURY "
 	even
 	
 ; give the vram setting on d3
@@ -4394,7 +4386,7 @@ Player_Palette:
 		dc.w	28,28,28,0 ; LimitedSonic 
 		dc.w	26,26,$26,0 ; neru
 		dc.w	3,$F,$10,0 ; Gomer Gomer!
-
+		dc.w	28,28,28,0 ; MERCURY
 		; add more player palettes
 Level_LoadPal:
 		move.w	#$1E,($FFFFFE14).w
@@ -24440,6 +24432,8 @@ Player_Maps:
 	dc.l	Map_Limit ; LimitedSonic
 	dc.l    map_neru
 	dc.l    map_gomer
+;	dc.l    map_mercury
+	dc.l    map_neru
 	; insert player mapping here
 	
 Obj01_Main:				; XREF: Obj01_Index
@@ -26189,6 +26183,7 @@ Player_Anim:
 	dc.l	LimitedSonicAniData ; LimitedSonic
 	dc.l	SonicAniData ; neru
 	dc.l	SonicAniData ; gomer gomer!
+	dc.l	SonicAniData ; mercury
 	; Insert more animation data for other characters here
 	
 Sonic_Animate:				; XREF: Obj01_Control; et al
@@ -26389,6 +26384,8 @@ Player_DPLC:
 	dc.l	LimitDynPLC ; LimitedSonic
 	dc.l	NeruDynPLC ; neru
 	dc.l	GomerDynPLC ; gomer gomer!
+;	dc.l	mercuryDynPLC ; mercury
+	dc.l	NeruDynPLC ; neru
 	; add pointers for player dplc here
 Player_Art:
 	dc.l	Art_Sonic
@@ -26397,7 +26394,8 @@ Player_Art:
 	dc.l	Art_Limit ; LimitedSonic
 	dc.l	Art_neru ; neru
 	dc.l	Art_gomer ; gomer gomer!
-
+;	dc.l	Art_mercury ; mercury
+	dc.l	Art_neru ; neru
 	; add pointers for player art here
 
 LoadSonicDynPLC:			; XREF: Obj01_Control; et al
@@ -39132,6 +39130,8 @@ map_neru:
 	include "_maps\neru.asm"
 map_gomer:
 	include "_maps\gomer.asm"
+;map_mercury:
+;	include "_maps\neru.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	loading	array for the players
 ; ---------------------------------------------------------------------------
@@ -39143,6 +39143,8 @@ NeruDynPLC:
 	include "_inc\NeruDPLC.asm"
 gomerDynPLC:
 	include "_inc\gomerDPLC.asm"
+;mercuryDynPLC:
+;	include "_inc\NeruDPLC.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	- players
 ; ---------------------------------------------------------------------------
@@ -39154,6 +39156,8 @@ Art_neru:	incbin	artunc\neru.bin	; gocha gocha urusee!
 		even
 Art_gomer:	incbin	artunc\gomer.bin	; gomer gomer!
 		even
+;Art_mercury:	incbin	artunc\neru.bin
+;		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
@@ -39904,10 +39908,6 @@ byte_71A94:	dc.b 7,	$72, $73, $26, $15, 8, $FF, 5
 MusicIndex:	; $01-$7F
 		dc.l Music01 ; New Bark Town
 		dc.l Music02 ; Invincible Coconut
-		dc.l Music03 ; Dr. Coffinman (Boss Theme)
-		dc.l Music04 ; Eggman Encounter Cutscene (Transition to Z Z Z Z Z Z Act 3)
-		dc.l Music05 ; IDK (Originally for Sonic RPG Project - TG2000 Was Here)
-		dc.l Music06 ; Go Go Gadget
 		dc.l Music92 ; test
 
 MusicIndex80:	; $81-$9F
@@ -42375,14 +42375,6 @@ Music01:	include	sound\LimitedInvincibility.asm
 		even
 Music02:	include	sound\vroom.asm
 		even
-Music03:	include	sound\coffinman.asm
-		even
-Music04:	include	sound\eggmancutscene.asm
-		even
-Music05:	include	sound\music05.bin
-		even
-Music06:	include	sound\gogogadget.asm
-		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
 Music82:	incbin	sound\music82.bin ; Labyrinth Act 1
@@ -42580,13 +42572,6 @@ Minecraft:	include	minecraft\code\main.asm
 		include beebush\_BEEBUSH.68k
 
 		include otisexe\GM_Otis.asm
-
-
-
-
-
-
-
 
 ; end of 'ROM'
 EndOfRom:
