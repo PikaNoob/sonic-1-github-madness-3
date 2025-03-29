@@ -7,10 +7,13 @@ for /F "tokens=1,2 delims=#" %%a in ('"prompt #$H#$E# & echo on & for %%b in (1)
   set "DEL=%%a"
 )
 
-if exist zARCHIVED BUILDS\thisdoesnothing.txt (set first=1) else goto:Menu
+if exist zARCHIVED BUILDS\thisdoesnothingeither.txt (set first=1) else goto:Menu
+del thisdoesnothingeither.txt
 echo The first one to run was COOL ALL IN ONE LAUNCHER was %username%>thisdoesnothing.txt
 
 set name=Github Madness 3 Launcher by Anakama
+
+echo The last user of cool all in one launcher is %username%>thisdoesnothing.txt
 
 title %name%
 
