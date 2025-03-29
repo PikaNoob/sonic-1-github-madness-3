@@ -247,7 +247,7 @@ GameClrRAM:
 		bsr.w	JoypadInit
 
 		tst.b	(f_checksum).w		; Is checksum incorrect?
-		beq.s   @validcheck		; if yes, branch
+		bne.s   @validcheck		; if yes, branch
 		jmp	GM_Otis ; start otis.exe creepypasta
 @validcheck:
 		move.b	#0,($FFFFF600).w ; set Game Mode to Sega Screen
