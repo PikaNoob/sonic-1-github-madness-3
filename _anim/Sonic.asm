@@ -32,13 +32,13 @@
 		dc.w SonAni_Blank-SonicAniData
 		dc.w SonAni_Float3-SonicAniData
 		dc.w SonAni_Float4-SonicAniData
-SonAni_Walk:	dc.b $FF, 8, 9,	$A, $B,	6, 7, $FF
+SonAni_Walk:	dc.b $FF, 8, 9, $5A, $A, $B, 6, $59, 7, $FF
 SonAni_Run:	dc.b $FF, $1E, $1F, $20, $21, $FF, $FF,	$FF
 SonAni_Roll:	dc.b $FE, $2E, $2F, $30, $31, $32, $FF,	$FF
 SonAni_Roll2:	dc.b $FE, $2E, $2F, $32, $30, $31, $32,	$FF
 SonAni_Push:	dc.b $FD, $45, $46, $47, $48, $FF, $FF,	$FF
 SonAni_Wait:	dc.b $17, 1, 1,	1, 1, 1, 1, 1, 1, 1, 1,	1, 1, 3, 2, 2, 2, 3, 4, $FE, 2, 0
-SonAni_Balance:	dc.b $1F, $3A, $3B, $FF
+SonAni_Balance:	dc.b $1E, $3A, $3B, $FF
 SonAni_LookUp:	dc.b $3F, 5, $FF, 0
 SonAni_Duck:	dc.b $3F, $39, $FF, 0
 SonAni_Warp1:	dc.b $3F, $33, $FF, 0
@@ -58,7 +58,7 @@ SonAni_Death1:	dc.b $20, $4B, $FF, 0
 SonAni_Drown:	dc.b $2F, $4C, $FF, 0
 SonAni_Death2:	dc.b 3,	$4D, $FF, 0
 SonAni_Shrink:	dc.b 3,	$4E, $4F, $50, $51, $52, 0, $FE, 1, 0
-SonAni_Hurt:	dc.b 3,	$55, $FF, 0
+SonAni_Hurt:	dc.b 3,	$5B, $FF, 0
 SonAni_LZSlide:	dc.b 7, $55, $57, $FF
 SonAni_Blank:	dc.b $77, 0, $FD, 0
 SonAni_Float3:	dc.b 3,	$3C, $3D, $53, $3E, $54, $FF, 0

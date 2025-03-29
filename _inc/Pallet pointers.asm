@@ -61,3 +61,30 @@
 	dc.l Pal_Ending
 	dc.w $FB00
 	dc.w $1F
+	dc.l Pal_Idiot
+	dc.w $FB20
+	dc.w 7
+	dc.l Pal_BHZ
+	dc.w $FB20
+	dc.w $17
+	dc.l Pal_Otis
+	dc.w $FB00
+	dc.w $1F
+	dc.l Pal_Gronic
+	dc.w $FB00
+	dc.w 7
+	dc.l Pal_LZGroWater
+	dc.w $FB00
+	dc.w 7
+	dc.l Pal_SBZ3GroWat
+	dc.w $FB00
+	dc.w 7
+	dc.l Pal_Anakama
+	dc.w $FB00
+	dc.w 7
+	dc.l Pal_neru
+	dc.w $FB00
+	dc.w 7
+	dc.l Pal_Limit
+	dc.w $FB00
+	dc.w 7

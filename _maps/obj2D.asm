@@ -1,32 +1,46 @@
-; ---------------------------------------------------------------------------
-; Sprite mappings - Burrobot enemy (LZ)
-; ---------------------------------------------------------------------------
-		dc.w byte_AE6A-Map_obj2D
-		dc.w byte_AE75-Map_obj2D
-		dc.w byte_AE80-Map_obj2D
-		dc.w byte_AE8B-Map_obj2D
-		dc.w byte_AE96-Map_obj2D
-		dc.w byte_AEA1-Map_obj2D
-		dc.w byte_AEAC-Map_obj2D
-byte_AE6A:	dc.b 2
-		dc.b $EC, $A, 0, 0, $F0
-		dc.b 4,	9, 0, 9, $F4
-byte_AE75:	dc.b 2
-		dc.b $EC, $A, 0, $F, $F0
-		dc.b 4,	9, 0, $18, $F4
-byte_AE80:	dc.b 2
-		dc.b $E8, $A, 0, $1E, $F4
-		dc.b 0,	$A, 0, $27, $F4
-byte_AE8B:	dc.b 2
-		dc.b $E8, $A, 0, $30, $F4
-		dc.b 0,	$A, 0, $39, $F4
-byte_AE96:	dc.b 2
-		dc.b $E8, $A, 0, $F, $F0
-		dc.b 0,	$A, 0, $42, $F4
-byte_AEA1:	dc.b 2
-		dc.b $F4, 6, 0,	$4B, $E8
-		dc.b $F4, $A, 0, $51, $F8
-byte_AEAC:	dc.b 2
-		dc.b $EC, $A, 0, $F, $F0
-		dc.b 4,	9, 0, 9, $F4
-		even
+Map_e3a3:
+Map_e3a3_0: 	dc.w Map_e3a3_16-Map_e3a3
+Map_e3a3_2: 	dc.w Map_e3a3_21-Map_e3a3
+Map_e3a3_4: 	dc.w Map_e3a3_2C-Map_e3a3
+Map_e3a3_6: 	dc.w Map_e3a3_37-Map_e3a3
+Map_e3a3_8: 	dc.w Map_e3a3_42-Map_e3a3
+Map_e3a3_A: 	dc.w Map_e3a3_4D-Map_e3a3
+Map_e3a3_C: 	dc.w Map_e3a3_58-Map_e3a3
+Map_e3a3_E: 	dc.w Map_e3a3_63-Map_e3a3
+Map_e3a3_10: 	dc.w Map_e3a3_6E-Map_e3a3
+Map_e3a3_12: 	dc.w Map_e3a3_79-Map_e3a3
+Map_e3a3_14: 	dc.w Map_e3a3_84-Map_e3a3
+Map_e3a3_16: 	dc.b $2
+	dc.b $EC, $B, $8, $0, $F4
+	dc.b $C, $8, $8, $C, $F4
+Map_e3a3_21: 	dc.b $2
+	dc.b $EC, $7, $8, $F, $F8
+	dc.b $C, $4, $8, $17, $F8
+Map_e3a3_2C: 	dc.b $2
+	dc.b $EC, $7, $8, $19, $F8
+	dc.b $C, $4, $8, $21, $F8
+Map_e3a3_37: 	dc.b $2
+	dc.b $EC, $2, $8, $23, $FC
+	dc.b $FC, $2, $18, $23, $FC
+Map_e3a3_42: 	dc.b $2
+	dc.b $EC, $6, $8, $26, $F8
+	dc.b $FC, $6, $18, $26, $F8
+Map_e3a3_4D: 	dc.b $2
+	dc.b $EC, $6, $8, $2C, $F8
+	dc.b $FC, $6, $18, $2C, $F8
+Map_e3a3_58: 	dc.b $2
+	dc.b $EC, $A, $8, $32, $F4
+	dc.b $FC, $A, $18, $32, $F4
+Map_e3a3_63: 	dc.b $2
+	dc.b $EC, $6, $0, $2C, $F8
+	dc.b $FC, $6, $10, $2C, $F8
+Map_e3a3_6E: 	dc.b $2
+	dc.b $EC, $6, $0, $26, $F8
+	dc.b $FC, $6, $10, $26, $F8
+Map_e3a3_79: 	dc.b $2
+	dc.b $EC, $7, $0, $19, $F8
+	dc.b $C, $4, $0, $21, $F8
+Map_e3a3_84: 	dc.b $2
+	dc.b $EC, $7, $0, $F, $F8
+	dc.b $C, $4, $0, $17, $F8
+	even

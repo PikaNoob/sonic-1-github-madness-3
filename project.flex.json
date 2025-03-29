@@ -1,22 +1,158 @@
 {
-    "description": "Flex 2 Project File",
+    "Flex": 2,
     "name": "",
+    "node": "1c0e1eff-a75d-4561-9981-6a08d53ca655",
     "objects": [
         {
-            "uuid": "fb908fa2-af4f-4292-9696-ead3c8d5a5df",
+            "name": "players",
+            "children": [
+                {
+                    "uuid": "db436497-8172-4473-ab1a-116ba31d78a9",
+                    "format": "Sonic 1.js",
+                    "name": "sonc",
+                    "palettes": [
+                        {
+                            "path": "pallet\\sonic.bin",
+                            "length": 1
+                        }
+                    ],
+                    "art": {
+                        "path": "artunc\\sonic.bin",
+                        "compression": "Uncompressed",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "_maps\\Sonic.asm",
+                        "label": "",
+                        "customDefinition": ""
+                    },
+                    "dplcs": {
+                        "enabled": true,
+                        "path": "_inc\\Sonic dynamic pattern load cues.asm",
+                        "label": "",
+                        "customDefinition": ""
+                    }
+                },
+                {
+                    "uuid": "7c221514-e097-4e7e-a467-34ba98094ecd",
+                    "format": "Sonic 1 Raw.js",
+                    "name": "gronic",
+                    "palettes": [
+                        {
+                            "path": "pallet/gronic.bin",
+                            "length": 1
+                        }
+                    ],
+                    "art": {
+                        "path": "artunc/sonic.bin",
+                        "compression": "Uncompressed",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "_maps/Sonic.asm",
+                        "label": "",
+                        "customDefinition": ""
+                    },
+                    "dplcs": {
+                        "enabled": true,
+                        "path": "_inc/Sonic dynamic pattern load cues.asm",
+                        "label": "",
+                        "customDefinition": ""
+                    }
+                },
+                {
+                    "format": "Sonic 1.js",
+                    "name": "neru",
+                    "palettes": [
+                        {
+                            "path": "pallet\\neru.bin",
+                            "length": 1
+                        }
+                    ],
+                    "art": {
+                        "path": "artunc\\neru.bin",
+                        "compression": "Uncompressed",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "_maps\\neru.asm",
+                        "label": ""
+                    },
+                    "dplcs": {
+                        "enabled": true,
+                        "path": "_inc\\neruDPLC.asm",
+                        "label": ""
+                    },
+                    "uuid": "1c0e1eff-a75d-4561-9981-6a08d53ca655"
+                }
+            ],
+            "isDirectory": true,
+            "expanded": true
+        },
+        {
             "format": "Sonic 1.js",
-            "name": "Title Screen Sonic",
-            "palettes": [],
+            "name": "ballhog",
+            "palettes": [
+                {
+                    "path": "pallet\\sbz_act2.bin",
+                    "length": 3
+                }
+            ],
             "art": {
-                "path": "artnem\\titleson.bin",
+                "path": "artnem\\ballhog.bin",
                 "compression": "Nemesis",
                 "offset": 0
             },
             "mappings": {
-                "path": "_maps\\obj0E.asm",
+                "path": "_maps\\obj1E.asm",
+                "label": ""
+            },
+            "dplcs": {
+                "enabled": false,
+                "path": "",
+                "label": ""
+            },
+            "uuid": "3d860095-97a9-49b2-a7d4-b8cb3af5edda"
+        },
+        {
+            "format": "Sonic 1.js",
+            "name": "object",
+            "palettes": [
+                {
+                    "path": "pallet\\sonic.bin",
+                    "length": 1
+                }
+            ],
+            "art": {
+                "path": "artnem\\segalogo.bin",
+                "compression": "Nemesis",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "sprites\\Amappings.bin",
+                "label": ""
+            },
+            "dplcs": {
+                "enabled": false,
+                "path": "",
+                "label": ""
+            },
+            "uuid": "e02c60bf-44b8-4ec7-a78f-359839fecb2b"
+        },
+        {
+            "uuid": "221514e0-977e-4ee4-a734-ba98094ecd01",
+            "format": "Sonic 1.js",
+            "name": "bill newton crabmeat real",
+            "palettes": [],
+            "art": {
+                "path": "artnem\\crabmeat.bin",
+                "compression": "Nemesis",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "_maps\\obj1F.asm",
                 "label": "",
-                "customDefinition": "",
-                "format": "Sonic 1"
+                "customDefinition": ""
             },
             "dplcs": {
                 "enabled": false,
@@ -26,9 +162,100 @@
             }
         },
         {
-            "uuid": "fdfb908f-a2af-4fe2-9216-96ead3c8d5a5",
             "format": "Sonic 1.js",
-            "name": "Sonic",
+            "name": "motobug",
+            "palettes": [],
+            "art": {
+                "path": "artnem\\motobug.bin",
+                "compression": "Nemesis",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "_maps\\obj40.asm",
+                "label": "",
+                "customDefinition": "",
+                "format": "Sonic 1"
+            },
+            "dplcs": {
+                "enabled": false,
+                "path": "",
+                "label": "",
+                "customDefinition": ""
+            },
+            "uuid": "7ad6cedc-7ec9-4161-818e-0a4f8fe47564"
+        },
+        {
+            "format": "Sonic 1.js",
+            "name": "buzz bomber",
+            "palettes": [],
+            "art": {
+                "path": "artnem\\buzzbomb.bin",
+                "compression": "Nemesis",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "_maps\\obj22.asm",
+                "label": "",
+                "customDefinition": "",
+                "format": "Sonic 1"
+            },
+            "dplcs": {
+                "enabled": false,
+                "path": "",
+                "label": "",
+                "customDefinition": ""
+            },
+            "uuid": "08e97ad6-cedc-4ec9-a161-818e0a4f8fe4"
+        },
+        {
+            "format": "Sonic 1.js",
+            "name": "plap brain egg",
+            "palettes": [],
+            "art": {
+                "path": "artnem\\sbz2boss.bin",
+                "compression": "Nemesis",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "_maps\\obj82.asm",
+                "label": "",
+                "customDefinition": "",
+                "format": "Sonic 1"
+            },
+            "dplcs": {
+                "enabled": false,
+                "path": "",
+                "label": "",
+                "customDefinition": ""
+            },
+            "uuid": "404b25bd-b064-4bd9-92a0-0a84f3a7f277"
+        },
+        {
+            "format": "Sonic 1.js",
+            "name": "robotonic",
+            "palettes": [],
+            "art": {
+                "path": "artnem\\bossmain.bin",
+                "compression": "Nemesis",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "_maps\\Eggman.asm",
+                "label": "",
+                "customDefinition": "",
+                "format": "Sonic 1"
+            },
+            "dplcs": {
+                "enabled": false,
+                "path": "",
+                "label": "",
+                "customDefinition": ""
+            },
+            "uuid": "5a404b25-bdb0-44cb-9912-a00a84f3a7f2"
+        },
+        {
+            "format": "Sonic 1.js",
+            "name": "sonic",
             "palettes": [
                 {
                     "path": "pallet\\sonic.bin",
@@ -52,7 +279,80 @@
                 "label": "",
                 "customDefinition": "",
                 "format": "Sonic 1"
-            }
+            },
+            "uuid": "3b933959-6263-4958-b487-ca0d225026da"
+        },
+        {
+            "name": "Monitors",
+            "palettes": [],
+            "art": {
+                "path": "artnem\\monitors.bin",
+                "compression": "Nemesis",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "_maps\\obj26.asm",
+                "format": "Sonic 1",
+                "customDefinition": "",
+                "label": ""
+            },
+            "dplcs": {
+                "enabled": false,
+                "path": "",
+                "format": "Sonic 1",
+                "customDefinition": "",
+                "label": ""
+            },
+            "uuid": "5084dacb-f1a4-496e-9d15-f129272959b2",
+            "format": "Sonic 1.js"
+        },
+        {
+            "name": "title sonic",
+            "palettes": [],
+            "art": {
+                "path": "artnem\\titleson.bin",
+                "compression": "Nemesis",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "_maps\\obj0E.asm",
+                "format": "Sonic 1",
+                "customDefinition": "",
+                "label": ""
+            },
+            "dplcs": {
+                "enabled": false,
+                "path": "",
+                "format": "Sonic 1",
+                "customDefinition": "",
+                "label": ""
+            },
+            "uuid": "84dacbf1-a489-4e5d-95f1-29272959b29e",
+            "format": "Sonic 1.js"
+        },
+        {
+            "name": "Credits Text",
+            "palettes": [],
+            "art": {
+                "path": "artnem\\credits.bin",
+                "compression": "Nemesis",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "_maps\\obj8A.asm",
+                "format": "Sonic 1",
+                "customDefinition": "",
+                "label": ""
+            },
+            "dplcs": {
+                "enabled": false,
+                "path": "",
+                "format": "Sonic 1",
+                "customDefinition": "",
+                "label": ""
+            },
+            "uuid": "c5e02c60-bf44-489e-8767-8f359839fecb",
+            "format": "Sonic 1.js"
         }
     ]
 }

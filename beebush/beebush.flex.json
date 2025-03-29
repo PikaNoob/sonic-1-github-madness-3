@@ -1,0 +1,47 @@
+{
+    "Flex": 2,
+    "name": "",
+    "node": "f3879ca0-6016-4468-8fb3-ede0adcf0eca",
+    "objects": [
+        {
+            "format": "Sonic 1.js",
+            "name": "Quagmire Player",
+            "palettes": [],
+            "art": {
+                "path": "Data/QUAGMIRE_ART.NEM",
+                "compression": "Nemesis",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "Objects/SPRPAT_PLAYER.asm",
+                "label": ""
+            },
+            "dplcs": {
+                "enabled": false,
+                "path": "",
+                "label": ""
+            },
+            "uuid": "f3879ca0-6016-4468-8fb3-ede0adcf0eca"
+        },
+        {
+            "format": "Sonic 1.js",
+            "name": "Quagmire Intro",
+            "palettes": [],
+            "art": {
+                "path": "Data/QUAGMIRE_ART.NEM",
+                "compression": "Nemesis",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "Objects/SPRPAT_QUAGMIRE.asm",
+                "label": ""
+            },
+            "dplcs": {
+                "enabled": false,
+                "path": "",
+                "label": ""
+            },
+            "uuid": "58f38368-4b0b-495d-8b13-2a55c4e0b459"
+        }
+    ]
+}
