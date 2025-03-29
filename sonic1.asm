@@ -3408,7 +3408,7 @@ loc_3230:
 		beq.s	@notc
 
 		add.b	#1,(v_character).w ; sonic/gronic 
-		cmpi.b	#5,(v_character).w
+		cmpi.b	#6,(v_character).w
 		blt.s	@notoverflow
 		move.b	#0,(v_character).w
 	@notoverflow:
@@ -4272,11 +4272,11 @@ Level_ClrVars3:
 Player_Palette:
 		; normal, lz, sbz, blank
 		dc.w	3,$F,$10,0 ; Sonic 
-		
 		dc.w	23,24,25,0 ; Pal_Gronic 
 		dc.w	26,24,25,0 ; Pal_Anakama 
 		dc.w	28,28,28,0 ; LimitedSonic 
 		dc.w	26,26,$26,0 ; neru
+		dc.w	3,$F,$10,0 ; Gomer Gomer!
 
 		; add more player palettes
 Level_LoadPal:
@@ -24311,6 +24311,7 @@ Player_Maps:
 	dc.l	Map_Sonic ; anakama
 	dc.l	Map_Limit ; LimitedSonic
 	dc.l    map_neru
+	dc.l    map_gomer
 	; insert player mapping here
 	
 Obj01_Main:				; XREF: Obj01_Index
@@ -25996,7 +25997,7 @@ Player_Anim:
 	dc.l	SonicAniData ; anakama
 	dc.l	LimitedSonicAniData ; LimitedSonic
 	dc.l	SonicAniData ; neru
-
+	dc.l	SonicAniData ; gomer gomer!
 	; Insert more animation data for other characters here
 	
 Sonic_Animate:				; XREF: Obj01_Control; et al
@@ -26196,7 +26197,7 @@ Player_DPLC:
 	dc.l	SonicDynPLC ; anakama
 	dc.l	LimitDynPLC ; LimitedSonic
 	dc.l	NeruDynPLC ; neru
-
+	dc.l	GomerDynPLC ; gomer gomer!
 	; add pointers for player dplc here
 Player_Art:
 	dc.l	Art_Sonic
@@ -26204,6 +26205,7 @@ Player_Art:
 	dc.l	Art_Sonic ; anakama
 	dc.l	Art_Limit ; LimitedSonic
 	dc.l	Art_neru ; neru
+	dc.l	Art_gomer ; gomer gomer!
 
 	; add pointers for player art here
 
@@ -38905,6 +38907,8 @@ Map_Limit:
 	include "_maps\LimitedSonic.asm"
 map_neru:
 	include "_maps\neru.asm"
+map_gomer:
+	include "_maps\gomer.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	loading	array for the players
 ; ---------------------------------------------------------------------------
@@ -38914,6 +38918,8 @@ LimitDynPLC:
 	include "_inc\limitedsonic dynamic pattern load cues.asm"
 NeruDynPLC:
 	include "_inc\NeruDPLC.asm"
+gomerDynPLC:
+	include "_inc\gomerDPLC.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	- players
 ; ---------------------------------------------------------------------------
@@ -38922,6 +38928,8 @@ Art_Sonic:	incbin	artunc\sonic.bin	; Sonic
 Art_Limit:	incbin	artunc\limitedsonic.bin ; LimitedSonic
 		even
 Art_neru:	incbin	artunc\neru.bin	; gocha gocha urusee!
+		even
+Art_gomer:	incbin	artunc\gomer.bin	; gomer gomer!
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
