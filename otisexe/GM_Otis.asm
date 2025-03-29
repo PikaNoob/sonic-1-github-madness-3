@@ -99,7 +99,7 @@ GM_Sega_ClrObjRam:
 		jsr	EniDec
 		copyTilemap	$FF0000,$E000,$27,$1D
 
-		moveq	#2,d0
+		moveq	#$16,d0
 		jsr	PalLoad1
 		jsr	PaletteFadeIn
 		move.w  #$FF,(v_demolength).w

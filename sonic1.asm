@@ -2902,6 +2902,7 @@ Pal_SpeResult:	incbin	pallet\ssresult.bin	; special stage results screen pallets
 Pal_SpeContinue:incbin	pallet\sscontin.bin	; special stage results screen continue pallet
 Pal_Ending:	incbin	pallet\ending.bin	; ending sequence pallets
 Pal_Idiot:	incbin	pallet\idiot.bin	; idiot pallet
+Pal_Otis: incbin otisexe\palette.bin	;	OH YEAH!
 Pal_Gronic:	incbin	pallet\gronic.bin	; gronic char
 Pal_LZGroWater:	incbin	pallet\groniclzuw.bin	; Gronic (underwater in SBZ act 3) pallet
 Pal_SBZ3GroWat:	incbin	pallet\gronicsbz3uw.bin	; Gronic (underwater in SBZ act 3) pallet
@@ -4169,10 +4170,10 @@ Player_Palette:
 		; normal, lz, sbz, blank
 		dc.w	3,$F,$10,0 ; Sonic 
 		
-		dc.w	22,23,24,0 ; Pal_Gronic 
-		dc.w	25,23,24,0 ; Pal_Anakama 
-        dc.w	27,27,27,0 ; LimitedSonic 
-        dc.w	26,$F,$10,0 ; neru
+		dc.w	23,24,25,0 ; Pal_Gronic 
+		dc.w	26,24,25,0 ; Pal_Anakama 
+		dc.w	28,28,28,0 ; LimitedSonic 
+		dc.w	26,26,$26,0 ; neru
 
 		; add more player palettes
 Level_LoadPal:
