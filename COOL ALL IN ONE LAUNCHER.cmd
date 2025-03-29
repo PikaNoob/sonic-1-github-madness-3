@@ -1,8 +1,18 @@
-:: made by anakama
-
 @echo off
 
-title Anakama is so cool launcher 2025 pro extreme max edition
+set first=0
+set version=v1.01
+
+for /F "tokens=1,2 delims=#" %%a in ('"prompt #$H#$E# & echo on & for %%b in (1) do rem"') do (
+  set "DEL=%%a"
+)
+
+if exist zARCHIVED BUILDS\thisdoesnothing.txt (set first=1) else goto:Menu
+echo The first one to run was COOL ALL IN ONE LAUNCHER was %username%>thisdoesnothing.txt
+
+set name=All in one launcher for github madness 3 by Anakama
+
+title %name%
 
 echo Sup brother
 timeout 1 > NUL
@@ -20,7 +30,7 @@ echo You just wanna rest right?
 timeout 1 > NUL
 echo Or maybe edit some sonic.asm idk
 timeout 1 > NUL
-echo I am pro batch guy
+echo Thats what %name% is made for!
 timeout 1 > NUL
 
 :Menu
@@ -29,48 +39,45 @@ pushd %~dp0
 set "choice=-"
 echo.
 echo ============================================================
-echo  Select
+echo  %name%
 echo ============================================================
 echo.
-echo  [ 1 ] Open sonic.asm
-echo  [ 2 ] Build and start the game
-echo  [ 3 ] See contrictubers or smth
-echo  [ 7 ] open real pizza tower game
-echo  [ 4 ] join official discord s official server
-
+echo  [ A ] Open sonic.asm
+echo  [ B ] Build and start the game
+echo  [ C ] See contrictubers or smth
+echo  [ E ] open real pizza tower game
+echo  [ D ] join official discord s official server
 echo.
 echo  [ / ] Settings
 echo  [ - ] EXIT
 echo.
-set /p choice= Game: 
-goto:Menu
-if %choice%==1 goto:sonicasm
-if %choice%==2 goto:build
-if %choice%==3 goto:cont
-if %choice%==4 goto:diiscord
-if %choice%==7 goto:pizzatower
+set /p choice= Select: 
+if %choice%==A goto:sonicasm
+if %choice%==a goto:sonicasm
+if %choice%==b goto:build
+if %choice%==B goto:build
+if %choice%==c goto:cont
+if %choice%==C goto:cont
+if %choice%==D goto:discord
+if %choice%==d goto:discord
+if %choice%==E goto:pizzatower
+if %choice%==e goto:pizzatower
 if %choice%==/ goto:setting
 if %choice%==- goto:exit
 
-:diiscord
-title discord ahh opening w anakama
+:discord
 start https://discord.gg/tDYpbpvmet
-msg * alr bbg
 goto:Menu
 
 :pizzatower
-title ANAKAMA 2 TOWERS
 start /wait pizza-tower.exe
-msg * alr bbg finish
-
+msg * Opened
 :cont
 start https://github.com/PikaNoob/sonic-1-github-madness-3/graphs/contributors
-msg * ok bbg
 goto:Menu
-msg * btw anakama is most cool guy
+msg * Opened
 
 :sonicasm
-title sonic.asm so cool just like anakama number 1 and %random%
 echo Oh you wanna open sonic.asm
 start sonic.asm
 goto:Menu
@@ -81,43 +88,52 @@ convsym sonic1.lst s1built.bin -input asm68k_lst -inopt "/localSign=@ /localJoin
 fixheadr.exe s1built.bin
 echo All right
 start s1built.bin
-msg * Just select your emulator bbg
+msg * Select the emulator you want
 
 :exit
-echo Alr mf I am going
 echo cya
 
 :setting
-title anakama settigns so cool
-echo We don't have such settigns bbg
-echo But uhh
-echo you can see the repo ig?
-echo cus I hate setting some variables
-echo %random%
+cls
 pushd %~dp0
 set "choice=-"
 echo.
-echo.
 echo  [ 1 ] open repo page
-echo  [ 2 ] delete current Build
+echo  [ 2 ] delete current build
 echo  [ 3 ] go back to menu
-
+echo  [ 4 ] version info
 echo.
-echo.
-set /p choice= Game: 
-goto:Menu
+set /p choice= Select: 
 if %choice%==1 goto:repo
-if %choice%==2 goto:deleteHAHAHA
+if %choice%==2 goto:delete
 if %choice%==3 goto:Menu
+if %choice%==4 goto:version
 
-:deleteHAHAHA
-echo ur so evil bbg
+:version
+cls
+echo Version Info:
+echo.
+if "%first%" == "1" call :ColorText 2 "Running for the first time"
+if "%first%" == "0" call :ColorText C "Not running for the first time"
+echo.
+call :ColorText 9 "%name% V%version%"
+echo.
+echo Press any button to exit...
+echo.
+pause>nul
+
+:delete
 del s1build.bin
-echo alr just build again ig why this option even exist its ass
+echo You can always build again
 goto:Menu
 
 :repo
 echo Alr
 start https://github.com/PikaNoob/sonic-1-github-madness-3
-msg * here bgg
 goto:Menu
+
+:ColorText
+echo off
+<nul set /p ".=%DEL%" > "%~2"
+findstr /v /a:%1 /R "^$" "%~2" nul
+del "%~2" > nul 2>&1
