@@ -1,8 +1,94 @@
 {
     "Flex": 2,
     "name": "",
-    "node": "84dacbf1-a489-4e5d-95f1-29272959b29e",
+    "node": "1c0e1eff-a75d-4561-9981-6a08d53ca655",
     "objects": [
+        {
+            "name": "players",
+            "children": [
+                {
+                    "uuid": "db436497-8172-4473-ab1a-116ba31d78a9",
+                    "format": "Sonic 1.js",
+                    "name": "sonc",
+                    "palettes": [
+                        {
+                            "path": "pallet\\sonic.bin",
+                            "length": 1
+                        }
+                    ],
+                    "art": {
+                        "path": "artunc\\sonic.bin",
+                        "compression": "Uncompressed",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "_maps\\Sonic.asm",
+                        "label": "",
+                        "customDefinition": ""
+                    },
+                    "dplcs": {
+                        "enabled": true,
+                        "path": "_inc\\Sonic dynamic pattern load cues.asm",
+                        "label": "",
+                        "customDefinition": ""
+                    }
+                },
+                {
+                    "uuid": "7c221514-e097-4e7e-a467-34ba98094ecd",
+                    "format": "Sonic 1 Raw.js",
+                    "name": "gronic",
+                    "palettes": [
+                        {
+                            "path": "pallet/gronic.bin",
+                            "length": 1
+                        }
+                    ],
+                    "art": {
+                        "path": "artunc/sonic.bin",
+                        "compression": "Uncompressed",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "_maps/Sonic.asm",
+                        "label": "",
+                        "customDefinition": ""
+                    },
+                    "dplcs": {
+                        "enabled": true,
+                        "path": "_inc/Sonic dynamic pattern load cues.asm",
+                        "label": "",
+                        "customDefinition": ""
+                    }
+                },
+                {
+                    "format": "Sonic 1.js",
+                    "name": "neru",
+                    "palettes": [
+                        {
+                            "path": "pallet\\neru.bin",
+                            "length": 1
+                        }
+                    ],
+                    "art": {
+                        "path": "artunc\\neru.bin",
+                        "compression": "Uncompressed",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "_maps\\neru.asm",
+                        "label": ""
+                    },
+                    "dplcs": {
+                        "enabled": true,
+                        "path": "_inc\\neruDPLC.asm",
+                        "label": ""
+                    },
+                    "uuid": "1c0e1eff-a75d-4561-9981-6a08d53ca655"
+                }
+            ],
+            "isDirectory": true,
+            "expanded": true
+        },
         {
             "format": "Sonic 1.js",
             "name": "ballhog",
@@ -71,60 +157,6 @@
             "dplcs": {
                 "enabled": false,
                 "path": "",
-                "label": "",
-                "customDefinition": ""
-            }
-        },
-        {
-            "uuid": "db436497-8172-4473-ab1a-116ba31d78a9",
-            "format": "Sonic 1.js",
-            "name": "sonc",
-            "palettes": [
-                {
-                    "path": "pallet\\sonic.bin",
-                    "length": 1
-                }
-            ],
-            "art": {
-                "path": "artunc\\sonic.bin",
-                "compression": "Uncompressed",
-                "offset": 0
-            },
-            "mappings": {
-                "path": "_maps\\Sonic.asm",
-                "label": "",
-                "customDefinition": ""
-            },
-            "dplcs": {
-                "enabled": true,
-                "path": "_inc\\Sonic dynamic pattern load cues.asm",
-                "label": "",
-                "customDefinition": ""
-            }
-        },
-        {
-            "uuid": "7c221514-e097-4e7e-a467-34ba98094ecd",
-            "format": "Sonic 1 Raw.js",
-            "name": "gronic",
-            "palettes": [
-                {
-                    "path": "pallet/gronic.bin",
-                    "length": 1
-                }
-            ],
-            "art": {
-                "path": "artunc/sonic.bin",
-                "compression": "Uncompressed",
-                "offset": 0
-            },
-            "mappings": {
-                "path": "_maps/Sonic.asm",
-                "label": "",
-                "customDefinition": ""
-            },
-            "dplcs": {
-                "enabled": true,
-                "path": "_inc/Sonic dynamic pattern load cues.asm",
                 "label": "",
                 "customDefinition": ""
             }

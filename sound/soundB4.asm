@@ -2,27 +2,13 @@ SndB4_Bumper_Header:
 smpsHeaderStartSong = 1
 	smpsHeaderVoice     SndB4_Bumper_Voices
 	smpsHeaderTempoSFX  $01
-	smpsHeaderChanSFX   $03
+	smpsHeaderChanSFX   $01
 
 	smpsHeaderSFXChannel cFM5, SndB4_Bumper_FM5,	$00, $00
-        smpsHeaderSFXChannel cFM4, SndB4_Bumper_FM4,	$00, $00
-	smpsHeaderSFXChannel cFM3, SndB4_Bumper_FM3,	$00, $02
-
 ; FM5 Data
 SndB4_Bumper_FM5:
 	smpsSetvoice        $00
-	smpsJump            SndB4_Bumper_Jump00
-
-; FM4 Data
-SndB4_Bumper_FM4:
-	smpsStop
-
-SndB4_Bumper_Jump00:
 	dc.b	nG2, $20
-	smpsStop
-
-; FM3 Data
-SndB4_Bumper_FM3:
 	smpsStop
 
 SndB4_Bumper_Voices:

@@ -2,12 +2,12 @@ Fart_Header:
 smpsHeaderStartSong = 1
 	smpsHeaderVoice     Fart_Voices
 	smpsHeaderTempoSFX  $01
-	smpsHeaderChanSFX   $04
+	smpsHeaderChanSFX   $03
 
 	smpsHeaderSFXChannel cFM3, Fart_FM3,	$00, $01
 	smpsHeaderSFXChannel cFM4, Fart_FM4,	$00, $01
 	smpsHeaderSFXChannel cFM5, Fart_FM5,	$F4, $01
-	smpsHeaderSFXChannel cPSG3, Fart_PSG3,    $00, $03
+;	smpsHeaderSFXChannel cPSG3, Fart_PSG3,    $00, $03
 
 Fart_FM3:
 	smpsSetvoice        $00

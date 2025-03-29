@@ -1,0 +1,433 @@
+LimitDynPLC_0: 	dc.w LimitDynPLC_B0-LimitDynPLC
+LimitDynPLC_2: 	dc.w LimitDynPLC_B1-LimitDynPLC
+LimitDynPLC_4: 	dc.w LimitDynPLC_BA-LimitDynPLC
+LimitDynPLC_6: 	dc.w LimitDynPLC_C1-LimitDynPLC
+LimitDynPLC_8: 	dc.w LimitDynPLC_C8-LimitDynPLC
+LimitDynPLC_A: 	dc.w LimitDynPLC_CF-LimitDynPLC
+LimitDynPLC_C: 	dc.w LimitDynPLC_D6-LimitDynPLC
+LimitDynPLC_E: 	dc.w LimitDynPLC_DF-LimitDynPLC
+LimitDynPLC_10: 	dc.w LimitDynPLC_E4-LimitDynPLC
+LimitDynPLC_12: 	dc.w LimitDynPLC_E9-LimitDynPLC
+LimitDynPLC_14: 	dc.w LimitDynPLC_F2-LimitDynPLC
+LimitDynPLC_16: 	dc.w LimitDynPLC_F7-LimitDynPLC
+LimitDynPLC_18: 	dc.w LimitDynPLC_FE-LimitDynPLC
+LimitDynPLC_1A: 	dc.w LimitDynPLC_109-LimitDynPLC
+LimitDynPLC_1C: 	dc.w LimitDynPLC_116-LimitDynPLC
+LimitDynPLC_1E: 	dc.w LimitDynPLC_11F-LimitDynPLC
+LimitDynPLC_20: 	dc.w LimitDynPLC_12A-LimitDynPLC
+LimitDynPLC_22: 	dc.w LimitDynPLC_133-LimitDynPLC
+LimitDynPLC_24: 	dc.w LimitDynPLC_13E-LimitDynPLC
+LimitDynPLC_26: 	dc.w LimitDynPLC_147-LimitDynPLC
+LimitDynPLC_28: 	dc.w LimitDynPLC_14C-LimitDynPLC
+LimitDynPLC_2A: 	dc.w LimitDynPLC_151-LimitDynPLC
+LimitDynPLC_2C: 	dc.w LimitDynPLC_15A-LimitDynPLC
+LimitDynPLC_2E: 	dc.w LimitDynPLC_15F-LimitDynPLC
+LimitDynPLC_30: 	dc.w LimitDynPLC_166-LimitDynPLC
+LimitDynPLC_32: 	dc.w LimitDynPLC_173-LimitDynPLC
+LimitDynPLC_34: 	dc.w LimitDynPLC_180-LimitDynPLC
+LimitDynPLC_36: 	dc.w LimitDynPLC_189-LimitDynPLC
+LimitDynPLC_38: 	dc.w LimitDynPLC_194-LimitDynPLC
+LimitDynPLC_3A: 	dc.w LimitDynPLC_19D-LimitDynPLC
+LimitDynPLC_3C: 	dc.w LimitDynPLC_1A8-LimitDynPLC
+LimitDynPLC_3E: 	dc.w LimitDynPLC_1AD-LimitDynPLC
+LimitDynPLC_40: 	dc.w LimitDynPLC_1B2-LimitDynPLC
+LimitDynPLC_42: 	dc.w LimitDynPLC_1B7-LimitDynPLC
+LimitDynPLC_44: 	dc.w LimitDynPLC_1BC-LimitDynPLC
+LimitDynPLC_46: 	dc.w LimitDynPLC_1C5-LimitDynPLC
+LimitDynPLC_48: 	dc.w LimitDynPLC_1CC-LimitDynPLC
+LimitDynPLC_4A: 	dc.w LimitDynPLC_1D5-LimitDynPLC
+LimitDynPLC_4C: 	dc.w LimitDynPLC_1DC-LimitDynPLC
+LimitDynPLC_4E: 	dc.w LimitDynPLC_1E1-LimitDynPLC
+LimitDynPLC_50: 	dc.w LimitDynPLC_1E6-LimitDynPLC
+LimitDynPLC_52: 	dc.w LimitDynPLC_1EB-LimitDynPLC
+LimitDynPLC_54: 	dc.w LimitDynPLC_1F0-LimitDynPLC
+LimitDynPLC_56: 	dc.w LimitDynPLC_1F9-LimitDynPLC
+LimitDynPLC_58: 	dc.w LimitDynPLC_1FE-LimitDynPLC
+LimitDynPLC_5A: 	dc.w LimitDynPLC_207-LimitDynPLC
+LimitDynPLC_5C: 	dc.w LimitDynPLC_20C-LimitDynPLC
+LimitDynPLC_5E: 	dc.w LimitDynPLC_20F-LimitDynPLC
+LimitDynPLC_60: 	dc.w LimitDynPLC_212-LimitDynPLC
+LimitDynPLC_62: 	dc.w LimitDynPLC_215-LimitDynPLC
+LimitDynPLC_64: 	dc.w LimitDynPLC_218-LimitDynPLC
+LimitDynPLC_66: 	dc.w LimitDynPLC_21B-LimitDynPLC
+LimitDynPLC_68: 	dc.w LimitDynPLC_220-LimitDynPLC
+LimitDynPLC_6A: 	dc.w LimitDynPLC_223-LimitDynPLC
+LimitDynPLC_6C: 	dc.w LimitDynPLC_228-LimitDynPLC
+LimitDynPLC_6E: 	dc.w LimitDynPLC_22B-LimitDynPLC
+LimitDynPLC_70: 	dc.w LimitDynPLC_230-LimitDynPLC
+LimitDynPLC_72: 	dc.w LimitDynPLC_239-LimitDynPLC
+LimitDynPLC_74: 	dc.w LimitDynPLC_23C-LimitDynPLC
+LimitDynPLC_76: 	dc.w LimitDynPLC_243-LimitDynPLC
+LimitDynPLC_78: 	dc.w LimitDynPLC_24A-LimitDynPLC
+LimitDynPLC_7A: 	dc.w LimitDynPLC_251-LimitDynPLC
+LimitDynPLC_7C: 	dc.w LimitDynPLC_254-LimitDynPLC
+LimitDynPLC_7E: 	dc.w LimitDynPLC_25B-LimitDynPLC
+LimitDynPLC_80: 	dc.w LimitDynPLC_262-LimitDynPLC
+LimitDynPLC_82: 	dc.w LimitDynPLC_269-LimitDynPLC
+LimitDynPLC_84: 	dc.w LimitDynPLC_272-LimitDynPLC
+LimitDynPLC_86: 	dc.w LimitDynPLC_27B-LimitDynPLC
+LimitDynPLC_88: 	dc.w LimitDynPLC_286-LimitDynPLC
+LimitDynPLC_8A: 	dc.w LimitDynPLC_291-LimitDynPLC
+LimitDynPLC_8C: 	dc.w LimitDynPLC_296-LimitDynPLC
+LimitDynPLC_8E: 	dc.w LimitDynPLC_29D-LimitDynPLC
+LimitDynPLC_90: 	dc.w LimitDynPLC_2A2-LimitDynPLC
+LimitDynPLC_92: 	dc.w LimitDynPLC_2A9-LimitDynPLC
+LimitDynPLC_94: 	dc.w LimitDynPLC_2AE-LimitDynPLC
+LimitDynPLC_96: 	dc.w LimitDynPLC_2B5-LimitDynPLC
+LimitDynPLC_98: 	dc.w LimitDynPLC_2BC-LimitDynPLC
+LimitDynPLC_9A: 	dc.w LimitDynPLC_2C7-LimitDynPLC
+LimitDynPLC_9C: 	dc.w LimitDynPLC_2D2-LimitDynPLC
+LimitDynPLC_9E: 	dc.w LimitDynPLC_2D7-LimitDynPLC
+LimitDynPLC_A0: 	dc.w LimitDynPLC_2DE-LimitDynPLC
+LimitDynPLC_A2: 	dc.w LimitDynPLC_2E1-LimitDynPLC
+LimitDynPLC_A4: 	dc.w LimitDynPLC_2E4-LimitDynPLC
+LimitDynPLC_A6: 	dc.w LimitDynPLC_2E7-LimitDynPLC
+LimitDynPLC_A8: 	dc.w LimitDynPLC_2EE-LimitDynPLC
+LimitDynPLC_AA: 	dc.w LimitDynPLC_2F5-LimitDynPLC
+LimitDynPLC_AC: 	dc.w LimitDynPLC_2FC-LimitDynPLC
+LimitDynPLC_AE: 	dc.w LimitDynPLC_303-LimitDynPLC
+LimitDynPLC_B0: 	dc.b $0
+LimitDynPLC_B1: 	dc.b $4
+	dc.b $20, $0
+	dc.b $70, $3
+	dc.b $20, $B
+	dc.b $20, $E
+LimitDynPLC_BA: 	dc.b $3
+	dc.b $50, $11
+	dc.b $50, $17
+	dc.b $20, $1D
+LimitDynPLC_C1: 	dc.b $3
+	dc.b $50, $20
+	dc.b $50, $17
+	dc.b $20, $1D
+LimitDynPLC_C8: 	dc.b $3
+	dc.b $50, $20
+	dc.b $50, $17
+	dc.b $20, $26
+LimitDynPLC_CF: 	dc.b $3
+	dc.b $80, $29
+	dc.b $20, $B
+	dc.b $20, $E
+LimitDynPLC_D6: 	dc.b $4
+	dc.b $70, $32
+	dc.b $50, $3A
+	dc.b $50, $40
+	dc.b $10, $46
+LimitDynPLC_DF: 	dc.b $2
+	dc.b $70, $32
+	dc.b $B0, $48
+LimitDynPLC_E4: 	dc.b $2
+	dc.b $50, $54
+	dc.b $80, $5A
+LimitDynPLC_E9: 	dc.b $4
+	dc.b $50, $54
+	dc.b $50, $63
+	dc.b $50, $69
+	dc.b $10, $6F
+LimitDynPLC_F2: 	dc.b $2
+	dc.b $50, $54
+	dc.b $B0, $71
+LimitDynPLC_F7: 	dc.b $3
+	dc.b $70, $32
+	dc.b $30, $7D
+	dc.b $50, $81
+LimitDynPLC_FE: 	dc.b $5
+	dc.b $50, $87
+	dc.b $50, $8D
+	dc.b $20, $93
+	dc.b $50, $96
+	dc.b $0, $9C
+LimitDynPLC_109: 	dc.b $6
+	dc.b $50, $87
+	dc.b $10, $9D
+	dc.b $30, $9F
+	dc.b $50, $A3
+	dc.b $30, $A9
+	dc.b $0, $AD
+LimitDynPLC_116: 	dc.b $4
+	dc.b $50, $AE
+	dc.b $10, $B4
+	dc.b $70, $B6
+	dc.b $20, $BE
+LimitDynPLC_11F: 	dc.b $5
+	dc.b $50, $C1
+	dc.b $30, $C7
+	dc.b $70, $CB
+	dc.b $20, $D3
+	dc.b $10, $D6
+LimitDynPLC_12A: 	dc.b $4
+	dc.b $50, $C1
+	dc.b $10, $D8
+	dc.b $70, $DA
+	dc.b $20, $E2
+LimitDynPLC_133: 	dc.b $5
+	dc.b $50, $87
+	dc.b $10, $9D
+	dc.b $0, $93
+	dc.b $70, $E5
+	dc.b $20, $ED
+LimitDynPLC_13E: 	dc.b $4
+	dc.b $70, $F0
+	dc.b $50, $F8
+	dc.b $10, $FE
+	dc.b $51, $0
+LimitDynPLC_147: 	dc.b $2
+	dc.b $70, $F0
+	dc.b $B1, $6
+LimitDynPLC_14C: 	dc.b $2
+	dc.b $51, $12
+	dc.b $81, $18
+LimitDynPLC_151: 	dc.b $4
+	dc.b $51, $12
+	dc.b $51, $21
+	dc.b $11, $27
+	dc.b $51, $29
+LimitDynPLC_15A: 	dc.b $2
+	dc.b $51, $12
+	dc.b $B1, $2F
+LimitDynPLC_15F: 	dc.b $3
+	dc.b $70, $F0
+	dc.b $1, $6
+	dc.b $81, $3B
+LimitDynPLC_166: 	dc.b $6
+	dc.b $51, $44
+	dc.b $11, $4A
+	dc.b $11, $4C
+	dc.b $81, $4E
+	dc.b $1, $57
+	dc.b $1, $58
+LimitDynPLC_173: 	dc.b $6
+	dc.b $51, $44
+	dc.b $21, $59
+	dc.b $11, $5C
+	dc.b $11, $5E
+	dc.b $81, $60
+	dc.b $1, $57
+LimitDynPLC_180: 	dc.b $4
+	dc.b $51, $69
+	dc.b $11, $6F
+	dc.b $81, $71
+	dc.b $11, $7A
+LimitDynPLC_189: 	dc.b $5
+	dc.b $51, $7C
+	dc.b $21, $82
+	dc.b $11, $85
+	dc.b $71, $87
+	dc.b $21, $8F
+LimitDynPLC_194: 	dc.b $4
+	dc.b $51, $7C
+	dc.b $11, $92
+	dc.b $81, $94
+	dc.b $11, $9D
+LimitDynPLC_19D: 	dc.b $5
+	dc.b $51, $44
+	dc.b $81, $9F
+	dc.b $11, $5E
+	dc.b $11, $A8
+	dc.b $1, $57
+LimitDynPLC_1A8: 	dc.b $2
+	dc.b $51, $AA
+	dc.b $B1, $B0
+LimitDynPLC_1AD: 	dc.b $2
+	dc.b $50, $54
+	dc.b $B1, $BC
+LimitDynPLC_1B2: 	dc.b $2
+	dc.b $51, $AA
+	dc.b $B1, $C8
+LimitDynPLC_1B7: 	dc.b $2
+	dc.b $50, $54
+	dc.b $B1, $D4
+LimitDynPLC_1BC: 	dc.b $4
+	dc.b $51, $E0
+	dc.b $11, $E6
+	dc.b $B1, $E8
+	dc.b $1, $F4
+LimitDynPLC_1C5: 	dc.b $3
+	dc.b $51, $F5
+	dc.b $11, $FB
+	dc.b $B1, $FD
+LimitDynPLC_1CC: 	dc.b $4
+	dc.b $51, $E0
+	dc.b $12, $9
+	dc.b $B2, $B
+	dc.b $1, $F4
+LimitDynPLC_1D5: 	dc.b $3
+	dc.b $51, $F5
+	dc.b $11, $FB
+	dc.b $B2, $17
+LimitDynPLC_1DC: 	dc.b $2
+	dc.b $52, $23
+	dc.b $B2, $29
+LimitDynPLC_1E1: 	dc.b $2
+	dc.b $51, $12
+	dc.b $B2, $35
+LimitDynPLC_1E6: 	dc.b $2
+	dc.b $52, $23
+	dc.b $B2, $41
+LimitDynPLC_1EB: 	dc.b $2
+	dc.b $51, $12
+	dc.b $B2, $4D
+LimitDynPLC_1F0: 	dc.b $4
+	dc.b $52, $59
+	dc.b $12, $5F
+	dc.b $B2, $61
+	dc.b $2, $6D
+LimitDynPLC_1F9: 	dc.b $2
+	dc.b $72, $6E
+	dc.b $B2, $76
+LimitDynPLC_1FE: 	dc.b $4
+	dc.b $52, $59
+	dc.b $12, $82
+	dc.b $B2, $84
+	dc.b $2, $6D
+LimitDynPLC_207: 	dc.b $2
+	dc.b $72, $6E
+	dc.b $B2, $90
+LimitDynPLC_20C: 	dc.b $1
+	dc.b $F2, $9C
+LimitDynPLC_20F: 	dc.b $1
+	dc.b $F2, $AC
+LimitDynPLC_212: 	dc.b $1
+	dc.b $F2, $BC
+LimitDynPLC_215: 	dc.b $1
+	dc.b $F2, $CC
+LimitDynPLC_218: 	dc.b $1
+	dc.b $F2, $DC
+LimitDynPLC_21B: 	dc.b $2
+	dc.b $B2, $EC
+	dc.b $22, $F8
+LimitDynPLC_220: 	dc.b $1
+	dc.b $F2, $FB
+LimitDynPLC_223: 	dc.b $2
+	dc.b $B3, $B
+	dc.b $23, $17
+LimitDynPLC_228: 	dc.b $1
+	dc.b $F3, $1A
+LimitDynPLC_22B: 	dc.b $2
+	dc.b $53, $2A
+	dc.b $B3, $30
+LimitDynPLC_230: 	dc.b $4
+	dc.b $53, $3C
+	dc.b $73, $42
+	dc.b $13, $4A
+	dc.b $3, $4C
+LimitDynPLC_239: 	dc.b $1
+	dc.b $F2, $DC
+LimitDynPLC_23C: 	dc.b $3
+	dc.b $23, $5B
+	dc.b $23, $5E
+	dc.b $F3, $61
+LimitDynPLC_243: 	dc.b $3
+	dc.b $B3, $71
+	dc.b $73, $7D
+	dc.b $0, $71
+LimitDynPLC_24A: 	dc.b $3
+	dc.b $73, $85
+	dc.b $33, $8D
+	dc.b $23, $91
+LimitDynPLC_251: 	dc.b $1
+	dc.b $83, $94
+LimitDynPLC_254: 	dc.b $3
+	dc.b $73, $9D
+	dc.b $3, $A5
+	dc.b $33, $A6
+LimitDynPLC_25B: 	dc.b $3
+	dc.b $73, $AA
+	dc.b $33, $B2
+	dc.b $23, $B6
+LimitDynPLC_262: 	dc.b $3
+	dc.b $B3, $B9
+	dc.b $13, $C5
+	dc.b $3, $C7
+LimitDynPLC_269: 	dc.b $4
+	dc.b $B3, $C8
+	dc.b $33, $D4
+	dc.b $3, $D8
+	dc.b $3, $D9
+LimitDynPLC_272: 	dc.b $4
+	dc.b $B3, $DA
+	dc.b $33, $E6
+	dc.b $3, $EA
+	dc.b $3, $EB
+LimitDynPLC_27B: 	dc.b $5
+	dc.b $83, $EC
+	dc.b $13, $F5
+	dc.b $53, $F7
+	dc.b $13, $FD
+	dc.b $3, $FF
+LimitDynPLC_286: 	dc.b $5
+	dc.b $84, $0
+	dc.b $14, $9
+	dc.b $53, $F7
+	dc.b $13, $FD
+	dc.b $3, $FF
+LimitDynPLC_291: 	dc.b $2
+	dc.b $84, $B
+	dc.b $74, $14
+LimitDynPLC_296: 	dc.b $3
+	dc.b $84, $1C
+	dc.b $24, $25
+	dc.b $14, $28
+LimitDynPLC_29D: 	dc.b $2
+	dc.b $84, $2A
+	dc.b $74, $33
+LimitDynPLC_2A2: 	dc.b $3
+	dc.b $84, $1C
+	dc.b $24, $3B
+	dc.b $14, $3E
+LimitDynPLC_2A9: 	dc.b $2
+	dc.b $54, $40
+	dc.b $B4, $46
+LimitDynPLC_2AE: 	dc.b $3
+	dc.b $84, $52
+	dc.b $34, $5B
+	dc.b $4, $5F
+LimitDynPLC_2B5: 	dc.b $3
+	dc.b $74, $60
+	dc.b $14, $68
+	dc.b $B4, $6A
+LimitDynPLC_2BC: 	dc.b $5
+	dc.b $74, $76
+	dc.b $14, $7E
+	dc.b $54, $80
+	dc.b $34, $86
+	dc.b $4, $8A
+LimitDynPLC_2C7: 	dc.b $5
+	dc.b $74, $8B
+	dc.b $14, $7E
+	dc.b $54, $93
+	dc.b $34, $86
+	dc.b $4, $8A
+LimitDynPLC_2D2: 	dc.b $2
+	dc.b $24, $99
+	dc.b $F4, $9C
+LimitDynPLC_2D7: 	dc.b $3
+	dc.b $24, $AC
+	dc.b $B4, $AF
+	dc.b $24, $BB
+LimitDynPLC_2DE: 	dc.b $1
+	dc.b $B4, $BE
+LimitDynPLC_2E1: 	dc.b $1
+	dc.b $54, $CA
+LimitDynPLC_2E4: 	dc.b $1
+	dc.b $14, $D0
+LimitDynPLC_2E7: 	dc.b $3
+	dc.b $73, $85
+	dc.b $33, $8D
+	dc.b $23, $91
+LimitDynPLC_2EE: 	dc.b $3
+	dc.b $73, $9D
+	dc.b $3, $A5
+	dc.b $33, $A6
+LimitDynPLC_2F5: 	dc.b $3
+	dc.b $B4, $D2
+	dc.b $14, $DE
+	dc.b $34, $E0
+LimitDynPLC_2FC: 	dc.b $3
+	dc.b $54, $E4
+	dc.b $B4, $EA
+	dc.b $10, $6D
+LimitDynPLC_303: 	dc.b $2
+	dc.b $F4, $F6
+	dc.b $25, $6
+	even
