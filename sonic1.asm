@@ -35092,7 +35092,7 @@ Obj86_Index2:	dc.w loc_1A9A6-Obj86_Index2
 		dc.w Obj86_Ball_Speed-Obj86_Index2	; yeah you get it
 		dc.w Obj86_Ball_Standard-Obj86_Index2
 		dc.w Obj86_Ball_Homing-Obj86_Index2
-		dc.w Obj86_Ball_Standard-Obj86_Index2
+		dc.w Obj86_Ball_AAAAAAA-Obj86_Index2
 		dc.w Obj86_Ball_Static-Obj86_Index2
 ; ===========================================================================
 
@@ -35186,25 +35186,34 @@ Obj86_Ball_Sine:
 		bra.w	loc_1AA1E
 ; ===========================================================================
 
+Obj86_Ball_AAAAAAA:
+		move.w	$10(a0),d0
+		add.w	$10(a0),d0
+		add.w	$10(a0),d0
+		move.w	$14(a0),d0
+		add.w	$14(a0),d0
+		add.w	$14(a0),d0
+		bra.w	loc_1AA1E
+; ===========================================================================
+
 Obj86_Ball_Homing:
-		cmp.b	#$F0,$28(a0)
+		cmp.b	#35*4,$28(a0)
 		bhs.s	@homer
-		cmp.b	#$E0,$28(a0)
-		bhs.s	Obj86_Ball_Vanish
 		subq.b	#4,$28(a0)
 		bcc.s	@nomorehoming
+		clr.b	$28(a0)
 		move.w	($FFFFD008).w,d0
 		sub.w	8(a0),d0
-		add.w	d0,$10(a0)
 		add.w	d0,$10(a0)
 @nomorehoming:
 		bra.w	loc_1AA1E
 @homer:
-		cmp.b	#$DF,$28(a0)
-		bra.s	@nomorehoming	; next frame ig
+;		bra.s	Obj86_Ball_Speed
 ; ===========================================================================
 
 Obj86_Ball_Speed:
+		cmp.b	#3,$28(a0)
+		blo.s	@oof
 		clr.w	$10(a0)
 		moveq	#0,d0
 		move.b	$28(a0),d0
@@ -35212,7 +35221,15 @@ Obj86_Ball_Speed:
 		add.w	d0,$12(a0)
 		move.b	$29(a0),d0
 		add.b	d0,$28(a0)
+		bcc.s	@notoverflown
+		move.b	#-1,$28(a0)
+@notoverflown:
 		bra.w	loc_1AA1E
+@oof:
+		move.w	#$94,d0			; play Vanish sample
+		jsr	MegaPCM_PlaySample
+		illegal
+		bra.w	loc_1AA34
 ; ===========================================================================
 
 Obj86_Ball_Vanish:
@@ -35228,6 +35245,8 @@ Obj86_Ball_Static:
 		move.b	$28(a0),d0
 		move.b	$29(a0),d1
 		add.w	d1,d0
+		cmp.b	#$1C,d0			; prevent particularly bad movement speeds
+		blo.s	Obj86_Ball_Vanish	; still keeps the hilariously bad ones though
 		move.w	d0,$12(a0)
 		bra.w	loc_1AA1E
 ; ===========================================================================
