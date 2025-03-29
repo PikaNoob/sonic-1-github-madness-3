@@ -33,6 +33,7 @@ lsselectable: 	equ ((LMTSelectableEnd-LevelMenuText)/16)-1 ; last selectable ite
 lssndtest: 	equ lsrow1size+8
 lswifi: 	equ lsrow1size+9
 lsjackass:	equ lsrow1size+11
+lsMinecraft:equ lsrow1size+12
 vBlankRoutine 	equ $FFFFFFC4 ; VBlank Routine Jump Instruction (6 bytes)
 vBlankJump 	equ vBlankRoutine
 vBlankAdress 	equ vBlankRoutine+2
@@ -3503,11 +3504,17 @@ LevelSelect:
 		; giggity
 	@waitbees:
 		cmpi.w	#lswifi,d0		; have you selected item $15 (free wifi)?
-		bne.s	@dont	; if not, dont blow this place up
+		bne.s	@NoWifi	; if not, dont blow this place up
 			
 		move.b	#$E5,($FFFFF00B).w ; YOU ARE AN IDIOT BOOM
 		move.b	#4,($FFFFF62A).w
 		bsr.w	DelayProgram
+    @NoWifi:
+		cmpi.w	#lsMinecraft,d0		; have you selected item $17 (minecraft)
+		bne.s	@dont		; if not, no minecraft 
+		move.b	#$20,($FFFFF600).w 	; set screen	mode to	$20 free minecraft!!
+		rts	
+
 	@dont:
 		cmpi.w	#lssndtest,d0		; have you selected item $14 (sound test)?
 		bne.s	LevSel_Level_SS	; if not, go to	Level/SS subroutine
@@ -3968,6 +3975,7 @@ LMTSecondRow:
 	dc.b	"FREE WIFI       "
 	dc.b	"OPTIONS LATER   "
 	dc.b	"JACKASS         "
+	dc.b	"PLAY MINECRAFT  "
 LMTSelectableEnd:
 	dc.b	"CANT TOUCH ME XD"
 LMTEnd:
