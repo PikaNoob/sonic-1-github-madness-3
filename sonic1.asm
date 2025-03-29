@@ -16202,8 +16202,20 @@ loc_C61A:				; XREF: Obj3A_ChkPos
 		cmpi.b	#4,$1A(a0)
 		bne.s	loc_C5FE
 		addq.b	#2,$24(a0)
-		move.w	#180,$1E(a0)	; set time delay to 3 seconds
 
+		move.w	#180,$1E(a0)	; set time delay to 3 seconds
+CHAR_WIN_SND:
+		cmp.b	#5,(v_character).w ; has gomer spawned?
+		bne.s	SMCsoundCHKWN
+		move.b  #$90,d0
+		jsr	MegaPCM_PlaySample
+		jmp	NormalsoundCHKWN
+SMCsoundCHKWN:
+		cmp.b	#6,(v_character).w ; has sailor mercury spawned?
+		bne.s	NormalsoundCHKWN
+		move.b  #$9E,d0
+		jsr	MegaPCM_PlaySample
+NormalsoundCHKWN:
 Obj3A_Wait:				; XREF: Obj3A_Index
 		subq.w	#1,$1E(a0)	; subtract 1 from time delay
 		bne.s	Obj3A_Display
@@ -31007,6 +31019,7 @@ loc_177E6:
 		tst.b	$3E(a0)
 		bne.s	Obj3D_ShipFlash
 		move.b	#$20,$3E(a0)	; set number of	times for ship to flash
+		jsr	CHAR_BOSSHIT_SND ;	play boss damage sound
 		move.w	#$AC,d0
 		jsr	(PlaySound_Special).l ;	play boss damage sound
 
@@ -31033,6 +31046,25 @@ loc_1784C:				; XREF: loc_177E6
 		move.b	#8,$25(a0)
 		move.w	#$B3,$3C(a0)
 		rts	
+
+; ---------------------------------------------------------------------------
+; Subroutine to	make a sound when hitting a boss
+; ---------------------------------------------------------------------------
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+CHAR_BOSSHIT_SND:
+		cmp.b	#5,(v_character).w ; did gomer hit?
+		bne.s	SMCsoundCHKBH
+		move.b  #$90,d0
+		jmp	MegaPCM_PlaySample
+SMCsoundCHKBH:
+		cmp.b	#6,(v_character).w ; did sailor mercury hit?
+		bne.s	NormalsoundCHKBH
+		move.b  #$9D,d0
+		jmp	MegaPCM_PlaySample
+NormalsoundCHKBH:
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Defeated boss	subroutine
@@ -31626,6 +31658,7 @@ loc2_177E6:
 		tst.b	$3E(a0)
 		bne.s	obj77_ShipFlash
 		move.b	#$60,$3E(a0)	; set number of	times for ship to flash
+		jsr	CHAR_BOSSHIT_SND ;	play boss damage sound
 		move.w	#$AC,d0
 		jsr	(PlaySound_Special).l ;	play boss damage sound
 
@@ -31945,6 +31978,7 @@ loc_1833E:
 		tst.b	$3E(a0)
 		bne.s	loc_18374
 		move.b	#$28,$3E(a0)
+		jsr	CHAR_BOSSHIT_SND ;	play boss damage sound
 		move.w	#$AC,d0
 		jsr	(PlaySound_Special).l ;	play boss damage sound
 
@@ -32618,6 +32652,7 @@ loc_189FE:
 		tst.b	$3E(a0)
 		bne.s	loc_18A28
 		move.b	#$20,$3E(a0)
+		jsr	CHAR_BOSSHIT_SND ;	play boss damage sound
 		move.w	#$AC,d0
 		jsr	(PlaySound_Special).l ;	play boss damage sound
 
@@ -33379,6 +33414,7 @@ loc_19202:
 		tst.b	$3E(a0)
 		bne.s	loc_1923A
 		move.b	#$20,$3E(a0)
+		jsr	CHAR_BOSSHIT_SND ;	play boss damage sound
 		move.w	#$AC,d0
 		jsr	(PlaySound_Special).l ;	play boss damage sound
 
@@ -34580,6 +34616,7 @@ loc_19F50:
 		clr.w	($FF7FFE).l
 @notoverflown:
 		move.b	#1,$35(a0)		; eye-frame timer
+		jsr	CHAR_BOSSHIT_SND ;	play boss damage sound
 		move.w	#$AC,d0
 		jsr	(PlaySound_Special).l ;	play boss damage sound
 
@@ -34789,6 +34826,7 @@ loc_1A1D4:				; XREF: off_19E80
 		tst.b	$20(a0)
 		bne.s	loc_1A216
 		move.w	#$1E,$30(a0)
+		jsr	CHAR_BOSSHIT_SND ;	play boss damage sound
 		move.w	#$AC,d0
 		jsr	(PlaySound_Special).l ;	play boss damage sound
 
