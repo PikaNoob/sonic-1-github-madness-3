@@ -1,12 +1,60 @@
+cmd_fadeout:	equ $E4
+palettefadeout = Pal_FadeFrom
+vdp_control_port:	equ $C00004
+vram_fg:	equ $C000
+vram_bg:	equ $E000
+f_wtr_state:	equ $FFFFF64E
+v_vdp_buffer1:	equ $FFFFF60C
+v_objspace:	equ $FFFFD000
+palettefadein = Pal_FadeTo
+v_demolength:	equ $FFFFF614
+pcm_ohyeah = $91
+pcm_otisexe = $92
+pcm_Amb = $93
+pcm_mikuing = $94
+v_vbla_routine:	equ $FFFFF62A
+waitforvbla = DelayProgram
+v_pfade_start:	equ $FFFFF626
+palfadeout_alt = Pal_FadeFrom2
+btna = %01000000 
+v_jpadhold1:		equ $FFFFF604
+psg_input:		equ $C00011
+
+; ---------------------------------------------------------------------------
+; Set a VRAM address via the VDP control port.
+; input: 16-bit VRAM address, control port (default is ($C00004).l)
+; ---------------------------------------------------------------------------
+
+locVRAM:	macro loc,controlport
+		if (narg=1)
+		move.l	#($40000000+((loc&$3FFF)<<16)+((loc&$C000)>>14)),(vdp_control_port).l
+		else
+		move.l	#($40000000+((loc&$3FFF)<<16)+((loc&$C000)>>14)),\controlport
+		endc
+		endm
+
+; ---------------------------------------------------------------------------
+; Copy a tilemap from 68K (ROM/RAM) to the VRAM without using DMA
+; input: source, destination, width [cells], height [cells]
+; ---------------------------------------------------------------------------
+
+copyTilemap:	macro source,destination,width,height
+		lea	(source).l,a1
+		locVRAM	\destination,d0
+		moveq	#width,d1
+		moveq	#height,d2
+		jsr	ShowVDPGraphics
+		endm
+
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; OTIS.EXE
 ; ---------------------------------------------------------------------------
 GM_Otis:
 		move.b	#cmd_FadeOut,d0
-		bsr.w	PlaySound_Special  ; fade out music
-		bsr.w	ClearPLC
-		bsr.w	PaletteFadeOut
+		jsr	PlaySound_Special  ; fade out music
+		jsr	ClearPLC
+		jsr	PaletteFadeOut
 		lea	(vdp_control_port).l,a6
 		move.w	#$8004,(a6)	; use 8-colour mode
 		move.w	#$8200+(vram_fg>>10),(a6) ; set foreground nametable address
@@ -15,12 +63,9 @@ GM_Otis:
 		move.w	#$9200,(a6)	; window vertical position
 		move.w	#$8B03,(a6)	; line scroll mode
 		move.w	#$8720,(a6)	; set background colour (line 3; colour 0)
-		move.w  #$28,(v_pcyc_num).w
-		move.w  #0,(v_pal_buffer+$C).w
-		move.w  #0,(v_pal_buffer+$A).w
 		clr.b	(f_wtr_state).w
-		bsr.w	ClearScreen
-		ResetDMAQueue
+		jsr	ClearScreen
+
 		move.w	(v_vdp_buffer1).w,d0
 		ori.b	#$40,d0
 		move.w	d0,(vdp_control_port).l
@@ -36,99 +81,101 @@ GM_Sega_ClrObjRam:
 		
 		locVRAM	0
 		lea     (Nem_OtFont).l,a0
-		bsr.w   NemDec		
+		jsr   NemDec		
 
 		locVRAM	$2400
 		lea     (Nem_Ot1).l,a0
-		bsr.w   NemDec	
+		jsr   NemDec	
 	
 		lea	($FF0000).l,a1
 		lea	(Eni_Ot0).l,a0 ; load mappings
 		move.w	#0,d0
-		bsr.w	EniDec
-		copyTilemap	$FF0000,$C000,$27,$1B
+		jsr	EniDec
+		copyTilemap	$FF0000,$C000,$27,$1D
 
 		lea	($FF0000).l,a1
 		lea	(Eni_OtBG1).l,a0 ; load mappings
 		move.w	#$120,d0
-		bsr.w	EniDec
-		copyTilemap	$FF0000,$E000,$27,$1B
+		jsr	EniDec
+		copyTilemap	$FF0000,$E000,$27,$1D
 
-		moveq	#0,d0
-		bsr.w	PalLoad1
-		bsr.w	PaletteFadeIn
+		moveq	#2,d0
+		jsr	PalLoad1
+		jsr	PaletteFadeIn
 		move.w  #$FF,(v_demolength).w
-		move.w	#0,(v_huddraw).w
-		move.b  #PCM_Sega,d0
+
+		move.b  #PCM_OtisExe,d0
 		jsr	MegaPCM_PlaySample
 GM_S1_MainLoop:
 		move.b	#4,(v_vbla_routine).w
-		bsr.w	WaitForVBla
+		jsr	WaitForVBla
 		tst.w   (v_demolength).w
 		bne.s	GM_S1_MainLoop	; if yes, branch
 
 		lea	($FF0000).l,a1
 		lea	(Eni_Ot1).l,a0 ; load mappings
 		move.w	#0,d0
-		bsr.w	EniDec
-		copyTilemap	$FF0000,$C000,$27,$1B
+		jsr	EniDec
+		copyTilemap	$FF0000,$C000,$27,$1D
 		move.w  #$FF,(v_demolength).w
 GM_S2_MainLoop:
 		move.b	#2,(v_vbla_routine).w
-		bsr.w	WaitForVBla
+		jsr	WaitForVBla
 		tst.w   (v_demolength).w
 		bne.s   GM_S2_MainLoop
 
 		move.w	#$2020,(v_pfade_start).w ; fade in 2th palette line
-		bsr.w	PalFadeOut_Alt
+		jsr	PalFadeOut_Alt
 
 		lea	($FF0000).l,a1
 		lea	(Eni_Ot2).l,a0 ; load mappings
 		move.w	#0,d0
-		bsr.w	EniDec
-		copyTilemap	$FF0000,$C000,$27,$1B
+		jsr	EniDec
+		copyTilemap	$FF0000,$C000,$27,$1D
 		move.w  #$FF,(v_demolength).w
 GM_S3_MainLoop:
 		move.b	#2,(v_vbla_routine).w
-		bsr.w	WaitForVBla
+		jsr	WaitForVBla
 		tst.w   (v_demolength).w
-
 		bne.s	GM_S3_MainLoop	; if yes, branch
 		move.b	#cmd_FadeOut,d0
 
-		bsr.w	ClearScreen
-
 		cmp.b	#btnA,(v_jpadhold1).w ; are u ready for miku?
 		beq.w	MIKUCHECK	; if yes, branch
+		jsr	ClearScreen
 
 		locVRAM	$2400
 		lea     (Nem_Ot2).l,a0
-		bsr.w   NemDec	
+		jsr   NemDec	
 
 		lea	($FF0000).l,a1
 		lea	(Eni_OtBG2).l,a0 ; load mappings
 		move.w	#$120,d0
-		bsr.w	EniDec
-		copyTilemap	$FF0000,$E000,$27,$1B
+		jsr	EniDec
+		copyTilemap	$FF0000,$E000,$27,$1D
 		move.w  #$FF,(v_demolength).w
-		bsr.w	PaletteFadeIn
+		jsr	PaletteFadeIn
+
+		move.b  #PCM_Amb,d0
+		jsr	MegaPCM_PlaySample
+
 GM_S4_MainLoop:
 		move.b	#2,(v_vbla_routine).w
-		bsr.w	WaitForVBla
+		jsr	WaitForVBla
 		tst.w   (v_demolength).w
 		bne.s	GM_S4_MainLoop	; if yes, branch
 
 		lea	($FF0000).l,a1
 		lea	(Eni_Ot3).l,a0 ; load mappings
 		move.w	#$120,d0
-		bsr.w	EniDec
-		copyTilemap	$FF0000,$C000,$27,$1B
-		move.b  #PCM_Sega,d0
+		jsr	EniDec
+		copyTilemap	$FF0000,$C000,$27,$1D
+		move.b  #PCM_OhYeah,d0
 		jsr	MegaPCM_PlaySample
 		move.w  #$40,(v_demolength).w
 GM_S5_MainLoop:
 		move.b	#2,(v_vbla_routine).w
-		bsr.w	WaitForVBla
+		jsr	WaitForVBla
 		tst.w   (v_demolength).w
 		bne.s	GM_S5_MainLoop	; if yes, branch
 
@@ -143,23 +190,27 @@ CheckSum_Loop:
 		bra.s	CheckSum_Loop
 
 MIKUCHECK:
+		jsr	ClearScreen
 		locVRAM	$2400
 		lea     (Nem_Ot3).l,a0
-		bsr.w   NemDec	
+		jsr   NemDec	
 
 		lea	($FF0000).l,a1
 		lea	(Eni_OtBG3).l,a0 ; load mappings
 		move.w	#$120,d0
-		bsr.w	EniDec
-		copyTilemap	$FF0000,$E000,$27,$1B
+		jsr	EniDec
+		copyTilemap	$FF0000,$E000,$27,$1D
 		move.w  #$FF,(v_demolength).w
-		bsr.w	PaletteFadeIn
+		jsr	PaletteFadeIn
+		move.b  #PCM_Mikuing,d0
+		jsr	MegaPCM_PlaySample
 GM_S6_MainLoop:
 		move.b	#2,(v_vbla_routine).w
-		bsr.w	WaitForVBla
+		jsr	WaitForVBla
 		tst.w   (v_demolength).w
-		bne.s	GM_S6_MainLoop	; if yes, branc
-
-loc_2544: ; GotoCN
-		move.b	#id_CN,(v_gamemode).w	; go to Title Screen
+		bne.s	GM_S6_MainLoop	; if yes, brancH
+		jsr	GM_SplashScreensIG
 		rts
+
+		include		"otisexe\assets.asm"
+

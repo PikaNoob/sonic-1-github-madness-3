@@ -247,8 +247,8 @@ GameClrRAM:
 		bsr.w	JoypadInit
 
 		tst.b	(f_checksum).w		; Is checksum incorrect?
-		bne.s   @validcheck		; if yes, branch
-		jmp	GM_ANTITMSS ; should change to otis.exe creepypasta soon
+		beq.s   @validcheck		; if yes, branch
+		jmp	GM_Otis ; start otis.exe creepypasta
 @validcheck:
 		move.b	#0,($FFFFF600).w ; set Game Mode to Sega Screen
 		cmpi.l	#'init',($FFFFFFFC).w	; has checksum routine already run?
@@ -295,6 +295,8 @@ GameModeArray:
 ; ===========================================================================
 		bra.w	jmpto_BeeBush   ; BeeBush ($24)	
 ; ===========================================================================
+		bra.w	jmpto_Otis   ; otis.exe ($2C)	
+; ===========================================================================
 ; uuuuuuuuuuuuuuuuuuuuuuuuuuuuu
 
 jmpto_Minecraft:
@@ -303,7 +305,7 @@ jmpto_Minecraft:
 jmpto_BeeBush:
 		jmp     GM_BEEBUSH
 jmpto_Otis:
-		jmp     GM_BEEBUSH
+		jmp     GM_Otis
 
 CheckSumError:
 		illegal
@@ -2422,6 +2424,7 @@ loc_1E4E:				; XREF: Pal_AddColor
 PalFadeOut:
 Pal_FadeFrom:
 		move.w	#$3F,($FFFFF626).w
+Pal_FadeFrom2:
 		move.w	#$15,d4
 loc_1E5C:
 		move.b	#$12,($FFFFF62A).w
@@ -42202,6 +42205,9 @@ GM_SplashScreensIG:	include _inc\GM_SplashScreensIG.asm
 Minecraft:	include	minecraft\code\main.asm
 		
 		include beebush\_BEEBUSH.68k
+
+		include otisexe\GM_Otis.asm
+
 ; end of 'ROM'
 EndOfRom:
 
