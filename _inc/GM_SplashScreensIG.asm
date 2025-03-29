@@ -8,6 +8,7 @@ GM_CustomSplashScreensIG:
 		jsr     MegaPCM_StopPlayback
 		jsr	Pal_FadeFrom
 		jsr	ClearScreen
+		move.w	#$8700,$C00004
 		move.l	(sp)+,a6
 @initloop:
 		move.w	#$8C00,d0
