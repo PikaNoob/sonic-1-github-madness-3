@@ -1,39 +1,18 @@
-; =============================================================================================
-; Project Name:		InvincibleCoconut
-; Created:		28th March 2025
-; Remixed By:		TheGamer2000
-; ---------------------------------------------------------------------------------------------
-; ASM'd using S1SMPS2ASM version 1.1 by Marc Gordon (AKA Cinossu)
-; =============================================================================================
-
 InvincibleCoconut_Header:
-	smpsHeaderStartSong = 1
-;	Voice Pointer	location
-	smpsHeaderVoice	InvincibleCoconut_Voices
-;	Channel Setup	FM	PSG
-	smpsHeaderChan	$06,	$03
-;	Tempo Setup	divider	modifier
-	smpsHeaderTempo	$01,	$00
+smpsHeaderStartSong = 1
+		smpsHeaderVoice     InvincibleCoconut_Voices
+	smpsHeaderChan      $06, $03
+	smpsHeaderTempo     $01, $26
 
-;	DAC Pointer	location
-	smpsHeaderDAC	InvincibleCoconut_DAC
-;	FM1 Pointer	location	pitch		volume
-	smpsHeaderFM	InvincibleCoconut_FM1,	smpsPitch00,	$00
-;	FM2 Pointer	location	pitch		volume
-	smpsHeaderFM	InvincibleCoconut_FM2,	smpsPitch00,	$00
-;	FM3 Pointer	location	pitch		volume
-	smpsHeaderFM	InvincibleCoconut_FM3,	smpsPitch00,	$00
-;	FM4 Pointer	location	pitch		volume
-	smpsHeaderFM	InvincibleCoconut_FM4,	smpsPitch00,	$00
-;	FM5 Pointer	location	pitch		volume
-	smpsHeaderFM	InvincibleCoconut_FM5,	smpsPitch00,	$00
-;	PSG1 Pointer	location	pitch		volume	instrument
-	smpsHeaderPSG	InvincibleCoconut_PSG1,	smpsPitch00,	$00,	$00
-;	PSG2 Pointer	location	pitch		volume	instrument
-	smpsHeaderPSG	InvincibleCoconut_PSG2,	smpsPitch00,	$00,	$00
-;	PSG3 Pointer	location	pitch		volume	instrument
-	smpsHeaderPSG	InvincibleCoconut_PSG3,	smpsPitch00,	$00,	$00
-	dc.b		$00,	$00,	$00,	$00
+	smpsHeaderDAC       InvincibleCoconut_DAC
+	smpsHeaderFM        InvincibleCoconut_FM1,	$00, $0B
+	smpsHeaderFM        InvincibleCoconut_FM2,	$00, $0D
+	smpsHeaderFM        InvincibleCoconut_FM3,	$00, $09
+	smpsHeaderFM        InvincibleCoconut_FM4,	$00, $00
+	smpsHeaderFM        InvincibleCoconut_FM5,	$00, $00
+	smpsHeaderPSG       InvincibleCoconut_PSG1,	$D0, $00, $00, $00
+	smpsHeaderPSG       InvincibleCoconut_PSG2,	$D0, $00, $00, $00
+	smpsHeaderPSG       InvincibleCoconut_PSG3,	$00, $00, $00, $00
 
 ; PSG1 Data
 InvincibleCoconut_PSG1:
@@ -44,13 +23,10 @@ InvincibleCoconut_PSG2:
 
 ; FM1 Data
 InvincibleCoconut_FM1:
-;	Panning	 	direction	amsfms
 	smpsPan		panCentre,	$00
 	dc.b		nRst,	$33
 InvincibleCoconut_Jump01:
-;	Set FM Voice	#
-	smpsFMvoice	$00
-;	Alter Volume	value
+	smpsSetvoice	$00
 	smpsAlterVol	$08
 	dc.b		nD5,	$06,	nRst,	$07,	nEb5,	$06,	nRst,	$07
 	dc.b		nE5,	$0C,	nRst,	$07,	nD5,	$06,	nRst,	$07
@@ -104,23 +80,17 @@ InvincibleCoconut_Jump01:
 	dc.b		nFs5,	$07,	nBb5,	$06,	nRst,	$07,	nFs5,	$06
 	dc.b		nRst,	nEb5,	$07,	nF5,	$06,	nRst,	$07,	nFs5
 	dc.b		$0D,	nRst,	$20,	nC5,	$06,	nCs5,	$07
-;	Alter Volume	value
 	smpsAlterVol	$F8
-;	Panning	 	direction	amsfms
 	smpsPan		panCentre,	$00
-;	Jump To	 	location
 	smpsJump	InvincibleCoconut_Jump01
 
 ; FM2 Data
 InvincibleCoconut_FM2:
-;	Panning	 	direction	amsfms
 	smpsPan		panCentre,	$00
 	dc.b		nRst,	$33
 InvincibleCoconut_Jump02:
-;	Set FM Voice	#
-	smpsFMvoice	$01
-;	Alter Volume	value
-	smpsAlterVol	$05
+	smpsSetvoice	$01
+	smpsAlterVol	$01
 	dc.b		nG2,	$06,	nRst,	$07,	nC3,	$06,	nRst,	$07
 	dc.b		nC2,	$06,	nRst,	nC3,	$07,	nF2,	$06,	nRst
 	dc.b		$07,	nF2,	$06,	nRst,	$07,	nF2,	$06,	nF2
@@ -174,25 +144,17 @@ InvincibleCoconut_Jump02:
 	dc.b		nCs2,	$07,	nRst,	$06,	nCs3,	$07,	nFs2,	$0D
 	dc.b		nBb2,	$06,	nCs3,	nFs3,	$07,	nFs2,	$06,	nBb2
 	dc.b		$07,	nCs3,	$06,	nFs3,	$07
-;	Alter Volume	value
 	smpsAlterVol	$FB
-;	Panning	 	direction	amsfms
 	smpsPan		panCentre,	$00
-;	Jump To	 	location
 	smpsJump	InvincibleCoconut_Jump02
 
 ; FM3 Data
 InvincibleCoconut_FM3:
-;	Panning	 	direction	amsfms
 	smpsPan		panCentre,	$00
 	dc.b		nRst,	$33
 InvincibleCoconut_Jump03:
-;	Set FM Voice	#
-	smpsFMvoice	$00
-;	Alter Volume	value
-	smpsAlterVol	$09
-;	Set Modulation	wait	speed	change	step
-	smpsModSet	$00,	$02,	$03,	$03
+	smpsSetvoice	$00
+	smpsAlterVol	$04
 	dc.b		nD5,	$06,	nRst,	$07,	nEb5,	$06,	nRst,	$07
 	dc.b		nE5,	$0C,	nRst,	$07,	nD5,	$06,	nRst,	$07
 	dc.b		nD5,	$06,	nRst,	$07,	nE5,	$06,	nF5,	nRst
@@ -218,60 +180,44 @@ InvincibleCoconut_Jump03:
 	dc.b		$07,	nB5,	$06,	nC6,	$0D,	nD6,	$07,	nRst
 	dc.b		$06,	nF5,	nA5,	$07,	nRst,	$06,	nF5,	$07
 	dc.b		nRst,	$06,	nD5,	$07,	nE5,	$06,	nRst,	nF5
-	dc.b		$0D,	nRst,	$20
-;	Alter Volume	value
-	smpsAlterVol	$FF
-	dc.b		smpsModOff,	nCs5,	$07,	nD5,	$06
-;	Alter Volume	value
-	smpsAlterVol	$01
-;	Set Modulation	wait	speed	change	step
-	smpsModSet	$00,	$02,	$03,	$03
-	dc.b		nEb5,	$07,	nRst,	$06,	nE5,	$07,	nRst,	$06
-	dc.b		nF5,	$0D,	nRst,	$06,	nEb5,	$07,	nRst,	$06
-	dc.b		nEb5,	nRst,	$07,	nF5,	$06,	nFs5,	$07,	nRst
-	dc.b		$06,	nCs6,	$07,	nRst,	$06,	nEb6,	nRst,	$07
-	dc.b		nCs6,	$06,	nRst,	$07,	nEb6,	$06,	nRst,	$07
-	dc.b		nCs6,	$06,	nRst,	nB5,	$07,	nBb5,	$06,	nAb5
-	dc.b		$07,	nFs5,	$0D,	nRst,	$06,	nCs5,	$0D,	nEb5
-	dc.b		$06,	nRst,	$07,	nE5,	$06,	nRst,	$07,	nF5
-	dc.b		$0C,	nRst,	$07,	nEb5,	$06,	nRst,	$07,	nEb5
-	dc.b		$06,	nRst,	nF5,	$07,	nFs5,	$06,	nRst,	$07
-	dc.b		nCs6,	$06,	nRst,	$07,	nFs6,	$06,	nRst,	nEb6
-	dc.b		$07,	nCs6,	$06,	nB5,	$07,	nBb5,	$06,	nAb5
-	dc.b		$07,	nFs5,	$0C,	nRst,	$21,	nCs5,	$06,	nD5
-	dc.b		nEb5,	$07,	nRst,	$06,	nE5,	$07,	nRst,	$06
-	dc.b		nF5,	$0D,	nRst,	$06,	nEb5,	$07,	nRst,	$06
-	dc.b		nEb5,	$07,	nRst,	$06,	nF5,	nFs5,	$07,	nRst
-	dc.b		$06,	nCs6,	$07,	nRst,	$06,	nEb6,	$07,	nRst
-	dc.b		$06,	nCs6,	nRst,	$07,	nEb6,	$06,	nRst,	$07
-	dc.b		nCs6,	$06,	nRst,	$07,	nB5,	$06,	nBb5,	nAb5
-	dc.b		$07,	nFs5,	$0D,	nRst,	$06,	nCs6,	$0D,	nFs6
+	dc.b		$0D,	nRst,	$20,	nCs5,	$07,	nD5,	$06,	nEb5
+	dc.b		$07,	nRst,	$06,	nE5,	$07,	nRst,	$06,	nF5
+	dc.b		$0D,	nRst,	$06,	nEb5,	$07,	nRst,	$06,	nEb5
+	dc.b		nRst,	$07,	nF5,	$06,	nFs5,	$07,	nRst,	$06
+	dc.b		nCs6,	$07,	nRst,	$06,	nEb6,	nRst,	$07,	nCs6
 	dc.b		$06,	nRst,	$07,	nEb6,	$06,	nRst,	$07,	nCs6
-	dc.b		$06,	nRst,	$07,	nB5,	$06,	nRst,	nBb5,	$07
-	dc.b		nB5,	$06,	nC6,	$07,	nCs6,	$0D,	nEb6,	$06
-	dc.b		nRst,	nFs5,	$07,	nBb5,	$06,	nRst,	$07,	nFs5
-	dc.b		$06,	nRst,	nEb5,	$07,	nF5,	$06,	nRst,	$07
-	dc.b		nFs5,	$0D,	nRst,	$20
-;	Alter Volume	value
-	smpsAlterVol	$FF
-	dc.b		smpsModOff,	nC5,	$06,	nCs5,	$07
-;	Alter Volume	value
+	dc.b		$06,	nRst,	nB5,	$07,	nBb5,	$06,	nAb5,	$07
+	dc.b		nFs5,	$0D,	nRst,	$06,	nCs5,	$0D,	nEb5,	$06
+	dc.b		nRst,	$07,	nE5,	$06,	nRst,	$07,	nF5,	$0C
+	dc.b		nRst,	$07,	nEb5,	$06,	nRst,	$07,	nEb5,	$06
+	dc.b		nRst,	nF5,	$07,	nFs5,	$06,	nRst,	$07,	nCs6
+	dc.b		$06,	nRst,	$07,	nFs6,	$06,	nRst,	nEb6,	$07
+	dc.b		nCs6,	$06,	nB5,	$07,	nBb5,	$06,	nAb5,	$07
+	dc.b		nFs5,	$0C,	nRst,	$21,	nCs5,	$06,	nD5,	nEb5
+	dc.b		$07,	nRst,	$06,	nE5,	$07,	nRst,	$06,	nF5
+	dc.b		$0D,	nRst,	$06,	nEb5,	$07,	nRst,	$06,	nEb5
+	dc.b		$07,	nRst,	$06,	nF5,	nFs5,	$07,	nRst,	$06
+	dc.b		nCs6,	$07,	nRst,	$06,	nEb6,	$07,	nRst,	$06
+	dc.b		nCs6,	nRst,	$07,	nEb6,	$06,	nRst,	$07,	nCs6
+	dc.b		$06,	nRst,	$07,	nB5,	$06,	nBb5,	nAb5,	$07
+	dc.b		nFs5,	$0D,	nRst,	$06,	nCs6,	$0D,	nFs6,	$06
+	dc.b		nRst,	$07,	nEb6,	$06,	nRst,	$07,	nCs6,	$06
+	dc.b		nRst,	$07,	nB5,	$06,	nRst,	nBb5,	$07,	nB5
+	dc.b		$06,	nC6,	$07,	nCs6,	$0D,	nEb6,	$06,	nRst
+	dc.b		nFs5,	$07,	nBb5,	$06,	nRst,	$07,	nFs5,	$06
+	dc.b		nRst,	nEb5,	$07,	nF5,	$06,	nRst,	$07,	nFs5
+	dc.b		$0D,	nRst,	$20,	nC5,	$06,	nCs5,	$07
 	smpsAlterVol	$F8
-;	Panning	 	direction	amsfms
 	smpsPan		panCentre,	$00
-	dc.b		smpsModOff
-;	Jump To	 	location
 	smpsJump	InvincibleCoconut_Jump03
+
 
 ; FM4 Data
 InvincibleCoconut_FM4:
-;	Panning	 	direction	amsfms
 	smpsPan		panCentre,	$00
 	dc.b		nRst,	$33
 InvincibleCoconut_Jump04:
-;	Set FM Voice	#
-	smpsFMvoice	$00
-;	Alter Volume	value
+	smpsSetvoice	$00
 	smpsAlterVol	$0B
 	dc.b		nF4,	$06,	nRst,	$07,	nF4,	$06,	nRst,	$07
 	dc.b		nE4,	$0C,	nRst,	$07,	nD4,	$06,	nRst,	$07
@@ -324,22 +270,16 @@ InvincibleCoconut_Jump04:
 	dc.b		nRst,	$06,	nCs4,	nRst,	$07,	nEb4,	$06,	nRst
 	dc.b		$07,	nEb4,	$06,	nRst,	nF4,	$07,	nRst,	$06
 	dc.b		nF4,	$07,	nFs4,	$13,	nRst,	$27
-;	Alter Volume	value
 	smpsAlterVol	$F5
-;	Panning	 	direction	amsfms
 	smpsPan		panCentre,	$00
-;	Jump To	 	location
 	smpsJump	InvincibleCoconut_Jump04
 
 ; FM5 Data
 InvincibleCoconut_FM5:
-;	Panning	 	direction	amsfms
 	smpsPan		panCentre,	$00
 	dc.b		nRst,	$33
 InvincibleCoconut_Jump05:
-;	Set FM Voice	#
-	smpsFMvoice	$00
-;	Alter Volume	value
+	smpsSetvoice	$00
 	smpsAlterVol	$0B
 	dc.b		nD4,	$06,	nRst,	$07,	nD4,	$06,	nRst,	$07
 	dc.b		nC4,	$0C,	nRst,	$07,	nBb3,	$06,	nRst,	$07
@@ -392,1302 +332,784 @@ InvincibleCoconut_Jump05:
 	dc.b		nRst,	$06,	nBb3,	nRst,	$07,	nB3,	$06,	nRst
 	dc.b		$07,	nB3,	$06,	nRst,	nCs4,	$07,	nRst,	$06
 	dc.b		nCs4,	$07,	nCs4,	$13,	nRst,	$27
-;	Alter Volume	value
 	smpsAlterVol	$F5
-;	Panning	 	direction	amsfms
 	smpsPan		panCentre,	$00
-;	Jump To	 	location
 	smpsJump	InvincibleCoconut_Jump05
 
 ; PSG3 Data
 InvincibleCoconut_PSG3:
 	dc.b		nRst,	$33
 InvincibleCoconut_Jump06:
-;	Set Volume	value
 	smpsSetVol	$05
-;	Set PSG WvForm	#
 	smpsPSGform	$E7
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$03,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$03,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$03,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$03,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$03,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$03,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$03,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$03,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$03,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$03,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$03,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$03,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$03,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$03,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$03,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$03,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$03,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$03,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$05
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$03,	nRst,	$06
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FF
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$04
-;	Set Volume	value
 	smpsSetVol	$01
-;	Alter Notes	value
 	smpsAlterNote	$01
 	dc.b		nA5,	$02,	nRst,	$07
-;	Set Volume	value
 	smpsSetVol	$FA
-;	Jump To	 	location
 	smpsJump	InvincibleCoconut_Jump06
 
 ; DAC Data
@@ -1728,7 +1150,6 @@ InvincibleCoconut_Jump07:
 	dc.b		dKick,	$06,	dSnare,	$07,	dSnare,	$06,	dSnare,	dSnare
 	dc.b		$07,	dSnare,	$06,	dSnare,	$07,	dSnare,	$06,	dSnare
 	dc.b		$07
-;	Jump To	 	location
 	smpsJump	InvincibleCoconut_Jump07
 
 InvincibleCoconut_Voices:

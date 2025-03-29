@@ -39672,6 +39672,7 @@ byte_71A94:	dc.b 7,	$72, $73, $26, $15, 8, $FF, 5
 ; ---------------------------------------------------------------------------
 MusicIndex:	; $01-$7F
 		dc.l Music01 ; New Bark Town
+		dc.l Music02 ; Invincible Coconut
 		dc.l Music92 ; test
 
 MusicIndex80:	; $81-$9F
@@ -42136,6 +42137,8 @@ Kos_Z80:	incbin	sound\z80_1.bin
 		incbin	sound\z80_2.bin
 		even
 Music01:	include	sound\LimitedInvincibility.asm
+		even
+Music02:	include	sound\vroom.asm
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
