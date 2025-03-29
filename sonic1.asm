@@ -303,9 +303,10 @@ GameModeArray:
 ; ===========================================================================
 		bra.w	jmpto_BeeBush   ; BeeBush ($24)	
 ; ===========================================================================
-		bra.w	jmpto_Otis   ; otis.exe ($2C)	
+		bra.w	jmpto_Otis   ; otis.exe ($28)	
 ; ===========================================================================
-; uuuuuuuuuuuuuuuuuuuuuuuuuuuuu
+		bra.w	jmpto_IntroCutscene   ; Intro Cutscene($2C)	
+; ===========================================================================
 
 jmpto_Minecraft:
 		jmp     Minecraft
@@ -315,6 +316,10 @@ jmpto_BeeBush:
 jmpto_Otis:
 		jmp     GM_Otis
 
+jmpto_IntroCutscene:
+		lea	(IntroCutscene),a6
+		jsr	GM_CustomSplashScreensIG
+		jmp	PlayLevel
 CheckSumError:
 		illegal
 ; ===========================================================================
@@ -3210,8 +3215,8 @@ Title_ClrObjRam:
 		moveq	#$27,d1
 		moveq	#$1B,d2
 		bsr.w	ShowVDPGraphics
-                moveq   #$FFFFFF90,d0          ; play gomer
-                jsr     MegaPCM_PlaySample     ; "gomer!"
+        moveq   #$FFFFFF90,d0          ; play gomer
+        jsr     MegaPCM_PlaySample     ; "gomer!"
 		bsr.w	Pal_FadeTo
 		bsr.w	Pal_FadeFrom
 
@@ -3391,6 +3396,10 @@ Title_PlayRing:
 		bsr.w	PlaySound_Special
 		bra.s	Title_CountC
 ; ===========================================================================
+PlayIntro:
+		move.b	#$2C,($FFFFF600).w
+		rts
+; ===========================================================================
 
 loc_3210:				; XREF: Title_EnterCheat
 		tst.b	d0
@@ -3425,6 +3434,8 @@ loc_3230:
 		beq.w	loc_317C	; if not, branch
 
 Title_ChkLevSel:
+		btst	#6,($FFFFF604).w ; check if A is pressed
+		beq.w	PlayIntro	; if not, play level
 		
 		move.b	#$01,d0		; play level select music (DAX: Using New Bark Town as placeholder)
 		bsr.w	PlaySound_Special
@@ -39893,6 +39904,10 @@ byte_71A94:	dc.b 7,	$72, $73, $26, $15, 8, $FF, 5
 MusicIndex:	; $01-$7F
 		dc.l Music01 ; New Bark Town
 		dc.l Music02 ; Invincible Coconut
+		dc.l Music03 ; Dr. Coffinman (Boss Theme)
+		dc.l Music04 ; Eggman Encounter Cutscene (Transition to Z Z Z Z Z Z Act 3)
+		dc.l Music05 ; IDK (Originally for Sonic RPG Project - TG2000 Was Here)
+		dc.l Music06 ; Go Go Gadget
 		dc.l Music92 ; test
 
 MusicIndex80:	; $81-$9F
@@ -42360,6 +42375,14 @@ Music01:	include	sound\LimitedInvincibility.asm
 		even
 Music02:	include	sound\vroom.asm
 		even
+Music03:	include	sound\coffinman.asm
+		even
+Music04:	include	sound\eggmancutscene.asm
+		even
+Music05:	include	sound\music05.bin
+		even
+Music06:	include	sound\gogogadget.asm
+		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
 Music82:	incbin	sound\music82.bin ; Labyrinth Act 1
@@ -42557,6 +42580,13 @@ Minecraft:	include	minecraft\code\main.asm
 		include beebush\_BEEBUSH.68k
 
 		include otisexe\GM_Otis.asm
+
+
+
+
+
+
+
 
 ; end of 'ROM'
 EndOfRom:
