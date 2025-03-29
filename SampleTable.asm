@@ -26,6 +26,14 @@ SampleTable:
 	dcSample	TYPE_PCM,		Otis,		8000, FLAGS_SFX		; $95
 	dcSample	TYPE_PCM,		AmbO,		8000, FLAGS_LOOP	; $96
 	dcSample	TYPE_PCM,		Mikuingit,	8000, FLAGS_SFX		; $97
+; SAILOR MERCURY
+	dcSample	TYPE_DPCM,		SM1,	11025, FLAGS_SFX	; $94
+	dcSample	TYPE_DPCM,		SM2,	11025, FLAGS_SFX	; $94
+	dcSample	TYPE_DPCM,		SM3,	11025, FLAGS_SFX	; $94
+	dcSample	TYPE_DPCM,		SM4,	11025, FLAGS_SFX	; $94
+	dcSample	TYPE_DPCM,		SM5,	11025, FLAGS_SFX	; $94
+	dcSample	TYPE_DPCM,		SM6,	11025, FLAGS_SFX	; $94
+	dcSample	TYPE_DPCM,		SM7,	11025, FLAGS_SFX	; $94
 	dc.w	-1	; end marker
 
 ; ---------------------------------------------------------------
@@ -45,4 +53,11 @@ SampleTable:
 	incdac	Otis, "sound/dac/otis.wav"
 	incdac	AmbO, "sound/dac/ambience.wav"
 	incdac	Mikuingit, "sound/dac/mikuing.wav"
+	incdac	SM1, "sound/dac/Mercury_Start.bin"
+	incdac	SM2, "sound/dac/Mercury_Jump.bin"
+	incdac	SM3, "sound/dac/Mercury_leap.bin"
+	incdac	SM4, "sound/dac/Mercury_hit.bin"
+	incdac	SM5, "sound/dac/Mercury_death.bin"
+	incdac	SM6, "sound/dac/Mercury_bosshit.bin"
+	incdac	SM7, "sound/dac/Mercury_Win.bin"
 	even
