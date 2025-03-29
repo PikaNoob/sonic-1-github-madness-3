@@ -16260,7 +16260,7 @@ Obj3A_ChkSS:				; XREF: Obj3A_NextLevel
 		clr.b	($FFFFFE30).w	; clear	lamppost counter
 		tst.b	($FFFFF7CD).w	; has Sonic jumped into	a giant	ring?
 		beq.s	loc_C6EA	; if not, branch
-		move.b	#$10,($FFFFF600).w ; set game mode to Special Stage (10)
+		move.b	#$24,($FFFFF600).w ; set game mode to Special Stage (10)
 		bra.s	Obj3A_Display2
 ; ===========================================================================
 
