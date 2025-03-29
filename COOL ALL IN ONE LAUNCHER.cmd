@@ -10,7 +10,7 @@ for /F "tokens=1,2 delims=#" %%a in ('"prompt #$H#$E# & echo on & for %%b in (1)
 if exist zARCHIVED BUILDS\thisdoesnothing.txt (set first=1) else goto:Menu
 echo The first one to run was COOL ALL IN ONE LAUNCHER was %username%>thisdoesnothing.txt
 
-set name=All in one launcher for github madness 3 by Anakama
+set name=Github Madness 3 Launcher by Anakama
 
 title %name%
 
@@ -67,6 +67,7 @@ if %choice%==- goto:exit
 
 :discord
 start https://discord.gg/tDYpbpvmet
+msg * Opening
 goto:Menu
 
 :pizzatower
@@ -116,7 +117,7 @@ echo.
 if "%first%" == "1" call :ColorText 2 "Running for the first time"
 if "%first%" == "0" call :ColorText C "Not running for the first time"
 echo.
-call :ColorText 9 "%name% V%version%"
+call :ColorText 9 "%name% %version%"
 echo.
 echo Press any button to exit...
 echo.
