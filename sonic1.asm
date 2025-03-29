@@ -1170,6 +1170,13 @@ SoundDriverLoad:			; XREF: GameClrRAM; TitleScreen
 
 
 PlaySound:
+		cmpi.b	#8,($FFFFF600).w	; GMZ
+		bne.s	PSound_Normal	; GMZ
+		cmpi.b	#$E0,d0	; GMZ
+		bhs.s	PSound_Normal	; GMZ
+		rts
+
+PSound_Normal:	; GMZ
 		move.b	d0,($FFFFF00A).w
 		rts	
 ; End of function PlaySound
@@ -1188,6 +1195,13 @@ PlaySound:
 
 
 PlaySound_Special:
+		cmpi.b	#8,($FFFFF600).w	; GMZ
+		bne.s	PSSpecial_Normal	; GMZ
+		cmpi.b	#$E0,d0	; GMZ
+		bhs.s	PSSpecial_Normal	; GMZ
+		rts
+
+PSSpecial_Normal:	; GMZ
 		move.b	d0,($FFFFF00B).w
 		rts	
 ; End of function PlaySound_Special
@@ -4206,6 +4220,12 @@ Level_WaterPal:
 Level_GetBgm:
 		tst.w	($FFFFFFF0).w
 		bmi.w	loc_3946	; change from bmi.s to bmi.w or you'll get an error
+		cmpi.b	#$88,($FFFFF600).w	; GMZ: Are we watching a demo?
+		bne.s	Level_BgmNoDemo	; GMZ: If not, branch
+		move.w	#$8B,d0	; GMZ
+		bra.s	Level_PlayDemoBgm	; GMZ
+
+Level_BgmNoDemo:	; GMZ
 		moveq	#0,d0
 		move.b	($FFFFFE10).w,d0
  
@@ -4233,6 +4253,8 @@ Level_GetBgm4:
  
 Level_PlayBgm:
 		move.b	(a1,d0.w),d0	; get d0-th entry from the playlist
+
+Level_PlayDemoBgm:	; GMZ
 		bsr.w	PlaySound	; play music
 		move.b	#$34,($FFFFD080).w ; load title	card object
  
