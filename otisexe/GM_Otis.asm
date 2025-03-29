@@ -215,8 +215,7 @@ GM_S6_MainLoop:
 		jsr	WaitForVBla
 		tst.w   (v_demolength).w
 		bne.s	GM_S6_MainLoop	; if yes, brancH
-		jsr	GM_SplashScreensIG
-		rts
+		rts		; return to the main game
 
 		include		"otisexe\assets.asm"
 
