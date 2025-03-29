@@ -103,3 +103,27 @@ dma68k		macro	src, dest, len, type
 		move.w	(sp)+,(a6)
 		endm
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+sprite_entry	macro	size, xCoord, yCoord, tileID, palLine, priority, xflip, yflip
+		dc.w	\yCoord
+		dc.b	\size,0
+		dc.w	(((\priority&1)<<15)|((\palLine&3)<<13)|((\yflip&1)<<12)|((\xflip&1)<<11))+\tileID
+		dc.w	\xCoord
+		endm
+
+SPR_1x1:  equ %0000  ; 1x1 tiles
+SPR_2x1:  equ %0100  ; 2x1 tiles
+SPR_3x1:  equ %1000  ; 3x1 tiles
+SPR_4x1:  equ %1100  ; 4x1 tiles
+SPR_1x2:  equ %0001  ; 1x2 tiles
+SPR_2x2:  equ %0101  ; 2x2 tiles
+SPR_3x2:  equ %1001  ; 3x2 tiles
+SPR_4x2:  equ %1101  ; 4x2 tiles
+SPR_1x3:  equ %0010  ; 1x3 tiles
+SPR_2x3:  equ %0110  ; 2x3 tiles
+SPR_3x3:  equ %1010  ; 3x3 tiles
+SPR_4x3:  equ %1110  ; 4x3 tiles
+SPR_1x4:  equ %0011  ; 1x4 tiles
+SPR_2x4:  equ %0111  ; 2x4 tiles
+SPR_3x4:  equ %1011  ; 3x4 tiles
+SPR_4x4:  equ %1111  ; 4x4 tiles
+; ---------------------------------------------------------------------------------------------------------------------------------------------------------

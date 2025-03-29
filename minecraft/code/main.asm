@@ -33,6 +33,7 @@ MC_Init:
 
 	dma68k	MC_Palette,$0000,$40*2,CRAM				; load in the palette
 	dma68k	MC_Terrain,vramTerrain,MC_Terrain_End-MC_Terrain,VRAM	; load in the block art
+	dma68k	MC_Steve,vramSteve,MC_Steve_End-MC_Steve,VRAM		; load player art
 		bsr.w	MC_LoadBackground
 		bsr.w	MC_LoadWorld
 
@@ -40,42 +41,28 @@ MC_Init:
 		move.w	#$8174,(a6)				; enable display
 		intsOn						; enable CPU interrupts
 
-		clr.w	(cloudFrameCnt).w		
+		clr.w	(cloudFrameCnt).w
+
+		move.w	#128,(playerObjVars+xPos).w
+		move.w	#128,(playerObjVars+yPos).w
 
 .gameLoop:
 		st.b	(vblankWait).w
 
 	; Camera Test
-.checkUp:
-		btst.b	#BIT_UP,(ctrlHoldP1).w
-		beq.s	.checkDown
-		subq.w	#1,(camYposFG).w
 
-.checkDown:
-		btst.b	#BIT_DOWN,(ctrlHoldP1).w
-		beq.s	.checkLeft
-		addq.w	#1,(camYposFG).w
-
-.checkLeft:
-		btst.b	#BIT_LEFT,(ctrlHoldP1).w
-		beq.s	.checkRight
-		subq.w	#1,(camXposFG).w
-
-.checkRight:
-		btst.b	#BIT_RIGHT,(ctrlHoldP1).w
-		beq.s	.updateBGPos
-		addq.w	#1,(camXposFG).w
-
-.updateBGPos:
-		move.w	(camXposFG).w,d0
-		lsr.w	#1,d0
-		move.w	d0,(camXposBG).w
+;.updateBGPos:
 
 ;		move.w	(camYposFG).w,d0
 ;		lsr.w	#4,d0
 ;		move.w	d0,(camYposBG).w
 
-		bsr.w	MC_Steve
+		bsr.w	MC_Player
+
+		move.w	(camXposFG).w,d0
+		lsr.w	#1,d0
+		move.w	d0,(camXposBG).w
+
 		bsr.w	MC_UpdateScrollBuffer
 		bsr.s	MC_RenderBlocks
 
@@ -101,7 +88,7 @@ MC_RenderBlocks:
 		andi.w	#$FF,d0			; Cap to a maximum index value of 0xFF
 
 		move.w	(camYPosFG).w,d1	; Get the camera's y coordinate
-		asl.w	#5,d1			; Make into row offset
+		lsl.w	#5,d1			; Make into row offset
 		andi.w	#$FF00,d1		; ^
 		bpl.s	.renderScreen
 
@@ -267,7 +254,7 @@ MC_UpdateScrollBuffer:
 .doneClouds:
 		move.w	(camXPosBG).w,d0
 		neg.w	d0
-		move.w	#200-1,d7
+		move.w	#168-1,d7
 
 .hillsBGSegment:
 		move.l	d0,(a0)+
@@ -370,9 +357,9 @@ MC_LoadWorld:
 ; ---------------------------------------------------------------------------
 MC_VInt:
 		movem.l	d0-a5,-(sp)
-
 	dma68k	planeBuffer,VRAM_PLANE_A,PLANE_BUFF_SIZE,VRAM	; transfer the entire FG tileplane buffer
 	dma68k	scrollBuffer,VRAM_HSCROLL,224*4,VRAM		; transfer the horizontal scroll data
+	dma68k	spriteList,VRAM_SPR_LIST,80*8,VRAM		; transfer the sprite list
 
 		move.w	(camYPosFG).w,d0			; update vertical scrolling
 		andi.w	#7,d0					; ^
@@ -418,7 +405,7 @@ MC_ReadJoypad:
 		rts
 ; ---------------------------------------------------------------------------
 
-	include	"minecraft\code\steve.asm"
+	include	"minecraft\code\player.asm"
 
 ; ---------------------------------------------------------------------------
 MC_Palette:
@@ -426,6 +413,11 @@ MC_Palette:
 	dc.w	$000, $CCC, $AAA, $888, $666, $444, $222, $4E6, $2C4, $0A2, $080, $6AE, $48C, $26A, $048, $026
 	dc.w	$000, $EEE, $CCC, $AAA, $4CE, $2AC, $08A, $E6C, $C4A, $A08, $44E, $22C, $00A, $EE0, $888, $666
 	dc.w	$000, $EEE, $CAA, $A88, $866, $644, $422, $46A, $448, $226, $6C4, $680, $8CE, $6AC, $EA6, $E44
+; ---------------------------------------------------------------------------
+MC_Steve:
+	incbin	"minecraft\assets\bin\steve.bin"
+MC_Steve_End:
+	even
 ; ---------------------------------------------------------------------------
 MC_Terrain:
 	incbin	"minecraft\assets\bin\terrain.bin"
@@ -475,7 +467,8 @@ MC_TestMap:
 	dcb.b	256,$00	; Row 0C
 	dcb.b	256,$00	; Row 0D
 	dcb.b	256,$00	; Row 0E
-	dcb.b	256,$00	; Row 0F
+	dcb.b	255,$00	; Row 0F
+	dc.b	$11
 
 	dcb.b	256,$03	; Row 20
 	dcb.b	256,$02	; Row 21

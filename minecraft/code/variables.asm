@@ -14,7 +14,8 @@ planeBuffer	rs.w	29*64			; foreground plane buffer
 planeBuffer_End	rs.b	0
 PLANE_BUFF_SIZE	equ	planeBuffer_End-planeBuffer
 
-scrollBuffer	rs.l	256
+scrollBuffer	rs.l	$E0
+spriteList	rs.b	$280
 
 camXPosFG	rs.w	1			; camera foreground layout x position
 camYposFG	rs.w	1			; camera foreground layout y position
@@ -30,7 +31,7 @@ ctrlPressP1	rs.b	1
 ctrlHoldP2	rs.b	1
 ctrlPressP2	rs.b	1
 
-steveObjRam	rs.b	$40
+playerObjVars	rs.b	$40
 
 		rsset	__rs&$FFFFFF
 mcRAM_End	rs.b	0
@@ -42,6 +43,7 @@ TILE		equ	32			; number of bytes a single tile occupies in VRAM
 vramEmptyTile	rs.b	TILE
 vramTerrain	rs.b	255*TILE
 vramBackground	rs.b	408*TILE
+vramSteve	rs.b	32*TILE
 
 VRAM_PLANE_A	equ	$C000
 VRAM_PLANE_W	equ	$D000
