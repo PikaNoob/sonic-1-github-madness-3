@@ -39804,6 +39804,10 @@ byte_71A94:	dc.b 7,	$72, $73, $26, $15, 8, $FF, 5
 MusicIndex:	; $01-$7F
 		dc.l Music01 ; New Bark Town
 		dc.l Music02 ; Invincible Coconut
+		dc.l Music03 ; Dr. Coffinman (Boss Theme)
+		dc.l Music04 ; Eggman Encounter Cutscene (Transition to Z Z Z Z Z Z Act 3)
+		dc.l Music05 ; IDK (Originally for Sonic RPG Project - TG2000 Was Here)
+		dc.l Music06 ; Go Go Gadget
 		dc.l Music92 ; test
 
 MusicIndex80:	; $81-$9F
@@ -42270,6 +42274,14 @@ Kos_Z80:	incbin	sound\z80_1.bin
 Music01:	include	sound\LimitedInvincibility.asm
 		even
 Music02:	include	sound\vroom.asm
+		even
+Music03:	include	sound\coffinman.asm
+		even
+Music04:	include	sound\eggmancutscene.asm
+		even
+Music05:	include	sound\music05.bin
+		even
+Music06:	include	sound\gogogadget.asm
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
