@@ -41,6 +41,7 @@ vBlankJump 	equ vBlankRoutine
 vBlankAdress 	equ vBlankRoutine+2
 ; options menu
 optamm: 	equ ((OMTEnd-OptionMenuText)/16)-1
+optcharpos = lsscrpos+$960000 ; character
 
 ; NOTES FOR ANYONE MAKING CHARACTERS
 v_character = $FFFFFFE8
@@ -50,7 +51,7 @@ v_character = $FFFFFFE8
 ; PLAYER ART -> Player_Art
 ; PLAYER DPLC -> Player_DPLC
 ; PLAYER PALETTE -> Player_Palette
-
+; MENU NAME -> Player_Names
 
 StartOfRom:
 Vectors:	dc.l 'P'<<24|$FFFE00,		'O'<<24|EntryPoint,	'Y'<<24|BusError,	'S'<<24|AddressError
@@ -3408,7 +3409,7 @@ loc_3230:
 		beq.s	@notc
 
 		add.b	#1,(v_character).w ; sonic/gronic 
-		cmpi.b	#5,(v_character).w
+		cmpi.b	#6,(v_character).w
 		blt.s	@notoverflow
 		move.b	#0,(v_character).w
 	@notoverflow:
@@ -3909,20 +3910,20 @@ loc_3580:
 LevSel_ChgLine:				; XREF: LevSelTextLoad
 		moveq	#$10-1,d2		; number of characters per line
 
-@loop:
+LevSel_ChgLine_Loop:
 		moveq	#0,d0
 		move.b	(a1)+,d0
 		cmpi.b	#$20,d0
 		bgt.s	@draw
 		move.w	#0,(a6)
-		dbf	d2,@loop
+		dbf	d2,LevSel_ChgLine_Loop
 		rts	
 ; ===========================================================================
 
 @draw:				; XREF: LevSel_ChgLine
 		add.w	d3,d0
 		move.w	d0,(a6)
-		dbf	d2,@loop
+		dbf	d2,LevSel_ChgLine_Loop
 		rts	
 ; End of function LevSel_ChgLine
 		
@@ -4036,20 +4037,66 @@ Controls_SND:
 		
 OptionMenuText:	
 		dc.b    "PLAY THE GAME!!!"
-        dc.b    "CHARACTER       "
+        dc.b    "CHARACTER:      "
 OMTEnd:
+	even
+Player_Names:
+		dc.b "SONIC   "
+		dc.b "OGORKI  "
+		dc.b "ANAKAMA "
+		dc.b "LIMITED "
+		dc.b "NERU    "
+	even
+	
+OptionsHighlight:
+		lea	($C00000).l,a6
+		moveq	#0,d0
+		move.w	($FFFFFF82).w,d0
+		move.w	d0,d1
+		move.l	#lsscrpos,d4
+		
+		cmpi.w	#lsrow1size,d0
+		blt.s	@notsecond
+		
+		sub.w	#lsrow1size,d0
+		addi.l	#lsoff,d4
+	@notsecond:
+		lsl.w	#7,d0
+		swap	d0
+		add.l	d0,d4
+		lea	(LevelMenuText).l,a1
+		lsl.w	#3,d1
+		add.w	d1,d1
+		adda.w	d1,a1
+		move.l	d4,4(a6)
 		
 ; ---------------------------------------------------------------------------
-; Level	Select
+; Opshuns scream
 ; ---------------------------------------------------------------------------
+; give the vram setting on d3
+CharDraw:
+		lea	(Player_Names).l,a1
+		moveq	#0,d0
+		move.b	(v_character).w,d0
+		add.w	d0,d0
+		add.w	d0,d0
+		add.w	d0,d0
+		adda.w	d0,a1
+		lea	($C00000).l,a6
+		move.l	#optcharpos,d4	; screen position (character)
+		move.w	#7,d2
+		move.l	d4,4(a6)
+		bra.w	LevSel_ChgLine_Loop
 GotoOptions:
 		lea	(OptionMenuText).l,a1
 		lea	($C00000).l,a6
 		move.w	#$E680-$21,d3	; VRAM setting
 		move.l	#lsscrpos,d4	; screen position (text)
 		
-		move.w	#optamm-1,d1		; number of lines of text (first row)
+		move.w	#optamm,d1		; number of lines of text (first row)
 		bsr.w	LevSelTextLoad_loop
+		
+		bsr.s	CharDraw
 
 OptionsMenu:
 		move.b	#4,($FFFFF62A).w
@@ -4068,7 +4115,7 @@ OptReturn:
 OptControls:				; XREF: LevelSelect
 		move.b	($FFFFF605).w,d1
 		andi.b	#3,d1		; is up/down pressed and held?
-		bne.s	Opt_UpDown	; if yes, branch
+		beq.s	OptReturn	; if not, branch
 		subq.w	#1,($FFFFFF80).w ; subtract 1 from time	to next	move
 		bpl.s	OptReturn	; if time remains, branch
 Opt_UpDown:
@@ -4089,7 +4136,7 @@ Opt_Down:
 		bcs.s	Opt_Refresh
 		moveq	#0,d6		; if selection moves above last selectable,	jump to	selection 0
 Opt_Refresh:
-		
+		rts
 ; ---------------------------------------------------------------------------
 ; Music	playlist
 ; ---------------------------------------------------------------------------
@@ -4272,11 +4319,11 @@ Level_ClrVars3:
 Player_Palette:
 		; normal, lz, sbz, blank
 		dc.w	3,$F,$10,0 ; Sonic 
-		
 		dc.w	23,24,25,0 ; Pal_Gronic 
 		dc.w	26,24,25,0 ; Pal_Anakama 
 		dc.w	28,28,28,0 ; LimitedSonic 
 		dc.w	26,26,$26,0 ; neru
+		dc.w	3,$F,$10,0 ; Gomer Gomer!
 
 		; add more player palettes
 Level_LoadPal:
@@ -16130,10 +16177,9 @@ Obj3A_AddBonus:				; XREF: Obj3A_ChkBonus
 Obj3A_NextLevel:			; XREF: Obj3A_Index
 		jsr	GetLevelRandom
 		tst.l	(v_levelrandtracker).w	; if level selection is random, ignore the SS
-		bpl.s	@random
+		bpl.s	Obj3A_ChkSS
 		tst.w	($FFFFFE10).w	; if level is GHZ1, go back to Sega screen(???)
 		bne.s	Obj3A_ChkSS
-@random:
 		move.b	#0,($FFFFF600).w ; set game mode to level (00)
 		bra.s	Obj3A_Display2
 ; ===========================================================================
@@ -24311,6 +24357,7 @@ Player_Maps:
 	dc.l	Map_Sonic ; anakama
 	dc.l	Map_Limit ; LimitedSonic
 	dc.l    map_neru
+	dc.l    map_gomer
 	; insert player mapping here
 	
 Obj01_Main:				; XREF: Obj01_Index
@@ -25996,7 +26043,7 @@ Player_Anim:
 	dc.l	SonicAniData ; anakama
 	dc.l	LimitedSonicAniData ; LimitedSonic
 	dc.l	SonicAniData ; neru
-
+	dc.l	SonicAniData ; gomer gomer!
 	; Insert more animation data for other characters here
 	
 Sonic_Animate:				; XREF: Obj01_Control; et al
@@ -26196,7 +26243,7 @@ Player_DPLC:
 	dc.l	SonicDynPLC ; anakama
 	dc.l	LimitDynPLC ; LimitedSonic
 	dc.l	NeruDynPLC ; neru
-
+	dc.l	GomerDynPLC ; gomer gomer!
 	; add pointers for player dplc here
 Player_Art:
 	dc.l	Art_Sonic
@@ -26204,6 +26251,7 @@ Player_Art:
 	dc.l	Art_Sonic ; anakama
 	dc.l	Art_Limit ; LimitedSonic
 	dc.l	Art_neru ; neru
+	dc.l	Art_gomer ; gomer gomer!
 
 	; add pointers for player art here
 
@@ -38905,6 +38953,8 @@ Map_Limit:
 	include "_maps\LimitedSonic.asm"
 map_neru:
 	include "_maps\neru.asm"
+map_gomer:
+	include "_maps\gomer.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	loading	array for the players
 ; ---------------------------------------------------------------------------
@@ -38914,6 +38964,8 @@ LimitDynPLC:
 	include "_inc\limitedsonic dynamic pattern load cues.asm"
 NeruDynPLC:
 	include "_inc\NeruDPLC.asm"
+gomerDynPLC:
+	include "_inc\gomerDPLC.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	- players
 ; ---------------------------------------------------------------------------
@@ -38922,6 +38974,8 @@ Art_Sonic:	incbin	artunc\sonic.bin	; Sonic
 Art_Limit:	incbin	artunc\limitedsonic.bin ; LimitedSonic
 		even
 Art_neru:	incbin	artunc\neru.bin	; gocha gocha urusee!
+		even
+Art_gomer:	incbin	artunc\gomer.bin	; gomer gomer!
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
