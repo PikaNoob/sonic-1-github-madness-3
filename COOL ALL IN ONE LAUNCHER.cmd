@@ -17,25 +17,9 @@ echo The last user of cool all in one launcher is %username%>thisdoesnothing.txt
 
 title %name%
 
-echo Sup brother
-timeout 1 > NUL
-echo You got headache browsing the dissassembly?
-timeout 1 > NUL
-echo Yeah the code is fucking hell.
-timeout 1 > NUL
-echo Don't worry, I am here to help you
-timeout 1 > NUL
-echo I mean if you call it a help
-timeout 1 > NUL
-echo Now don't close
-timeout 1 > NUL
-echo You just wanna rest right?
-timeout 1 > NUL
-echo Or maybe edit some sonic.asm idk
-timeout 1 > NUL
-echo Thats what %name% is made for!
-timeout 1 > NUL
+echo %name%
 
+timeout 1 > NUL
 :Menu
 cls
 pushd %~dp0
