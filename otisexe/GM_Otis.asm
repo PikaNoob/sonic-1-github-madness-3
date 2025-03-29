@@ -9,9 +9,9 @@ v_objspace:	equ $FFFFD000
 palettefadein = Pal_FadeTo
 v_demolength:	equ $FFFFF614
 pcm_ohyeah = $91
-pcm_otisexe = $92
-pcm_Amb = $93
-pcm_mikuing = $94
+pcm_otisexe = $95
+pcm_Amb = $96
+pcm_mikuing = $97
 v_vbla_routine:	equ $FFFFF62A
 waitforvbla = DelayProgram
 v_pfade_start:	equ $FFFFF626
@@ -102,7 +102,7 @@ GM_Sega_ClrObjRam:
 		moveq	#$16,d0
 		jsr	PalLoad1
 		jsr	PaletteFadeIn
-		move.w  #$FF,(v_demolength).w
+		move.w  #$60,(v_demolength).w
 
 		move.b  #PCM_OtisExe,d0
 		jsr	MegaPCM_PlaySample
@@ -117,7 +117,10 @@ GM_S1_MainLoop:
 		move.w	#0,d0
 		jsr	EniDec
 		copyTilemap	$FF0000,$C000,$27,$1D
-		move.w  #$FF,(v_demolength).w
+		move.w  #$560,(v_demolength).w
+		btst	#6,($FFFFFFF8).w	; Is this a PAL console?
+		beq.s	GM_S2_MainLoop			; If not, skip
+		sub.w	#$C0,(v_demolength).w
 GM_S2_MainLoop:
 		move.b	#2,(v_vbla_routine).w
 		jsr	WaitForVBla
@@ -132,7 +135,10 @@ GM_S2_MainLoop:
 		move.w	#0,d0
 		jsr	EniDec
 		copyTilemap	$FF0000,$C000,$27,$1D
-		move.w  #$FF,(v_demolength).w
+		move.w  #$200,(v_demolength).w
+		btst	#6,($FFFFFFF8).w	; Is this a PAL console?
+		beq.s	GM_S3_MainLoop			; If not, skip
+		sub.w	#$A0,(v_demolength).w
 GM_S3_MainLoop:
 		move.b	#2,(v_vbla_routine).w
 		jsr	WaitForVBla
@@ -200,7 +206,7 @@ MIKUCHECK:
 		move.w	#$120,d0
 		jsr	EniDec
 		copyTilemap	$FF0000,$E000,$27,$1D
-		move.w  #$FF,(v_demolength).w
+		move.w  #$200,(v_demolength).w
 		jsr	PaletteFadeIn
 		move.b  #PCM_Mikuing,d0
 		jsr	MegaPCM_PlaySample

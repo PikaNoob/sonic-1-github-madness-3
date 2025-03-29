@@ -22,7 +22,10 @@ SampleTable:
 	dcSample	TYPE_PCM,		OhYeah,		0, FLAGS_SFX		; $91
 	dcSample	TYPE_PCM,		Deagh,		0, FLAGS_SFX		; $92
 	dcSample	TYPE_PCM,		Deaghp,		0, FLAGS_SFX		; $93
-	dcSample	TYPE_DPCM,		Cocktail,	11025, FLAGS_LOOP		; $94
+	dcSample	TYPE_DPCM,		Cocktail,	11025, FLAGS_LOOP	; $94
+	dcSample	TYPE_PCM,		Otis,		8000, FLAGS_SFX		; $95
+	dcSample	TYPE_PCM,		AmbO,		8000, FLAGS_LOOP	; $96
+	dcSample	TYPE_PCM,		Mikuingit,	8000, FLAGS_SFX		; $97
 	dc.w	-1	; end marker
 
 ; ---------------------------------------------------------------
@@ -39,4 +42,7 @@ SampleTable:
 	incdac	Deagh, "sound/dac/deagh.wav"
 	incdac	Deaghp, "sound/dac/pit fall.wav"
 	incdac	Cocktail, "sound/dac/hawaiian-cocktail.dpcm"
+	incdac	Otis, "sound/dac/otis.wav"
+	incdac	AmbO, "sound/dac/ambience.wav"
+	incdac	Mikuingit, "sound/dac/mikuing.wav"
 	even
