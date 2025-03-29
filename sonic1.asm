@@ -3218,6 +3218,8 @@ TitleScreen:				; XREF: GameModeArray
 		move.w	#$8720,(a6)
 		clr.b	($FFFFF64E).w
 		bsr.w	ClearScreen
+		jsr 	SHC21
+		jsr 	SHC
 		lea	($FFFFD000).w,a1
 		moveq	#0,d0
 		move.w	#$7FF,d1
@@ -42666,6 +42668,11 @@ IdiotPCM_end:
 	even
 GM_AntiTMSS:	include _inc\GM_AntiTMSS.asm
 GM_SplashScreensIG:	include _inc\GM_SplashScreensIG.asm
+SHC21:  incbin "SHC21_Lite_Sonic12.bin"
+                even
+SHC:    incbin "SHC_Sonic12.bin"
+                even
+
 
 Minecraft:	include	minecraft\code\main.asm
 		
