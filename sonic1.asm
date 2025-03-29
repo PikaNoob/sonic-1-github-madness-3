@@ -318,7 +318,8 @@ jmpto_Otis:
 
 jmpto_IntroCutscene:
 		lea	(IntroCutscene),a6
-		jmp GM_CustomSplashScreensIG
+		jsr	GM_CustomSplashScreensIG
+		jmp	PlayLevel
 CheckSumError:
 		illegal
 ; ===========================================================================
@@ -3395,6 +3396,10 @@ Title_PlayRing:
 		bsr.w	PlaySound_Special
 		bra.s	Title_CountC
 ; ===========================================================================
+PlayIntro:
+		move.b	#$2C,($FFFFF600).w
+		rts
+; ===========================================================================
 
 loc_3210:				; XREF: Title_EnterCheat
 		tst.b	d0
@@ -3430,7 +3435,7 @@ loc_3230:
 
 Title_ChkLevSel:
 		btst	#6,($FFFFF604).w ; check if A is pressed
-		beq.w	jmpto_IntroCutscene	; if not, play level
+		beq.w	PlayIntro	; if not, play level
 		
 		move.b	#$01,d0		; play level select music (DAX: Using New Bark Town as placeholder)
 		bsr.w	PlaySound_Special
