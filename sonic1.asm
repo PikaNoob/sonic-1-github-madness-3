@@ -41,6 +41,7 @@ vBlankJump 	equ vBlankRoutine
 vBlankAdress 	equ vBlankRoutine+2
 ; options menu
 optamm: 	equ ((OMTEnd-OptionMenuText)/16)-1
+optcharpos = lsscrpos+$960000 ; character
 
 ; NOTES FOR ANYONE MAKING CHARACTERS
 v_character = $FFFFFFE8
@@ -50,7 +51,7 @@ v_character = $FFFFFFE8
 ; PLAYER ART -> Player_Art
 ; PLAYER DPLC -> Player_DPLC
 ; PLAYER PALETTE -> Player_Palette
-
+; MENU NAME -> Player_Names
 
 StartOfRom:
 Vectors:	dc.l 'P'<<24|$FFFE00,		'O'<<24|EntryPoint,	'Y'<<24|BusError,	'S'<<24|AddressError
@@ -3909,20 +3910,20 @@ loc_3580:
 LevSel_ChgLine:				; XREF: LevSelTextLoad
 		moveq	#$10-1,d2		; number of characters per line
 
-@loop:
+LevSel_ChgLine_Loop:
 		moveq	#0,d0
 		move.b	(a1)+,d0
 		cmpi.b	#$20,d0
 		bgt.s	@draw
 		move.w	#0,(a6)
-		dbf	d2,@loop
+		dbf	d2,LevSel_ChgLine_Loop
 		rts	
 ; ===========================================================================
 
 @draw:				; XREF: LevSel_ChgLine
 		add.w	d3,d0
 		move.w	d0,(a6)
-		dbf	d2,@loop
+		dbf	d2,LevSel_ChgLine_Loop
 		rts	
 ; End of function LevSel_ChgLine
 		
@@ -4036,20 +4037,66 @@ Controls_SND:
 		
 OptionMenuText:	
 		dc.b    "PLAY THE GAME!!!"
-        dc.b    "CHARACTER       "
+        dc.b    "CHARACTER:      "
 OMTEnd:
+	even
+Player_Names:
+		dc.b "SONIC   "
+		dc.b "OGORKI  "
+		dc.b "ANAKAMA "
+		dc.b "LIMITED "
+		dc.b "NERU    "
+	even
+	
+OptionsHighlight:
+		lea	($C00000).l,a6
+		moveq	#0,d0
+		move.w	($FFFFFF82).w,d0
+		move.w	d0,d1
+		move.l	#lsscrpos,d4
+		
+		cmpi.w	#lsrow1size,d0
+		blt.s	@notsecond
+		
+		sub.w	#lsrow1size,d0
+		addi.l	#lsoff,d4
+	@notsecond:
+		lsl.w	#7,d0
+		swap	d0
+		add.l	d0,d4
+		lea	(LevelMenuText).l,a1
+		lsl.w	#3,d1
+		add.w	d1,d1
+		adda.w	d1,a1
+		move.l	d4,4(a6)
 		
 ; ---------------------------------------------------------------------------
-; Level	Select
+; Opshuns scream
 ; ---------------------------------------------------------------------------
+; give the vram setting on d3
+CharDraw:
+		lea	(Player_Names).l,a1
+		moveq	#0,d0
+		move.b	(v_character).w,d0
+		add.w	d0,d0
+		add.w	d0,d0
+		add.w	d0,d0
+		adda.w	d0,a1
+		lea	($C00000).l,a6
+		move.l	#optcharpos,d4	; screen position (character)
+		move.w	#7,d2
+		move.l	d4,4(a6)
+		bra.w	LevSel_ChgLine_Loop
 GotoOptions:
 		lea	(OptionMenuText).l,a1
 		lea	($C00000).l,a6
 		move.w	#$E680-$21,d3	; VRAM setting
 		move.l	#lsscrpos,d4	; screen position (text)
 		
-		move.w	#optamm-1,d1		; number of lines of text (first row)
+		move.w	#optamm,d1		; number of lines of text (first row)
 		bsr.w	LevSelTextLoad_loop
+		
+		bsr.s	CharDraw
 
 OptionsMenu:
 		move.b	#4,($FFFFF62A).w
@@ -4068,7 +4115,7 @@ OptReturn:
 OptControls:				; XREF: LevelSelect
 		move.b	($FFFFF605).w,d1
 		andi.b	#3,d1		; is up/down pressed and held?
-		bne.s	Opt_UpDown	; if yes, branch
+		beq.s	OptReturn	; if not, branch
 		subq.w	#1,($FFFFFF80).w ; subtract 1 from time	to next	move
 		bpl.s	OptReturn	; if time remains, branch
 Opt_UpDown:
@@ -4089,7 +4136,7 @@ Opt_Down:
 		bcs.s	Opt_Refresh
 		moveq	#0,d6		; if selection moves above last selectable,	jump to	selection 0
 Opt_Refresh:
-		
+		rts
 ; ---------------------------------------------------------------------------
 ; Music	playlist
 ; ---------------------------------------------------------------------------
