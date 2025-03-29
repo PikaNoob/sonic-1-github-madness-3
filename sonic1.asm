@@ -48,7 +48,7 @@ optcharpos = lsscrpos+$960000 ; character
 
 ; NOTES FOR ANYONE MAKING CHARACTERS
 v_character = $FFFFFFE8
-charcount = 5
+charcount = 6
 ; pointers for:
 ; PLAYER MAPPINGS -> Player_Maps
 ; PLAYER ANIM SCRIPTS -> Player_Anim
@@ -24974,6 +24974,17 @@ loc_130BA:
 		blt.s	locret_130E8
 		move.b	#$D,$1C(a0)	; use "stopping" animation
 		bclr	#0,$22(a0)
+
+		cmp.b	#5,(v_character).w ; is this gomer?
+		bne.s	SMCsoundCHK1
+		move.b  #$90,d0
+		jmp	MegaPCM_PlaySample
+SMCsoundCHK1:
+		cmp.b	#6,(v_character).w ; is this sailor mercury?
+		bne.s	NormalsoundCHK1
+		move.b  #$90,d0
+		jmp	MegaPCM_PlaySample
+NormalsoundCHK1:
 		move.w	#$A4,d0
 		jsr	(PlaySound_Special).l ;	play stopping sound
 
@@ -25020,6 +25031,17 @@ loc_13120:
 		bgt.s	locret_1314E
 		move.b	#$D,$1C(a0)	; use "stopping" animation
 		bset	#0,$22(a0)
+
+		cmp.b	#5,(v_character).w ; is this gomer?
+		bne.s	SMCsoundCHK2
+		move.b  #$90,d0
+		jmp	MegaPCM_PlaySample
+SMCsoundCHK2:
+		cmp.b	#6,(v_character).w ; is this sailor mercury?
+		bne.s	NormalsoundCHK2
+		move.b  #$90,d0
+		jmp	MegaPCM_PlaySample
+NormalsoundCHK2:
 		move.w	#$A4,d0
 		jsr	(PlaySound_Special).l ;	play stopping sound
 
@@ -25170,23 +25192,37 @@ loc_13242:
 Sonic_AirUnroll:
 		
 		tst.b	$3A(a0) ; check jump height control
-		bne.s	@timer
+		bne.w	uutimer
 		move.b	($FFFFF605).w,d0
 		andi.b	#$70,d0 ; is abc being pressed?
-		beq.s	@end	; if not, branch
+		beq.w	uuend	; if not, branch
 		bclr	#2,$22(a0)
 		move.b	#$13,$16(a0)
 		move.b	#9,$17(a0)
 		move.b	#14,$1C(a0)	; use dunk animation
+
+		cmp.b	#5,(v_character).w ; is this gomer?
+		bne.s	SMCsoundCHK3
+		move.b  #$90,d0
+		jsr	MegaPCM_PlaySample
+		jmp	NormalsoundCHK33
+SMCsoundCHK3:
+		cmp.b	#6,(v_character).w ; is this sailor mercury?
+		bne.s	NormalsoundCHK3
+		move.b  #$90,d0
+		jsr	MegaPCM_PlaySample
+		jmp	NormalsoundCHK33
+NormalsoundCHK3:
 		move.w	#$A5,d0
 		jsr	(PlaySound_Special).l ;	play fart sound
+NormalsoundCHK33
 		move.l	$10(a0),d0
 		add.l	d0,d0
 		move.l	d0,$10(a0)
 		subq.w	#5,$C(a0)
-	@end:
+	uuend:
 		rts
-	@timer:
+	uutimer:
 		subq.b	#1,$3A(a0)
 		rts
 
@@ -25404,8 +25440,22 @@ Obj01_DoRoll:
 		move.b	#7,$17(a0)
 		move.b	#2,$1C(a0)	; use "rolling"	animation
 		addq.w	#5,$C(a0)
+
+		cmp.b	#5,(v_character).w ; is this gomer?
+		bne.s	SMCsoundCHK4
+		move.b  #$90,d0
+		jsr	MegaPCM_PlaySample
+		jmp	NormalsoundCHK44
+SMCsoundCHK4:
+		cmp.b	#6,(v_character).w ; is this sailor mercury?
+		bne.s	NormalsoundCHK4
+		move.b  #$90,d0
+		jsr	MegaPCM_PlaySample
+		jmp	NormalsoundCHK44
+NormalsoundCHK4:
 		move.w	#$BE,d0
 		jsr	(PlaySound_Special).l ;	play rolling sound
+NormalsoundCHK44:
 		tst.w	$14(a0)
 		bne.s	locret_133E8
 		move.w	#$200,$14(a0)
@@ -25452,8 +25502,21 @@ loc_1341C:
 		addq.l	#4,sp
 		move.b	#1,$3C(a0)
 		clr.b	$38(a0)
+		cmp.b	#5,(v_character).w ; is this gomer?
+		bne.s	SMCsoundCHK5
+		move.b  #$90,d0
+		jsr	MegaPCM_PlaySample
+		jmp	NormalsoundCHK55
+SMCsoundCHK5:
+		cmp.b	#6,(v_character).w ; is this sailor mercury?
+		bne.s	NormalsoundCHK5
+		move.b  #$90,d0
+		jsr	MegaPCM_PlaySample
+		jmp	NormalsoundCHK55
+NormalsoundCHK5:
 		move.w	#$A0,d0
 		jsr	(PlaySound_Special).l ;	play jumping sound
+NormalsoundCHK55:
 		move.b	#$13,$16(a0)
 		move.b	#9,$17(a0)
 		btst	#2,$22(a0)
@@ -29915,18 +29978,18 @@ loc_166C8:				; XREF: Obj72_Index
 
 loc_166E0:
 		cmpi.w	#$10,d0
-		bcc.s	locret_1675C
+		bcc.w	locret_1675C
 		move.w	$C(a1),d1
 		sub.w	$C(a0),d1
 		addi.w	#$20,d1
 		cmpi.w	#$40,d1
-		bcc.s	locret_1675C
+		bcc.w	locret_1675C
 		tst.b	($FFFFF7C8).w
-		bne.s	locret_1675C
+		bne.w	locret_1675C
 		cmpi.b	#7,$28(a0)
 		bne.s	loc_1670E
 		cmpi.w	#50,($FFFFFE20).w
-		bcs.s	locret_1675C
+		bcs.w	locret_1675C
 
 loc_1670E:
 		addq.b	#2,$24(a0)
@@ -29941,6 +30004,16 @@ loc_1670E:
 		move.w	8(a0),8(a1)
 		move.w	$C(a0),$C(a1)
 		clr.b	$32(a0)
+		cmp.b	#5,(v_character).w ; is this gomer?
+		bne.s	SMCsoundCHK6
+		move.b  #$90,d0
+		jmp	MegaPCM_PlaySample
+SMCsoundCHK6:
+		cmp.b	#6,(v_character).w ; is this sailor mercury?
+		bne.s	NormalsoundCHK6
+		move.b  #$90,d0
+		jmp	MegaPCM_PlaySample
+NormalsoundCHK6:
 		move.w	#$BE,d0
 		jsr	(PlaySound_Special).l ;	play Sonic rolling sound
 
@@ -36071,6 +36144,17 @@ Hurt_ChkSpikes:
 Hurt_Sound:
 		jsr	(PlaySound_Special).l
 		moveq	#-1,d0
+
+		cmp.b	#5,(v_character).w ; is this gomer?
+		bne.s	SMCsoundCHKD
+		move.b  #$90,d0
+		jmp	MegaPCM_PlaySample
+SMCsoundCHKD:
+		cmp.b	#6,(v_character).w ; is this sailor mercury?
+		bne.s	NormalsoundCHKD
+		move.b  #$90,d0
+		jmp	MegaPCM_PlaySample
+NormalsoundCHKD:
 		rts	
 ; ===========================================================================
 
@@ -36108,7 +36192,18 @@ KillLimitedSonic:
 
 Kill_Sound:
 		jsr	(PlaySound_Special).l
+
 		move.b  #$92, d0
+		cmp.b	#5,(v_character).w ; is this gomer?
+		bne.s	SMCsoundCHK7
+		move.b  #$90,d0
+		jmp	NormalsoundCHK7
+SMCsoundCHK7:
+		cmp.b	#6,(v_character).w ; is this sailor mercury?
+		bne.s	NormalsoundCHK7
+		move.b  #$90,d0
+		jmp	NormalsoundCHK7
+NormalsoundCHK7:
 		jsr     MegaPCM_PlaySample
 
 Kill_NoDeath:
