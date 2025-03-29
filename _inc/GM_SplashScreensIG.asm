@@ -107,6 +107,7 @@ GM_SplashScreensListIG:
 	dc.l $81<<24|@nem_fartboy,$00<<24|@enifg_fartboy,$00<<24|@enibg_fartboy,$81<<24|@pal_fartboy
 	dc.l $81<<24|@nem_vroom,$00<<24|@enifg_vroom,$00<<24|@enibg_vroom,$81<<24|@pal_vroom
 	dc.l $81<<24|@nem_mal,$00<<24|@enifg_mal,$00<<24|@enibg_mal,$97<<24|@pal_mal
+	dc.l $81<<24|@nem_sh,$00<<24|@enifg_sh,$00<<24|@enibg_sh,$97<<24|@pal_sh
 	dc.l 0	; terminator 2
 	even
 ; -----------------------------------------------------------------------------
@@ -148,4 +149,12 @@ GM_SplashScreensListIG:
 @enibg_mal:	incbin mapeni\splash_mal.bin
 	even
 @pal_mal:	incbin pallet\splash_mal.bin
+	even
+
+@nem_sh:	incbin artnem\splash_sh.bin
+	even
+@enifg_sh:
+@enibg_sh:	incbin mapeni\splash_sh.bin
+	even
+@pal_sh:	incbin pallet\splash_sh.bin
 	even
