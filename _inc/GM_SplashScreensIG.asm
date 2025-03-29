@@ -102,6 +102,7 @@ GM_CustomSplashScreensIG:
 @timelut:
 	dc.w 0
 	dc.w 30
+
 GM_SplashScreensListIG:
 	dc.l $89<<24|@nem_pillow,$00<<24|@enifg_pillow,$94<<24|@enibg_pillow,$00<<24|@pal_pillow
 	dc.l $81<<24|@nem_fnaf,$01<<24|@enifg_fnaf,$82<<24|@enibg_fnaf,$00<<24|@pal_fnaf
@@ -110,7 +111,6 @@ GM_SplashScreensListIG:
 	dc.l $81<<24|@nem_mal,$00<<24|@enifg_mal,$00<<24|@enibg_mal,$97<<24|@pal_mal
 	dc.l $81<<24|@nem_sh,$00<<24|@enifg_sh,$00<<24|@enibg_sh,$9F<<24|@pal_sh
 	dc.l 0	; terminator 2
-	even
 ; -----------------------------------------------------------------------------
 @nem_pillow:	incbin artnem\splash_pillow.bin
 	even
@@ -158,4 +158,43 @@ GM_SplashScreensListIG:
 @enibg_sh:	incbin mapeni\splash_sh.bin
 	even
 @pal_sh:	incbin pallet\splash_sh.bin
+	even
+	
+IntroCutscene:		; no one fucking modify this or i swear to fucking god, except malachi :3
+	dc.l $81<<24|@nem_PicBatch,$00<<24|@enifg_Picture1,$82<<24|@enibg_Picture1,$1C<<24|@pal_monochrome
+	dc.l $81<<24|@nem_PicBatch,$00<<24|@enifg_Picture2,$8F<<24|@enibg_Picture2,$00<<24|@pal_monochrome	
+	dc.l $81<<24|@nem_PicBatch,$00<<24|@enifg_Picture3,$82<<24|@enibg_Picture3,$00<<24|@pal_monochrome	
+	dc.l $81<<24|@nem_PicBatch2,$00<<24|@enifg_Picture4,$82<<24|@enibg_Picture4,$13<<24|@pal_monochrome	
+	dc.l $81<<24|@nem_PicBatch2,$00<<24|@enifg_Picture5,$82<<24|@enibg_Picture5,$13<<24|@pal_monochrome
+	dc.l $81<<24|@nem_PicBatch2,$00<<24|@enifg_Picture6,$82<<24|@enibg_Picture6,$13<<24|@pal_monochrome
+	dc.l 0	; terminator 2
+	even
+	
+@nem_PicBatch:	incbin artnem\Batch1.bin
+	even
+@nem_PicBatch2:	incbin artnem\Batch2.bin
+	even
+@enifg_Picture1:
+@enibg_Picture1:	incbin mapeni\Picture1.bin
+	even
+@pal_monochrome:	incbin pallet\monochrome.bin
+	even
+
+@enifg_Picture2:
+@enibg_Picture2:	incbin mapeni\Picture2.bin
+	even
+
+@enifg_Picture3:
+@enibg_Picture3:	incbin mapeni\Picture3.bin
+	even
+	
+@enifg_Picture4:
+@enibg_Picture4:	incbin mapeni\Picture4.bin
+	even
+	
+@enifg_Picture5:
+@enibg_Picture5:	incbin mapeni\Picture5.bin
+	even
+@enifg_Picture6:
+@enibg_Picture6:	incbin mapeni\Picture6.bin
 	even

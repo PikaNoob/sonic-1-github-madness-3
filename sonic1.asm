@@ -303,9 +303,10 @@ GameModeArray:
 ; ===========================================================================
 		bra.w	jmpto_BeeBush   ; BeeBush ($24)	
 ; ===========================================================================
-		bra.w	jmpto_Otis   ; otis.exe ($2C)	
+		bra.w	jmpto_Otis   ; otis.exe ($28)	
 ; ===========================================================================
-; uuuuuuuuuuuuuuuuuuuuuuuuuuuuu
+		bra.w	jmpto_IntroCutscene   ; Intro Cutscene($2C)	
+; ===========================================================================
 
 jmpto_Minecraft:
 		jmp     Minecraft
@@ -315,6 +316,9 @@ jmpto_BeeBush:
 jmpto_Otis:
 		jmp     GM_Otis
 
+jmpto_IntroCutscene:
+		lea	(IntroCutscene),a6
+		jmp GM_CustomSplashScreensIG
 CheckSumError:
 		illegal
 ; ===========================================================================
@@ -3210,8 +3214,8 @@ Title_ClrObjRam:
 		moveq	#$27,d1
 		moveq	#$1B,d2
 		bsr.w	ShowVDPGraphics
-                moveq   #$FFFFFF90,d0          ; play gomer
-                jsr     MegaPCM_PlaySample     ; "gomer!"
+        moveq   #$FFFFFF90,d0          ; play gomer
+        jsr     MegaPCM_PlaySample     ; "gomer!"
 		bsr.w	Pal_FadeTo
 		bsr.w	Pal_FadeFrom
 
@@ -3425,6 +3429,8 @@ loc_3230:
 		beq.w	loc_317C	; if not, branch
 
 Title_ChkLevSel:
+		btst	#6,($FFFFF604).w ; check if A is pressed
+		beq.w	jmpto_IntroCutscene	; if not, play level
 		
 		move.b	#$01,d0		; play level select music (DAX: Using New Bark Town as placeholder)
 		bsr.w	PlaySound_Special
@@ -42462,6 +42468,13 @@ Minecraft:	include	minecraft\code\main.asm
 		include beebush\_BEEBUSH.68k
 
 		include otisexe\GM_Otis.asm
+
+
+
+
+
+
+
 
 ; end of 'ROM'
 EndOfRom:
