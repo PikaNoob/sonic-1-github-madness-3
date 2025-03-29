@@ -16177,10 +16177,9 @@ Obj3A_AddBonus:				; XREF: Obj3A_ChkBonus
 Obj3A_NextLevel:			; XREF: Obj3A_Index
 		jsr	GetLevelRandom
 		tst.l	(v_levelrandtracker).w	; if level selection is random, ignore the SS
-		bpl.s	@random
+		bpl.s	Obj3A_ChkSS
 		tst.w	($FFFFFE10).w	; if level is GHZ1, go back to Sega screen(???)
 		bne.s	Obj3A_ChkSS
-@random:
 		move.b	#0,($FFFFF600).w ; set game mode to level (00)
 		bra.s	Obj3A_Display2
 ; ===========================================================================
