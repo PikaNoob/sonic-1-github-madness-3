@@ -17,6 +17,8 @@ align macro
 		include	"sound/smps2asm_inc.asm"
 		include "MapMacros.asm"
 
+randLevelCount		= 18	; 31 max (32 is reserved for linear path flag)
+v_levelrandtracker	= $FFFFF5FC	; longword
 ;level select constants (to not give the foward reference warning this was moved here)
 f_checksum	= $FFFFFFF9
 lsscrpos 	= $60860003 ; level select screen position
@@ -3332,6 +3334,7 @@ Title_ClrObjRam2:
 loc_317C:
 		move.b	#4,($FFFFF62A).w
 		bsr.w	DelayProgram
+		jsr	RandomNumber	; for better randomness for the level IDs
 		jsr	ObjectsLoad
 		bsr.w	DeformBgLayer
 		jsr	BuildSprites
@@ -3569,11 +3572,17 @@ LevSel_Level_SS:			; XREF: LevelSelect
 
 LevSel_Level:				; XREF: LevSel_Level_SS
 		andi.w	#$3FFF,d0
-		move.w	d0,($FFFFFE10).w ; set level number
+		move.w	d0,($FFFFFE10).w	; set level number
+		moveq	#-1,d2			; go through stages linearly
+		bra.s	PlayLevelSetId
 
 PlayLevel:				; XREF: ROM:00003246j ...
+		jsr	InitGetLevelRandom	; randomise stages
+
+PlayLevelSetId:
+		move.l	d2,(v_levelrandtracker).w
 		move.b	#$C,($FFFFF600).w ; set	screen mode to $0C (level)
-		move.b	#39,($FFFFFE12).w ; set lives to	3
+		move.b	#39,($FFFFFE12).w ; set lives to 3
 		moveq	#0,d0
 		move.w	d0,($FFFFFE20).w ; clear rings
 		move.l	d0,($FFFFFE22).w ; clear time
@@ -3584,8 +3593,7 @@ PlayLevel:				; XREF: ROM:00003246j ...
 		move.l	d0,($FFFFFE5C).w ; clear emeralds
 		move.b	d0,($FFFFFE18).w ; clear continues
 		move.b	#$E0,d0
-		bsr.w	PlaySound_Special ; fade out music
-		rts	
+		bra.w	PlaySound_Special ; fade out music
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Level	select - level pointers
@@ -4090,6 +4098,76 @@ MusicList3:	incbin	misc\muslist3.bin
 		even
 MusicList4:	incbin	misc\muslist4.bin
 		even
+; -----------------------------------------------------------------------------
+; move.b #$C,($FFFFF600).w
+; Obj3A_NextLevel
+;randLevelCount		= 20	; 31 max (32 is reserved for linear path flag)
+;v_levelrandtracker	= $FFFF8000
+InitGetLevelRandom:
+	move.l	#(1<<randLevelCount)-1,(v_levelrandtracker).w	; set all bits from 0-19
+
+GetLevelRandom:
+	move.l	(v_levelrandtracker).w,d2
+;	tst.l	d2
+	beq.s	@allrandomcompleted
+	bmi.s	@onlinearpath
+	jsr	RandomNumber		; get random number from 0-19
+	swap	d0			; modulo(random16,val)
+	clr.w	d0
+	swap	d0
+	divu.w	#randLevelCount,d0
+	swap	d0
+@repeat:
+	btst	d0,d2
+	bne.s	@notplayedyet
+	addq.b	#1,d0			; damnit we got a repeat
+	cmp.b	#randLevelCount,d0
+	blo.s	@repeat
+	clr.b	d0
+	bra.s	@repeat
+@notplayedyet:
+	bclr	d0,d2			; clear bit in the tracker
+	add.w	d0,d0
+	lea	@randomlut,a1
+	bra.s	@getlevel
+@allrandomcompleted:
+	bset	#31,d2			; begin linear path	
+	move.w	#5<<8|0,d0		; SBZ (heinous anus)
+	bra.s	@setalevel
+@onlinearpath:
+	move.w	#$FF03,d0		; 11111111 00000011
+	and.w	($FFFFFE10).w,d0	; ZZZZZZZZ 000000AA
+	ror.b	#2,d0			; ZZZZZZZZ AA000000
+	lsr.w	#6-1,d0			; 000000ZZ ZZZZZZAA
+;	add.w	d0,d0			; x2
+	lea	LevelOrder,a1
+@getlevel:
+	move.w	(a1,d0.w),d0		; get level number from array
+@setalevel:
+	move.w	d0,($FFFFFE10).w	; set level number
+	move.l	d2,(v_levelrandtracker).w
+	rts
+; must match randLevelCount!
+@randomlut:
+	dc.w 0<<8|0	; GHZ
+	dc.w 0<<8|1
+	dc.w 0<<8|2
+	dc.w 1<<8|0	; LZ
+	dc.w 1<<8|1
+	dc.w 1<<8|2
+	dc.w 2<<8|0	; MZ
+	dc.w 2<<8|1
+	dc.w 2<<8|2
+	dc.w 3<<8|0	; SLZ
+	dc.w 3<<8|1
+	dc.w 3<<8|2
+	dc.w 4<<8|0	; SYZ
+	dc.w 4<<8|1
+	dc.w 4<<8|2
+	dc.w 7<<8|0	; Makoto
+	dc.w 7<<8|1
+	dc.w 7<<8|2
+	even
 ; ===========================================================================
 
 ; ---------------------------------------------------------------------------
@@ -4400,7 +4478,8 @@ Level_ClrCardArt:
 		jsr	(LoadPLC).l	; load explosion patterns
 		moveq	#0,d0
 		move.b	($FFFFFE10).w,d0
-		addi.w	#$15,d0
+		lea	Obj34_AnimalPLC,a1
+		move.b	(a1,d0.w),d0
 		jsr	(LoadPLC).l	; load animal patterns (level no. + $15)
 
 Level_StartGame:
@@ -16046,16 +16125,8 @@ Obj3A_AddBonus:				; XREF: Obj3A_ChkBonus
 ; ===========================================================================
 
 Obj3A_NextLevel:			; XREF: Obj3A_Index
-		move.b	($FFFFFE10).w,d0
-		andi.w	#7,d0
-		lsl.w	#3,d0
-		move.b	($FFFFFE11).w,d1
-		andi.w	#3,d1
-		add.w	d1,d1
-		add.w	d1,d0
-		move.w	LevelOrder(pc,d0.w),d0 ; load level from level order array
-		move.w	d0,($FFFFFE10).w ; set level number
-		tst.w	d0
+		jsr	GetLevelRandom
+		tst.w	($FFFFFE10).w	; if level is GHZ1, go back to Sega screen(???)
 		bne.s	Obj3A_ChkSS
 		move.b	#0,($FFFFF600).w ; set game mode to level (00)
 		bra.s	Obj3A_Display2
