@@ -18,7 +18,7 @@ align macro
 		include "MapMacros.asm"
 
 ;level select constants (to not give the foward reference warning this was moved here)
-f_checksum	= $FFFFFF8E
+f_checksum	= $FFFF8000
 lsscrpos 	= $60860003 ; level select screen position
 lsoff 		= $240000 ; second row jump
 lsstpos 	= lsscrpos+$43C0000 ; sound test
@@ -197,9 +197,10 @@ GameProgram:
 		ori	#$700,sr
 
 		btst	#6,($A1000D).l
-		beq.s	CheckSumCheck
+		beq.s	@hard
 		cmpi.l	#'init',($FFFFFFFC).w ; has checksum routine already run?
 		beq.w	GameInit	; if yes, branch
+@hard:
 ; init stuff for hard reset
 		lea	($FFFFFE00).w,a6
 		moveq	#0,d7
@@ -212,7 +213,6 @@ CheckSumCheck:
 		movea.l	#RomEndLoc,a1	; stop at end of ROM
 		move.l	(a1),d0
 		moveq	#0,d1
-
 loc_32C:
 		add.w	(a0)+,d1
 		cmp.l	a0,d0
@@ -220,6 +220,7 @@ loc_32C:
 		movea.l	#Checksum,a1	; read the checksum
 		cmp.w	(a1),d1		; compare correct checksum to the one in ROM
 		sne	(f_checksum).w	; if they don't match, set this flag. if they do, clear it
+
 		move.b	($A10001).l,d0
 		andi.b	#$C0,d0
 		move.b	d0,($FFFFFFF8).w
@@ -246,9 +247,9 @@ GameClrRAM:
 @mpcmsucc:
 		bsr.w	JoypadInit
 
-		tst.b	(f_checksum).w		; Is checksum incorrect?
-		bne.s   @validcheck		; if yes, branch
-		jmp	GM_Otis ; start otis.exe creepypasta
+		tst.b	(f_checksum).w		; Is checksum correct?
+		beq.s   @validcheck		; if yes, branch
+		jmp	GM_Otis ; if incorrect, start otis.exe creepypasta
 @validcheck:
 		move.b	#0,($FFFFF600).w ; set Game Mode to Sega Screen
 		cmpi.l	#'init',($FFFFFFFC).w	; has checksum routine already run?
