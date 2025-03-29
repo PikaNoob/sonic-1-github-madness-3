@@ -217,14 +217,43 @@ loc_348:
 		move.l	d7,(a6)+
 		dbf	d6,loc_348
 CheckSumCheck:
-		lea	($200).w,a0		; start	checking bytes after the header	($200)
-		move.l	RomEndLoc-$200(a0),a1	; stop at end of ROM
-		move.w	Checksum-$200(a0),d0	; get rom comparison checksum
-		move.w	(a0)+,d1
-@cksm:		add.w	(a0)+,d1
-		cmp.l	a0,a1
-		bhs.s	@cksm
-		cmp.w	d0,d1			; compare correct checksum to the one in ROM
+; calculate checksum, makes sure cart is inserted properly and stalls hackers
+; traditional checksum
+; OUTPUT
+; d0 = calculated checksum
+; d1 = precalculated checksum
+; TRASHES
+; a0,a1,d2,d3
+@checksum	= $18E
+@end_addr	= $1A4
+@header_end	= $200
+	clr.w	d0
+	lea	(@header_end).w,a0
+	move.w	@checksum-@header_end(a0),d1	; get precalc checksum
+	move.l	@end_addr-@header_end(a0),d2	; get end address
+	addq.l	#1,d2		; speeds up properly padded roms a bit
+	movea.l	d2,a1		; romend
+	sub.l	a0,d2
+	lsr.l	#5,d2		; (romend-$200)/32
+	subq.l	#1,d2		; -1 for dbf
+	move.w	d2,d3		; copy word to d3
+	swap	d2		; swap to high word
+;	subq.w	#1,d3		; -1 for dbf
+@cksm_loop:
+	rept 32/2
+	add.w	(a0)+,d0	; 8
+	endr			; 128
+	dbra	d3,@cksm_loop	; 14, 10 for exit
+	dbra	d2,@cksm_loop	; 14
+; handle remaining bytes
+	cmp.l	a1,a0		; have we already hit the end?
+	bhs.s	@cksm_end	; if so, branch
+@cksm_remains:
+	add.w	(a0)+,d0
+	cmp.l	a1,a0
+	blo.s	@cksm_remains
+@cksm_end:
+	cmp.w	d1,d0
 		sne	(f_checksum).w		; if they don't match, set this flag. if they do, clear it
 
 		move.b	($A10001).l,d0
