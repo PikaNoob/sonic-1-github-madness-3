@@ -34,8 +34,11 @@ lsselectable: 	equ ((LMTSelectableEnd-LevelMenuText)/16)-1 ; last selectable ite
 
 lssndtest: 	equ lsrow1size+8
 lswifi: 	equ lsrow1size+9
+lsoptions:	equ lsrow1size+10
 lsjackass:	equ lsrow1size+11
 lsMinecraft:equ lsrow1size+12
+
+
 vBlankRoutine 	equ $FFFFFFC4 ; VBlank Routine Jump Instruction (6 bytes)
 vBlankJump 	equ vBlankRoutine
 vBlankAdress 	equ vBlankRoutine+2
@@ -45,6 +48,7 @@ optcharpos = lsscrpos+$960000 ; character
 
 ; NOTES FOR ANYONE MAKING CHARACTERS
 v_character = $FFFFFFE8
+charcount = 5
 ; pointers for:
 ; PLAYER MAPPINGS -> Player_Maps
 ; PLAYER ANIM SCRIPTS -> Player_Anim
@@ -3409,7 +3413,8 @@ loc_3230:
 		beq.s	@notc
 
 		add.b	#1,(v_character).w ; sonic/gronic 
-		cmpi.b	#6,(v_character).w
+
+		cmpi.b	#charcount,(v_character).w
 		blt.s	@notoverflow
 		move.b	#0,(v_character).w
 	@notoverflow:
@@ -3420,8 +3425,6 @@ loc_3230:
 		beq.w	loc_317C	; if not, branch
 
 Title_ChkLevSel:
-		btst	#6,($FFFFF604).w ; check if A is pressed
-		beq.w	PlayLevel	; if not, play level
 		
 		move.b	#$01,d0		; play level select music (DAX: Using New Bark Town as placeholder)
 		bsr.w	PlaySound_Special
@@ -3446,7 +3449,11 @@ Title_ClrVram:
 		dbf	d1,Title_ClrVram ; fill	VRAM with 0
 
 		tst.b	($FFFFFFE0).w	; check	if level select	code is	on
-		beq.w	GotoOptions	; if not, play level
+		beq.w	GotoOptions	; if not, options
+		
+		
+		btst	#6,($FFFFF604).w ; check if A is pressed
+		beq.w	GotoOptions	; if not, options
 
 		bsr.w	LevSelTextLoad
 		
@@ -3521,11 +3528,27 @@ LevelSelect:
 		rts	
 
 	@dont:
+		cmpi.w	#lsoptions,d0
+		bne.s	@unoption
+		
+		moveq	#0,d0
+		move.l	d0,($FFFFF616).w
+		move	#$2700,sr
+		lea	($C00000).l,a6
+		move.l	#$60000003,($C00004).l
+		move.w	#$3FF,d1
+
+	@clrvram:
+		move.l	d0,(a6)
+		dbf	d1,@clrvram ; fill	VRAM with 0
+		move.w	#0,($FFFFFF82).w
+		jmp		GotoOptions
+	@unoption:
 		cmpi.w	#lssndtest,d0		; have you selected item $14 (sound test)?
 		bne.s	LevSel_Level_SS	; if not, go to	Level/SS subroutine
 		
 		andi.b	#$A0,($FFFFF605).w ; is C or Start pressed?
-		beq.s	LevelSelect	; if not, branch
+		beq.w	LevelSelect	; if not, branch
 		
 		btst	#7,($FFFFF605).w ; was it start?
 		bne.s	LevSel_SEGA ; then go to sega screen
@@ -3534,7 +3557,7 @@ LevelSelect:
 		move.b	d0,($FFFFF00B).w ; PlaySound_Special but faster
 		
 		jsr		ShowNow_Playing
-		bra.s	LevelSelect
+		bra.w	LevelSelect
 ; ===========================================================================
 
 LevSel_SEGA:				; XREF: LevelSelect
@@ -3985,7 +4008,7 @@ LMTSecondRow:
         dc.b    "SPECIAL STAGE   "
         dc.b    "SOUND TEST $    "
 	dc.b	"FREE WIFI       "
-	dc.b	"OPTIONS LATER   "
+	dc.b	"GO TO DA OPTIONS"
 	dc.b	"JACKASS         "
 	dc.b	"PLAY MINECRAFT  "
 LMTSelectableEnd:
@@ -4048,28 +4071,25 @@ Player_Names:
 		dc.b "NERU    "
 	even
 	
+; give the vram setting on d3
 OptionsHighlight:
 		lea	($C00000).l,a6
 		moveq	#0,d0
 		move.w	($FFFFFF82).w,d0
 		move.w	d0,d1
 		move.l	#lsscrpos,d4
-		
-		cmpi.w	#lsrow1size,d0
-		blt.s	@notsecond
-		
-		sub.w	#lsrow1size,d0
-		addi.l	#lsoff,d4
-	@notsecond:
 		lsl.w	#7,d0
 		swap	d0
 		add.l	d0,d4
-		lea	(LevelMenuText).l,a1
+		lea	(OptionMenuText).l,a1
 		lsl.w	#3,d1
 		add.w	d1,d1
 		adda.w	d1,a1
 		move.l	d4,4(a6)
-		
+		bsr.w	LevSel_ChgLine
+		cmpi.w	#1,($FFFFFF82).w
+		beq.s	CharDraw
+		rts
 ; ---------------------------------------------------------------------------
 ; Opshuns scream
 ; ---------------------------------------------------------------------------
@@ -4095,8 +4115,10 @@ GotoOptions:
 		
 		move.w	#optamm,d1		; number of lines of text (first row)
 		bsr.w	LevSelTextLoad_loop
-		
 		bsr.s	CharDraw
+		
+		move.w	#$C680-$21,d3	; VRAM setting
+		bsr.w	OptionsHighlight
 
 OptionsMenu:
 		move.b	#4,($FFFFF62A).w
@@ -4107,36 +4129,73 @@ OptionsMenu:
 		bne.s	OptionsMenu
 		andi.b	#$F0,($FFFFF605).w ; is	A, B, C, or Start pressed?
 		beq.s	OptionsMenu	; if not, branch
-		nop
+		move.w	($FFFFFF82).w,d0
+		tst.w	d0
+		beq.w	PlayLevel
 		bra.s	OptionsMenu
 		
 OptReturn:
 		rts
 OptControls:				; XREF: LevelSelect
-		move.b	($FFFFF605).w,d1
-		andi.b	#3,d1		; is up/down pressed and held?
-		beq.s	OptReturn	; if not, branch
+		tst.w	($FFFFFF80).w
+		beq.s	@fucklogic
 		subq.w	#1,($FFFFFF80).w ; subtract 1 from time	to next	move
 		bpl.s	OptReturn	; if time remains, branch
+	@fucklogic:
+		move.b	($FFFFF605).w,d1
+		
+		andi.b	#3,d1		; is up/down pressed and held?
+		beq.s	OptLR	; if not, branch
+		
 Opt_UpDown:
 		move.w	#$B,($FFFFFF80).w ; reset time delay
-		move.b	($FFFFF604).w,d1
 		move.w	($FFFFFF82).w,d6
+		move.b	($FFFFF604).w,d1
 		btst	#0,d1		; is up	pressed?
 		beq.s	Opt_Down	; if not, branch
 		subq.w	#1,d6		; move up 1 selection
-		bcc.s	Opt_Down
-		moveq	#lsselectable,d6		; if selection moves below 0, jump to last selection
+		bpl.s	Opt_Down
+		move.w	#optamm,d6		; if selection moves below 0, jump to last selection
 
 Opt_Down:
 		btst	#1,d1		; is down pressed?
 		beq.s	Opt_Refresh	; if not, branch
 		addq.w	#1,d6		; move down 1 selection
-		cmpi.w	#lsselectable+1,d6
-		bcs.s	Opt_Refresh
-		moveq	#0,d6		; if selection moves above last selectable,	jump to	selection 0
+		cmpi.w	#optamm+1,d6
+		blt.s	Opt_Refresh
+		move.w	#0,d6		; if selection moves above last selectable,	jump to	selection 0
 Opt_Refresh:
-		rts
+		move.w	#$E680-$21,d3	; VRAM setting
+		bsr.w	OptionsHighlight
+		move.w	d6,($FFFFFF82).w
+		move.w	#$C680-$21,d3	; VRAM setting
+		bra.w	OptionsHighlight
+		
+OptLR:
+		move.b	($FFFFF605).w,d1
+		andi.b	#$C,d1		; is up/down pressed and held?
+		beq.s	OptReturn	; if not, branch
+		cmpi.w	#1,($FFFFFF82).w
+		bne.s	OptReturn	; if not, branch
+		move.b	(v_character).w,d6
+		
+		btst	#2,d1		; is up	pressed?
+		beq.s	@down	; if not, branch
+		subq.b	#1,d6		; move up 1 selection
+		bpl.s	@down
+		move.b	#charcount-1,d6		; if selection moves below 0, jump to last selection
+
+@down:
+		btst	#3,d1		; is down pressed?
+		beq.s	Opt_Refresh2	; if not, branch
+		addq.b	#1,d6		; move down 1 selection
+		cmpi.b	#charcount,d6
+		blt.s	Opt_Refresh2
+		move.b	#0,d6		; if selection moves above last selectable,	jump to	selection 0
+Opt_Refresh2:
+		move.b	d6,(v_character).w
+		move.w	#$C680-$21,d3	; VRAM setting
+		bra.w	CharDraw
 ; ---------------------------------------------------------------------------
 ; Music	playlist
 ; ---------------------------------------------------------------------------
