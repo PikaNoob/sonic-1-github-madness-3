@@ -251,6 +251,7 @@ GameClrRAM:
 		tst.b	(f_checksum).w		; Is checksum correct?
 		beq.s   @validcheck		; if yes, branch
 		jsr	GM_Otis ; if incorrect, start otis.exe creepypasta
+		bsr.w	VDPSetupGame
 @validcheck:
 		move.b	#0,($FFFFF600).w ; set Game Mode to Sega Screen
 		cmpi.l	#'init',($FFFFFFFC).w	; has checksum routine already run?
