@@ -34,6 +34,12 @@ SampleTable:
 	dcSample	TYPE_DPCM,		SM5,	11025, FLAGS_SFX	; $9C
 	dcSample	TYPE_DPCM,		SM6,	11025, FLAGS_SFX	; $9D
 	dcSample	TYPE_DPCM,		SM7,	11025, FLAGS_SFX	; $9E
+	dcSample	TYPE_PCM,		Line1,	11025, FLAGS_SFX	; $9E
+	dcSample	TYPE_PCM,		Line2,	11025, FLAGS_SFX	; $9E
+	dcSample	TYPE_PCM,		Line3,	11025, FLAGS_SFX	; $9E
+	dcSample	TYPE_PCM,		Line4,	11025, FLAGS_SFX	; $9E
+	dcSample	TYPE_PCM,		Line5,	11025, FLAGS_SFX	; $9E	
+	dcSample	TYPE_PCM,		Line6,	11025, FLAGS_SFX	; $9E	
 	dc.w	-1	; end marker
 
 ; ---------------------------------------------------------------
@@ -60,4 +66,10 @@ SampleTable:
 	incdac	SM5, "sound/dac/Mercury_death.bin"
 	incdac	SM6, "sound/dac/Mercury_bosshit.bin"
 	incdac	SM7, "sound/dac/Mercury_Win.bin"
+	incdac	Line1, "sound/dac/Line 1.wav"
+	incdac	Line2, "sound/dac/Line 2.wav"
+	incdac	Line3, "sound/dac/Line 3.wav"
+	incdac	Line4, "sound/dac/Line 4.wav"
+	incdac	Line5, "sound/dac/Line 5.wav"
+	incdac	Line6, "sound/dac/Line 6.wav"
 	even
