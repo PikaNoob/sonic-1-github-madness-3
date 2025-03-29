@@ -4048,7 +4048,7 @@ Player_Names:
 		dc.b "NERU    "
 	even
 	
-LevSelHighlightCode:
+OptionsHighlight:
 		lea	($C00000).l,a6
 		moveq	#0,d0
 		move.w	($FFFFFF82).w,d0
