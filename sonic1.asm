@@ -17982,8 +17982,6 @@ Obj41_Index:	dc.w Obj41_Main-Obj41_Index
 Obj41_Powers:	dc.w -$1000		; power	of red spring
 		dc.w -$A00		; power	of yellow spring
 
-LimitSpring_Powers:	dc.w -$2000		; power	of red spring
-		dc.w -$1400		; power	of yellow spring
 ; ===========================================================================
 
 Obj41_Main:				; XREF: Obj41_Index
@@ -18023,6 +18021,11 @@ loc_DB72:
 UseLimitedSpringPower:
 		move.w	LimitSpring_Powers(pc,d0.w),$30(a0)
 		rts
+; ===========================================================================
+
+LimitSpring_Powers:	dc.w -$1800		; power	of red spring
+		dc.w -$1000		; power	of yellow spring
+
 ; ===========================================================================
 
 Obj41_Up:				; XREF: Obj41_Index
