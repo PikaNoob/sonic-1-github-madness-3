@@ -44,8 +44,6 @@ MC_Init:
 
 .gameLoop:
 		st.b	(vblankWait).w
-		bsr.w	MC_UpdateScrollBuffer
-		bsr.s	MC_RenderBlocks
 
 	; Camera Test
 .checkUp:
@@ -73,6 +71,14 @@ MC_Init:
 		lsr.w	#1,d0
 		move.w	d0,(camXposBG).w
 
+;		move.w	(camYposFG).w,d0
+;		lsr.w	#4,d0
+;		move.w	d0,(camYposBG).w
+
+		bsr.w	MC_Steve
+		bsr.w	MC_UpdateScrollBuffer
+		bsr.s	MC_RenderBlocks
+
 .spin:
 		tst.b	(vblankWait).w
 		beq.s	.gameLoop
@@ -84,19 +90,35 @@ MC_Init:
 ; Render the Visible Portion of the World to the Screen
 ; ---------------------------------------------------------------------------
 MC_RenderBlocks:
-		move.w	(camXPosFG).w,d0	; Get the camera's x coordinate
-		lsr.w	#3,d0			; Divide by 8 to get the index of the tile within the row
-		andi.w	#$FF,d0			; Cap to a maximum index value of 0xFF
-
-		move.w	(camYPosFG).w,d1	; Get the camera's y coordinate
-		lsl.w	#5,d1			; Make into row offset
-		andi.w	#$3F00,d1		; ^
-
 		lea	(mapCollBlocks).l,a0	; Load the world map collision layer into a0
 		lea	(mapCollBlocks).l,a1	; Load the world map wall layer into a1
 		lea	(planeBuffer).w,a2	; Load the plane A buffer into a2
 		moveq	#0,d3			; Clear d3
 		moveq	#28,d6			; Load the number of rows as the outer loop counter
+
+		move.w	(camXPosFG).w,d0	; Get the camera's x coordinate
+		lsr.w	#3,d0			; Divide by 8 to get the index of the tile within the row
+		andi.w	#$FF,d0			; Cap to a maximum index value of 0xFF
+
+		move.w	(camYPosFG).w,d1	; Get the camera's y coordinate
+		asl.w	#5,d1			; Make into row offset
+		andi.w	#$FF00,d1		; ^
+		bpl.s	.renderScreen
+
+.abovePlayfield:
+		moveq	#40,d7			; Load the number of blocks in each row as the inner loop counter
+
+.renderNullRow:
+		move.w	#$8000,(a2)+		; Render an air block to the current tile index
+		dbf	d7,.renderNullRow	; Loop until the entire null row is rendered
+
+		adda.w	#(64-41)*2,a2		; Skip the rest of the row in the plane buffer
+		add.w	#$100,d1		; Increment to the next row
+		bpl.s	.inBounds		; If the result has flipped to a positive index, switch to world rendering
+
+		dbf	d6,.abovePlayfield	; Loop until the entire screen is rendered
+		rts
+; ---------------------------------------------------------------------------
 
 .renderScreen:
 		moveq	#40,d7			; Load the number of blocks in each row as the inner loop counter
@@ -128,7 +150,7 @@ MC_RenderBlocks:
 		adda.w	#(64-41)*2,a2		; Skip the rest of the row in the plane buffer
 		add.w	#$100,d1		; Increment to the next row
 		cmpi.w	#$3F00,d1		; Check to make sure we're still in bounds
-		bhi.s	.inBounds		; If so, branch
+		blt.s	.inBounds		; If so, branch
 		move.w	#$3F00,d1		; If not, render the last row for the rest of the screen (Bedrock)
 
 .inBounds:	
@@ -249,7 +271,7 @@ MC_UpdateScrollBuffer:
 
 .hillsBGSegment:
 		move.l	d0,(a0)+
-		dbf	d7,.blankBGSegment
+		dbf	d7,.hillsBGSegment
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -347,20 +369,22 @@ MC_LoadWorld:
 ; VBlank Interrupt
 ; ---------------------------------------------------------------------------
 MC_VInt:
+		movem.l	d0-a5,-(sp)
+
 	dma68k	planeBuffer,VRAM_PLANE_A,PLANE_BUFF_SIZE,VRAM	; transfer the entire FG tileplane buffer
 	dma68k	scrollBuffer,VRAM_HSCROLL,224*4,VRAM		; transfer the horizontal scroll data
 
-;		move.w	(camXPosFG).w,d0			; update scrolling
-;		andi.w	#7,d0					; ^
-;		neg.w	d0					; ^
-;	vdpCmd	move.l, VRAM_HSCROLL, VRAM, WRITE, (a6)		; ^
-;		move.w	d0,-4(a6)				; ^
+		move.w	(camYPosFG).w,d0			; update vertical scrolling
+		andi.w	#7,d0					; ^
+		swap	d0					; ^
+		move.w	(camYPosBG).w,d0			; ^
+	vdpCmd	move.l, $0, VSRAM, WRITE, (a6)			; ^
+		move.l	d0,-4(a6)				; ^
 
-;		addq.w	#1,(camXPosFG).w
-
-	;	bsr.s	MC_ReadJoypad
+		bsr.s	MC_ReadJoypad
 
 		sf.b	(vblankWait).w
+		movem.l	(sp)+,d0-a5
 		rte						; return
 ; ---------------------------------------------------------------------------
 
@@ -394,6 +418,8 @@ MC_ReadJoypad:
 		rts
 ; ---------------------------------------------------------------------------
 
+	include	"minecraft\code\steve.asm"
+
 ; ---------------------------------------------------------------------------
 MC_Palette:
 	dc.w	$E84, $8AE, $68E, $46C, $EE0, $CC0, $AA0, $E68, $C46, $824, $444, $222, $000, $EEE, $246, $024
@@ -425,33 +451,63 @@ MC_TestMap:
 	dcb.b	256,$00	; Row 05
 	dcb.b	256,$00	; Row 06
 	dcb.b	256,$00	; Row 07
+	dcb.b	256,$00	; Row 08
 	dcb.b	256,$00	; Row 09
 	dcb.b	256,$00	; Row 0A
 	dcb.b	256,$00	; Row 0B
 	dcb.b	256,$00	; Row 0C
+	dcb.b	256,$00	; Row 0D
 	dcb.b	256,$00	; Row 0E
-	
-;	dcb.b	32,$01	; Row 0F
-;	dcb.b	32,$02	; Row 0F
-;	dcb.b	32,$03	; Row 0F
-;	dcb.b	32,$04	; Row 0F
-;	dcb.b	32,$05	; Row 0F
-;	dcb.b	32,$06	; Row 0F
-;	dcb.b	32,$07	; Row 0F
-;	dcb.b	32,$08	; Row 0F
+	dcb.b	256,$00	; Row 0F
 
-;	dcb.b	256,$03	; Row 10
-;	dcb.b	256,$02	; Row 11
-;	dcb.b	256,$02	; Row 12
-;	dcb.b	256,$02	; Row 13
-;	dcb.b	256,$01	; Row 14
-;	dcb.b	256,$01	; Row 15
-;	dcb.b	256,$01	; Row 16
-;	dcb.b	256,$01	; Row 17
-;	dcb.b	256,$01	; Row 19
-;	dcb.b	256,$01	; Row 1A
-;	dcb.b	256,$01	; Row 1B
-;	dcb.b	256,$01	; Row 1C
-;	dcb.b	256,$01	; Row 1E
-;	dcb.b	256,$01	; Row 1F
+	dcb.b	256,$00	; Row 00
+	dcb.b	256,$00	; Row 01
+	dcb.b	256,$00	; Row 02
+	dcb.b	256,$00	; Row 03
+	dcb.b	256,$00	; Row 04
+	dcb.b	256,$00	; Row 05
+	dcb.b	256,$00	; Row 06
+	dcb.b	256,$00	; Row 07
+	dcb.b	256,$00	; Row 08
+	dcb.b	256,$00	; Row 09
+	dcb.b	256,$00	; Row 0A
+	dcb.b	256,$00	; Row 0B
+	dcb.b	256,$00	; Row 0C
+	dcb.b	256,$00	; Row 0D
+	dcb.b	256,$00	; Row 0E
+	dcb.b	256,$00	; Row 0F
+
+	dcb.b	256,$03	; Row 20
+	dcb.b	256,$02	; Row 21
+	dcb.b	256,$02	; Row 22
+	dcb.b	256,$02	; Row 23
+	dcb.b	256,$01	; Row 24
+	dcb.b	256,$01	; Row 25
+	dcb.b	256,$01	; Row 26
+	dcb.b	256,$01	; Row 27
+	dcb.b	256,$01	; Row 28
+	dcb.b	256,$01	; Row 29
+	dcb.b	256,$01	; Row 2A
+	dcb.b	256,$01	; Row 2B
+	dcb.b	256,$01	; Row 2C
+	dcb.b	256,$01	; Row 2D
+	dcb.b	256,$01	; Row 2E
+	dcb.b	256,$01	; Row 2F
+
+	dcb.b	256,$01	; Row 30
+	dcb.b	256,$01	; Row 31
+	dcb.b	256,$01	; Row 32
+	dcb.b	256,$01	; Row 33
+	dcb.b	256,$01	; Row 34
+	dcb.b	256,$01	; Row 35
+	dcb.b	256,$01	; Row 36
+	dcb.b	256,$01	; Row 37
+	dcb.b	256,$01	; Row 38
+	dcb.b	256,$01	; Row 39
+	dcb.b	256,$01	; Row 3A
+	dcb.b	256,$01	; Row 3B
+	dcb.b	256,$01	; Row 3C
+	dcb.b	256,$01	; Row 3D
+	dcb.b	256,$01	; Row 3E
+	dcb.b	256,$05	; Row 3F
 MC_TestMap_End:
