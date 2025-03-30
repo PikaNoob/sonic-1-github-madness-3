@@ -4441,8 +4441,8 @@ Level_ClrVars3:
 Player_Palette:
 		; normal, lz, sbz, blank
 		dc.w	3,$F,$10,0 ; Sonic 
-		dc.w	24,25,26,0 ; Pal_Gronic 
-		dc.w	27,25,26,0 ; Pal_Anakama 
+		dc.w	23,24,25,0 ; Pal_Gronic 
+		dc.w	26,24,25,0 ; Pal_Anakama 
 		dc.w	28,28,28,0 ; LimitedSonic 
 		dc.w	27,27,$27,0 ; neru
 		dc.w	3,$F,$10,0 ; Gomer Gomer!
@@ -24491,28 +24491,14 @@ Obj01_Index:	dc.w Obj01_Main-Obj01_Index
 		dc.w Obj01_Death-Obj01_Index
 		dc.w Obj01_ResetLevel-Obj01_Index
 ; ===========================================================================
-
-Player_Maps:
-	dc.l	Map_Sonic
-	dc.l	Map_Sonic ; gronic
-	dc.l	Map_Sonic ; anakama
-	dc.l	Map_Limit ; LimitedSonic
-	dc.l    map_neru
-	dc.l    map_gomer
-	dc.l    map_mercury
-	; insert player mapping here
 	
 Obj01_Main:				; XREF: Obj01_Index
 		addq.b	#2,$24(a0)
 		move.b	#$13,$16(a0)
 		move.b	#9,$17(a0)
-		
-		moveq	#0,d0
-		move.b	(v_character),d0
-		lsl.w	#2,d0
-		lea 	Player_Maps(pc),a1
-		move.l	(a1,d0.w),4(a0)	; load Map patterns
-		
+;map setting is a routine so it can be done by debug mode!
+		jsr	Obj01_setplayermap
+
 		move.w	#$780,2(a0)
 		move.b	#2,$18(a0)
 		move.b	#$18,$19(a0)
@@ -39076,26 +39062,45 @@ Debug_Exit:
 		beq.s	Debug_DoNothing	; if not, branch
 		moveq	#0,d0
 		move.w	d0,($FFFFFE08).w ; deactivate debug mode
-		move.l	#Map_Sonic,($FFFFD004).w
+;fix to get correct map!
+		bsr.w	Obj01_setplayermap
 		move.w	#$780,($FFFFD002).w
 		move.b	d0,($FFFFD01C).w
 		move.w	d0,$A(a0)
 		move.w	d0,$E(a0)
 		move.w	($FFFFFEF0).w,($FFFFF72C).w ; restore level boundaries
 		move.w	($FFFFFEF2).w,($FFFFF726).w
-		cmpi.b	#$10,($FFFFF600).w ; are you in	the special stage?
-		bne.s	Debug_DoNothing	; if not, branch
-		clr.w	($FFFFF780).w
-		move.w	#$40,($FFFFF782).w ; set new level rotation speed
-		move.l	#Map_Sonic,($FFFFD004).w
-		move.w	#$780,($FFFFD002).w
-		move.b	#2,($FFFFD01C).w
-		bset	#2,($FFFFD022).w
-		bset	#1,($FFFFD022).w
-
+; this isnt needed because of the limitedsonic special stage
+;		cmpi.b	#$10,($FFFFF600).w ; are you in	the special stage?
+;		bne.s	Debug_DoNothing	; if not, branch
+;		clr.w	($FFFFF780).w
+;		move.w	#$40,($FFFFF782).w ; set new level rotation speed
+;		move.l	#Map_Sonic,($FFFFD004).w
+;		move.w	#$780,($FFFFD002).w
+;		move.b	#2,($FFFFD01C).w
+;		bset	#2,($FFFFD022).w
+;		bset	#1,($FFFFD022).w
+;
 Debug_DoNothing:
 		rts	
 ; End of function Debug_Control
+
+Obj01_setplayermap:
+		moveq	#0,d0
+		move.b	(v_character),d0
+		lsl.w	#2,d0
+		lea 	Player_Maps(pc),a1
+		move.l	(a1,d0.w),4(a0)	; load Map patterns
+		rts	
+Player_Maps:
+	dc.l	Map_Sonic
+	dc.l	Map_Sonic ; gronic
+	dc.l	Map_Sonic ; anakama
+	dc.l	Map_Limit ; LimitedSonic
+	dc.l    map_neru
+	dc.l    map_gomer
+	dc.l    map_mercury
+	; insert player mapping here
 
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
