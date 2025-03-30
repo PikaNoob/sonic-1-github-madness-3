@@ -295,20 +295,18 @@ BEEBUSH_INITMAIN:
         dbf     d1,.ClearObjects
         move.b  #BBUSH_OBJNO_PLAYER,objSlot02.w
         move.b  #BBUSH_OBJNO_BEES,objSlot01.w
-
+        move.b  #BBUSH_OBJNO_HIVE,objSlot00.w
         clr.w   d0
         move.b  $FFFFFE57.w,d0
         lsl.w   #2,d0
         btst    #6,$FFFFFFF8.w
         bne.s   .PALHardware
         move.l  DistanceTbl(pc,d0.w),distance
-        move.b  #SMNO_BEEBUSH_MAIN,submode.w ; Move to next mode
-        moveq   #$FFFFFF8E, d0          ; request SEGA PCM sample
-        jsr     MegaPCM_PlaySample
-        rts
+        bra.s   .Cont
 
 .PALHardware
         move.l  DistanceTbl_PAL(pc,d0.w),distance
+.Cont:
         move.b  #SMNO_BEEBUSH_MAIN,submode.w ; Move to next mode
         moveq   #$FFFFFF8E, d0          ; request SEGA PCM sample
         jsr     MegaPCM_PlaySample

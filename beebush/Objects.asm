@@ -90,13 +90,14 @@ _beebushRunObjects:
 ; ---------------------------------------------------------------------------
 ; Object Index for Bee Bush
 ; ---------------------------------------------------------------------------
+
 BBUSH_OBJNO_PLAYER      = 1
 BBUSH_OBJNO_BODY        = 2
 BBUSH_OBJNO_HEAD        = 3
 BBUSH_OBJNO_EYES        = 4
 BBUSH_OBJNO_MOUTH       = 5
 BBUSH_OBJNO_BEES        = 6
-
+BBUSH_OBJNO_HIVE        = 7
 
 .ObjectIndex:    
         dc.l BbushObj_Player
@@ -105,6 +106,7 @@ BBUSH_OBJNO_BEES        = 6
         dc.l BbushObj_QuagmireEyes
         dc.l BbushObj_QuagmireMouth
         dc.l BbushObj_Bees
+        dc.l BbushObj_Hive
 .Null:
         rts 
 

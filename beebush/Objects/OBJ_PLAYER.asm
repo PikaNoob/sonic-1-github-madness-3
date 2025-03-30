@@ -2,10 +2,7 @@
 ; Player object and dependent objects+routines
 ; ---------------------------------------------------------------------------    
 
-bbplay.WindowSz        equ     $30
-bbplay.WindowCnt       equ     $31
-bbplay.Xorg            equ     $34
-bbplay.Yorg            equ     $36
+bbplay.MvFlag          equ     $30
 
 ; ---------------------------------------------------------------------------
 ; Main player 
@@ -53,12 +50,14 @@ BbushPlayer_Main:
 _bbplayNormalCtrl:                                                 
         btst    #2,d4
         beq.s   .NoLeft
+        move.b  #1,bbplay.MvFlag(a0)
         addi.w  #1,cameraAPosX
         addi.w  #1,cameraCPosX
         subi.l  #1,distance
         lea     AniSpr_QuagmirePlayer,a1
         jmp    _objectAnimate
-.NoLeft:                                             
+.NoLeft:    
+	clr.b   bbplay.MvFlag(a0)                                         
         rts
 
 AniSpr_QuagmirePlayer:
@@ -112,3 +111,47 @@ AniSpr_QuagmireBees:
 
 SprPat_BBushPlayer:
         include "beebush/Objects/SPRPAT_PLAYER.asm"
+
+; ---------------------------------------------------------------------------
+; The Hive which spawns based on distance (or should, i guess)
+; ---------------------------------------------------------------------------
+
+BbushObj_Hive:                          
+        moveq   #0,d0
+        move.b  obj.Action(a0),d0
+        move.w  .Index(pc,d0.w),d1
+        jmp     .Index(pc,d1.w)
+; ---------------------------------------------------------------------------
+.Index:                                
+        dc.w BbushHive_InitMain-.Index
+        dc.w BbushHive_Wait-.Index
+        dc.w BbushHive_Show-.Index
+; ---------------------------------------------------------------------------
+
+BbushHive_InitMain:                         
+        addq.b  #2,obj.Action(a0)
+        move.b  #18,obj.YRad(a0)
+        move.b  #9,obj.XRad(a0)
+        move.l  #SprPat_BBushPlayer,obj.Map(a0)
+        move.w  #QUAGTILE,obj.Tile(a0)
+        move.b  #$0,obj.Render(a0)
+        move.b  #1,obj.Priority(a0)
+        move.b  #$C,obj.Frame(a0)
+
+; ---------------------------------------------------------------------------
+BbushHive_Wait:
+        cmpi.l  #200,distance.w 
+        beq.s   .Show
+        rts
+.Show 
+        addq.b  #2,obj.Action(a0)
+        move.w  #88,obj.X(a0)     
+        move.w  #260,obj.YScr(a0)     
+
+BbushHive_Show:            
+	tst.b   (membushPlayer+$30).w  
+	beq.s   .NoMv  
+	add.w   #1,obj.X(a0)       
+.NoMv:
+        jmp     _objectDraw   
+        rts
