@@ -33,15 +33,15 @@
 		dc.w KiryuAni_Float3-KiryuAniData
 		dc.w KiryuAni_Float4-KiryuAniData
 
-KiryuAni_Walk:	dc.b 4 2,3,4,5, $FF
+KiryuAni_Walk:	dc.b 4,1,2,3,4, $FF
 		even
-KiryuAni_Run:	dc.b 4 2,3,4,5, $FF
+KiryuAni_Run:	dc.b 4,1,2,3,4, $FF
 		even
-KiryuAni_Roll:	dc.b 4  7, $FF, $FF, $FF, $FF
+KiryuAni_Roll:	dc.b 4, 7, $FF, $FF, $FF, $FF
 		even
-KiryuAni_Roll2:	dc.b 4  7, $FF, $FF, $FF, $FF
+KiryuAni_Roll2:	dc.b 4, 7, $FF, $FF, $FF, $FF
 		even
-KiryuAni_Push:	dc.b 4  8, $FF, $FF, $FF, $FF
+KiryuAni_Push:	dc.b 4, 8, $FF, $FF, $FF, $FF
 		even
 KiryuAni_Wait:	dc.b $17, 1, $FF
 		even
