@@ -13756,52 +13756,23 @@ Obj0E:					; XREF: Obj_Index
 		jmp	Obj0E_Index(pc,d1.w)
 ; ===========================================================================
 Obj0E_Index:	dc.w Obj0E_Main-Obj0E_Index
-		dc.w Obj0E_Delay-Obj0E_Index
-		dc.w Obj0E_Move-Obj0E_Index
-		dc.w Obj0E_Animate-Obj0E_Index
+		dc.w Obj0E_Show-Obj0E_Index
+		dc.w Obj0E_Show-Obj0E_Index
+		dc.w Obj0E_Show-Obj0E_Index
 ; ===========================================================================
 
 Obj0E_Main:				; XREF: Obj0E_Index
 		addq.b	#2,$24(a0)
-		move.w	#$F0,8(a0)
-		move.w	#$DE,$A(a0)
+		move.w	#240+42,8(a0)
+		move.w	#200,$A(a0)
 		move.l	#Map_obj0E,4(a0)
-		move.w	#$2300,2(a0)
+		move.w	#$0300,2(a0)
 		move.b	#1,$18(a0)
-		move.b	#29,$1F(a0)	; set time delay to 0.5	seconds
-		lea	(Ani_obj0E).l,a1
-		bsr.w	AnimateSprite
-
-Obj0E_Delay:				; XREF: Obj0E_Index
-		subq.b	#1,$1F(a0)	; subtract 1 from time delay
-		bpl.s	Obj0E_Wait	; if time remains, branch
+		move.b	#1,$1A(a0)
 		addq.b	#2,$24(a0)	; go to	next routine
+Obj0E_Show:				; XREF: Obj0E_Index
 		bra.w	DisplaySprite
-; ===========================================================================
 
-Obj0E_Wait:				; XREF: Obj0E_Delay
-		rts	
-; ===========================================================================
-
-Obj0E_Move:				; XREF: Obj0E_Index
-		subq.w	#8,$A(a0)
-		cmpi.w	#$96,$A(a0)
-		bne.s	Obj0E_Display
-		addq.b	#2,$24(a0)
-
-Obj0E_Display:
-		bra.w	DisplaySprite
-; ===========================================================================
-		rts	
-; ===========================================================================
-
-Obj0E_Animate:				; XREF: Obj0E_Index
-		lea	(Ani_obj0E).l,a1
-		bsr.w	AnimateSprite
-		bra.w	DisplaySprite
-; ===========================================================================
-		rts	
-; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Object 0F - "PRESS START BUTTON" and "TM" from title screen
 ; ---------------------------------------------------------------------------
