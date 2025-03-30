@@ -40048,6 +40048,7 @@ MusicIndex:	; $01-$7F
 		dc.l Music08 ; THX Logo
 		dc.l Music09 ; Poop
 		dc.l Music0A ; TG2000 Jingle (Gotta mark my presence somewhere - TG2000 was here)
+		dc.l Music0B ; hill climb DAMN
 		dc.l Music92 ; test
 
 MusicIndex80:	; $81-$9F
@@ -42530,6 +42531,8 @@ Music08:	include	sound\THX.asm
 Music09:	include	sound\curburenthusiasm.asm
 		even
 Music0A:	include	sound\TG2000JingleIDK.asm
+		even
+Music0B:	incbin	sound\professionalhcrsong.bin
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
