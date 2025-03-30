@@ -34,12 +34,13 @@ SampleTable:
 	dcSample	TYPE_DPCM,		SM5,	11025, FLAGS_SFX	; $9C
 	dcSample	TYPE_DPCM,		SM6,	11025, FLAGS_SFX	; $9D
 	dcSample	TYPE_DPCM,		SM7,	11025, FLAGS_SFX	; $9E
-	dcSample	TYPE_PCM,		Line1,	11025, FLAGS_SFX	; $9E
-	dcSample	TYPE_PCM,		Line2,	11025, FLAGS_SFX	; $9E
-	dcSample	TYPE_PCM,		Line3,	11025, FLAGS_SFX	; $9E
-	dcSample	TYPE_PCM,		Line4,	11025, FLAGS_SFX	; $9E
-	dcSample	TYPE_PCM,		Line5,	11025, FLAGS_SFX	; $9E	
-	dcSample	TYPE_PCM,		Line6,	11025, FLAGS_SFX	; $9E	
+	dcSample	TYPE_PCM,		Line1,	11025, FLAGS_SFX	; $9F
+	dcSample	TYPE_PCM,		Line2,	11025, FLAGS_SFX	; $A0
+	dcSample	TYPE_PCM,		Line3,	11025, FLAGS_SFX	; $A1
+	dcSample	TYPE_PCM,		Line4,	11025, FLAGS_SFX	; $A2
+	dcSample	TYPE_PCM,		Line5,	11025, FLAGS_SFX	; $A3	
+	dcSample	TYPE_PCM,		Line6,	11025, FLAGS_SFX	; $A4	
+	dcSample	TYPE_PCM,		Fat,	11025, FLAGS_SFX	; $A5
 	dc.w	-1	; end marker
 
 ; ---------------------------------------------------------------
@@ -72,4 +73,5 @@ SampleTable:
 	incdac	Line4, "sound/dac/Line 4.wav"
 	incdac	Line5, "sound/dac/Line 5.wav"
 	incdac	Line6, "sound/dac/Line 6.wav"
+	incdac	Fat, "sound/dac/fatty-ingame.wav"
 	even
