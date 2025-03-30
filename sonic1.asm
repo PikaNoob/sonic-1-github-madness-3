@@ -26510,7 +26510,7 @@ LimitedSonicAniData:
 	include "_anim\LimitedSonic.asm"
 	
 KiryuAniData:
-	include "_anim\Kiryu.asm"
+	include "_anim\kiryu.asm"
 
 ; ---------------------------------------------------------------------------
 ; Sonic	pattern	loading	subroutine
