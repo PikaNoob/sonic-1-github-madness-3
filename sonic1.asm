@@ -48,7 +48,7 @@ optcharpos = lsscrpos+$960000 ; character
 
 ; NOTES FOR ANYONE MAKING CHARACTERS
 v_character = $FFFFFFE8
-charcount = 7 ; 6, +1 for the check
+charcount = 7 ; there are 7 characters, not 6??
 ; pointers for:
 ; PLAYER MAPPINGS -> Player_Maps
 ; PLAYER ANIM SCRIPTS -> Player_Anim
@@ -3053,24 +3053,7 @@ loc_29C0:
 ; End of function RandomNumber
 
 
-; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-CalcSinCos:
-CalcSine:				; XREF: SS_BGAnimate; et al
-		andi.w	#$FF,d0
-		add.w	d0,d0
-		addi.w	#$80,d0
-		move.w	Sine_Data(pc,d0.w),d1
-		subi.w	#$80,d0
-		move.w	Sine_Data(pc,d0.w),d0
-		rts	
-; End of function CalcSine
-
-; ===========================================================================
-
-Sine_Data:	incbin	misc\sinewave.bin	; values for a 360º sine wave
-
-; ===========================================================================
 		movem.l	d1-d2,-(sp)
 		move.w	d0,d1
 		swap	d1
@@ -3162,6 +3145,27 @@ loc_2D04:				; XREF: CalcAngle
 ; ===========================================================================
 
 Angle_Data:	incbin	misc\angles.bin
+
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+; Moved this here to avoid bsr.w breaking without making it a jsr
+CalcSinCos:
+CalcSine:				; XREF: SS_BGAnimate; et al
+		andi.w	#$FF,d0
+		add.w	d0,d0
+		addi.w	#$80,d0
+		move.w	Sine_Data(pc,d0.w),d1
+		subi.w	#$80,d0
+		move.w	Sine_Data(pc,d0.w),d0
+		rts	
+; End of function CalcSine
+
+; ===========================================================================
+
+Sine_Data:	incbin	misc\sinewave.bin	; values for a 360º sine wave
+
+; ===========================================================================
 
 ; ===========================================================================
 
@@ -3484,11 +3488,11 @@ Title_CountC:
 loc_3230:
 		tst.w	($FFFFF614).w
 		beq.w	Demo
-		; (temporary until we have an actual options screen)
+		; nvm we're gonna keep this as a second way
 		btst	#5,	($FFFFF605).w ; check if c pressed
 		beq.s	@notc
 
-		add.b	#1,(v_character).w ; sonic/gronic 
+		add.b	#1,(v_character).w
 
 		cmpi.b	#charcount,(v_character).w
 		blt.s	@notoverflow
@@ -4175,6 +4179,21 @@ OptionsHighlight:
 ; ---------------------------------------------------------------------------
 ; give the vram setting on d3
 CharDraw:
+		; counter thing
+		moveq	#0,d0
+		move.b	(v_character).w,d0
+		add.b	#$31,d0
+		
+		move.l	#optcharpos+$120000,d4	; screen position (character)
+		add.w	d3,d0
+		move.l	d4,4(a6)
+		move.w	d0,(a6)
+		sub.b	(v_character).w,d0
+		add.b	#'/'-$31,d0
+		move.w	d0,(a6)
+		add.b	#charcount+1,d0
+		move.w	d0,(a6)
+		
 		lea	(Player_Names).l,a1
 		moveq	#0,d0
 		move.b	(v_character).w,d0
