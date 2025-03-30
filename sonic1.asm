@@ -3253,6 +3253,11 @@ Sega_GotoTitle:
 
 titlemode 	= $FFFFF601 	; AKA "submode"
 titleHScroll    = $FFFFCC00	; hscroll buffer
+
+titleSinCntr 	= $FFFFF760	; sine info
+titleScrCnt	= $FFFFF762      
+titleCos	= $FFFFF764
+
 TitleScreen:
 	move.b  titlemode.w,d0
         andi.w  #$1C,d0
@@ -3267,12 +3272,13 @@ SMNO_TITLE_MAIN      	= 2*4   ; Intro seq.
 
 TitleMdTbl:      
         bra.w   TITLE_INIT
-        bra.w   TITLE_MAIN
+        bra.w   TITLE_SCR
         bra.w   TITLE_MAIN
 
 ; ---------------------------------------------------------------------------
 ; Title "initialization", (don't worry, i won't touch Gomer)
 ; ---------------------------------------------------------------------------
+
 TITLE_INIT:
 		move.b	#$E4,d0
 		bsr.w	PlaySound_Special ; stop music
@@ -3406,10 +3412,7 @@ Title_LoadText:
 		moveq	#$21,d1
 		moveq	#$15,d2
 		bsr.w	ShowVDPGraphics
-		moveq	#1,d0		; load title screen pallet
-		bsr.w	PalLoad1
-		move.b	#$8A,d0		; play title screen music
-		bsr.w	PlaySound_Special
+
 		move.b	#0,($FFFFFFFA).w ; disable debug mode
 		move.w	#$178,($FFFFF614).w ; run title	screen for $178	frames
 		lea	($FFFFD080).w,a1
@@ -3426,9 +3429,9 @@ Title_ClrObjRam2:
 		move.b	#3,($FFFFD0DA).w
 		move.b	#$F,($FFFFD100).w
 		move.b	#2,($FFFFD11A).w
-		jsr	ObjectsLoad
-		bsr.w	DeformBgLayer
-		jsr	BuildSprites
+		;jsr	ObjectsLoad
+		;bsr.w	DeformBgLayer
+		;jsr	BuildSprites
 		moveq	#0,d0
 		bsr.w	LoadPLC2
 		move.w	#0,($FFFFFFE4).w
@@ -3437,14 +3440,59 @@ Title_ClrObjRam2:
 		ori.b	#$40,d0
 		move.w	d0,($C00004).l
 		move.b  #SMNO_TITLE_SCR,titlemode.w
-		bra.w	Pal_FadeTo
-TITLE_SCR:
-		move.b	#4,($FFFFF62A).w ; set vblank cmd and do vsync
-		bsr.w	DelayProgram
-		bsr.w   _titleScroll
-		rts
-_titleScroll:
+		move.w  #60*2,titleScrCnt.w
+		move.w  #0,titleSinCntr.w
+		moveq	#1,d0		; load title screen pallet
+		bsr.w	PalLoad2
+		move.b	#$CA,d0
+		bra.w	PlaySound
 
+; ---------------------------------------------------------------------------
+; Title screen scroll in
+; I have never written anything like this, nor have I seen any code for it
+; so THIS SUCKS!!!!! maybe someone can improve it. I don't know Lolol. 
+; ---------------------------------------------------------------------------
+
+TITLE_SCR:
+	move.b	#4,($FFFFF62A).w ; set vblank cmd and do vsync
+	bsr.w	DelayProgram
+	sub.w   #1,titleScrCnt.w
+	bmi.s   .Exit
+	bra.w   _titleScroll
+.Exit:
+	move.b	#$8A,d0
+	bsr.w	PlaySound
+
+	move.b	#$AC,d0
+	bsr.w	PlaySound_Special
+
+	move.b  #SMNO_TITLE_MAIN,titlemode.w
+	rts
+
+
+_titleScroll:
+        lea     titleHScroll.w,a1
+        moveq   #240/2,d7
+        moveq   #0,d2
+        move.w  titleScrCnt.w,d2
+.ScrLoop:
+	addq.w  #1,titleSinCntr.w
+       	move.w  titleSinCntr.w,d0
+        jsr     CalcSinCos
+        mulu.w  d2,d0
+        asr.w   #7,d0
+        move.w  d0,(a1)+
+        move.w  #0,(a1)+
+        neg     d0
+        move.w  d0,(a1)+
+        move.w  #0,(a1)+
+        dbf     d7,.ScrLoop
+
+        rts
+
+; ---------------------------------------------------------------------------
+; Title screen main loop
+; ---------------------------------------------------------------------------
 TITLE_MAIN:
 		move.b	#4,($FFFFF62A).w
 		bsr.w	DelayProgram
@@ -4416,6 +4464,7 @@ GetLevelRandom:
 ; ---------------------------------------------------------------------------
 
 Level:					; XREF: GameModeArray
+		move.b  #0,titlemode.w
 		bset	#7,($FFFFF600).w ; add $80 to screen mode (for pre level sequence)
 		tst.w	($FFFFFFF0).w
 		bmi.s	loc_37B6
