@@ -1,7 +1,7 @@
 {
     "Flex": 2,
     "name": "",
-    "node": "db436497-8172-4473-ab1a-116ba31d78a9",
+    "node": "cd533db5-b393-4aab-8f7e-0379f4c3dabf",
     "objects": [
         {
             "uuid": "988f990c-af11-4993-9ca7-f2c8a7e5e296",
@@ -34,7 +34,7 @@
             "name": "players",
             "children": [
                 {
-                    "uuid": "cd533db5-b393-4aab-8f7e-0379f4c3dabf",
+                    "uuid": "d2a6e803-a319-4e98-bcf6-bd821b46d798",
                     "format": "Sonic 1.js",
                     "name": "sonc",
                     "palettes": [
@@ -56,6 +56,33 @@
                     "dplcs": {
                         "enabled": true,
                         "path": "_inc/Sonic dynamic pattern load cues.asm",
+                        "label": "",
+                        "customDefinition": ""
+                    }
+                },
+                {
+                    "uuid": "cd533db5-b393-4aab-8f7e-0379f4c3dabf",
+                    "format": "Sonic 1.js",
+                    "name": "purple",
+                    "palettes": [
+                        {
+                            "path": "pallet/purple.bin",
+                            "length": 1
+                        }
+                    ],
+                    "art": {
+                        "path": "artunc/purple.bin",
+                        "compression": "Uncompressed",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "_maps/purple.asm",
+                        "label": "",
+                        "customDefinition": ""
+                    },
+                    "dplcs": {
+                        "enabled": true,
+                        "path": "_inc/Purple dynamic pattern load cues.asm",
                         "label": "",
                         "customDefinition": ""
                     }
