@@ -40118,13 +40118,13 @@ MusicIndex:	; $01-$7F
 		dc.l Music0A ; TG2000 Jingle (Gotta mark my presence somewhere - TG2000 was here)
 		dc.l Music0B ; hill climb DAMN
 		dc.l Music0C ; Breaking The Habit, Linkin Park
-		dc.l Music13 ; Drowning of Puyo Puyo (For STOP splash screen)
-		dc.l Music0D ; Megalovania Looped
-		dc.l Music0E ; Go Go Gadget But it actually works correctly, had to sacrifice the DAC though :(
-		dc.l Music0F ; Eggman Encounter Cutscene (Transition to Z Z Z Z Z Z Act 3)
-		dc.l Music10 ; Dr. Coffinman Boss Theme (USE THIS ONE IF WE END UP DOING THE DIFFERENT BOSS TRACKS PER ZONE THING) 
-		dc.l Music11 ; We Are Number One (Why did I make this one I have no idea)
-		dc.l Music12 ; Folgers (I made this in 2023, I guess it has a home now)
+		dc.l Music0D ; Drowning of Puyo Puyo (For STOP splash screen)
+		dc.l Music0E ; Megalovania Looped
+		dc.l Music0F ; Go Go Gadget But it actually works correctly, had to sacrifice the DAC though :(
+		dc.l Music10 ; Eggman Encounter Cutscene (Transition to Z Z Z Z Z Z Act 3)
+		dc.l Music11 ; Dr. Coffinman Boss Theme (USE THIS ONE IF WE END UP DOING THE DIFFERENT BOSS TRACKS PER ZONE THING) 
+		dc.l Music12 ; We Are Number One (Why did I make this one I have no idea)
+		dc.l Music13 ; Folgers (I made this in 2023, I guess it has a home now)
 
 		dc.l Music92 ; test
 
