@@ -40190,11 +40190,14 @@ MusicIndex:	; $01-$7F
 		dc.l Music0C ; Breaking The Habit, Linkin Park
 		dc.l Music0D ; Megalovania Looped
 		dc.l Music0E ; Go Go Gadget But it actually works correctly, had to sacrifice the DAC though :(
-		dc.l Music0F ; Eggman Encounter Cutscene (Transition to Z Z Z Z Z Z Act 3)
+		dc.l Music0F ; Eggman Encounter Cutscene (USE THIS ONE!!!)
 		dc.l Music10 ; Dr. Coffinman Boss Theme (USE THIS ONE IF WE END UP DOING THE DIFFERENT BOSS TRACKS PER ZONE THING) 
 		dc.l Music11 ; We Are Number One (Why did I make this one I have no idea)
 		dc.l Music12 ; Folgers (I made this in 2023, I guess it has a home now)
 		dc.l Music13 ; Drowning of Puyo Puyo (For STOP splash screen)
+		dc.l Music14 ; Bad Rickroll (Test, credits to MegaPigeon92 since they're the author of the VGM I found)
+		dc.l Music15 ; Matt's Track
+		dc.l Music16 ; IDK (This was made by YoMama2612 if that helps at all)
 
 		dc.l Music92 ; test
 
@@ -42696,6 +42699,12 @@ Music10:	incbin	sound\tg2000tracks\drcoffinman.bin
 Music11:	incbin	sound\tg2000tracks\wearenumberone.bin
 		even
 Music12:	incbin	sound\tg2000tracks\folgers.bin
+		even
+Music14:	incbin	sound\rickroll.bin ; Added in to see if that fixes Matt's track from crashing the game
+		even
+Music15:	incbin	sound\rivalry.bin
+		even
+Music16:	incbin	sound\rabbitthing.bin
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
