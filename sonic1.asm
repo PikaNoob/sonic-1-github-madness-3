@@ -49,7 +49,7 @@ optcharpos = lsscrpos+$960000 ; character
 
 ; NOTES FOR ANYONE MAKING CHARACTERS
 v_character = $FFFFFFE8
-charcount = 8 ; there are 8 characters, not 6??
+charcount = 9
 ; pointers for:
 ; PLAYER MAPPINGS -> Player_Maps
 ; PLAYER ANIM SCRIPTS -> Player_Anim
@@ -59,6 +59,20 @@ charcount = 8 ; there are 8 characters, not 6??
 ; MENU NAME -> Player_Names
 ; Player Specific Sounds: every instance of @sndlut
 ; Player Specific Misc Data: Anything with the comment ">charcount", hopefully
+
+kdebugtext: macro
+	move.w	d0,-(sp)
+	move.l	a1,-(sp)
+	lea	@text\@,a1
+	pea	@cont\@
+	jmp	KDebug_WriteToCmd
+@text\@:
+	dc.b \1,0
+	even
+@cont\@:
+	move.l	(sp)+,a1
+	move.w	(sp)+,d0
+	endm
 
 StartOfRom:
 Vectors:	dc.l 'P'<<24|$FFFE00,		'O'<<24|EntryPoint,	'Y'<<24|BusError,	'S'<<24|AddressError
@@ -288,8 +302,12 @@ GameClrRAM:
 		tst.b	(f_checksum).w		; Is checksum correct?
 		beq.s   @validcheck		; if yes, branch
 		jsr	GM_Otis ; if incorrect, start otis.exe creepypasta
+		kdebugtext "bro is really mikuing it"
 		bsr.w	VDPSetupGame
+		bra.w	@invalidcheck
 @validcheck:
+		kdebugtext "umm excuse me what the actual fuck are you doing in my house?"
+@invalidcheck:
 		move.b	#0,($FFFFF600).w ; set Game Mode to Sega Screen
 		cmpi.l	#'init',($FFFFFFFC).w	; has checksum routine already run?
 		beq.w	@nosplashscreens	; if yes, branch
@@ -301,6 +319,7 @@ GameClrRAM:
 		jsr	GM_AntiTMSS
 @notmss:
 		jsr	GM_SplashScreensIG
+		kdebugtext "you can soft reset to skip all those splash screens btw"
 @nosplashscreens:
 	;	move.b	#$20,($FFFFF600).w ; set Game Mode to Minecraft
 	;	move.b	#$24,($FFFFF600).w ; set Game Mode to Bee Bush
@@ -356,17 +375,22 @@ jmpto_IntroCutscene:
 @lut:	bra.w 	@sonic		; sonic
 	bra.w	@null
 	bra.w	@null
-	bra.w	@null
-	bra.w	@null		; limited
+	bra.w	@limited	; limited
 	bra.w	@null		; neru
 	bra.w	@null		; gomer
 	bra.w	@null		; sailor mercury
 	bra.w	@null		; kiryu
-
-@null:		rts
-
-@sonic:		lea	IntroCutscene,a6
+	bra.w	@null		; purple guy
+@limited:
+		lea	@limitedtext,a1
+		jmp	KDebug_WriteToCmd
+@null:
+		rts
+@sonic:
+		lea	IntroCutscene,a6
 		jmp	GM_CustomSplashScreensIG
+
+@limitedtext:	dc.b "IT IS LIMITED",0
 ; ===========================================================================
 
 CheckSumError:
@@ -554,6 +578,19 @@ Art_ErrText_end:		even
 Art_Text:	incbin	artunc\menutext.bin	; text used in level select and debug mode
 Art_Text_end:		even
 
+; ===========================================================================
+KDebug_WriteToCmd:
+		move.w	sr,-(sp)
+		move	#$2700,sr
+		move.w	#$9E00,d0
+@loop:
+		move.b	(a1)+,d0
+		move.w	d0,$C00004
+		tst.b	d0
+		bne.s	@loop
+
+		move.w	(sp)+,sr
+		rts
 ; ===========================================================================
 ;VBlank
 loc_B10:				; XREF: Vectors
@@ -2178,8 +2215,7 @@ PalCycle:	dc.w PalCycle_GHZ-PalCycle
 
 
 PalCycle_Title:				; XREF: TitleScreen
-		lea	(Pal_TitleCyc).l,a0
-		bra.s	loc_196A
+		rts
 ; ===========================================================================
 
 PalCycle_GHZ:				; XREF: PalCycle
@@ -3013,6 +3049,7 @@ Pal_neru:incbin	pallet\neru.bin	; kosaku  kosaku  kosaku  kosaku  kosaku
 Pal_Limit:incbin pallet\LimitedSonic.bin	;	Soo limited-core
 Pal_mercury:incbin	pallet\mercury.bin	; mercury power make up!
 Pal_Kiryu:incbin	pallet\kiryu.bin	; I AM THE YAKUZA KIWAMI
+Pal_Purple:incbin	pallet\purple.bin	; I ALWAYS CUM
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	delay the program by ($FFFFF62A) frames
@@ -3368,7 +3405,7 @@ Title_ClrPallet:
 		move.l	#$40000001,($C00004).l
 		lea	(Nem_TitleFg).l,a0 ; load title	screen patterns
 		bsr.w	NemDec
-		move.l	#$60000000,($C00004).l
+		move.l	#$68000000,($C00004).l
 		lea	(Nem_TitleSonic).l,a0 ;	load Sonic title screen	patterns
 		bsr.w	NemDec
 		lea	($C00000).l,a6
@@ -3387,8 +3424,6 @@ Title_LoadText:
 		move.w	#0,($FFFFFE10).w ; set level to	GHZ (00)
 		move.w	#0,($FFFFF634).w ; disable pallet cycling
 		bsr.w	LevelSizeLoad
-		bsr.w	DeformBgLayer
-
 		lea	($FFFFB000).w,a1
 		lea	(Blk16_GHZ).l,a0 ; load	GHZ 16x16 mappings
 		move.w	#0,d0
@@ -3397,7 +3432,6 @@ Title_LoadText:
 		lea	($FF0000).l,a1
 		bsr.w	KosDec
 		bsr.w	LevelLayoutLoad
-
 		move	#$2700,sr
 		bsr.w	ClearScreen
 		lea	($C00004).l,a5
@@ -3407,7 +3441,7 @@ Title_LoadText:
 		move.w	#$6000,d2
 		bsr.w	LoadTilesFromStart2
 		lea	($FF0000).l,a1
-		lea	(Eni_Title).l,a0 ; load	title screen mappings
+		lea	(Eni_Title).l,a0 	; load	title screen mappings
 		move.w	#0,d0
 		bsr.w	EniDec
 		lea	($FF0000).l,a1
@@ -3415,9 +3449,8 @@ Title_LoadText:
 		moveq	#$21,d1
 		moveq	#$15,d2
 		bsr.w	ShowVDPGraphics
-
-		move.b	#0,($FFFFFFFA).w ; disable debug mode
-		move.w	#$178,($FFFFF614).w ; run title	screen for $178	frames
+		move.b	#0,($FFFFFFFA).w 	; disable debug mode
+		move.w	#600*3,($FFFFF614).w 	; run titlescreen for 30 seconds
 		lea	($FFFFD080).w,a1
 		moveq	#0,d0
 		move.w	#$F,d1
@@ -3432,9 +3465,6 @@ Title_ClrObjRam2:
 		move.b	#3,($FFFFD0DA).w
 		move.b	#$F,($FFFFD100).w
 		move.b	#2,($FFFFD11A).w
-		;jsr	ObjectsLoad
-		;bsr.w	DeformBgLayer
-		;jsr	BuildSprites
 		moveq	#0,d0
 		bsr.w	LoadPLC2
 		move.w	#0,($FFFFFFE4).w
@@ -3445,8 +3475,14 @@ Title_ClrObjRam2:
 		move.b  #SMNO_TITLE_SCR,titlemode.w
 		move.w  #60*2,titleScrCnt.w
 		move.w  #0,titleSinCntr.w
-		moveq	#1,d0		; load title screen pallet
-		bsr.w	PalLoad2
+
+        	moveq   #(32/2)-1,d7
+		lea     Pal_Title,a2
+		lea     palette,a3
+
+initLoadToBuffer:                         
+		move.l  (a2)+,(a3)+
+		dbf     d7,initLoadToBuffer
 		move.b	#$CA,d0
 		bra.w	PlaySound
 
@@ -3461,19 +3497,40 @@ TITLE_SCR:
 	bsr.w	DelayProgram
 	sub.w   #1,titleScrCnt.w
 	bmi.s   .Exit
-	bra.w   _titleScroll
+	bra.w   _titleSineSlide
+
 .Exit:
+
+	lea	($FF0000).l,a1
+	lea	(Eni_TitleBG).l,a0 ; load	title screen mappings
+	move.w	#0,d0
+	bsr.w	EniDec
+	move.l	#$60000003,d0
+	moveq	#64-1,d1
+	moveq	#32-1,d2
+	bsr.w	ShowVDPGraphics
+
+        moveq   #(32/2)-1,d7
+	lea     Pal_Title+(32*2),a2
+	lea     palette+(32*2),a3
+
+scrLoadToBuffer:                         
+	move.l  (a2)+,(a3)+
+	dbf     d7,scrLoadToBuffer
+
 	move.b	#$8A,d0
 	bsr.w	PlaySound
 
 	move.b	#$AC,d0
 	bsr.w	PlaySound_Special
-
 	move.b  #SMNO_TITLE_MAIN,titlemode.w
 	rts
 
+; ---------------------------------------------------------------------------
+; Bouncy sine-wavey effect for the emblem
+; ---------------------------------------------------------------------------
 
-_titleScroll:
+_titleSineSlide:
         lea     titleHScroll.w,a1
         moveq   #240/2,d7
         moveq   #0,d2
@@ -3494,16 +3551,37 @@ _titleScroll:
         rts
 
 ; ---------------------------------------------------------------------------
+; main scr
+; ---------------------------------------------------------------------------
+
+_titleScroll:
+        lea     titleHScroll.w,a1
+        add.b   #2,beeSinCntr.w
+        move.b  beeSinCntr.w,d0
+        jsr     CalcSinCos
+        asr.w   #1,d1
+
+        move.w  #0,(a1)+
+        add.w   $FFFFF618+$A.w,d0
+        move.w  d0,(a1)
+        add.w   $FFFFF618+8.w,d1
+        move.w  d1,$FFFFF618.w
+
+        addq.w  #1,$FFFFF618+8.w
+        addq.w  #1,$FFFFF618+$A.w
+        rts
+
+; ---------------------------------------------------------------------------
 ; Title screen main loop
 ; ---------------------------------------------------------------------------
 TITLE_MAIN:
+	        move.w  #$8B00+%00000000,VDPCTRL
 		move.b	#4,($FFFFF62A).w
 		bsr.w	DelayProgram
+		bsr.w   _titleScroll
 		jsr	RandomNumber	; for better randomness for the level IDs
 		jsr	ObjectsLoad
-		; bsr.w	 DeformBgLayer
 		jsr	BuildSprites
-		bsr.w	PalCycle_Title
 		bsr.w	RunPLC_RAM
 		move.w	($FFFFD008).w,d0
 		addq.w	#2,d0
@@ -3839,7 +3917,7 @@ Demo:					; XREF: TitleScreen
 loc_33B6:				; XREF: loc_33E4
 		move.b	#4,($FFFFF62A).w
 		bsr.w	DelayProgram
-		bsr.w	DeformBgLayer
+		bsr.w   _titleScroll
 		bsr.w	PalCycle_Load
 		bsr.w	RunPLC_RAM
 		move.w	($FFFFD008).w,d0
@@ -4237,6 +4315,7 @@ Player_Names:
 		dc.b "GOMER G."
 		dc.b "MERCURY "
 		dc.b "KIRYU K."
+		dc.b "PRPL GUY"
 	even
 	
 ; give the vram setting on d3
@@ -4569,6 +4648,7 @@ Player_Palette:
 		dc.w	3,$F,$10,0 ; Gomer Gomer!
 		dc.w	29,29,29,0 ; MERCURY
 		dc.w	30,30,30,0 ; bragon of bojima 
+		dc.w	31,31,31,0 ; I am the purple guy come and see my suit tonight 
 		; add more player palettes
 Level_LoadPal:
 		move.w	#$1E,($FFFFFE14).w
@@ -4791,6 +4871,7 @@ Level_StartGame:
 		dc.b 2,$90	; gomer
 		dc.b 2,$98	; sailer mercury
 		dc.b 2,$A8 ;  kiryu
+		dc.b 2,$AD	; purple guy
 		even
 @cont:
 ; ---------------------------------------------------------------------------
@@ -13938,7 +14019,7 @@ Obj0E_Main:				; XREF: Obj0E_Index
 		move.w	#240+42,8(a0)
 		move.w	#200,$A(a0)
 		move.l	#Map_obj0E,4(a0)
-		move.w	#$0100,2(a0)
+		move.w	#$0140,2(a0)
 		move.b	#1,$18(a0)
 		move.b	#1,$1A(a0)
 		addq.b	#2,$24(a0)	; go to	next routine
@@ -16391,6 +16472,7 @@ loc_C61A:				; XREF: Obj3A_ChkPos
 		dc.b 2,$90	; gomer
 		dc.b 2,$9E	; sailer mercury
 		dc.b 0,$00
+		dc.b 0,$00	; purple guy
 		even
 @contgame:
 
@@ -25197,6 +25279,7 @@ SMCsoundCHK1:
 		dc.b 2,$90	; gomer
 		dc.b 2,$9A	; sailer mercury
 		dc.b 1,$A4
+		dc.b 1,$A4	; purple guy
 		even
 ; End of function Sonic_MoveLeft
 
@@ -25409,6 +25492,7 @@ Sonic_AirUnroll:
 		dc.b 2,$90	; gomer
 		dc.b 2,$9A	; sailer mercury
 		dc.b 2,$AC
+		dc.b 1,$A5
 		even
 @contgame:
 		move.l	$10(a0),d0
@@ -25662,6 +25746,7 @@ locret_133E8:
 		dc.b 2,$90	; gomer
 		dc.b 2,$9A	; sailer mercury
 		dc.b 1,$BE
+		dc.b 1,$BE
 		even
 ; End of function Sonic_Roll
 
@@ -25728,6 +25813,7 @@ loc_1341C:
 		dc.b 2,$90	; gomer
 		dc.b 2,$99	; sailer mercury
 		dc.b 2,$AA
+		dc.b 1,$A0
 		even
 ; ===========================================================================
 
@@ -26192,10 +26278,10 @@ Sonic_HurtStop:				; XREF: Obj01_Hurt
 		move.w	($FFFFF72E).w,d0
 		addi.w	#$E0,d0
 		cmp.w	$C(a0),d0
-		bcs.w	KillSonic
+		bcs.s	@kill
 		bsr.w	Sonic_Floor
 		btst	#1,$22(a0)
-		bne.s	locret_13860
+		bne.s	@exit
 		moveq	#0,d0
 		move.w	d0,$12(a0)
 		move.w	d0,$10(a0)
@@ -26203,9 +26289,11 @@ Sonic_HurtStop:				; XREF: Obj01_Hurt
 		move.b	#0,$1C(a0)
 		subq.b	#2,$24(a0)
 		move.w	#$78,$30(a0)
-
-locret_13860:
-		rts	
+; locret_13860:
+@exit:
+		rts
+@kill:
+		jmp	KillSonic
 ; End of function Sonic_HurtStop
 
 ; ===========================================================================
@@ -26379,6 +26467,7 @@ Player_Anim:
 	dc.l	SonicAniData ; gomer gomer!
 	dc.l	SonicAniData ; mercury
 	dc.l	KiryuAniData ; Kiryu
+	dc.l	PurpleAniData ; Purple guy
 	; Insert more animation data for other characters here
 	
 Sonic_Animate:				; XREF: Obj01_Control; et al
@@ -26561,14 +26650,6 @@ loc_13B26:
 	include	"_inc\LimitedSonic\Limit_Animate.asm"
 
 ; ===========================================================================
-SonicAniData:
-	include "_anim\Sonic.asm"
-
-LimitedSonicAniData:
-	include "_anim\LimitedSonic.asm"
-	
-KiryuAniData:
-	include "_anim\kiryu.asm"
 
 ; ---------------------------------------------------------------------------
 ; Sonic	pattern	loading	subroutine
@@ -26584,6 +26665,7 @@ Player_DPLC:
 	dc.l	GomerDynPLC ; gomer gomer!
 	dc.l	mercuryDynPLC ; mercury
 	dc.l	KiryuDynPLC ; kiryu kasuga from the oni alliance
+	dc.l	PurpleDynPLC
 	; add pointers for player dplc here
 Player_Art:
 	dc.l	Art_Sonic
@@ -26594,6 +26676,7 @@ Player_Art:
 	dc.l	Art_gomer ; gomer gomer!
 	dc.l	Art_mercury ; mercury
 	dc.l	Art_Kiryu ; kiryuing
+	dc.l	Art_Purple
 	; add pointers for player art here
 
 LoadSonicDynPLC:			; XREF: Obj01_Control; et al
@@ -28565,7 +28648,7 @@ Obj66_Main:				; XREF: Obj66_Index
 ; ===========================================================================
 
 Obj66_Loop:
-		bsr.w	SingleObjLoad
+		jsr	SingleObjLoad
 		bne.s	loc_150FE
 		move.b	#$66,0(a1)
 		addq.b	#4,$24(a1)
@@ -31231,6 +31314,7 @@ CHAR_BOSSHIT_SND:
 		dc.b 2,$90	; gomer
 		dc.b 2,$9D	; sailer mercury
 		dc.b 0,$00
+		dc.b 2,$AD
 		even
 
 ; ---------------------------------------------------------------------------
@@ -36359,7 +36443,7 @@ HurtSonic:
 Hurt_Shield:
 		move.b	#0,($FFFFFE2C).w ; remove shield
 		move.b	#4,$24(a0)
-		bsr.w	Sonic_ResetOnFloor
+		jsr	Sonic_ResetOnFloor
 		bset	#1,$22(a0)
 		move.w	#-$400,$12(a0)	; make Sonic bounce away from the object
 		move.w	#-$200,$10(a0)
@@ -36403,6 +36487,7 @@ Hurt_Sound:
 		dc.b 2,$90	; gomer
 		dc.b 2,$9B	; sailer mercury
 		dc.b 2,$AB
+		dc.b 0,$00
 		even
 ; ===========================================================================
 
@@ -36458,6 +36543,7 @@ Kill_Sound:
 		dc.b 2,$90	; gomer
 		dc.b 2,$9C	; sailer mercury
 		dc.b 2,$A9
+		dc.b 0,$00
 		even
 ; End of function KillSonic
 
@@ -39274,6 +39360,7 @@ Player_Maps:
 	dc.l    map_gomer
 	dc.l    map_mercury
 	dc.l	Map_Kiryu
+	dc.l	Map_Purple
 	; insert player mapping here
 
 
@@ -39363,6 +39450,8 @@ Eni_Gomer:	incbin	mapeni\gomer.bin
 		even
 Eni_Title:	incbin	mapeni\titlescr.bin	; title screen foreground (mappings)
 		even
+Eni_TitleBG:	incbin	mapeni\titlescr_bg.bin	; title screen foreground (mappings)
+		even
 Nem_TitleFg:	incbin	artnem\titlefor.bin	; title screen foreground
 		even
 Nem_TitleSonic:	incbin	artnem\titleson.bin	; Sonic on title screen
@@ -39396,6 +39485,23 @@ map_mercury:
 	include "_maps\mercury.asm"
 Map_Kiryu:
 	include "_maps\Kiryu.asm"
+Map_Purple:
+	include "_maps\Purple.asm"
+
+; ---------------------------------------------------------------------------
+; Animation data array for the players
+; ---------------------------------------------------------------------------
+SonicAniData:
+	include "_anim\Sonic.asm"
+
+LimitedSonicAniData:
+	include "_anim\LimitedSonic.asm"
+	
+KiryuAniData:
+	include "_anim\kiryu.asm"
+
+PurpleAniData:
+	include "_anim\Purple.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	loading	array for the players
 ; ---------------------------------------------------------------------------
@@ -39411,6 +39517,8 @@ mercuryDynPLC:
 	include "_inc\mercuryDPLC.asm"
 KiryuDynPLC:
 	include "_inc\Kiryu dynamic pattern load cues.asm"
+PurpleDynPLC:
+	include "_inc\Purple dynamic pattern load cues.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	- players
 ; ---------------------------------------------------------------------------
@@ -39425,6 +39533,8 @@ Art_gomer:	incbin	artunc\gomer.bin	; gomer gomer!
 Art_mercury:	incbin	artunc\mercury.bin
 		even
 Art_Kiryu:	incbin	artunc/kiryu.bin	; Kiryu
+		even
+Art_Purple:	incbin  artunc/purple.bin
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various

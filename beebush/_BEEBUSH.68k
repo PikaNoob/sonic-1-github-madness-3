@@ -431,8 +431,6 @@ ArtNem_QUAGMIRE:
 ; camera B = background (moves)
 ; ---------------------------------------------------------------------------
 
-
-
 _beebushCamShake:
         add.b   #2,beeSinCntr.w
         move.b  beeSinCntr.w,d0
@@ -454,7 +452,6 @@ _beebushCamShake:
 ; ---------------------------------------------------------------------------
 ; Main scrolling for gameplay
 ; ---------------------------------------------------------------------------
-
 
 _beebushScroll:      
         moveq   #0,d0
