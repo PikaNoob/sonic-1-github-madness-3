@@ -26559,7 +26559,7 @@ LimitedSonicAniData:
 	include "_anim\LimitedSonic.asm"
 	
 KiryuAniData:
-	include "_anim\Kiryu.asm"
+	include "_anim\kiryu.asm"
 
 ; ---------------------------------------------------------------------------
 ; Sonic	pattern	loading	subroutine
@@ -40161,12 +40161,20 @@ MusicIndex:	; $01-$7F
 		dc.l Music04 ; Eggman Encounter Cutscene (Transition to Z Z Z Z Z Z Act 3)
 		dc.l Music05 ; IDK
 		dc.l Music06 ; Go Go Gadget
-		dc.l Music07 ; The Angry Hedgehog
+		dc.l Music07 ; The Angry Hedgehog (For Play Now splash screen)
 		dc.l Music08 ; THX Logo
 		dc.l Music09 ; Poop
 		dc.l Music0A ; TG2000 Jingle (Gotta mark my presence somewhere - TG2000 was here)
 		dc.l Music0B ; hill climb DAMN
 		dc.l Music0C ; Breaking The Habit, Linkin Park
+		dc.l Music0D ; Megalovania Looped
+		dc.l Music0E ; Go Go Gadget But it actually works correctly, had to sacrifice the DAC though :(
+		dc.l Music0F ; Eggman Encounter Cutscene (Transition to Z Z Z Z Z Z Act 3)
+		dc.l Music10 ; Dr. Coffinman Boss Theme (USE THIS ONE IF WE END UP DOING THE DIFFERENT BOSS TRACKS PER ZONE THING) 
+		dc.l Music11 ; We Are Number One (Why did I make this one I have no idea)
+		dc.l Music12 ; Folgers (I made this in 2023, I guess it has a home now)
+		dc.l Music13 ; Drowning of Puyo Puyo (For STOP splash screen)
+
 		dc.l Music92 ; test
 
 MusicIndex80:	; $81-$9F
@@ -42632,27 +42640,41 @@ Kos_Z80:	incbin	sound\z80_1.bin
 		even
 Music01:	include	sound\LimitedInvincibility.asm
 		even
-Music03:	include	sound\drcoffinman.asm
+Music03:	include	sound\tg2000tracks\drcoffinman.asm
 		even
-Music04:	include	sound\eggmancutscene.asm
+Music04:	include	sound\tg2000tracks\eggmancutscene.asm
 		even
-Music05:	include	sound\music05.asm
+Music05:	include	sound\tg2000tracks\music05.asm
 		even
-Music06:	include	sound\gogogadget.asm
+Music06:	include	sound\tg2000tracks\gogogadget.asm
 		even
-Music02:	include	sound\vroom.asm
+Music02:	include	sound\tg2000tracks\vroom.asm
 		even
-Music07:	include	sound\anger.asm
+Music07:	include	sound\tg2000tracks\anger.asm
 		even
-Music08:	include	sound\THX.asm
+Music08:	include	sound\tg2000tracks\THX.asm
 		even
-Music09:	include	sound\curburenthusiasm.asm
+Music09:	include	sound\tg2000tracks\curburenthusiasm.asm
 		even
-Music0A:	include	sound\TG2000JingleIDK.asm
+Music0A:	include	sound\tg2000tracks\TG2000JingleIDK.asm
 		even
 Music0B:	incbin	sound\professionalhcrsong.bin
 		even
 Music0C:	include	sound\BTH.asm
+		even
+Music13:	incbin	sound\tg2000tracks\drowningofpuyopuyo.bin
+		even
+Music0D:	incbin	sound\tg2000tracks\megalovanialooped.bin
+		even
+Music0E:	incbin	sound\tg2000tracks\gadget.bin
+		even
+Music0F:	incbin	sound\tg2000tracks\eggmancutscene.bin
+		even
+Music10:	incbin	sound\tg2000tracks\drcoffinman.bin
+		even
+Music11:	incbin	sound\tg2000tracks\wearenumberone.bin
+		even
+Music12:	incbin	sound\tg2000tracks\folgers.bin
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
