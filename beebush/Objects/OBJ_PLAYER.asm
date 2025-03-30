@@ -17,6 +17,7 @@ BbushObj_Player:
 .Index:                                
         dc.w BbushPlayer_InitMain-.Index
         dc.w BbushPlayer_Main-.Index
+        dc.w BbushPlayer_Show-.Index
 ; ---------------------------------------------------------------------------
 
 BbushPlayer_InitMain:                         
@@ -30,6 +31,10 @@ BbushPlayer_InitMain:
         move.w  #100+128,obj.YScr(a0)
         move.b  #2,obj.Priority(a0)
         move.b  #3,obj.Frame(a0)
+        move.w  obj.X(a0),(membushBees+obj.X).w
+        move.w  obj.YScr(a0),(membushBees+obj.YScr).w
+        add.w   #6,(membushBees+obj.X).w
+        add.w   #9,(membushBees+obj.YScr).w
 
 ; ---------------------------------------------------------------------------
 
@@ -37,10 +42,9 @@ BbushPlayer_Main:
         move.b  joypad.w,d4         ;SACBRLDU
         move.b  joypadPress.w,d5    
         bsr.w   _bbplayNormalCtrl 
-        move.w  obj.X(a0),(membushBees+obj.X).w
-        move.w  obj.YScr(a0),(membushBees+obj.YScr).w
-        add.w   #6,(membushBees+obj.X).w
-        add.w   #9,(membushBees+obj.YScr).w
+
+
+BbushPlayer_Show:
         jmp     _objectDraw   
 
 ; ---------------------------------------------------------------------------
@@ -82,6 +86,8 @@ BbushObj_Bees:
 .Index:                                
         dc.w BbushBees_InitMain-.Index
         dc.w BbushBees_Main-.Index
+        dc.w BbushBees_InitHive-.Index
+        dc.w BbushBees_Hive-.Index
 ; ---------------------------------------------------------------------------
 
 BbushBees_InitMain:                         
@@ -99,6 +105,27 @@ BbushBees_Main:
         lea     AniSpr_QuagmireBees,a1  
         jsr     _objectAnimate                    
         jmp     _objectDraw   
+
+BbushBees_InitHive:
+        addq.b  #2,obj.Action(a0)
+	move.w  #-$600,obj.YSpeed(a0)
+	move.w  #-$7A,obj.XSpeed(a0)
+	move.w  obj.YScr(a0),obj.Y(a0)
+
+BbushBees_Hive:
+	jsr     _objectFall
+	move.w  obj.Y(a0),obj.YScr(a0)
+	moveq   #0,d0
+        move.w  #100+128+9,d0
+        cmp.w   obj.YScr(a0),d0
+        blo.s   .Finish
+        lea     AniSpr_QuagmireBees,a1  
+        jsr     _objectAnimate                    
+        jmp     _objectDraw 
+
+.Finish
+	move.b  #$D,(membushHive+obj.Frame).w
+	jmp	_objectDelete
 
 AniSpr_QuagmireBees:
 .tbl

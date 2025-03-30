@@ -104,11 +104,12 @@ GM_BEEBUSH:
 
 ; ---------------------------------------------------------------------------
 
-SMNO_BEEBUSH_INIT       = 0*4   ; Init 
-SMNO_BEEBUSH_INTRO      = 1*4   ; Intro seq.
-SMNO_BEEBUSH_STATIC     = 2*4   ; Static scr.
-SMNO_BEEBUSH_INITMAIN   = 3*4   ; Main Init
-SMNO_BEEBUSH_MAIN       = 4*4   ; Main game
+SMNO_BEEBUSH_INIT       	= 0*4   ; Init 
+SMNO_BEEBUSH_INTRO      	= 1*4   ; Intro seq.
+SMNO_BEEBUSH_STATIC     	= 2*4   ; Static scr.
+SMNO_BEEBUSH_INITMAIN   	= 3*4   ; Main Init
+SMNO_BEEBUSH_MAIN       	= 4*4   ; Main game
+SMNO_BEEBUSH_EXIT_WIN       	= 5*4   ; Main game
 
 .Index:      
         bra.w   BEEBUSH_INIT
@@ -116,6 +117,7 @@ SMNO_BEEBUSH_MAIN       = 4*4   ; Main game
         bra.w   BEEBUSH_STATIC
         bra.w   BEEBUSH_INITMAIN
         bra.w   BEEBUSH_MAIN
+        bra.w   BEEBUSH_EXIT_WIN
 .Null:
         rts 
 
@@ -345,9 +347,25 @@ BEEBUSH_MAIN:
         jsr     DrawObjects
         move.l  distance,d0 
         bne.s   .NoWin
-        move.b  #$10,gamemode.w
+        move.b  #SMNO_BEEBUSH_EXIT_WIN,submode.w ; Move to next mode
+        move.b  #4,(membushBees+obj.Action).w
+        move.b  #4,(membushPlayer+obj.Action).w
+        move.b  #0,(membushPlayer+$30).w
 .NoWin
-        rts     
+        rts   
+
+; ---------------------------------------------------------------------------
+; Exit routine
+; ---------------------------------------------------------------------------
+
+BEEBUSH_EXIT_WIN:                              
+        move.b  #VBLNO_BEEBUSHSCR,vblankCmd.w
+        jsr     VSync
+        addq.w  #1,frameCntr.w
+        bsr.w   _beebushScroll
+        bsr.w   _beebushRunObjects    
+        jsr     DrawObjects
+        rts
 
 ; ---------------------------------------------------------------------------
 
