@@ -39970,6 +39970,7 @@ MusicIndex:	; $01-$7F
 		dc.l Music06 ; Go Go Gadget
 		dc.l Music07 ; The Angry Hedgehog
 		dc.l Music08 ; THX Logo
+		dc.l Music09 ; Poop
 		dc.l Music92 ; test
 
 MusicIndex80:	; $81-$9F
@@ -42448,6 +42449,8 @@ Music02:	include	sound\vroom.asm
 Music07:	include	sound\anger.asm
 		even
 Music08:	include	sound\THX.asm
+		even
+Music09:	include	sound\curburenthusiasm.asm
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
