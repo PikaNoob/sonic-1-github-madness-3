@@ -296,7 +296,8 @@ BEEBUSH_INITMAIN:
         move.b  #BBUSH_OBJNO_PLAYER,objSlot02.w
         move.b  #BBUSH_OBJNO_BEES,objSlot01.w
 
-        move.w  $FFFFFE56.w,d0
+        clr.w   d0
+        move.b  $FFFFFE57.w,d0
         lsl.w   #2,d0
         btst    #6,$FFFFFFF8.w
         bne.s   .PALHardware

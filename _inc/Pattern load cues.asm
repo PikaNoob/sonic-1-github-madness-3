@@ -389,7 +389,7 @@ PLC_Warp:	dc.w 0
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - special stage
 ; ---------------------------------------------------------------------------
-PLC_SpeStage:	dc.w $10
+PLC_SpeStage:	dc.w 15-1
 		dc.l Nem_SSBgCloud	; bubble and cloud background
 		dc.w 0
 		dc.l Nem_SSBgFish	; bird and fish	background
@@ -418,18 +418,21 @@ PLC_SpeStage:	dc.w $10
 		dc.w $BE00
 		dc.l Nem_SSEmerald	; emeralds
 		dc.w $EE00
-		dc.l Nem_SSZone1	; ZONE 1 block
-		dc.w $F2E0
-		dc.l Nem_SSZone2	; ZONE 2 block
-		dc.w $F400
-		dc.l Nem_SSZone3	; ZONE 3 block
-		dc.w $F520
-		dc.l Nem_SSZone4	; ZONE 4 block
-		dc.w $F2E0
-		dc.l Nem_SSZone5	; ZONE 5 block
-		dc.w $F400
-		dc.l Nem_SSZone6	; ZONE 6 block
-		dc.w $F520
+		dc.l Nem_SSMicroplastics	; da playar
+		dc.w $F000
+
+;		dc.l Nem_SSZone1	; ZONE 1 block
+;		dc.w $F2E0
+;		dc.l Nem_SSZone2	; ZONE 2 block
+;		dc.w $F400
+;		dc.l Nem_SSZone3	; ZONE 3 block
+;		dc.w $F520
+;		dc.l Nem_SSZone4	; ZONE 4 block
+;		dc.w $F2E0
+;		dc.l Nem_SSZone5	; ZONE 5 block
+;		dc.w $F400
+;		dc.l Nem_SSZone6	; ZONE 6 block
+;		dc.w $F520
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - GHZ animals
 ; ---------------------------------------------------------------------------

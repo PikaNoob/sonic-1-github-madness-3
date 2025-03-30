@@ -1,8 +1,35 @@
 {
     "Flex": 2,
     "name": "",
-    "node": "07566fbf-46a0-496a-9374-8fd79bebf175",
+    "node": "988f990c-af11-4993-9ca7-f2c8a7e5e296",
     "objects": [
+        {
+            "uuid": "988f990c-af11-4993-9ca7-f2c8a7e5e296",
+            "format": "Sonic 1.js",
+            "name": "special microplas",
+            "palettes": [
+                {
+                    "path": "pallet\\special.bin",
+                    "length": 4
+                }
+            ],
+            "art": {
+                "path": "artnem\\ssmicroplastics.bin",
+                "compression": "Nemesis",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "_maps\\ssmicroplastics.asm",
+                "label": "",
+                "customDefinition": ""
+            },
+            "dplcs": {
+                "enabled": false,
+                "path": "",
+                "label": "",
+                "customDefinition": ""
+            }
+        },
         {
             "name": "players",
             "children": [
@@ -87,7 +114,7 @@
                 }
             ],
             "isDirectory": true,
-            "expanded": false,
+            "expanded": true,
             "uuid": "b2e21f93-0756-4fbf-86a0-596a53748fd7"
         },
         {
