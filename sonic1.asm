@@ -48,7 +48,7 @@ optcharpos = lsscrpos+$960000 ; character
 
 ; NOTES FOR ANYONE MAKING CHARACTERS
 v_character = $FFFFFFE8
-charcount = 7 ; there are 7 characters, not 6??
+charcount = 8 ; there are 8 characters, not 6??
 ; pointers for:
 ; PLAYER MAPPINGS -> Player_Maps
 ; PLAYER ANIM SCRIPTS -> Player_Anim
@@ -3008,6 +3008,7 @@ Pal_Anakama:incbin	pallet\anakama.bin	; anakama char
 Pal_neru:incbin	pallet\neru.bin	; kosaku  kosaku  kosaku  kosaku  kosaku 
 Pal_Limit:incbin pallet\LimitedSonic.bin	;	Soo limited-core
 Pal_mercury:incbin	pallet\mercury.bin	; mercury power make up!
+Pal_Kiryu:incbin	pallet\kiryu.bin	; I AM THE YAKUZA KIWAMI
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	delay the program by ($FFFFF62A) frames
@@ -4153,6 +4154,7 @@ Player_Names:
 		dc.b "NERU    "
 		dc.b "GOMER G."
 		dc.b "MERCURY "
+		dc.b "KIRYU K."
 	even
 	
 ; give the vram setting on d3
@@ -4483,6 +4485,7 @@ Player_Palette:
 		dc.w	27,27,$27,0 ; neru
 		dc.w	3,$F,$10,0 ; Gomer Gomer!
 		dc.w	29,29,29,0 ; MERCURY
+		dc.w	30,30,30,0 ; bragon of bojima 
 		; add more player palettes
 Level_LoadPal:
 		move.w	#$1E,($FFFFFE14).w
@@ -26286,6 +26289,7 @@ Player_Anim:
 	dc.l	SonicAniData ; neru
 	dc.l	SonicAniData ; gomer gomer!
 	dc.l	SonicAniData ; mercury
+	dc.l	KiryuAniData ; Kiryu
 	; Insert more animation data for other characters here
 	
 Sonic_Animate:				; XREF: Obj01_Control; et al
@@ -26473,6 +26477,9 @@ SonicAniData:
 
 LimitedSonicAniData:
 	include "_anim\LimitedSonic.asm"
+	
+KiryuAniData:
+	include "_anim\Kiryu.asm"
 
 ; ---------------------------------------------------------------------------
 ; Sonic	pattern	loading	subroutine
@@ -26487,6 +26494,7 @@ Player_DPLC:
 	dc.l	NeruDynPLC ; neru
 	dc.l	GomerDynPLC ; gomer gomer!
 	dc.l	mercuryDynPLC ; mercury
+	dc.l	KiryuDynPLC ; kiryu kasuga from the oni alliance
 	; add pointers for player dplc here
 Player_Art:
 	dc.l	Art_Sonic
@@ -26496,6 +26504,7 @@ Player_Art:
 	dc.l	Art_neru ; neru
 	dc.l	Art_gomer ; gomer gomer!
 	dc.l	Art_mercury ; mercury
+	dc.l	Art_Kiryu ; kiryuing
 	; add pointers for player art here
 
 LoadSonicDynPLC:			; XREF: Obj01_Control; et al
@@ -39163,6 +39172,7 @@ Player_Maps:
 	dc.l    map_neru
 	dc.l    map_gomer
 	dc.l    map_mercury
+	dc.l	Map_Kiryu
 	; insert player mapping here
 
 
@@ -39283,6 +39293,8 @@ map_gomer:
 	include "_maps\gomer.asm"
 map_mercury:
 	include "_maps\mercury.asm"
+Map_Kiryu:
+	include "_maps\Kiryu.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	loading	array for the players
 ; ---------------------------------------------------------------------------
@@ -39296,6 +39308,8 @@ gomerDynPLC:
 	include "_inc\gomerDPLC.asm"
 mercuryDynPLC:
 	include "_inc\mercuryDPLC.asm"
+KiryuDynPLC:
+	include "_inc\Kiryu dynamic pattern load cues.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	- players
 ; ---------------------------------------------------------------------------
@@ -39308,6 +39322,8 @@ Art_neru:	incbin	artunc\neru.bin	; gocha gocha urusee!
 Art_gomer:	incbin	artunc\gomer.bin	; gomer gomer!
 		even
 Art_mercury:	incbin	artunc\mercury.bin
+		even
+Art_Kiryu:	incbin	artunc/kiryu.bin	; Kiryu
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
