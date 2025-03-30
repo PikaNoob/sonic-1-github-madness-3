@@ -41,6 +41,8 @@ SampleTable:
 	dcSample	TYPE_PCM,		Line5,	11025, FLAGS_SFX	; $A3	
 	dcSample	TYPE_PCM,		Line6,	11025, FLAGS_SFX	; $A4	
 	dcSample	TYPE_PCM,		Fat,	11025, FLAGS_SFX	; $A5
+	;not sailor mercury sounds start again here
+	dcSample	TYPE_PCM,		futuristicsound,	20000, FLAGS_SFX		; $A6
 	dc.w	-1	; end marker
 
 ; ---------------------------------------------------------------
@@ -74,4 +76,5 @@ SampleTable:
 	incdac	Line5, "sound/dac/Line 5.wav"
 	incdac	Line6, "sound/dac/Line 6.wav"
 	incdac	Fat, "sound/dac/fatty-ingame.wav"
+	incdac	futuristicsound, "sound/dac/futuristicsound.wav"
 	even

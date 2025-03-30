@@ -13720,6 +13720,8 @@ Obj2E_ChkS:
 		cmpi.b	#7,d0		; does monitor contain 'S'
 		bne.s	Obj2E_ChkEnd
 		; nop	
+		move.w #$A6,d0 ;play futuristic
+		jsr MegaPCM_PlaySample ;aaaa
 		moveq	#1,d1
 		eor.b	d1,($FFFFFE2F).w	; GMZ: Set reverse controls flag when broken, revert when another monitor of same type is broken again
 
