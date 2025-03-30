@@ -3263,11 +3263,11 @@ TitleScreen:
 
 SMNO_TITLE_INIT       	= 0*4   ; Init 
 SMNO_TITLE_SCR      	= 1*4   ; Intro seq.
-SMNO_TITLE_MAIN      	= 1*4   ; Intro seq.
+SMNO_TITLE_MAIN      	= 2*4   ; Intro seq.
 
 TitleMdTbl:      
         bra.w   TITLE_INIT
-        bra.w   TITLE_SCR
+        bra.w   TITLE_MAIN
         bra.w   TITLE_MAIN
 
 ; ---------------------------------------------------------------------------
@@ -3441,13 +3441,16 @@ Title_ClrObjRam2:
 TITLE_SCR:
 		move.b	#4,($FFFFF62A).w ; set vblank cmd and do vsync
 		bsr.w	DelayProgram
+		bsr.w   _titleScroll
+		rts
+_titleScroll:
 
 TITLE_MAIN:
 		move.b	#4,($FFFFF62A).w
 		bsr.w	DelayProgram
 		jsr	RandomNumber	; for better randomness for the level IDs
 		jsr	ObjectsLoad
-		bsr.w	DeformBgLayer
+		; bsr.w	 DeformBgLayer
 		jsr	BuildSprites
 		bsr.w	PalCycle_Title
 		bsr.w	RunPLC_RAM
@@ -3610,7 +3613,7 @@ LevelSelect:
 
 		cmpi.w	#lsjackass,d0		; have you selected item $16 (jackass/beebush)
 		bne.s	@waitbees		; if not, we're just waiting for the bees. 
-
+		move.b  #$0,titlemode.w
 		move.b	#$24,($FFFFF600).w 	; set screen	mode to	$24 BEEBUSH
 		rts	
 
