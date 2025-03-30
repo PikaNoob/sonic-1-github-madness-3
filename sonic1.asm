@@ -58,6 +58,7 @@ charcount = 8 ; there are 8 characters, not 6??
 ; PLAYER PALETTE -> Player_Palette
 ; MENU NAME -> Player_Names
 ; Player Specific Sounds: every instance of @sndlut
+; Player Specific Misc Data: Anything with the comment ">charcount", hopefully
 
 StartOfRom:
 Vectors:	dc.l 'P'<<24|$FFFE00,		'O'<<24|EntryPoint,	'Y'<<24|BusError,	'S'<<24|AddressError
@@ -348,7 +349,7 @@ jmpto_Otis:
 		jmp     GM_Otis
 jmpto_IntroCutscene:
 		pea	PlayLevel
-		moveq	#0,d0
+		moveq	#0,d0			; >charcount
 		move.b	(v_character).w,d0
 		lsl.w	#2,d0
 		jmp	@lut(pc,d0.w)
@@ -360,6 +361,7 @@ jmpto_IntroCutscene:
 	bra.w	@null		; neru
 	bra.w	@null		; gomer
 	bra.w	@null		; sailor mercury
+	bra.w	@null		; kiryu
 
 @null:		rts
 
@@ -4262,7 +4264,7 @@ OptionsHighlight:
 ; give the vram setting on d3
 CharDraw:
 		; counter thing
-		moveq	#0,d0
+		moveq	#0,d0			; >charcount
 		move.b	(v_character).w,d0
 		add.b	#$31,d0
 		
@@ -4276,7 +4278,7 @@ CharDraw:
 		add.b	#charcount+1,d0
 		move.w	d0,(a6)
 		
-		lea	(Player_Names).l,a1
+		lea	(Player_Names).l,a1	; >charcount
 		moveq	#0,d0
 		move.b	(v_character).w,d0
 		add.w	d0,d0
@@ -4572,7 +4574,7 @@ Level_LoadPal:
 		move.w	#$1E,($FFFFFE14).w
 		move	#$2300,sr
 
-		moveq	#0,d1
+		moveq	#0,d1		; >charcount
 		move.b	(v_character),d1
 		add.w	d1,d1
 		add.w	d1,d1
@@ -4777,7 +4779,7 @@ Level_StartGame:
 		bclr	#7,($FFFFF600).w ; subtract 80 from screen mode
 
 ;START SOUNDS
-		lea	@sndlut(pc),a1
+		lea	@sndlut(pc),a1		; >charcount
 		jsr	PlayerSpecificSound
 		bra.w	@cont
 @sndlut:
@@ -16377,7 +16379,7 @@ loc_C61A:				; XREF: Obj3A_ChkPos
 
 		move.w	#180,$1E(a0)	; set time delay to 3 seconds
 ; CHAR_WIN_SND: SMCsoundCHKWN: NormalsoundCHKWN:
-		lea	@sndlut(pc),a1
+		lea	@sndlut(pc),a1		; >charcount
 		jsr	PlayerSpecificSound
 		bra.w	@contgame
 @sndlut:
@@ -25184,7 +25186,7 @@ loc_130BA:
 		bclr	#0,$22(a0)
 SMCsoundCHK1:
 ; NormalsoundCHK1:
-		lea	@sndlut(pc),a1
+		lea	@sndlut(pc),a1		; >charcount
 		jmp	PlayerSpecificSound
 @sndlut:
 		dc.b 1,$A4	; sonic
@@ -25395,7 +25397,7 @@ Sonic_AirUnroll:
 		move.b	#9,$17(a0)
 		move.b	#14,$1C(a0)	; use dunk animation
 
-		lea	@sndlut(pc),a1
+		lea	@sndlut(pc),a1		; >charcount
 		jsr	PlayerSpecificSound
 		bra.w	@contgame
 @sndlut:
@@ -25648,7 +25650,7 @@ Obj01_DoRoll:
 		bne.s	locret_133E8
 		move.w	#$200,$14(a0)
 locret_133E8:
-		lea	@sndlut(pc),a1
+		lea	@sndlut(pc),a1		; >charcount
 		jmp	PlayerSpecificSound
 @sndlut:
 		dc.b 1,$BE	; sonic
@@ -25706,7 +25708,7 @@ loc_1341C:
 		move.b	#$13,$16(a0)
 		move.b	#9,$17(a0)
 
-		lea	@sndlut(pc),a1
+		lea	@sndlut(pc),a1		; >charcount
 		jsr	PlayerSpecificSound
 ;		btst	#2,$22(a0)
 ;		bne.s	loc_13490
@@ -26380,7 +26382,7 @@ Player_Anim:
 	; Insert more animation data for other characters here
 	
 Sonic_Animate:				; XREF: Obj01_Control; et al
-		moveq	#0,d0
+		moveq	#0,d0		; >charcount
 		move.b	(v_character).w,d0
 		lsl.w	#2,d0
 		lea 	Player_Anim(pc),a1
@@ -26601,7 +26603,7 @@ LoadSonicDynPLC:			; XREF: Obj01_Control; et al
 		beq.s	locret_13C96
 		move.b	d0,($FFFFF766).w
 		
-		move.w	#0,d1
+		move.w	#0,d1		; >charcount
 		move.b	(v_character),d1
 		lsl.w	#2,d1
 		lea 	Player_DPLC(pc),a2
@@ -26618,7 +26620,7 @@ LoadSonicDynPLC:			; XREF: Obj01_Control; et al
 		move.b	#1,($FFFFF767).w
 
 SPLC_ReadEntry:
-		move.w	#0,d0
+		move.w	#0,d0		; >charcount
 		move.b	(v_character),d0
 		lsl.w	#2,d0
 		lea 	Player_Art(pc),a1
@@ -31218,7 +31220,7 @@ loc_1784C:				; XREF: loc_177E6
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 CHAR_BOSSHIT_SND:
-		lea	@sndlut(pc),a1
+		lea	@sndlut(pc),a1		; >charcount
 		jmp	PlayerSpecificSound
 @sndlut:
 		dc.b 0,$00	; sonic
@@ -36387,7 +36389,7 @@ Hurt_Sound:
 
 ; SMCsoundCHKD: NormalsoundCHKD:
 		move.l	a1,-(sp)
-		lea	@sndlut(pc),a1
+		lea	@sndlut(pc),a1		; >charcount
 		jsr	PlayerSpecificSound
 		move.l	(sp)+,a1
 		moveq	#-1,d0
@@ -36442,7 +36444,7 @@ Kill_Sound:
 		jsr	(PlaySound_Special).l
 
 		move.l	a1,-(sp)
-		lea	@sndlut(pc),a1
+		lea	@sndlut(pc),a1		; >charcount
 		jsr	PlayerSpecificSound
 		move.l	(sp)+,a1
 		moveq	#-1,d0
@@ -39257,7 +39259,7 @@ Debug_DoNothing:
 ; End of function Debug_Control
 
 Obj01_setplayermap:
-		moveq	#0,d0
+		moveq	#0,d0		; >charcount
 		move.b	(v_character),d0
 		lsl.w	#2,d0
 		lea 	Player_Maps(pc),a1
