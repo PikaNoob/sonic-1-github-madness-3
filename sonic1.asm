@@ -2965,7 +2965,7 @@ Pal_SBZ3GroWat:	incbin	pallet\gronicsbz3uw.bin	; Gronic (underwater in SBZ act 3
 Pal_Anakama:incbin	pallet\anakama.bin	; anakama char
 Pal_neru:incbin	pallet\neru.bin	; kosaku  kosaku  kosaku  kosaku  kosaku 
 Pal_Limit:incbin pallet\LimitedSonic.bin	;	Soo limited-core
-Pal_mercury:incbin	pallet\LimitedSonic.bin	; mercury power make up!
+Pal_mercury:incbin	pallet\mercury.bin	; mercury power make up!
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	delay the program by ($FFFFF62A) frames
@@ -4422,12 +4422,12 @@ Level_ClrVars3:
 Player_Palette:
 		; normal, lz, sbz, blank
 		dc.w	3,$F,$10,0 ; Sonic 
-		dc.w	23,24,25,0 ; Pal_Gronic 
-		dc.w	26,24,25,0 ; Pal_Anakama 
+		dc.w	24,25,26,0 ; Pal_Gronic 
+		dc.w	27,25,26,0 ; Pal_Anakama 
 		dc.w	28,28,28,0 ; LimitedSonic 
-		dc.w	26,26,$26,0 ; neru
+		dc.w	27,27,$27,0 ; neru
 		dc.w	3,$F,$10,0 ; Gomer Gomer!
-		dc.w	28,28,28,0 ; MERCURY
+		dc.w	29,29,29,0 ; MERCURY
 		; add more player palettes
 Level_LoadPal:
 		move.w	#$1E,($FFFFFE14).w
@@ -24466,8 +24466,7 @@ Player_Maps:
 	dc.l	Map_Limit ; LimitedSonic
 	dc.l    map_neru
 	dc.l    map_gomer
-;	dc.l    map_mercury
-	dc.l    map_neru
+	dc.l    map_mercury
 	; insert player mapping here
 	
 Obj01_Main:				; XREF: Obj01_Index
@@ -26418,8 +26417,7 @@ Player_DPLC:
 	dc.l	LimitDynPLC ; LimitedSonic
 	dc.l	NeruDynPLC ; neru
 	dc.l	GomerDynPLC ; gomer gomer!
-;	dc.l	mercuryDynPLC ; mercury
-	dc.l	NeruDynPLC ; neru
+	dc.l	mercuryDynPLC ; mercury
 	; add pointers for player dplc here
 Player_Art:
 	dc.l	Art_Sonic
@@ -26428,8 +26426,7 @@ Player_Art:
 	dc.l	Art_Limit ; LimitedSonic
 	dc.l	Art_neru ; neru
 	dc.l	Art_gomer ; gomer gomer!
-;	dc.l	Art_mercury ; mercury
-	dc.l	Art_neru ; neru
+	dc.l	Art_mercury ; mercury
 	; add pointers for player art here
 
 LoadSonicDynPLC:			; XREF: Obj01_Control; et al
@@ -39191,8 +39188,8 @@ map_neru:
 	include "_maps\neru.asm"
 map_gomer:
 	include "_maps\gomer.asm"
-;map_mercury:
-;	include "_maps\neru.asm"
+map_mercury:
+	include "_maps\mercury.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	loading	array for the players
 ; ---------------------------------------------------------------------------
@@ -39204,8 +39201,8 @@ NeruDynPLC:
 	include "_inc\NeruDPLC.asm"
 gomerDynPLC:
 	include "_inc\gomerDPLC.asm"
-;mercuryDynPLC:
-;	include "_inc\NeruDPLC.asm"
+mercuryDynPLC:
+	include "_inc\mercuryDPLC.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	- players
 ; ---------------------------------------------------------------------------
@@ -39217,8 +39214,8 @@ Art_neru:	incbin	artunc\neru.bin	; gocha gocha urusee!
 		even
 Art_gomer:	incbin	artunc\gomer.bin	; gomer gomer!
 		even
-;Art_mercury:	incbin	artunc\neru.bin
-;		even
+Art_mercury:	incbin	artunc\mercury.bin
+		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
