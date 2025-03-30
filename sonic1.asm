@@ -26650,17 +26650,6 @@ loc_13B26:
 	include	"_inc\LimitedSonic\Limit_Animate.asm"
 
 ; ===========================================================================
-PurpleAniData:
-	include "_anim\Purple.asm"
-
-SonicAniData:
-	include "_anim\Sonic.asm"
-
-LimitedSonicAniData:
-	include "_anim\LimitedSonic.asm"
-	
-KiryuAniData:
-	include "_anim\kiryu.asm"
 
 ; ---------------------------------------------------------------------------
 ; Sonic	pattern	loading	subroutine
@@ -39498,6 +39487,21 @@ Map_Kiryu:
 	include "_maps\Kiryu.asm"
 Map_Purple:
 	include "_maps\Purple.asm"
+
+; ---------------------------------------------------------------------------
+; Animation data array for the players
+; ---------------------------------------------------------------------------
+SonicAniData:
+	include "_anim\Sonic.asm"
+
+LimitedSonicAniData:
+	include "_anim\LimitedSonic.asm"
+	
+KiryuAniData:
+	include "_anim\kiryu.asm"
+
+PurpleAniData:
+	include "_anim\Purple.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	loading	array for the players
 ; ---------------------------------------------------------------------------
