@@ -25420,10 +25420,11 @@ Boundary_Bottom:
 		rts	
 
 CallKillSonic:
-		move.b	#02,($FFFFF003).w ; pause music (this is for pit fall)
-		jsr	KillSonic	; GMZ
-		move.b  #$93, d0 ; scream in hell
-		jmp     MegaPCM_PlaySample
+		move.b	#$E4,d0		; stop music
+		jsr	PlaySound
+		move.b  #$93, d0	; scream in hell
+		jsr	MegaPCM_PlaySample
+		jmp	KillSonic	; GMZ
 ; ===========================================================================
 
 Boundary_Sides:
