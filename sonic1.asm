@@ -3902,7 +3902,7 @@ Demo:					; XREF: TitleScreen
 loc_33B6:				; XREF: loc_33E4
 		move.b	#4,($FFFFF62A).w
 		bsr.w	DelayProgram
-		bsr.w	DeformBgLayer
+		bsr.w   _titleScroll
 		bsr.w	PalCycle_Load
 		bsr.w	RunPLC_RAM
 		move.w	($FFFFD008).w,d0
