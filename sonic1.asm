@@ -345,9 +345,26 @@ jmpto_BeeBush:
 jmpto_Otis:
 		jmp     GM_Otis
 jmpto_IntroCutscene:
-		lea	(IntroCutscene),a6
-		jsr	GM_CustomSplashScreensIG
-		jmp	PlayLevel
+		pea	PlayLevel
+		moveq	#0,d0
+		move.b	(v_character).w,d0
+		lsl.w	#2,d0
+		jmp	@lut(pc,d0.w)
+@lut:	bra.w 	@sonic		; sonic
+	bra.w	@null
+	bra.w	@null
+	bra.w	@null
+	bra.w	@null		; limited
+	bra.w	@null		; neru
+	bra.w	@null		; gomer
+	bra.w	@null		; sailor mercury
+
+@null:		rts
+
+@sonic:		lea	IntroCutscene,a6
+		jmp	GM_CustomSplashScreensIG
+; ===========================================================================
+
 CheckSumError:
 		illegal
 ; ===========================================================================
@@ -4194,7 +4211,7 @@ OptionsMenu:
 		beq.s	OptionsMenu	; if not, branch
 		move.w	($FFFFFF82).w,d0
 		tst.w	d0
-		beq.w	PlayLevel
+		beq.w	PlayIntro
 		bra.s	OptionsMenu
 		
 OptReturn:
@@ -7406,6 +7423,29 @@ BgScroll_End:				; XREF: BgScroll_Index
 		move.w	#$1E,($FFFFF714).w
 		rts
 
+Deform_Title:
+		move.w	($FFFFFFF2).w,d0
+		lsl.w	#2,d0
+		jmp	@lut(pc,d0.w)
+@lut:		bra.w	Deform_GHZ
+		bra.w	@type2
+		bra.w	Deform_LZ		; TODO: idk replace it with something fancier
+		bra.w	Deform_Ripple
+@type2:
+		move.w	($FFFFF70C).w,($FFFFF618).w
+		lea	($FFFFCC00).w,a1
+		move.w	#240-1,d1	; v30
+		move.w	($FFFFF700).w,d0	; set FG
+		swap	d0
+		clr.w	d0			; set BG
+@t2loop:
+		neg.w	d0
+		swap	d0
+		neg.w	d0
+		swap	d0
+		move.l	d0,(a1)+
+		dbf	d1,@t2loop
+		rts
 ; ---------------------------------------------------------------------------
 ; Background layer deformation subroutines
 ; ---------------------------------------------------------------------------
@@ -7433,6 +7473,8 @@ loc_628E:
 		move.w	($FFFFF70C).w,($FFFFF618).w
 		move.w	($FFFFF718).w,($FFFFF620).w
 		move.w	($FFFFF71C).w,($FFFFF61E).w
+		cmp.b	#4,($FFFFF600).w
+		beq.w	Deform_Title
 		moveq	#0,d0
 		tst.b	($FFFFFFF9).w	; GMZ
 		beq.s	GetDeformRoutine	; GMZ
