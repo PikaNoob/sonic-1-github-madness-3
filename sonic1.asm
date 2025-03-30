@@ -39966,11 +39966,12 @@ MusicIndex:	; $01-$7F
 		dc.l Music02 ; Invincible Coconut
 		dc.l Music03 ; Dr. Coffinman (Boss Theme)
 		dc.l Music04 ; Eggman Encounter Cutscene (Transition to Z Z Z Z Z Z Act 3)
-		dc.l Music05 ; IDK (Originally for Sonic RPG Project - TG2000 Was Here)
+		dc.l Music05 ; IDK
 		dc.l Music06 ; Go Go Gadget
 		dc.l Music07 ; The Angry Hedgehog
 		dc.l Music08 ; THX Logo
 		dc.l Music09 ; Poop
+		dc.l Music0A ; TG2000 Jingle (Gotta mark my presence somewhere - TG2000 was here)
 		dc.l Music92 ; test
 
 MusicIndex80:	; $81-$9F
@@ -42440,7 +42441,7 @@ Music03:	include	sound\drcoffinman.asm
 		even
 Music04:	include	sound\eggmancutscene.asm
 		even
-Music05:	include	sound\music05.bin
+Music05:	include	sound\music05.asm
 		even
 Music06:	include	sound\gogogadget.asm
 		even
@@ -42451,6 +42452,8 @@ Music07:	include	sound\anger.asm
 Music08:	include	sound\THX.asm
 		even
 Music09:	include	sound\curburenthusiasm.asm
+		even
+Music0A:	include	sound\TG2000JingleIDK.asm
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
