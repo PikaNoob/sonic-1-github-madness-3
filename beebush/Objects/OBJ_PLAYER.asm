@@ -109,7 +109,7 @@ BbushBees_Main:
 BbushBees_InitHive:
         addq.b  #2,obj.Action(a0)
 	move.w  #-$600,obj.YSpeed(a0)
-	move.w  #-$7A,obj.XSpeed(a0)
+	move.w  #-$50,obj.XSpeed(a0)
 	move.w  obj.YScr(a0),obj.Y(a0)
 
 BbushBees_Hive:
@@ -125,6 +125,8 @@ BbushBees_Hive:
 
 .Finish
 	move.b  #$D,(membushHive+obj.Frame).w
+        move.b  #$BB,d0
+        jsr    PlaySound_Special
 	jmp	_objectDelete
 
 AniSpr_QuagmireBees:
