@@ -132,7 +132,7 @@ GM_SplashScreensListIG:
 	dc.l $81<<24|@nem_playnow,$00<<24|@enifg_playnow,$00<<24|@enibg_playnow,$07<<24|@pal_playnow,0
 	dc.l $81<<24|@nem_actualpoop,$00<<24|@enifg_actualpoop,$00<<24|@enibg_actualpoop,$09<<24|@pal_actualpoop,0	; GMZ
 	dc.l $81<<24|@nem_BILLglider,$00<<24|@enifg_BILLglider,$00<<24|@enibg_BILLglider,$0B<<24|@pal_BILLglider,0	; homemade aircraft very safe
-	dc.l $81<<24|@nem_stop,$00<<24|@enifg_stop,$00<<24|@enibg_stop,$0C<<24|@pal_stop,0
+	dc.l $81<<24|@nem_stop,$00<<24|@enifg_stop,$00<<24|@enibg_stop,$0D<<24|@pal_stop,0
 	dc.l 0	; terminator 2
 ; -----------------------------------------------------------------------------
 @nem_pillow:	incbin artnem\splash_pillow.bin
