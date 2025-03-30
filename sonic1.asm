@@ -1257,6 +1257,31 @@ PlaySound_Unk:
 		move.b	d0,($FFFFF00C).w
 		rts	
 
+
+; ---------------------------------------------------------------------------
+; Play specific sound for specific characters
+; ---------------------------------------------------------------------------
+; a1 = array
+PlayerSpecificSound:
+		clr.w	d0
+		move.b	(v_character).w,d0
+		add.w	d0,d0
+		adda.w	d0,a1
+
+		clr.w	d0
+		move.b	(a1)+,d0
+		add.w	d0,d0
+		jmp	@rout(pc,d0.w)
+@rout:
+		rts		; 0
+		bra.s	@fm	; 1
+;		bra.s	@pcm	; 2
+@pcm:
+		move.b	(a1),d0
+		jmp	MegaPCM_PlaySample
+@fm:
+		move.b	(a1),d0
+		jmp	PlaySound_Special
 ; ---------------------------------------------------------------------------
 ; Subroutine to	pause the game
 ; ---------------------------------------------------------------------------
@@ -4632,16 +4657,19 @@ Level_StartGame:
 		bclr	#7,($FFFFF600).w ; subtract 80 from screen mode
 
 ;START SOUNDS
-		cmp.b	#5,(v_character).w ; has gomer spawned?
-		bne.s	SMCsoundCHKSRT
-		move.b  #$90,d0
-		jsr	MegaPCM_PlaySample
-		jmp	Level_MainLoop
-SMCsoundCHKSRT:
-		cmp.b	#6,(v_character).w ; has sailor mercury spawned?
-		bne.s	Level_MainLoop
-		move.b  #$98,d0
-		jsr	MegaPCM_PlaySample
+		lea	@sndlut(pc),a1
+		jsr	PlayerSpecificSound
+		bra.w	@cont
+@sndlut:
+		dc.b 0,$00	; sonic
+		dc.b 0,$00
+		dc.b 0,$00
+		dc.b 0,$00	; limited
+		dc.b 0,$00
+		dc.b 2,$90	; gomer
+		dc.b 2,$98	; sailer mercury
+		even
+@cont:
 ; ---------------------------------------------------------------------------
 ; Main level loop (when	all title card and loading sequences are finished)
 ; ---------------------------------------------------------------------------
@@ -16200,18 +16228,21 @@ loc_C61A:				; XREF: Obj3A_ChkPos
 		addq.b	#2,$24(a0)
 
 		move.w	#180,$1E(a0)	; set time delay to 3 seconds
-CHAR_WIN_SND:
-		cmp.b	#5,(v_character).w ; has gomer spawned?
-		bne.s	SMCsoundCHKWN
-		move.b  #$90,d0
-		jsr	MegaPCM_PlaySample
-		jmp	NormalsoundCHKWN
-SMCsoundCHKWN:
-		cmp.b	#6,(v_character).w ; has sailor mercury spawned?
-		bne.s	NormalsoundCHKWN
-		move.b  #$9E,d0
-		jsr	MegaPCM_PlaySample
-NormalsoundCHKWN:
+; CHAR_WIN_SND: SMCsoundCHKWN: NormalsoundCHKWN:
+		lea	@sndlut(pc),a1
+		jsr	PlayerSpecificSound
+		bra.w	@contgame
+@sndlut:
+		dc.b 0,$00	; sonic
+		dc.b 0,$00
+		dc.b 0,$00
+		dc.b 0,$00	; limited
+		dc.b 0,$00
+		dc.b 2,$90	; gomer
+		dc.b 2,$9E	; sailer mercury
+		even
+@contgame:
+
 Obj3A_Wait:				; XREF: Obj3A_Index
 		subq.w	#1,$1E(a0)	; subtract 1 from time delay
 		bne.s	Obj3A_Display
@@ -24988,6 +25019,8 @@ loc_1309A:
 loc_130A6:
 		move.w	d0,$14(a0)
 		move.b	#0,$1C(a0)	; use walking animation
+
+locret_130E8:
 		rts	
 ; ===========================================================================
 
@@ -25006,22 +25039,19 @@ loc_130BA:
 		blt.s	locret_130E8
 		move.b	#$D,$1C(a0)	; use "stopping" animation
 		bclr	#0,$22(a0)
-
-		cmp.b	#5,(v_character).w ; is this gomer?
-		bne.s	SMCsoundCHK1
-		move.b  #$90,d0
-		jmp	MegaPCM_PlaySample
 SMCsoundCHK1:
-		cmp.b	#6,(v_character).w ; is this sailor mercury?
-		bne.s	NormalsoundCHK1
-		move.b  #$9A,d0
-		jmp	MegaPCM_PlaySample
-NormalsoundCHK1:
-		move.w	#$A4,d0
-		jsr	(PlaySound_Special).l ;	play stopping sound
-
-locret_130E8:
-		rts	
+; NormalsoundCHK1:
+		lea	@sndlut(pc),a1
+		jmp	PlayerSpecificSound
+@sndlut:
+		dc.b 1,$A4	; sonic
+		dc.b 1,$A4
+		dc.b 1,$A4
+		dc.b 1,$A4	; limited
+		dc.b 1,$A4
+		dc.b 2,$90	; gomer
+		dc.b 2,$9A	; sailer mercury
+		even
 ; End of function Sonic_MoveLeft
 
 
@@ -25045,6 +25075,8 @@ loc_13104:
 loc_1310C:
 		move.w	d0,$14(a0)
 		move.b	#0,$1C(a0)	; use walking animation
+
+locret_1314E:
 		rts	
 ; ===========================================================================
 
@@ -25064,21 +25096,7 @@ loc_13120:
 		move.b	#$D,$1C(a0)	; use "stopping" animation
 		bset	#0,$22(a0)
 
-		cmp.b	#5,(v_character).w ; is this gomer?
-		bne.s	SMCsoundCHK2
-		move.b  #$90,d0
-		jmp	MegaPCM_PlaySample
-SMCsoundCHK2:
-		cmp.b	#6,(v_character).w ; is this sailor mercury?
-		bne.s	NormalsoundCHK2
-		move.b  #$9A,d0
-		jmp	MegaPCM_PlaySample
-NormalsoundCHK2:
-		move.w	#$A4,d0
-		jsr	(PlaySound_Special).l ;	play stopping sound
-
-locret_1314E:
-		rts	
+		bra.w	SMCsoundCHK1
 ; End of function Sonic_MoveRight
 
 		include	"_inc\LimitedSonic\Limit Move.asm"
@@ -25233,21 +25251,19 @@ Sonic_AirUnroll:
 		move.b	#9,$17(a0)
 		move.b	#14,$1C(a0)	; use dunk animation
 
-		cmp.b	#5,(v_character).w ; is this gomer?
-		bne.s	SMCsoundCHK3
-		move.b  #$90,d0
-		jsr	MegaPCM_PlaySample
-		jmp	NormalsoundCHK33
-SMCsoundCHK3:
-		cmp.b	#6,(v_character).w ; is this sailor mercury?
-		bne.s	NormalsoundCHK3
-		move.b  #$9A,d0
-		jsr	MegaPCM_PlaySample
-		jmp	NormalsoundCHK33
-NormalsoundCHK3:
-		move.w	#$A5,d0
-		jsr	(PlaySound_Special).l ;	play fart sound
-NormalsoundCHK33
+		lea	@sndlut(pc),a1
+		jsr	PlayerSpecificSound
+		bra.w	@contgame
+@sndlut:
+		dc.b 1,$A5	; sonic
+		dc.b 1,$A5
+		dc.b 1,$A5
+		dc.b 1,$A5	; limited
+		dc.b 1,$A5
+		dc.b 2,$90	; gomer
+		dc.b 2,$9A	; sailer mercury
+		even
+@contgame:
 		move.l	$10(a0),d0
 		add.l	d0,d0
 		move.l	d0,$10(a0)
@@ -25421,8 +25437,8 @@ Boundary_Bottom:
 CallKillSonic:
 		move.b	#$E4,d0		; stop music
 		jsr	PlaySound
-		move.b  #$93, d0	; scream in hell
-		jsr	MegaPCM_PlaySample
+;		move.b  #$93, d0	; scream in hell
+;		jsr	MegaPCM_PlaySample
 		jmp	KillSonic	; GMZ
 ; ===========================================================================
 
@@ -25473,28 +25489,21 @@ Obj01_DoRoll:
 		move.b	#7,$17(a0)
 		move.b	#2,$1C(a0)	; use "rolling"	animation
 		addq.w	#5,$C(a0)
-
-		cmp.b	#5,(v_character).w ; is this gomer?
-		bne.s	SMCsoundCHK4
-		move.b  #$90,d0
-		jsr	MegaPCM_PlaySample
-		jmp	NormalsoundCHK44
-SMCsoundCHK4:
-		cmp.b	#6,(v_character).w ; is this sailor mercury?
-		bne.s	NormalsoundCHK4
-		move.b  #$9A,d0
-		jsr	MegaPCM_PlaySample
-		jmp	NormalsoundCHK44
-NormalsoundCHK4:
-		move.w	#$BE,d0
-		jsr	(PlaySound_Special).l ;	play rolling sound
-NormalsoundCHK44:
 		tst.w	$14(a0)
 		bne.s	locret_133E8
 		move.w	#$200,$14(a0)
-
 locret_133E8:
-		rts	
+		lea	@sndlut(pc),a1
+		jmp	PlayerSpecificSound
+@sndlut:
+		dc.b 0,$00	; sonic
+		dc.b 0,$00
+		dc.b 0,$00
+		dc.b 0,$00	; limited
+		dc.b 0,$00
+		dc.b 2,$90	; gomer
+		dc.b 2,$9A	; sailer mercury
+		even
 ; End of function Sonic_Roll
 
 ; ---------------------------------------------------------------------------
@@ -25504,16 +25513,18 @@ locret_133E8:
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 
+locret_1348E:
+		rts
 Sonic_Jump:				; XREF: Obj01_MdNormal; Obj01_MdRoll
 		move.b	($FFFFF603).w,d0
 		andi.b	#$70,d0		; is A,	B or C pressed?
-		beq.w	locret_1348E	; if not, branch
+		beq.s	locret_1348E	; if not, branch
 		moveq	#0,d0
 		move.b	$26(a0),d0
 		addi.b	#$80,d0
 		bsr.w	sub_14D48
 		cmpi.w	#6,d1
-		blt.w	locret_1348E
+		blt.s	locret_1348E
 		move.w	#$680,d2
 		btst	#6,$22(a0)
 		beq.s	loc_1341C
@@ -25535,39 +25546,34 @@ loc_1341C:
 		addq.l	#4,sp
 		move.b	#1,$3C(a0)
 		clr.b	$38(a0)
-		cmp.b	#5,(v_character).w ; is this gomer?
-		bne.s	SMCsoundCHK5
-		move.b  #$90,d0
-		jsr	MegaPCM_PlaySample
-		jmp	NormalsoundCHK55
-SMCsoundCHK5:
-		cmp.b	#6,(v_character).w ; is this sailor mercury?
-		bne.s	NormalsoundCHK5
-		move.b  #$99,d0
-		jsr	MegaPCM_PlaySample
-		jmp	NormalsoundCHK55
-NormalsoundCHK5:
-		move.w	#$A0,d0
-		jsr	(PlaySound_Special).l ;	play jumping sound
-NormalsoundCHK55:
 		move.b	#$13,$16(a0)
 		move.b	#9,$17(a0)
-		btst	#2,$22(a0)
-		bne.s	loc_13490
+
+		lea	@sndlut(pc),a1
+		jsr	PlayerSpecificSound
+;		btst	#2,$22(a0)
+;		bne.s	loc_13490
 		move.b	#$E,$16(a0)
 		move.b	#7,$17(a0)
 		move.b	#2,$1C(a0)	; use "jumping"	animation
 		bset	#2,$22(a0)
 		addq.w	#5,$C(a0)
 		move.b	#10,$3A(a0) ; timer
-
-locret_1348E:
 		rts	
+@sndlut:
+		dc.b 1,$A0	; sonic
+		dc.b 1,$A0
+		dc.b 1,$A0
+		dc.b 1,$A0	; limited
+		dc.b 1,$A0
+		dc.b 2,$90	; gomer
+		dc.b 2,$9A	; sailer mercury
+		even
 ; ===========================================================================
 
-loc_13490:
-		bset	#4,$22(a0)
-		rts	
+;loc_13490:
+;		bset	#4,$22(a0)
+;		rts	
 ; End of function Sonic_Jump
 
 
@@ -31048,17 +31054,17 @@ loc_1784C:				; XREF: loc_177E6
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 CHAR_BOSSHIT_SND:
-		cmp.b	#5,(v_character).w ; did gomer hit?
-		bne.s	SMCsoundCHKBH
-		move.b  #$90,d0
-		jmp	MegaPCM_PlaySample
-SMCsoundCHKBH:
-		cmp.b	#6,(v_character).w ; did sailor mercury hit?
-		bne.s	NormalsoundCHKBH
-		move.b  #$9D,d0
-		jmp	MegaPCM_PlaySample
-NormalsoundCHKBH:
-		rts
+		lea	@sndlut(pc),a1
+		jmp	PlayerSpecificSound
+@sndlut:
+		dc.b 0,$00	; sonic
+		dc.b 0,$00
+		dc.b 0,$00
+		dc.b 0,$00	; limited
+		dc.b 0,$00
+		dc.b 2,$90	; gomer
+		dc.b 2,$9D	; sailer mercury
+		even
 
 ; ---------------------------------------------------------------------------
 ; Defeated boss	subroutine
@@ -36196,29 +36202,35 @@ Hurt_ChkSpikes:
 		move.w	#0,$14(a0)
 		move.b	#$1A,$1C(a0)
 		move.w	#$78,$30(a0)
-		move.w	#$A3,d0		; load normal damage sound
-		cmpi.b	#$36,(a2)	; was damage caused by spikes?
-		bne.s	Hurt_Sound	; if not, branch
-		cmpi.b	#$16,(a2)	; was damage caused by LZ harpoon?
-		bne.s	Hurt_Sound	; if not, branch
 		move.w	#$A6,d0		; load spikes damage sound
-
+		cmpi.b	#$36,(a2)	; was damage caused by spikes?
+		beq.s	Hurt_Sound	; if so, branch
+		cmpi.b	#$16,(a2)	; was damage caused by LZ harpoon?
+		beq.s	Hurt_Sound	; if so, branch
+		move.w	#$A3,d0		; load normal damage sound
 Hurt_Sound:
 		jsr	(PlaySound_Special).l
-		moveq	#-1,d0
 
-		cmp.b	#5,(v_character).w ; is this gomer?
-		bne.s	SMCsoundCHKD
-		move.b  #$90,d0
-		jmp	MegaPCM_PlaySample
-SMCsoundCHKD:
-		cmp.b	#6,(v_character).w ; is this sailor mercury?
-		bne.s	NormalsoundCHKD
-		move.b  #$9B,d0
-		jmp	MegaPCM_PlaySample
-NormalsoundCHKD:
+; SMCsoundCHKD: NormalsoundCHKD:
+		move.l	a1,-(sp)
+		lea	@sndlut(pc),a1
+		jsr	PlayerSpecificSound
+		move.l	(sp)+,a1
+		moveq	#-1,d0
 		rts	
+@sndlut:
+		dc.b 0,$00	; sonic
+		dc.b 0,$00
+		dc.b 0,$00
+		dc.b 0,$00	; limited
+		dc.b 0,$00
+		dc.b 2,$90	; gomer
+		dc.b 2,$9B	; sailer mercury
+		even
 ; ===========================================================================
+
+Kill_NoDeath:
+		rts
 
 Hurt_NoRings:
 		tst.w	($FFFFFFFA).w	; is debug mode	cheat on?
@@ -36251,26 +36263,24 @@ KillLimitedSonic:
 		cmpi.b	#$36,(a2)	; check	if you were killed by spikes
 		bne.s	Kill_Sound
 		move.w	#$A6,d0		; play spikes death sound
-
 Kill_Sound:
 		jsr	(PlaySound_Special).l
 
-		move.b  #$92, d0
-		cmp.b	#5,(v_character).w ; is this gomer?
-		bne.s	SMCsoundCHK7
-		move.b  #$90,d0
-		jmp	NormalsoundCHK7
-SMCsoundCHK7:
-		cmp.b	#6,(v_character).w ; is this sailor mercury?
-		bne.s	NormalsoundCHK7
-		move.b  #$9C,d0
-		jmp	NormalsoundCHK7
-NormalsoundCHK7:
-		jsr     MegaPCM_PlaySample
-
-Kill_NoDeath:
+		move.l	a1,-(sp)
+		lea	@sndlut(pc),a1
+		jsr	PlayerSpecificSound
+		move.l	(sp)+,a1
 		moveq	#-1,d0
 		rts	
+@sndlut:
+		dc.b 0,$00	; sonic
+		dc.b 0,$00
+		dc.b 0,$00
+		dc.b 0,$00	; limited
+		dc.b 0,$00
+		dc.b 2,$90	; gomer
+		dc.b 2,$9C	; sailer mercury
+		even
 ; End of function KillSonic
 
 
