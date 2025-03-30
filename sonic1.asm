@@ -25514,11 +25514,19 @@ locret_133E8:
 		lea	@sndlut(pc),a1
 		jmp	PlayerSpecificSound
 @sndlut:
-		dc.b 1,$5E	; sonic
-		dc.b 1,$5E
-		dc.b 1,$5E
-		dc.b 1,$5E	; limited
-		dc.b 1,$5E
+; commented until fixed
+;		dc.b 1,$5E	; sonic
+;		dc.b 1,$5E
+;		dc.b 1,$5E
+;		dc.b 1,$5E	; limited
+;		dc.b 1,$5E
+;placeholder, remove soon
+		dc.b 0,$00	; sonic
+		dc.b 0,$00
+		dc.b 0,$00
+		dc.b 0,$00	; limited
+		dc.b 0,$00
+;placeholder, remove soon
 		dc.b 2,$90	; gomer
 		dc.b 2,$9A	; sailer mercury
 		even
