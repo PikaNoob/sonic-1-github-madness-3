@@ -2,7 +2,7 @@
 ; I'm Glenn Quagmire, and this is Code Bush.
 ; ---------------------------------------------------------------------------
 
-        include "beebush/Mega Drive.inc"
+        ;include "beebush/Mega Drive.inc"
         include "beebush/Macros.inc"
 
         opt     l.
@@ -456,7 +456,11 @@ _beebushCamShake:
 ; ---------------------------------------------------------------------------
 
 
-_beebushScroll:                    
+_beebushScroll:      
+        moveq   #0,d0
+        moveq   #0,d1
+        moveq   #0,d2
+        moveq   #0,d3              
         lea     hscroll.w,a1
 
         move.w  cameraAPosX.w,d1

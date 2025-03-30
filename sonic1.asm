@@ -16,6 +16,7 @@ align macro
 	endm
 		include	"sound/smps2asm_inc.asm"
 		include "MapMacros.asm"
+		include "beebush/Mega Drive.inc"
 
 randLevelCount		= 18	; 31 max (32 is reserved for linear path flag)
 v_levelrandtracker	= $FFFFF5FC	; longword
@@ -48,7 +49,7 @@ optcharpos = lsscrpos+$960000 ; character
 
 ; NOTES FOR ANYONE MAKING CHARACTERS
 v_character = $FFFFFFE8
-charcount = 7 ; 6, +1 for the check
+charcount = 8 ; there are 8 characters, not 6??
 ; pointers for:
 ; PLAYER MAPPINGS -> Player_Maps
 ; PLAYER ANIM SCRIPTS -> Player_Anim
@@ -345,9 +346,26 @@ jmpto_BeeBush:
 jmpto_Otis:
 		jmp     GM_Otis
 jmpto_IntroCutscene:
-		lea	(IntroCutscene),a6
-		jsr	GM_CustomSplashScreensIG
-		jmp	PlayLevel
+		pea	PlayLevel
+		moveq	#0,d0
+		move.b	(v_character).w,d0
+		lsl.w	#2,d0
+		jmp	@lut(pc,d0.w)
+@lut:	bra.w 	@sonic		; sonic
+	bra.w	@null
+	bra.w	@null
+	bra.w	@null
+	bra.w	@null		; limited
+	bra.w	@null		; neru
+	bra.w	@null		; gomer
+	bra.w	@null		; sailor mercury
+
+@null:		rts
+
+@sonic:		lea	IntroCutscene,a6
+		jmp	GM_CustomSplashScreensIG
+; ===========================================================================
+
 CheckSumError:
 		illegal
 ; ===========================================================================
@@ -2991,6 +3009,7 @@ Pal_Anakama:incbin	pallet\anakama.bin	; anakama char
 Pal_neru:incbin	pallet\neru.bin	; kosaku  kosaku  kosaku  kosaku  kosaku 
 Pal_Limit:incbin pallet\LimitedSonic.bin	;	Soo limited-core
 Pal_mercury:incbin	pallet\mercury.bin	; mercury power make up!
+Pal_Kiryu:incbin	pallet\kiryu.bin	; I AM THE YAKUZA KIWAMI
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	delay the program by ($FFFFF62A) frames
@@ -3036,24 +3055,7 @@ loc_29C0:
 ; End of function RandomNumber
 
 
-; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-CalcSinCos:
-CalcSine:				; XREF: SS_BGAnimate; et al
-		andi.w	#$FF,d0
-		add.w	d0,d0
-		addi.w	#$80,d0
-		move.w	Sine_Data(pc,d0.w),d1
-		subi.w	#$80,d0
-		move.w	Sine_Data(pc,d0.w),d0
-		rts	
-; End of function CalcSine
-
-; ===========================================================================
-
-Sine_Data:	incbin	misc\sinewave.bin	; values for a 360º sine wave
-
-; ===========================================================================
 		movem.l	d1-d2,-(sp)
 		move.w	d0,d1
 		swap	d1
@@ -3146,6 +3148,27 @@ loc_2D04:				; XREF: CalcAngle
 
 Angle_Data:	incbin	misc\angles.bin
 
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+; Moved this here to avoid bsr.w breaking without making it a jsr
+CalcSinCos:
+CalcSine:				; XREF: SS_BGAnimate; et al
+		andi.w	#$FF,d0
+		add.w	d0,d0
+		addi.w	#$80,d0
+		move.w	Sine_Data(pc,d0.w),d1
+		subi.w	#$80,d0
+		move.w	Sine_Data(pc,d0.w),d0
+		rts	
+; End of function CalcSine
+
+; ===========================================================================
+
+Sine_Data:	incbin	misc\sinewave.bin	; values for a 360º sine wave
+
+; ===========================================================================
+
 ; ===========================================================================
 
 ; ---------------------------------------------------------------------------
@@ -3226,8 +3249,37 @@ Sega_GotoTitle:
 ; ---------------------------------------------------------------------------
 ; Title	screen
 ; ---------------------------------------------------------------------------
+; for my own convenience
 
-TitleScreen:				; XREF: GameModeArray
+titlemode 	= $FFFFF601 	; AKA "submode"
+titleHScroll    = $FFFFCC00	; hscroll buffer
+
+titleSinCntr 	= $FFFFF760	; sine info
+titleScrCnt	= $FFFFF762      
+titleCos	= $FFFFF764
+
+TitleScreen:
+	move.b  titlemode.w,d0
+        andi.w  #$1C,d0
+        jsr     TitleMdTbl(pc,d0.w)
+        rts
+
+; ---------------------------------------------------------------------------
+
+SMNO_TITLE_INIT       	= 0*4   ; Init 
+SMNO_TITLE_SCR      	= 1*4   ; Intro seq.
+SMNO_TITLE_MAIN      	= 2*4   ; Intro seq.
+
+TitleMdTbl:      
+        bra.w   TITLE_INIT
+        bra.w   TITLE_SCR
+        bra.w   TITLE_MAIN
+
+; ---------------------------------------------------------------------------
+; Title "initialization", (don't worry, i won't touch Gomer)
+; ---------------------------------------------------------------------------
+
+TITLE_INIT:
 		move.b	#$E4,d0
 		bsr.w	PlaySound_Special ; stop music
 		bsr.w	Pal_FadeFrom
@@ -3360,10 +3412,7 @@ Title_LoadText:
 		moveq	#$21,d1
 		moveq	#$15,d2
 		bsr.w	ShowVDPGraphics
-		moveq	#1,d0		; load title screen pallet
-		bsr.w	PalLoad1
-		move.b	#$8A,d0		; play title screen music
-		bsr.w	PlaySound_Special
+
 		move.b	#0,($FFFFFFFA).w ; disable debug mode
 		move.w	#$178,($FFFFF614).w ; run title	screen for $178	frames
 		lea	($FFFFD080).w,a1
@@ -3380,9 +3429,9 @@ Title_ClrObjRam2:
 		move.b	#3,($FFFFD0DA).w
 		move.b	#$F,($FFFFD100).w
 		move.b	#2,($FFFFD11A).w
-		jsr	ObjectsLoad
-		bsr.w	DeformBgLayer
-		jsr	BuildSprites
+		;jsr	ObjectsLoad
+		;bsr.w	DeformBgLayer
+		;jsr	BuildSprites
 		moveq	#0,d0
 		bsr.w	LoadPLC2
 		move.w	#0,($FFFFFFE4).w
@@ -3390,14 +3439,66 @@ Title_ClrObjRam2:
 		move.w	($FFFFF60C).w,d0
 		ori.b	#$40,d0
 		move.w	d0,($C00004).l
-		bsr.w	Pal_FadeTo
+		move.b  #SMNO_TITLE_SCR,titlemode.w
+		move.w  #60*2,titleScrCnt.w
+		move.w  #0,titleSinCntr.w
+		moveq	#1,d0		; load title screen pallet
+		bsr.w	PalLoad2
+		move.b	#$CA,d0
+		bra.w	PlaySound
 
-loc_317C:
+; ---------------------------------------------------------------------------
+; Title screen scroll in
+; I have never written anything like this, nor have I seen any code for it
+; so THIS SUCKS!!!!! maybe someone can improve it. I don't know Lolol. 
+; ---------------------------------------------------------------------------
+
+TITLE_SCR:
+	move.b	#4,($FFFFF62A).w ; set vblank cmd and do vsync
+	bsr.w	DelayProgram
+	sub.w   #1,titleScrCnt.w
+	bmi.s   .Exit
+	bra.w   _titleScroll
+.Exit:
+	move.b	#$8A,d0
+	bsr.w	PlaySound
+
+	move.b	#$AC,d0
+	bsr.w	PlaySound_Special
+
+	move.b  #SMNO_TITLE_MAIN,titlemode.w
+	rts
+
+
+_titleScroll:
+        lea     titleHScroll.w,a1
+        moveq   #240/2,d7
+        moveq   #0,d2
+        move.w  titleScrCnt.w,d2
+.ScrLoop:
+	addq.w  #1,titleSinCntr.w
+       	move.w  titleSinCntr.w,d0
+        jsr     CalcSinCos
+        mulu.w  d2,d0
+        asr.w   #7,d0
+        move.w  d0,(a1)+
+        move.w  #0,(a1)+
+        neg     d0
+        move.w  d0,(a1)+
+        move.w  #0,(a1)+
+        dbf     d7,.ScrLoop
+
+        rts
+
+; ---------------------------------------------------------------------------
+; Title screen main loop
+; ---------------------------------------------------------------------------
+TITLE_MAIN:
 		move.b	#4,($FFFFF62A).w
 		bsr.w	DelayProgram
 		jsr	RandomNumber	; for better randomness for the level IDs
 		jsr	ObjectsLoad
-		bsr.w	DeformBgLayer
+		; bsr.w	 DeformBgLayer
 		jsr	BuildSprites
 		bsr.w	PalCycle_Title
 		bsr.w	RunPLC_RAM
@@ -3467,11 +3568,11 @@ Title_CountC:
 loc_3230:
 		tst.w	($FFFFF614).w
 		beq.w	Demo
-		; (temporary until we have an actual options screen)
+		; nvm we're gonna keep this as a second way
 		btst	#5,	($FFFFF605).w ; check if c pressed
 		beq.s	@notc
 
-		add.b	#1,(v_character).w ; sonic/gronic 
+		add.b	#1,(v_character).w
 
 		cmpi.b	#charcount,(v_character).w
 		blt.s	@notoverflow
@@ -3481,7 +3582,7 @@ loc_3230:
 		bsr.w	PlaySound_Special
 	@notc:
 		andi.b	#$80,($FFFFF605).w ; check if Start is pressed
-		beq.w	loc_317C	; if not, branch
+		beq.w	TITLE_MAIN	; if not, branch
 
 Title_ChkLevSel:
 		btst	#6,($FFFFF604).w ; check if A is pressed
@@ -3560,7 +3661,7 @@ LevelSelect:
 
 		cmpi.w	#lsjackass,d0		; have you selected item $16 (jackass/beebush)
 		bne.s	@waitbees		; if not, we're just waiting for the bees. 
-
+		move.b  #$0,titlemode.w
 		move.b	#$24,($FFFFF600).w 	; set screen	mode to	$24 BEEBUSH
 		rts	
 
@@ -4132,6 +4233,7 @@ Player_Names:
 		dc.b "NERU    "
 		dc.b "GOMER G."
 		dc.b "MERCURY "
+		dc.b "KIRYU K."
 	even
 	
 ; give the vram setting on d3
@@ -4158,6 +4260,21 @@ OptionsHighlight:
 ; ---------------------------------------------------------------------------
 ; give the vram setting on d3
 CharDraw:
+		; counter thing
+		moveq	#0,d0
+		move.b	(v_character).w,d0
+		add.b	#$31,d0
+		
+		move.l	#optcharpos+$120000,d4	; screen position (character)
+		add.w	d3,d0
+		move.l	d4,4(a6)
+		move.w	d0,(a6)
+		sub.b	(v_character).w,d0
+		add.b	#'/'-$31,d0
+		move.w	d0,(a6)
+		add.b	#charcount+1,d0
+		move.w	d0,(a6)
+		
 		lea	(Player_Names).l,a1
 		moveq	#0,d0
 		move.b	(v_character).w,d0
@@ -4194,7 +4311,7 @@ OptionsMenu:
 		beq.s	OptionsMenu	; if not, branch
 		move.w	($FFFFFF82).w,d0
 		tst.w	d0
-		beq.w	PlayLevel
+		beq.w	PlayIntro
 		bra.s	OptionsMenu
 		
 OptReturn:
@@ -4347,6 +4464,7 @@ GetLevelRandom:
 ; ---------------------------------------------------------------------------
 
 Level:					; XREF: GameModeArray
+		move.b  #0,titlemode.w
 		bset	#7,($FFFFF600).w ; add $80 to screen mode (for pre level sequence)
 		tst.w	($FFFFFFF0).w
 		bmi.s	loc_37B6
@@ -4447,6 +4565,7 @@ Player_Palette:
 		dc.w	27,27,$27,0 ; neru
 		dc.w	3,$F,$10,0 ; Gomer Gomer!
 		dc.w	29,29,29,0 ; MERCURY
+		dc.w	30,30,30,0 ; bragon of bojima 
 		; add more player palettes
 Level_LoadPal:
 		move.w	#$1E,($FFFFFE14).w
@@ -7406,6 +7525,29 @@ BgScroll_End:				; XREF: BgScroll_Index
 		move.w	#$1E,($FFFFF714).w
 		rts
 
+Deform_Title:
+		move.w	($FFFFFFF2).w,d0
+		lsl.w	#2,d0
+		jmp	@lut(pc,d0.w)
+@lut:		bra.w	Deform_GHZ
+		bra.w	@type2
+		bra.w	Deform_LZ		; TODO: idk replace it with something fancier
+		bra.w	Deform_Ripple
+@type2:
+		move.w	($FFFFF70C).w,($FFFFF618).w
+		lea	($FFFFCC00).w,a1
+		move.w	#240-1,d1	; v30
+		move.w	($FFFFF700).w,d0	; set FG
+		swap	d0
+		clr.w	d0			; set BG
+@t2loop:
+		neg.w	d0
+		swap	d0
+		neg.w	d0
+		swap	d0
+		move.l	d0,(a1)+
+		dbf	d1,@t2loop
+		rts
 ; ---------------------------------------------------------------------------
 ; Background layer deformation subroutines
 ; ---------------------------------------------------------------------------
@@ -7433,6 +7575,8 @@ loc_628E:
 		move.w	($FFFFF70C).w,($FFFFF618).w
 		move.w	($FFFFF718).w,($FFFFF620).w
 		move.w	($FFFFF71C).w,($FFFFF61E).w
+		cmp.b	#4,($FFFFF600).w
+		beq.w	Deform_Title
 		moveq	#0,d0
 		tst.b	($FFFFFFF9).w	; GMZ
 		beq.s	GetDeformRoutine	; GMZ
@@ -13678,6 +13822,8 @@ Obj2E_ChkS:
 		cmpi.b	#7,d0		; does monitor contain 'S'
 		bne.s	Obj2E_ChkEnd
 		; nop	
+		move.w #$A6,d0 ;play futuristic
+		jsr MegaPCM_PlaySample ;aaaa
 		moveq	#1,d1
 		eor.b	d1,($FFFFFE2F).w	; GMZ: Set reverse controls flag when broken, revert when another monitor of same type is broken again
 
@@ -26223,6 +26369,7 @@ Player_Anim:
 	dc.l	SonicAniData ; neru
 	dc.l	SonicAniData ; gomer gomer!
 	dc.l	SonicAniData ; mercury
+	dc.l	KiryuAniData ; Kiryu
 	; Insert more animation data for other characters here
 	
 Sonic_Animate:				; XREF: Obj01_Control; et al
@@ -26410,6 +26557,9 @@ SonicAniData:
 
 LimitedSonicAniData:
 	include "_anim\LimitedSonic.asm"
+	
+KiryuAniData:
+	include "_anim\kiryu.asm"
 
 ; ---------------------------------------------------------------------------
 ; Sonic	pattern	loading	subroutine
@@ -26424,6 +26574,7 @@ Player_DPLC:
 	dc.l	NeruDynPLC ; neru
 	dc.l	GomerDynPLC ; gomer gomer!
 	dc.l	mercuryDynPLC ; mercury
+	dc.l	KiryuDynPLC ; kiryu kasuga from the oni alliance
 	; add pointers for player dplc here
 Player_Art:
 	dc.l	Art_Sonic
@@ -26433,6 +26584,7 @@ Player_Art:
 	dc.l	Art_neru ; neru
 	dc.l	Art_gomer ; gomer gomer!
 	dc.l	Art_mercury ; mercury
+	dc.l	Art_Kiryu ; kiryuing
 	; add pointers for player art here
 
 LoadSonicDynPLC:			; XREF: Obj01_Control; et al
@@ -39100,6 +39252,7 @@ Player_Maps:
 	dc.l    map_neru
 	dc.l    map_gomer
 	dc.l    map_mercury
+	dc.l	Map_Kiryu
 	; insert player mapping here
 
 
@@ -39220,6 +39373,8 @@ map_gomer:
 	include "_maps\gomer.asm"
 map_mercury:
 	include "_maps\mercury.asm"
+Map_Kiryu:
+	include "_maps\Kiryu.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	loading	array for the players
 ; ---------------------------------------------------------------------------
@@ -39233,6 +39388,8 @@ gomerDynPLC:
 	include "_inc\gomerDPLC.asm"
 mercuryDynPLC:
 	include "_inc\mercuryDPLC.asm"
+KiryuDynPLC:
+	include "_inc\Kiryu dynamic pattern load cues.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	- players
 ; ---------------------------------------------------------------------------
@@ -39245,6 +39402,8 @@ Art_neru:	incbin	artunc\neru.bin	; gocha gocha urusee!
 Art_gomer:	incbin	artunc\gomer.bin	; gomer gomer!
 		even
 Art_mercury:	incbin	artunc\mercury.bin
+		even
+Art_Kiryu:	incbin	artunc/kiryu.bin	; Kiryu
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
@@ -40002,10 +40161,20 @@ MusicIndex:	; $01-$7F
 		dc.l Music04 ; Eggman Encounter Cutscene (Transition to Z Z Z Z Z Z Act 3)
 		dc.l Music05 ; IDK
 		dc.l Music06 ; Go Go Gadget
-		dc.l Music07 ; The Angry Hedgehog
+		dc.l Music07 ; The Angry Hedgehog (For Play Now splash screen)
 		dc.l Music08 ; THX Logo
 		dc.l Music09 ; Poop
 		dc.l Music0A ; TG2000 Jingle (Gotta mark my presence somewhere - TG2000 was here)
+		dc.l Music0B ; hill climb DAMN
+		dc.l Music0C ; Breaking The Habit, Linkin Park
+		dc.l Music0D ; Megalovania Looped
+		dc.l Music0E ; Go Go Gadget But it actually works correctly, had to sacrifice the DAC though :(
+		dc.l Music0F ; Eggman Encounter Cutscene (Transition to Z Z Z Z Z Z Act 3)
+		dc.l Music10 ; Dr. Coffinman Boss Theme (USE THIS ONE IF WE END UP DOING THE DIFFERENT BOSS TRACKS PER ZONE THING) 
+		dc.l Music11 ; We Are Number One (Why did I make this one I have no idea)
+		dc.l Music12 ; Folgers (I made this in 2023, I guess it has a home now)
+		dc.l Music13 ; Drowning of Puyo Puyo (For STOP splash screen)
+
 		dc.l Music92 ; test
 
 MusicIndex80:	; $81-$9F
@@ -42471,23 +42640,41 @@ Kos_Z80:	incbin	sound\z80_1.bin
 		even
 Music01:	include	sound\LimitedInvincibility.asm
 		even
-Music03:	include	sound\drcoffinman.asm
+Music03:	include	sound\tg2000tracks\drcoffinman.asm
 		even
-Music04:	include	sound\eggmancutscene.asm
+Music04:	include	sound\tg2000tracks\eggmancutscene.asm
 		even
-Music05:	include	sound\music05.asm
+Music05:	include	sound\tg2000tracks\music05.asm
 		even
-Music06:	include	sound\gogogadget.asm
+Music06:	include	sound\tg2000tracks\gogogadget.asm
 		even
-Music02:	include	sound\vroom.asm
+Music02:	include	sound\tg2000tracks\vroom.asm
 		even
-Music07:	include	sound\anger.asm
+Music07:	include	sound\tg2000tracks\anger.asm
 		even
-Music08:	include	sound\THX.asm
+Music08:	include	sound\tg2000tracks\THX.asm
 		even
-Music09:	include	sound\curburenthusiasm.asm
+Music09:	include	sound\tg2000tracks\curburenthusiasm.asm
 		even
-Music0A:	include	sound\TG2000JingleIDK.asm
+Music0A:	include	sound\tg2000tracks\TG2000JingleIDK.asm
+		even
+Music0B:	incbin	sound\professionalhcrsong.bin
+		even
+Music0C:	include	sound\BTH.asm
+		even
+Music13:	incbin	sound\tg2000tracks\drowningofpuyopuyo.bin
+		even
+Music0D:	incbin	sound\tg2000tracks\megalovanialooped.bin
+		even
+Music0E:	incbin	sound\tg2000tracks\gadget.bin
+		even
+Music0F:	incbin	sound\tg2000tracks\eggmancutscene.bin
+		even
+Music10:	incbin	sound\tg2000tracks\drcoffinman.bin
+		even
+Music11:	incbin	sound\tg2000tracks\wearenumberone.bin
+		even
+Music12:	incbin	sound\tg2000tracks\folgers.bin
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
