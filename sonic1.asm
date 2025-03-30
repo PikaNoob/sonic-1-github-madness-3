@@ -3404,7 +3404,7 @@ Title_ClrPallet:
 		move.l	#$40000001,($C00004).l
 		lea	(Nem_TitleFg).l,a0 ; load title	screen patterns
 		bsr.w	NemDec
-		move.l	#$60000000,($C00004).l
+		move.l	#$68000000,($C00004).l
 		lea	(Nem_TitleSonic).l,a0 ;	load Sonic title screen	patterns
 		bsr.w	NemDec
 		lea	($C00000).l,a6
@@ -13974,7 +13974,7 @@ Obj0E_Main:				; XREF: Obj0E_Index
 		move.w	#240+42,8(a0)
 		move.w	#200,$A(a0)
 		move.l	#Map_obj0E,4(a0)
-		move.w	#$0100,2(a0)
+		move.w	#$0140,2(a0)
 		move.b	#1,$18(a0)
 		move.b	#1,$1A(a0)
 		addq.b	#2,$24(a0)	; go to	next routine
