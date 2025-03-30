@@ -127,6 +127,7 @@ GM_SplashScreensListIG:
 	dc.l $81<<24|@nem_vroom,$00<<24|@enifg_vroom,$00<<24|@enibg_vroom,$02<<24|@pal_vroom,0
 	dc.l $81<<24|@nem_mal,$00<<24|@enifg_mal,$00<<24|@enibg_mal,$97<<24|@pal_mal,0
 	dc.l $81<<24|@nem_sh,$00<<24|@enifg_sh,$00<<24|@enibg_sh,$9F<<24|@pal_sh,0
+	dc.l $81<<24|@nem_sowwy,$00<<24|@enifg_sowwy,$00<<24|@enibg_sowwy,$01<<24|@pal_sowwy,0
 	dc.l $81<<24|@nem_playnow,$00<<24|@enifg_playnow,$00<<24|@enibg_playnow,$07<<24|@pal_playnow,0
 	dc.l 0	; terminator 2
 ; -----------------------------------------------------------------------------
@@ -176,6 +177,14 @@ GM_SplashScreensListIG:
 @enibg_sh:	incbin mapeni\splash_sh.bin
 	even
 @pal_sh:	incbin pallet\splash_sh.bin
+	even
+
+@nem_sowwy:	incbin artnem\splash_sowwy.bin
+	even
+@enifg_sowwy:
+@enibg_sowwy:	incbin mapeni\splash_sowwy.bin
+	even
+@pal_sowwy:	incbin pallet\monochrome.bin
 	even
 
 @nem_playnow:	incbin artnem\splash_playnow.bin

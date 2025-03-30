@@ -1,7 +1,7 @@
 {
     "Flex": 2,
     "name": "",
-    "node": "1c0e1eff-a75d-4561-9981-6a08d53ca655",
+    "node": "84dacbf1-a489-4e5d-95f1-29272959b29e",
     "objects": [
         {
             "name": "players",
@@ -87,7 +87,8 @@
                 }
             ],
             "isDirectory": true,
-            "expanded": true
+            "expanded": true,
+            "uuid": "b2e21f93-0756-4fbf-86a0-596a53748fd7"
         },
         {
             "format": "Sonic 1.js",
@@ -308,14 +309,19 @@
         },
         {
             "name": "title sonic",
-            "palettes": [],
+            "palettes": [
+                {
+                    "path": "pallet/title.bin",
+                    "length": 4
+                }
+            ],
             "art": {
-                "path": "artnem\\titleson.bin",
+                "path": "artnem/titleson.bin",
                 "compression": "Nemesis",
                 "offset": 0
             },
             "mappings": {
-                "path": "_maps\\obj0E.asm",
+                "path": "_maps/obj0E.asm",
                 "format": "Sonic 1",
                 "customDefinition": "",
                 "label": ""
