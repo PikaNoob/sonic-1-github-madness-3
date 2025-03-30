@@ -16,6 +16,7 @@ align macro
 	endm
 		include	"sound/smps2asm_inc.asm"
 		include "MapMacros.asm"
+		include "beebush/Mega Drive.inc"
 
 randLevelCount		= 18	; 31 max (32 is reserved for linear path flag)
 v_levelrandtracker	= $FFFFF5FC	; longword
@@ -48,7 +49,7 @@ optcharpos = lsscrpos+$960000 ; character
 
 ; NOTES FOR ANYONE MAKING CHARACTERS
 v_character = $FFFFFFE8
-charcount = 7 ; there are 7 characters, not 6??
+charcount = 8 ; there are 8 characters, not 6??
 ; pointers for:
 ; PLAYER MAPPINGS -> Player_Maps
 ; PLAYER ANIM SCRIPTS -> Player_Anim
@@ -3008,6 +3009,7 @@ Pal_Anakama:incbin	pallet\anakama.bin	; anakama char
 Pal_neru:incbin	pallet\neru.bin	; kosaku  kosaku  kosaku  kosaku  kosaku 
 Pal_Limit:incbin pallet\LimitedSonic.bin	;	Soo limited-core
 Pal_mercury:incbin	pallet\mercury.bin	; mercury power make up!
+Pal_Kiryu:incbin	pallet\kiryu.bin	; I AM THE YAKUZA KIWAMI
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	delay the program by ($FFFFF62A) frames
@@ -3247,8 +3249,31 @@ Sega_GotoTitle:
 ; ---------------------------------------------------------------------------
 ; Title	screen
 ; ---------------------------------------------------------------------------
+; for my own convenience
 
-TitleScreen:				; XREF: GameModeArray
+titlemode 	= $FFFFF601 	; AKA "submode"
+titleHScroll    = $FFFFCC00	; hscroll buffer
+TitleScreen:
+	move.b  titlemode.w,d0
+        andi.w  #$1C,d0
+        jsr     TitleMdTbl(pc,d0.w)
+        rts
+
+; ---------------------------------------------------------------------------
+
+SMNO_TITLE_INIT       	= 0*4   ; Init 
+SMNO_TITLE_SCR      	= 1*4   ; Intro seq.
+SMNO_TITLE_MAIN      	= 2*4   ; Intro seq.
+
+TitleMdTbl:      
+        bra.w   TITLE_INIT
+        bra.w   TITLE_MAIN
+        bra.w   TITLE_MAIN
+
+; ---------------------------------------------------------------------------
+; Title "initialization", (don't worry, i won't touch Gomer)
+; ---------------------------------------------------------------------------
+TITLE_INIT:
 		move.b	#$E4,d0
 		bsr.w	PlaySound_Special ; stop music
 		bsr.w	Pal_FadeFrom
@@ -3411,14 +3436,21 @@ Title_ClrObjRam2:
 		move.w	($FFFFF60C).w,d0
 		ori.b	#$40,d0
 		move.w	d0,($C00004).l
-		bsr.w	Pal_FadeTo
+		move.b  #SMNO_TITLE_SCR,titlemode.w
+		bra.w	Pal_FadeTo
+TITLE_SCR:
+		move.b	#4,($FFFFF62A).w ; set vblank cmd and do vsync
+		bsr.w	DelayProgram
+		bsr.w   _titleScroll
+		rts
+_titleScroll:
 
-loc_317C:
+TITLE_MAIN:
 		move.b	#4,($FFFFF62A).w
 		bsr.w	DelayProgram
 		jsr	RandomNumber	; for better randomness for the level IDs
 		jsr	ObjectsLoad
-		bsr.w	DeformBgLayer
+		; bsr.w	 DeformBgLayer
 		jsr	BuildSprites
 		bsr.w	PalCycle_Title
 		bsr.w	RunPLC_RAM
@@ -3502,7 +3534,7 @@ loc_3230:
 		bsr.w	PlaySound_Special
 	@notc:
 		andi.b	#$80,($FFFFF605).w ; check if Start is pressed
-		beq.w	loc_317C	; if not, branch
+		beq.w	TITLE_MAIN	; if not, branch
 
 Title_ChkLevSel:
 		btst	#6,($FFFFF604).w ; check if A is pressed
@@ -3581,7 +3613,7 @@ LevelSelect:
 
 		cmpi.w	#lsjackass,d0		; have you selected item $16 (jackass/beebush)
 		bne.s	@waitbees		; if not, we're just waiting for the bees. 
-
+		move.b  #$0,titlemode.w
 		move.b	#$24,($FFFFF600).w 	; set screen	mode to	$24 BEEBUSH
 		rts	
 
@@ -4153,6 +4185,7 @@ Player_Names:
 		dc.b "NERU    "
 		dc.b "GOMER G."
 		dc.b "MERCURY "
+		dc.b "KIRYU K."
 	even
 	
 ; give the vram setting on d3
@@ -4483,6 +4516,7 @@ Player_Palette:
 		dc.w	27,27,$27,0 ; neru
 		dc.w	3,$F,$10,0 ; Gomer Gomer!
 		dc.w	29,29,29,0 ; MERCURY
+		dc.w	30,30,30,0 ; bragon of bojima 
 		; add more player palettes
 Level_LoadPal:
 		move.w	#$1E,($FFFFFE14).w
@@ -26286,6 +26320,7 @@ Player_Anim:
 	dc.l	SonicAniData ; neru
 	dc.l	SonicAniData ; gomer gomer!
 	dc.l	SonicAniData ; mercury
+	dc.l	KiryuAniData ; Kiryu
 	; Insert more animation data for other characters here
 	
 Sonic_Animate:				; XREF: Obj01_Control; et al
@@ -26473,6 +26508,9 @@ SonicAniData:
 
 LimitedSonicAniData:
 	include "_anim\LimitedSonic.asm"
+	
+KiryuAniData:
+	include "_anim\Kiryu.asm"
 
 ; ---------------------------------------------------------------------------
 ; Sonic	pattern	loading	subroutine
@@ -26487,6 +26525,7 @@ Player_DPLC:
 	dc.l	NeruDynPLC ; neru
 	dc.l	GomerDynPLC ; gomer gomer!
 	dc.l	mercuryDynPLC ; mercury
+	dc.l	KiryuDynPLC ; kiryu kasuga from the oni alliance
 	; add pointers for player dplc here
 Player_Art:
 	dc.l	Art_Sonic
@@ -26496,6 +26535,7 @@ Player_Art:
 	dc.l	Art_neru ; neru
 	dc.l	Art_gomer ; gomer gomer!
 	dc.l	Art_mercury ; mercury
+	dc.l	Art_Kiryu ; kiryuing
 	; add pointers for player art here
 
 LoadSonicDynPLC:			; XREF: Obj01_Control; et al
@@ -39163,6 +39203,7 @@ Player_Maps:
 	dc.l    map_neru
 	dc.l    map_gomer
 	dc.l    map_mercury
+	dc.l	Map_Kiryu
 	; insert player mapping here
 
 
@@ -39283,6 +39324,8 @@ map_gomer:
 	include "_maps\gomer.asm"
 map_mercury:
 	include "_maps\mercury.asm"
+Map_Kiryu:
+	include "_maps\Kiryu.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	loading	array for the players
 ; ---------------------------------------------------------------------------
@@ -39296,6 +39339,8 @@ gomerDynPLC:
 	include "_inc\gomerDPLC.asm"
 mercuryDynPLC:
 	include "_inc\mercuryDPLC.asm"
+KiryuDynPLC:
+	include "_inc\Kiryu dynamic pattern load cues.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	- players
 ; ---------------------------------------------------------------------------
@@ -39308,6 +39353,8 @@ Art_neru:	incbin	artunc\neru.bin	; gocha gocha urusee!
 Art_gomer:	incbin	artunc\gomer.bin	; gomer gomer!
 		even
 Art_mercury:	incbin	artunc\mercury.bin
+		even
+Art_Kiryu:	incbin	artunc/kiryu.bin	; Kiryu
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
@@ -40062,7 +40109,7 @@ MusicIndex:	; $01-$7F
 		dc.l Music01 ; New Bark Town
 		dc.l Music02 ; Invincible Coconut
 		dc.l Music03 ; Dr. Coffinman (Boss Theme)
-		dc.l Music04 ; Eggman Encounter Cutscene EARRAPE
+		dc.l Music04 ; Eggman Encounter Cutscene (Transition to Z Z Z Z Z Z Act 3)
 		dc.l Music05 ; IDK
 		dc.l Music06 ; Go Go Gadget
 		dc.l Music07 ; The Angry Hedgehog
@@ -40070,13 +40117,7 @@ MusicIndex:	; $01-$7F
 		dc.l Music09 ; Poop
 		dc.l Music0A ; TG2000 Jingle (Gotta mark my presence somewhere - TG2000 was here)
 		dc.l Music0B ; hill climb DAMN
-		dc.l Music0C ; Drowning of Puyo Puyo (For STOP splash screen)
-		dc.l Music0D ; Megalovania Looped
-		dc.l Music0E ; Go Go Gadget But it actually works correctly, had to sacrifice the DAC though :(
-		dc.l Music0F ; Eggman Encounter Cutscene (Transition to Z Z Z Z Z Z Act 3)
-		dc.l Music10 ; Dr. Coffinman Boss Theme (USE THIS ONE IF WE END UP DOING THE DIFFERENT BOSS TRACKS PER ZONE THING) 
-		dc.l Music11 ; We Are Number One (Why did I make this one I have no idea)
-		dc.l Music12 ; Folgers (I made this in 2023, I guess it has a home now)
+		dc.l Music0C ; Breaking The Habit, Linkin Park
 		dc.l Music92 ; test
 
 MusicIndex80:	; $81-$9F
@@ -42542,39 +42583,27 @@ Kos_Z80:	incbin	sound\z80_1.bin
 		even
 Music01:	include	sound\LimitedInvincibility.asm
 		even
-Music03:	include	sound\tg2000tracks\drcoffinman.asm
+Music03:	include	sound\drcoffinman.asm
 		even
-Music04:	include	sound\tg2000tracks\eggmancutscene.asm
+Music04:	include	sound\eggmancutscene.asm
 		even
-Music05:	include	sound\tg2000tracks\music05.asm
+Music05:	include	sound\music05.asm
 		even
-Music06:	include	sound\tg2000tracks\gogogadget.asm
+Music06:	include	sound\gogogadget.asm
 		even
-Music02:	include	sound\tg2000tracks\vroom.asm
+Music02:	include	sound\vroom.asm
 		even
-Music07:	include	sound\tg2000tracks\anger.asm
+Music07:	include	sound\anger.asm
 		even
-Music08:	include	sound\tg2000tracks\THX.asm
+Music08:	include	sound\THX.asm
 		even
-Music09:	include	sound\tg2000tracks\curburenthusiasm.asm
+Music09:	include	sound\curburenthusiasm.asm
 		even
-Music0A:	include	sound\tg2000tracks\TG2000JingleIDK.asm
+Music0A:	include	sound\TG2000JingleIDK.asm
 		even
 Music0B:	incbin	sound\professionalhcrsong.bin
 		even
-Music0C:	incbin	sound\tg2000tracks\drowningofpuyopuyo.bin
-		even
-Music0D:	incbin	sound\tg2000tracks\megalovanialooped.bin
-		even
-Music0E:	incbin	sound\tg2000tracks\gadget.bin
-		even
-Music0F:	incbin	sound\tg2000tracks\eggmancutscene.bin
-		even
-Music10:	incbin	sound\tg2000tracks\drcoffinman.bin
-		even
-Music11:	incbin	sound\tg2000tracks\wearenumberone.bin
-		even
-Music12:	incbin	sound\tg2000tracks\folgers.bin
+Music0C:	include	sound\BTH.asm
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
