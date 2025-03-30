@@ -187,7 +187,7 @@ dHiTimpani		EQU	$88
 dMidTimpani		EQU	$89
 dLowTimpani		EQU	$8A
 dVLowTimpani		EQU	$8B
-dCrashCymbal	EQU $83
+dCrashCymbal	EQU $A6
 dKickS3			EQU	$81
 dSnareS3			EQU	$82
 delectriclowtom	EQU	$8A

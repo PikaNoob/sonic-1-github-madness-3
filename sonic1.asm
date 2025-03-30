@@ -40086,6 +40086,7 @@ MusicIndex:	; $01-$7F
 		dc.l Music09 ; Poop
 		dc.l Music0A ; TG2000 Jingle (Gotta mark my presence somewhere - TG2000 was here)
 		dc.l Music0B ; hill climb DAMN
+		dc.l Music0C ; Breaking The Habit, Linkin Park
 		dc.l Music92 ; test
 
 MusicIndex80:	; $81-$9F
@@ -42570,6 +42571,8 @@ Music09:	include	sound\curburenthusiasm.asm
 Music0A:	include	sound\TG2000JingleIDK.asm
 		even
 Music0B:	incbin	sound\professionalhcrsong.bin
+		even
+Music0C:	include	sound\BTH.asm
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
