@@ -132,6 +132,7 @@ GM_SplashScreensListIG:
 	dc.l $81<<24|@nem_playnow,$00<<24|@enifg_playnow,$00<<24|@enibg_playnow,$07<<24|@pal_playnow,0
 	dc.l $81<<24|@nem_actualpoop,$00<<24|@enifg_actualpoop,$00<<24|@enibg_actualpoop,$09<<24|@pal_actualpoop,0	; GMZ
 	dc.l $81<<24|@nem_BILLglider,$00<<24|@enifg_BILLglider,$00<<24|@enibg_BILLglider,$0B<<24|@pal_BILLglider,0	; homemade aircraft very safe
+	dc.l $81<<24|@nem_stop,$00<<24|@enifg_stop,$00<<24|@enibg_stop,$0C<<24|@pal_stop,0
 	dc.l 0	; terminator 2
 ; -----------------------------------------------------------------------------
 @nem_pillow:	incbin artnem\splash_pillow.bin
@@ -221,6 +222,14 @@ GM_SplashScreensListIG:
 	even	; GMZ im too lazy to chaange thissssssssssssssssssssssssssssssssssssssssssssssssssssssssss
 @pal_BILLglider:	incbin pallet\GLIDER11.bin	;
 	even	; 
+
+@nem_stop:	incbin artnem\splash_stop.bin
+	even
+@enifg_stop:
+@enibg_stop:	incbin mapeni\splash_stop.bin
+	even
+@pal_stop:	incbin pallet\splash_stop.bin
+	even
 	
 IntroCutscene:		; no one fucking modify this or i swear to fucking god, except malachi :3
 	dc.l $81<<24|@nem_PicBatch,$02<<24|@enifg_Picture1,$9F<<24|@enibg_Picture1,$85<<24|@pal_monochrome,1
