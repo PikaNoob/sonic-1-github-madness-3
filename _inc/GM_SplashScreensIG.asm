@@ -129,6 +129,7 @@ GM_SplashScreensListIG:
 	dc.l $81<<24|@nem_sh,$00<<24|@enifg_sh,$00<<24|@enibg_sh,$9F<<24|@pal_sh,0
 	dc.l $81<<24|@nem_sowwy,$00<<24|@enifg_sowwy,$00<<24|@enibg_sowwy,$01<<24|@pal_sowwy,0
 	dc.l $81<<24|@nem_playnow,$00<<24|@enifg_playnow,$00<<24|@enibg_playnow,$07<<24|@pal_playnow,0
+	dc.l $81<<24|@nem_actualpoop,$00<<24|@enifg_actualpoop,$00<<24|@enibg_actualpoop,$0F<<24|@pal_actualpoop,0	; GMZ
 	dc.l 0	; terminator 2
 ; -----------------------------------------------------------------------------
 @nem_pillow:	incbin artnem\splash_pillow.bin
@@ -194,6 +195,14 @@ GM_SplashScreensListIG:
 	even
 @pal_playnow:	incbin pallet\splash_playnow.bin
 	even
+
+@nem_actualpoop:	incbin artnem\actualpoop.bin	; GMZ
+	even	; GMZ
+@enifg_actualpoop:	; GMZ
+@enibg_actualpoop:	incbin mapeni\actualpoop.bin	; GMZ
+	even	; GMZ
+@pal_actualpoop:	incbin pallet\actualpoop.bin	; GMZ
+	even	; GMZ
 	
 IntroCutscene:		; no one fucking modify this or i swear to fucking god, except malachi :3
 	dc.l $81<<24|@nem_PicBatch,$02<<24|@enifg_Picture1,$9F<<24|@enibg_Picture1,$85<<24|@pal_monochrome,1
