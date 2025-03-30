@@ -40003,6 +40003,7 @@ MusicIndex:	; $01-$7F
 		dc.l Music05 ; IDK (Originally for Sonic RPG Project - TG2000 Was Here)
 		dc.l Music06 ; Go Go Gadget
 		dc.l Music07 ; The Angry Hedgehog
+		dc.l Music08 ; THX Logo
 		dc.l Music92 ; test
 
 MusicIndex80:	; $81-$9F
@@ -42479,6 +42480,8 @@ Music06:	include	sound\gogogadget.asm
 Music02:	include	sound\vroom.asm
 		even
 Music07:	include	sound\anger.asm
+		even
+Music08:	include	sound\THX.asm
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
