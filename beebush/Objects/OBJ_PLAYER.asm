@@ -19,6 +19,7 @@ BbushObj_Player:
         dc.w BbushPlayer_Main-.Index
         dc.w BbushPlayer_Left-.Index
         dc.w BbushPlayer_Show-.Index
+        dc.w BbushPlayer_Show-.Index
 ; ---------------------------------------------------------------------------
 
 BbushPlayer_InitMain:                         
