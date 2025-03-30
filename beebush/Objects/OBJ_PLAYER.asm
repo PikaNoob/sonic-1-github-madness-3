@@ -17,6 +17,7 @@ BbushObj_Player:
 .Index:                                
         dc.w BbushPlayer_InitMain-.Index
         dc.w BbushPlayer_Main-.Index
+        dc.w BbushPlayer_Left-.Index
         dc.w BbushPlayer_Show-.Index
 ; ---------------------------------------------------------------------------
 
@@ -41,8 +42,16 @@ BbushPlayer_InitMain:
 BbushPlayer_Main:                           
         move.b  joypad.w,d4         ;SACBRLDU
         move.b  joypadPress.w,d5    
-        bsr.w   _bbplayNormalCtrl 
+        btst    #2,d4
+        beq.s   .NotLeft
+        addq.b  #2,obj.Action(a0)       
+.NotLeft:
+        jmp	_objectDraw
 
+BbushPlayer_Left:                           
+        move.b  joypad.w,d4
+        move.b  joypadPress.w,d5    
+        bsr.w   _bbplayNormalCtrl 
 
 BbushPlayer_Show:
         jmp     _objectDraw   
@@ -60,8 +69,10 @@ _bbplayNormalCtrl:
         subi.l  #1,distance
         lea     AniSpr_QuagmirePlayer,a1
         jmp    _objectAnimate
-.NoLeft:    
-	clr.b   bbplay.MvFlag(a0)                                         
+.NoLeft:  
+        addq.b  #2,obj.Action(a0)    
+        move.b  #$F,obj.Frame(a0)    
+	move.b  #-1,bbplay.MvFlag(a0)                                         
         rts
 
 AniSpr_QuagmirePlayer:
