@@ -39973,6 +39973,7 @@ MusicIndex:	; $01-$7F
 		dc.l Music04 ; Eggman Encounter Cutscene (Transition to Z Z Z Z Z Z Act 3)
 		dc.l Music05 ; IDK (Originally for Sonic RPG Project - TG2000 Was Here)
 		dc.l Music06 ; Go Go Gadget
+		dc.l Music07 ; The Angry Hedgehog
 		dc.l Music92 ; test
 
 MusicIndex80:	; $81-$9F
@@ -42447,6 +42448,8 @@ Music05:	include	sound\music05.bin
 Music06:	include	sound\gogogadget.asm
 		even
 Music02:	include	sound\vroom.asm
+		even
+Music07:	include	sound\anger.asm
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
