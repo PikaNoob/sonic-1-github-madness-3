@@ -2,7 +2,7 @@
 ; I'm Glenn Quagmire, and this is Code Bush.
 ; ---------------------------------------------------------------------------
 
-        include "beebush/Mega Drive.inc"
+        ;include "beebush/Mega Drive.inc"
         include "beebush/Macros.inc"
 
         opt     l.

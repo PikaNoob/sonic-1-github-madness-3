@@ -16,6 +16,7 @@ align macro
 	endm
 		include	"sound/smps2asm_inc.asm"
 		include "MapMacros.asm"
+		include "beebush/Mega Drive.inc"
 
 randLevelCount		= 18	; 31 max (32 is reserved for linear path flag)
 v_levelrandtracker	= $FFFFF5FC	; longword
@@ -3248,8 +3249,31 @@ Sega_GotoTitle:
 ; ---------------------------------------------------------------------------
 ; Title	screen
 ; ---------------------------------------------------------------------------
+; for my own convenience
 
-TitleScreen:				; XREF: GameModeArray
+titlemode 	= $FFFFF601 	; AKA "submode"
+titleHScroll    = $FFFFCC00	; hscroll buffer
+TitleScreen:
+	move.b  titlemode.w,d0
+        andi.w  #$1C,d0
+        jsr     TitleMdTbl(pc,d0.w)
+        rts
+
+; ---------------------------------------------------------------------------
+
+SMNO_TITLE_INIT       	= 0*4   ; Init 
+SMNO_TITLE_SCR      	= 1*4   ; Intro seq.
+SMNO_TITLE_MAIN      	= 1*4   ; Intro seq.
+
+TitleMdTbl:      
+        bra.w   TITLE_INIT
+        bra.w   TITLE_SCR
+        bra.w   TITLE_MAIN
+
+; ---------------------------------------------------------------------------
+; Title "initialization", (don't worry, i won't touch Gomer)
+; ---------------------------------------------------------------------------
+TITLE_INIT:
 		move.b	#$E4,d0
 		bsr.w	PlaySound_Special ; stop music
 		bsr.w	Pal_FadeFrom
@@ -3412,9 +3436,13 @@ Title_ClrObjRam2:
 		move.w	($FFFFF60C).w,d0
 		ori.b	#$40,d0
 		move.w	d0,($C00004).l
-		bsr.w	Pal_FadeTo
+		move.b  #SMNO_TITLE_SCR,titlemode.w
+		bra.w	Pal_FadeTo
+TITLE_SCR:
+		move.b	#4,($FFFFF62A).w ; set vblank cmd and do vsync
+		bsr.w	DelayProgram
 
-loc_317C:
+TITLE_MAIN:
 		move.b	#4,($FFFFF62A).w
 		bsr.w	DelayProgram
 		jsr	RandomNumber	; for better randomness for the level IDs
@@ -3503,7 +3531,7 @@ loc_3230:
 		bsr.w	PlaySound_Special
 	@notc:
 		andi.b	#$80,($FFFFF605).w ; check if Start is pressed
-		beq.w	loc_317C	; if not, branch
+		beq.w	TITLE_MAIN	; if not, branch
 
 Title_ChkLevSel:
 		btst	#6,($FFFFF604).w ; check if A is pressed
