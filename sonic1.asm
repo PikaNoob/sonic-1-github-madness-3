@@ -60,6 +60,20 @@ charcount = 8 ; there are 8 characters, not 6??
 ; Player Specific Sounds: every instance of @sndlut
 ; Player Specific Misc Data: Anything with the comment ">charcount", hopefully
 
+kdebugtext: macro
+	move.w	d0,-(sp)
+	move.l	a1,-(sp)
+	lea	@text\@,a1
+	pea	@cont\@
+	jmp	KDebug_WriteToCmd
+@text\@:
+	dc.b \1,0
+	even
+@cont\@:
+	move.l	(sp)+,a1
+	move.w	(sp)+,d0
+	endm
+
 StartOfRom:
 Vectors:	dc.l 'P'<<24|$FFFE00,		'O'<<24|EntryPoint,	'Y'<<24|BusError,	'S'<<24|AddressError
 		dc.l 'U'<<24|IllegalInstr,	'F'<<24|ZeroDivide,	'O'<<24|ChkInstr,	'K'<<24|TrapvInstr
@@ -288,8 +302,12 @@ GameClrRAM:
 		tst.b	(f_checksum).w		; Is checksum correct?
 		beq.s   @validcheck		; if yes, branch
 		jsr	GM_Otis ; if incorrect, start otis.exe creepypasta
+		kdebugtext "bro is really mikuing it"
 		bsr.w	VDPSetupGame
+		bra.w	@invalidcheck
 @validcheck:
+		kdebugtext "umm excuse me what the actual fuck are you doing in my house?"
+@invalidcheck:
 		move.b	#0,($FFFFF600).w ; set Game Mode to Sega Screen
 		cmpi.l	#'init',($FFFFFFFC).w	; has checksum routine already run?
 		beq.w	@nosplashscreens	; if yes, branch
@@ -301,6 +319,7 @@ GameClrRAM:
 		jsr	GM_AntiTMSS
 @notmss:
 		jsr	GM_SplashScreensIG
+		kdebugtext "you can soft reset to skip all those splash screens btw"
 @nosplashscreens:
 	;	move.b	#$20,($FFFFF600).w ; set Game Mode to Minecraft
 	;	move.b	#$24,($FFFFF600).w ; set Game Mode to Bee Bush
@@ -356,17 +375,21 @@ jmpto_IntroCutscene:
 @lut:	bra.w 	@sonic		; sonic
 	bra.w	@null
 	bra.w	@null
-	bra.w	@null
-	bra.w	@null		; limited
+	bra.w	@limited	; limited
 	bra.w	@null		; neru
 	bra.w	@null		; gomer
 	bra.w	@null		; sailor mercury
 	bra.w	@null		; kiryu
-
-@null:		rts
-
-@sonic:		lea	IntroCutscene,a6
+@limited:
+		lea	@limitedtext,a1
+		jmp	KDebug_WriteToCmd
+@null:
+		rts
+@sonic:
+		lea	IntroCutscene,a6
 		jmp	GM_CustomSplashScreensIG
+
+@limitedtext:	dc.b "IT IS LIMITED",0
 ; ===========================================================================
 
 CheckSumError:
@@ -554,6 +577,19 @@ Art_ErrText_end:		even
 Art_Text:	incbin	artunc\menutext.bin	; text used in level select and debug mode
 Art_Text_end:		even
 
+; ===========================================================================
+KDebug_WriteToCmd:
+		move.w	sr,-(sp)
+		move	#$2700,sr
+		move.w	#$9E00,d0
+@loop:
+		move.b	(a1)+,d0
+		move.w	d0,$C00004
+		tst.b	d0
+		bne.s	@loop
+
+		move.w	(sp)+,sr
+		rts
 ; ===========================================================================
 ;VBlank
 loc_B10:				; XREF: Vectors
