@@ -57,6 +57,7 @@ charcount = 8 ; there are 8 characters, not 6??
 ; PLAYER DPLC -> Player_DPLC
 ; PLAYER PALETTE -> Player_Palette
 ; MENU NAME -> Player_Names
+; Player Specific Sounds: every instance of @sndlut
 
 StartOfRom:
 Vectors:	dc.l 'P'<<24|$FFFE00,		'O'<<24|EntryPoint,	'Y'<<24|BusError,	'S'<<24|AddressError
@@ -4787,6 +4788,7 @@ Level_StartGame:
 		dc.b 0,$00
 		dc.b 2,$90	; gomer
 		dc.b 2,$98	; sailer mercury
+		dc.b 2,$A8 ;  kiryu
 		even
 @cont:
 ; ---------------------------------------------------------------------------
@@ -13822,7 +13824,7 @@ Obj2E_ChkS:
 		cmpi.b	#7,d0		; does monitor contain 'S'
 		bne.s	Obj2E_ChkEnd
 		; nop	
-		move.w #$A6,d0 ;play futuristic
+		move.w #$A7,d0 ;play futuristic
 		jsr MegaPCM_PlaySample ;aaaa
 		moveq	#1,d1
 		eor.b	d1,($FFFFFE2F).w	; GMZ: Set reverse controls flag when broken, revert when another monitor of same type is broken again
@@ -16386,6 +16388,7 @@ loc_C61A:				; XREF: Obj3A_ChkPos
 		dc.b 0,$00
 		dc.b 2,$90	; gomer
 		dc.b 2,$9E	; sailer mercury
+		dc.b 0,$00
 		even
 @contgame:
 
@@ -25191,6 +25194,7 @@ SMCsoundCHK1:
 		dc.b 1,$A4
 		dc.b 2,$90	; gomer
 		dc.b 2,$9A	; sailer mercury
+		dc.b 1,$A4
 		even
 ; End of function Sonic_MoveLeft
 
@@ -25402,6 +25406,7 @@ Sonic_AirUnroll:
 		dc.b 1,$A5
 		dc.b 2,$90	; gomer
 		dc.b 2,$9A	; sailer mercury
+		dc.b 2,$AC
 		even
 @contgame:
 		move.l	$10(a0),d0
@@ -25654,6 +25659,7 @@ locret_133E8:
 ;placeholder, remove soon
 		dc.b 2,$90	; gomer
 		dc.b 2,$9A	; sailer mercury
+		dc.b 1,$BE
 		even
 ; End of function Sonic_Roll
 
@@ -25719,6 +25725,7 @@ loc_1341C:
 		dc.b 1,$A0
 		dc.b 2,$90	; gomer
 		dc.b 2,$99	; sailer mercury
+		dc.b 2,$AA
 		even
 ; ===========================================================================
 
@@ -26373,8 +26380,8 @@ Player_Anim:
 	; Insert more animation data for other characters here
 	
 Sonic_Animate:				; XREF: Obj01_Control; et al
-			moveq	#0,d0
-		move.b	(v_character),d0
+		moveq	#0,d0
+		move.b	(v_character).w,d0
 		lsl.w	#2,d0
 		lea 	Player_Anim(pc),a1
 		
@@ -31221,6 +31228,7 @@ CHAR_BOSSHIT_SND:
 		dc.b 0,$00
 		dc.b 2,$90	; gomer
 		dc.b 2,$9D	; sailer mercury
+		dc.b 0,$00
 		even
 
 ; ---------------------------------------------------------------------------
@@ -36213,8 +36221,17 @@ loc_1AF1E:
 locret_1AF2E:
 		rts	
 ; ===========================================================================
-
+KiryuTouchEnemy:
+		tst.b	($FFFFFE2D).w	; is invincible?
+		bne.s	loc_1AF40	; if yes, branch
+		cmpi.b	#2,$1C(a0)	; is rolling?
+		bne.s	loc_1AF40	; if so, branch
+		cmpi.b	#$14,$1C(a0)	; is fisting?
+		bne.w	Touch_ChkHurt	; if not, branch
+		
 Touch_Enemy:				; XREF: Touch_ChkValue
+		cmpi.b	#7,(v_character)
+		beq.s	KiryuTouchEnemy
 		tst.b	($FFFFFE2D).w	; is Sonic invincible?
 		bne.s	loc_1AF40	; if yes, branch
 		cmpi.b	#2,$1C(a0)	; is Sonic rolling?
@@ -36383,6 +36400,7 @@ Hurt_Sound:
 		dc.b 0,$00
 		dc.b 2,$90	; gomer
 		dc.b 2,$9B	; sailer mercury
+		dc.b 2,$AB
 		even
 ; ===========================================================================
 
@@ -36408,7 +36426,7 @@ KillSonic:
 KillLimitedSonic:
 		move.b	#0,($FFFFFE2D).w ; remove invincibility
 		move.b	#6,$24(a0)
-		bsr.w	Sonic_ResetOnFloor
+		jsr	Sonic_ResetOnFloor
 		bset	#1,$22(a0)
 		move.w	#-$700,$12(a0)
 		move.w	#0,$10(a0)
@@ -36437,6 +36455,7 @@ Kill_Sound:
 		dc.b 0,$00
 		dc.b 2,$90	; gomer
 		dc.b 2,$9C	; sailer mercury
+		dc.b 2,$A9
 		even
 ; End of function KillSonic
 

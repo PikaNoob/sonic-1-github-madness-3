@@ -44,7 +44,16 @@ SampleTable:
 	dcSample	TYPE_PCM,		Crash,	22050	; $A6
 
 	;not sailor mercury sounds start again here
-	dcSample	TYPE_PCM,		futuristicsound,	20000, FLAGS_SFX		; $A6
+	dcSample	TYPE_PCM,		futuristicsound,	20000, FLAGS_SFX		; $A7
+	
+	; kiryuman from the oni alliance
+	dcSample	TYPE_PCM,		KiryuLetsGo,8000, FLAGS_SFX	; $A8
+	dcSample	TYPE_PCM,		KiryuDead,	8000, FLAGS_SFX	; $A9
+	dcSample	TYPE_PCM,		KiryuJump,	8000, FLAGS_SFX	; $AA
+	dcSample	TYPE_PCM,		KiryuOuch,	8000, FLAGS_SFX	; $AB
+	dcSample	TYPE_PCM,		KiryuPunch,	8000, FLAGS_SFX	; $AC
+	
+	
 	dc.w	-1	; end marker
 
 ; ---------------------------------------------------------------
@@ -80,4 +89,9 @@ SampleTable:
 	incdac	Fat, "sound/dac/fatty-ingame.wav"
 	incdac	futuristicsound, "sound/dac/futuristicsound.wav"
 	incdac	Crash,	"sound/dac/crash0.wav"
+	incdac	KiryuLetsGo,	"sound/dac/kiryu_letsgo.wav"
+	incdac	KiryuDead,	"sound/dac/kiryu_dead.wav"
+	incdac	KiryuJump,	"sound/dac/kiryu_jump.wav"
+	incdac	KiryuOuch,	"sound/dac/kiryu_ouch.wav"
+	incdac	KiryuPunch,	"sound/dac/kiryu_punch.wav"
 	even
