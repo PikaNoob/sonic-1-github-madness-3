@@ -25513,7 +25513,7 @@ Obj01_DoRoll:
 locret_133E8:
 		lea	@sndlut(pc),a1
 		jmp	PlayerSpecificSound
-@sndlut:=
+@sndlut:
 		dc.b 1,$BE	; sonic
 		dc.b 1,$BE
 		dc.b 1,$BE
