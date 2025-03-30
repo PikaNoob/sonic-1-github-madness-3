@@ -25513,19 +25513,12 @@ Obj01_DoRoll:
 locret_133E8:
 		lea	@sndlut(pc),a1
 		jmp	PlayerSpecificSound
-@sndlut:
-; commented until fixed
-;		dc.b 1,$5E	; sonic
-;		dc.b 1,$5E
-;		dc.b 1,$5E
-;		dc.b 1,$5E	; limited
-;		dc.b 1,$5E
-;placeholder, remove soon
-		dc.b 0,$00	; sonic
-		dc.b 0,$00
-		dc.b 0,$00
-		dc.b 0,$00	; limited
-		dc.b 0,$00
+@sndlut:=
+		dc.b 1,$BE	; sonic
+		dc.b 1,$BE
+		dc.b 1,$BE
+		dc.b 1,$BE	; limited
+		dc.b 1,$BE
 ;placeholder, remove soon
 		dc.b 2,$90	; gomer
 		dc.b 2,$9A	; sailer mercury
