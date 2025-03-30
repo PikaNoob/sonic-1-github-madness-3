@@ -3502,7 +3502,7 @@ TITLE_SCR:
 	bsr.w	DelayProgram
 	sub.w   #1,titleScrCnt.w
 	bmi.s   .Exit
-	bra.w   _titleScroll
+	bra.w   _titleSineSlide
 .Exit:
 	move.b	#$8A,d0
 	bsr.w	PlaySound
@@ -3520,8 +3520,9 @@ scrLoadToBuffer:
 	dbf     d7,scrLoadToBuffer
 	rts
 
+; ---------------------------------------------------------------------------
 
-_titleScroll:
+_titleSineSlide:
         lea     titleHScroll.w,a1
         moveq   #240/2,d7
         moveq   #0,d2
@@ -3542,11 +3543,27 @@ _titleScroll:
         rts
 
 ; ---------------------------------------------------------------------------
+; main scr
+_titleScroll:
+        lea     titleHScroll.w,a1
+        add.b   #2,beeSinCntr.w
+        move.b  beeSinCntr.w,d0
+        jsr     CalcSinCos
+        asr.w   #1,d1
+        neg.w   d0
+        move.w  #0,(a1)+
+        move.w  d0,(a1)
+        move.w  d1,$FFFFF618.w
+        rts
+
+; ---------------------------------------------------------------------------
 ; Title screen main loop
 ; ---------------------------------------------------------------------------
 TITLE_MAIN:
+	        move.w  #$8B00+%00000000,VDPCTRL
 		move.b	#4,($FFFFF62A).w
 		bsr.w	DelayProgram
+		bsr.w   _titleScroll
 		jsr	RandomNumber	; for better randomness for the level IDs
 		jsr	ObjectsLoad
 		jsr	BuildSprites
