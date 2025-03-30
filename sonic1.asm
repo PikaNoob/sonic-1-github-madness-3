@@ -3288,16 +3288,13 @@ Title_ClrPallet:
 		move.l	#$40000001,($C00004).l
 		lea	(Nem_TitleFg).l,a0 ; load title	screen patterns
 		bsr.w	NemDec
-		move.l	#$60000001,($C00004).l
+		move.l	#$60000000,($C00004).l
 		lea	(Nem_TitleSonic).l,a0 ;	load Sonic title screen	patterns
-		bsr.w	NemDec
-		move.l	#$62000002,($C00004).l
-		lea	(Nem_TitleTM).l,a0 ; load "TM" patterns
 		bsr.w	NemDec
 		lea	($C00000).l,a6
 		move.l	#$50000003,4(a6)
 		lea	(Art_Text).l,a5
-		move.w	#(Art_Text_end-Art_Text/4)-1,d1
+		move.w	#((Art_Text_end-Art_Text)/4)-1,d1
 
 Title_LoadText:
 		move.l	(a5)+,(a6)
@@ -3338,9 +3335,6 @@ Title_LoadText:
 		moveq	#$21,d1
 		moveq	#$15,d2
 		bsr.w	ShowVDPGraphics
-		move.l	#$40000000,($C00004).l
-		lea	(Nem_GHZ_1st).l,a0 ; load GHZ patterns
-		bsr.w	NemDec
 		moveq	#1,d0		; load title screen pallet
 		bsr.w	PalLoad1
 		move.b	#$8A,d0		; play title screen music
@@ -13766,7 +13760,7 @@ Obj0E_Main:				; XREF: Obj0E_Index
 		move.w	#240+42,8(a0)
 		move.w	#200,$A(a0)
 		move.l	#Map_obj0E,4(a0)
-		move.w	#$0300,2(a0)
+		move.w	#$0100,2(a0)
 		move.b	#1,$18(a0)
 		move.b	#1,$1A(a0)
 		addq.b	#2,$24(a0)	; go to	next routine
@@ -25425,10 +25419,11 @@ Boundary_Bottom:
 		rts	
 
 CallKillSonic:
-		move.b	#02,($FFFFF003).w ; pause music (this is for pit fall)
-		jsr	KillSonic	; GMZ
-		move.b  #$93, d0 ; scream in hell
-		jmp     MegaPCM_PlaySample
+		move.b	#$E4,d0		; stop music
+		jsr	PlaySound
+		move.b  #$93, d0	; scream in hell
+		jsr	MegaPCM_PlaySample
+		jmp	KillSonic	; GMZ
 ; ===========================================================================
 
 Boundary_Sides:
@@ -39972,6 +39967,7 @@ MusicIndex:	; $01-$7F
 		dc.l Music06 ; Go Go Gadget
 		dc.l Music07 ; The Angry Hedgehog
 		dc.l Music08 ; THX Logo
+		dc.l Music09 ; Poop
 		dc.l Music92 ; test
 
 MusicIndex80:	; $81-$9F
@@ -42437,7 +42433,7 @@ Kos_Z80:	incbin	sound\z80_1.bin
 		even
 Music01:	include	sound\LimitedInvincibility.asm
 		even
-Music03:	include	sound\coffinman.asm
+Music03:	include	sound\drcoffinman.asm
 		even
 Music04:	include	sound\eggmancutscene.asm
 		even
@@ -42450,6 +42446,8 @@ Music02:	include	sound\vroom.asm
 Music07:	include	sound\anger.asm
 		even
 Music08:	include	sound\THX.asm
+		even
+Music09:	include	sound\curburenthusiasm.asm
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even

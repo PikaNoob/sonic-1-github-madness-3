@@ -1,7 +1,7 @@
 {
     "Flex": 2,
     "name": "",
-    "node": "84dacbf1-a489-4e5d-95f1-29272959b29e",
+    "node": "07566fbf-46a0-496a-9374-8fd79bebf175",
     "objects": [
         {
             "name": "players",
@@ -87,8 +87,28 @@
                 }
             ],
             "isDirectory": true,
-            "expanded": true,
+            "expanded": false,
             "uuid": "b2e21f93-0756-4fbf-86a0-596a53748fd7"
+        },
+        {
+            "format": "Sonic 1.js",
+            "name": "psb",
+            "palettes": [],
+            "art": {
+                "path": "artnem/titlefor.bin",
+                "compression": "Nemesis",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "_maps/obj0F.asm",
+                "label": ""
+            },
+            "dplcs": {
+                "enabled": false,
+                "path": "",
+                "label": ""
+            },
+            "uuid": "07566fbf-46a0-496a-9374-8fd79bebf175"
         },
         {
             "format": "Sonic 1.js",
@@ -340,12 +360,12 @@
             "name": "Credits Text",
             "palettes": [],
             "art": {
-                "path": "artnem\\credits.bin",
+                "path": "artnem/credits.bin",
                 "compression": "Nemesis",
                 "offset": 0
             },
             "mappings": {
-                "path": "_maps\\obj8A.asm",
+                "path": "_maps/obj8A.asm",
                 "format": "Sonic 1",
                 "customDefinition": "",
                 "label": ""
@@ -358,7 +378,7 @@
                 "label": ""
             },
             "uuid": "c5e02c60-bf44-489e-8767-8f359839fecb",
-            "format": "Sonic 1.js"
+            "format": "Sonic 1 MapMacros.js"
         }
     ]
 }
