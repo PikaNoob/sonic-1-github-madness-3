@@ -25443,10 +25443,20 @@ Boundary_Bottom:
 		rts	
 
 CallKillSonic:
-		move.b	#$E4,d0		; stop music
-		jsr	PlaySound
-;		move.b  #$93, d0	; scream in hell
-;		jsr	MegaPCM_PlaySample
+; this is gonna be removed unfortunately
+; this is a reference to the mario games made by BMB, in which falling into a pit
+; plays a long scream pcm, said pcm also has the sound driver freeze
+; 1. there used to be a line that intentionally froze it by setting the pause value to 2
+;		move.b	#02,($FFFFF003).w ; pause music (this is for pit fall)
+; this would be replaced by -
+;		move.b	#$E4,d0		; stop music
+;		jsr	PlaySound
+; broke the classic fasion it had though
+; 2. this below was commented out after streamlining character specific sounds
+; this will remain commented until otherwise reimplemented
+; -Coninight, MARCH 30 SAT
+;;;;;;;		move.b  #$93, d0	; scream in hell
+;;;;;;;		jsr	MegaPCM_PlaySample
 		jmp	KillSonic	; GMZ
 ; ===========================================================================
 
@@ -25504,11 +25514,11 @@ locret_133E8:
 		lea	@sndlut(pc),a1
 		jmp	PlayerSpecificSound
 @sndlut:
-		dc.b 0,$00	; sonic
-		dc.b 0,$00
-		dc.b 0,$00
-		dc.b 0,$00	; limited
-		dc.b 0,$00
+		dc.b 1,$5E	; sonic
+		dc.b 1,$5E
+		dc.b 1,$5E
+		dc.b 1,$5E	; limited
+		dc.b 1,$5E
 		dc.b 2,$90	; gomer
 		dc.b 2,$9A	; sailer mercury
 		even
@@ -25575,7 +25585,7 @@ loc_1341C:
 		dc.b 1,$A0	; limited
 		dc.b 1,$A0
 		dc.b 2,$90	; gomer
-		dc.b 2,$9A	; sailer mercury
+		dc.b 2,$99	; sailer mercury
 		even
 ; ===========================================================================
 
