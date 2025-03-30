@@ -49,7 +49,7 @@ optcharpos = lsscrpos+$960000 ; character
 
 ; NOTES FOR ANYONE MAKING CHARACTERS
 v_character = $FFFFFFE8
-charcount = 8 ; there are 8 characters, not 6??
+charcount = 9
 ; pointers for:
 ; PLAYER MAPPINGS -> Player_Maps
 ; PLAYER ANIM SCRIPTS -> Player_Anim
@@ -380,6 +380,7 @@ jmpto_IntroCutscene:
 	bra.w	@null		; gomer
 	bra.w	@null		; sailor mercury
 	bra.w	@null		; kiryu
+	bra.w	@null		; purple guy
 @limited:
 		lea	@limitedtext,a1
 		jmp	KDebug_WriteToCmd
@@ -3048,6 +3049,7 @@ Pal_neru:incbin	pallet\neru.bin	; kosaku  kosaku  kosaku  kosaku  kosaku
 Pal_Limit:incbin pallet\LimitedSonic.bin	;	Soo limited-core
 Pal_mercury:incbin	pallet\mercury.bin	; mercury power make up!
 Pal_Kiryu:incbin	pallet\kiryu.bin	; I AM THE YAKUZA KIWAMI
+Pal_Purple:incbin	pallet\purple.bin	; I ALWAYS CUM
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	delay the program by ($FFFFF62A) frames
@@ -4313,6 +4315,7 @@ Player_Names:
 		dc.b "GOMER G."
 		dc.b "MERCURY "
 		dc.b "KIRYU K."
+		dc.b "PRPL GUY"
 	even
 	
 ; give the vram setting on d3
@@ -4645,6 +4648,7 @@ Player_Palette:
 		dc.w	3,$F,$10,0 ; Gomer Gomer!
 		dc.w	29,29,29,0 ; MERCURY
 		dc.w	30,30,30,0 ; bragon of bojima 
+		dc.w	31,31,31,0 ; I am the purple guy come and see my suit tonight 
 		; add more player palettes
 Level_LoadPal:
 		move.w	#$1E,($FFFFFE14).w
@@ -4867,6 +4871,7 @@ Level_StartGame:
 		dc.b 2,$90	; gomer
 		dc.b 2,$98	; sailer mercury
 		dc.b 2,$A8 ;  kiryu
+		dc.b 2,$AD	; purple guy
 		even
 @cont:
 ; ---------------------------------------------------------------------------
@@ -16467,6 +16472,7 @@ loc_C61A:				; XREF: Obj3A_ChkPos
 		dc.b 2,$90	; gomer
 		dc.b 2,$9E	; sailer mercury
 		dc.b 0,$00
+		dc.b 0,$00	; purple guy
 		even
 @contgame:
 
@@ -25273,6 +25279,7 @@ SMCsoundCHK1:
 		dc.b 2,$90	; gomer
 		dc.b 2,$9A	; sailer mercury
 		dc.b 1,$A4
+		dc.b 1,$A4	; purple guy
 		even
 ; End of function Sonic_MoveLeft
 
@@ -25485,6 +25492,7 @@ Sonic_AirUnroll:
 		dc.b 2,$90	; gomer
 		dc.b 2,$9A	; sailer mercury
 		dc.b 2,$AC
+		dc.b 1,$A5
 		even
 @contgame:
 		move.l	$10(a0),d0
@@ -25738,6 +25746,7 @@ locret_133E8:
 		dc.b 2,$90	; gomer
 		dc.b 2,$9A	; sailer mercury
 		dc.b 1,$BE
+		dc.b 1,$BE
 		even
 ; End of function Sonic_Roll
 
@@ -25804,6 +25813,7 @@ loc_1341C:
 		dc.b 2,$90	; gomer
 		dc.b 2,$99	; sailer mercury
 		dc.b 2,$AA
+		dc.b 1,$A0
 		even
 ; ===========================================================================
 
@@ -26268,10 +26278,10 @@ Sonic_HurtStop:				; XREF: Obj01_Hurt
 		move.w	($FFFFF72E).w,d0
 		addi.w	#$E0,d0
 		cmp.w	$C(a0),d0
-		bcs.w	KillSonic
+		bcs.s	@kill
 		bsr.w	Sonic_Floor
 		btst	#1,$22(a0)
-		bne.s	locret_13860
+		bne.s	@exit
 		moveq	#0,d0
 		move.w	d0,$12(a0)
 		move.w	d0,$10(a0)
@@ -26279,9 +26289,11 @@ Sonic_HurtStop:				; XREF: Obj01_Hurt
 		move.b	#0,$1C(a0)
 		subq.b	#2,$24(a0)
 		move.w	#$78,$30(a0)
-
-locret_13860:
-		rts	
+; locret_13860:
+@exit:
+		rts
+@kill:
+		jmp	KillSonic
 ; End of function Sonic_HurtStop
 
 ; ===========================================================================
@@ -26455,6 +26467,7 @@ Player_Anim:
 	dc.l	SonicAniData ; gomer gomer!
 	dc.l	SonicAniData ; mercury
 	dc.l	KiryuAniData ; Kiryu
+	dc.l	PurpleAniData ; Purple guy
 	; Insert more animation data for other characters here
 	
 Sonic_Animate:				; XREF: Obj01_Control; et al
@@ -26637,6 +26650,9 @@ loc_13B26:
 	include	"_inc\LimitedSonic\Limit_Animate.asm"
 
 ; ===========================================================================
+PurpleAniData:
+	include "_anim\Purple.asm"
+
 SonicAniData:
 	include "_anim\Sonic.asm"
 
@@ -26660,6 +26676,7 @@ Player_DPLC:
 	dc.l	GomerDynPLC ; gomer gomer!
 	dc.l	mercuryDynPLC ; mercury
 	dc.l	KiryuDynPLC ; kiryu kasuga from the oni alliance
+	dc.l	PurpleDynPLC
 	; add pointers for player dplc here
 Player_Art:
 	dc.l	Art_Sonic
@@ -26670,6 +26687,7 @@ Player_Art:
 	dc.l	Art_gomer ; gomer gomer!
 	dc.l	Art_mercury ; mercury
 	dc.l	Art_Kiryu ; kiryuing
+	dc.l	Art_Purple
 	; add pointers for player art here
 
 LoadSonicDynPLC:			; XREF: Obj01_Control; et al
@@ -28641,7 +28659,7 @@ Obj66_Main:				; XREF: Obj66_Index
 ; ===========================================================================
 
 Obj66_Loop:
-		bsr.w	SingleObjLoad
+		jsr	SingleObjLoad
 		bne.s	loc_150FE
 		move.b	#$66,0(a1)
 		addq.b	#4,$24(a1)
@@ -31307,6 +31325,7 @@ CHAR_BOSSHIT_SND:
 		dc.b 2,$90	; gomer
 		dc.b 2,$9D	; sailer mercury
 		dc.b 0,$00
+		dc.b 2,$AD
 		even
 
 ; ---------------------------------------------------------------------------
@@ -36435,7 +36454,7 @@ HurtSonic:
 Hurt_Shield:
 		move.b	#0,($FFFFFE2C).w ; remove shield
 		move.b	#4,$24(a0)
-		bsr.w	Sonic_ResetOnFloor
+		jsr	Sonic_ResetOnFloor
 		bset	#1,$22(a0)
 		move.w	#-$400,$12(a0)	; make Sonic bounce away from the object
 		move.w	#-$200,$10(a0)
@@ -36479,6 +36498,7 @@ Hurt_Sound:
 		dc.b 2,$90	; gomer
 		dc.b 2,$9B	; sailer mercury
 		dc.b 2,$AB
+		dc.b 0,$00
 		even
 ; ===========================================================================
 
@@ -36534,6 +36554,7 @@ Kill_Sound:
 		dc.b 2,$90	; gomer
 		dc.b 2,$9C	; sailer mercury
 		dc.b 2,$A9
+		dc.b 0,$00
 		even
 ; End of function KillSonic
 
@@ -39350,6 +39371,7 @@ Player_Maps:
 	dc.l    map_gomer
 	dc.l    map_mercury
 	dc.l	Map_Kiryu
+	dc.l	Map_Purple
 	; insert player mapping here
 
 
@@ -39474,6 +39496,8 @@ map_mercury:
 	include "_maps\mercury.asm"
 Map_Kiryu:
 	include "_maps\Kiryu.asm"
+Map_Purple:
+	include "_maps\Purple.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	loading	array for the players
 ; ---------------------------------------------------------------------------
@@ -39489,6 +39513,8 @@ mercuryDynPLC:
 	include "_inc\mercuryDPLC.asm"
 KiryuDynPLC:
 	include "_inc\Kiryu dynamic pattern load cues.asm"
+PurpleDynPLC:
+	include "_inc\Purple dynamic pattern load cues.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	- players
 ; ---------------------------------------------------------------------------
@@ -39503,6 +39529,8 @@ Art_gomer:	incbin	artunc\gomer.bin	; gomer gomer!
 Art_mercury:	incbin	artunc\mercury.bin
 		even
 Art_Kiryu:	incbin	artunc/kiryu.bin	; Kiryu
+		even
+Art_Purple:	incbin  artunc/purple.bin
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various

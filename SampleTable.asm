@@ -47,11 +47,13 @@ SampleTable:
 	dcSample	TYPE_PCM,		futuristicsound,	20000, FLAGS_SFX		; $A7
 	
 	; kiryuman from the oni alliance
-	dcSample	TYPE_PCM,		KiryuLetsGo,8000, FLAGS_SFX	; $A8
+	dcSample	TYPE_PCM,		KiryuLetsGo,    8000, FLAGS_SFX	; $A8
 	dcSample	TYPE_PCM,		KiryuDead,	8000, FLAGS_SFX	; $A9
 	dcSample	TYPE_PCM,		KiryuJump,	8000, FLAGS_SFX	; $AA
 	dcSample	TYPE_PCM,		KiryuOuch,	8000, FLAGS_SFX	; $AB
 	dcSample	TYPE_PCM,		KiryuPunch,	8000, FLAGS_SFX	; $AC
+
+	dcSample	TYPE_PCM,		Always,		9000, FLAGS_SFX	; $AD
 	
 	
 	dc.w	-1	; end marker
@@ -94,4 +96,5 @@ SampleTable:
 	incdac	KiryuJump,	"sound/dac/kiryu_jump.wav"
 	incdac	KiryuOuch,	"sound/dac/kiryu_ouch.wav"
 	incdac	KiryuPunch,	"sound/dac/kiryu_punch.wav"
+	incdac  Always,	"sound/dac/ialwayscum.wav"
 	even
