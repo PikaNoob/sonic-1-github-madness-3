@@ -3288,16 +3288,13 @@ Title_ClrPallet:
 		move.l	#$40000001,($C00004).l
 		lea	(Nem_TitleFg).l,a0 ; load title	screen patterns
 		bsr.w	NemDec
-		move.l	#$60000001,($C00004).l
+		move.l	#$60000000,($C00004).l
 		lea	(Nem_TitleSonic).l,a0 ;	load Sonic title screen	patterns
-		bsr.w	NemDec
-		move.l	#$62000002,($C00004).l
-		lea	(Nem_TitleTM).l,a0 ; load "TM" patterns
 		bsr.w	NemDec
 		lea	($C00000).l,a6
 		move.l	#$50000003,4(a6)
 		lea	(Art_Text).l,a5
-		move.w	#(Art_Text_end-Art_Text/4)-1,d1
+		move.w	#((Art_Text_end-Art_Text)/4)-1,d1
 
 Title_LoadText:
 		move.l	(a5)+,(a6)
@@ -3338,9 +3335,6 @@ Title_LoadText:
 		moveq	#$21,d1
 		moveq	#$15,d2
 		bsr.w	ShowVDPGraphics
-		move.l	#$40000000,($C00004).l
-		lea	(Nem_GHZ_1st).l,a0 ; load GHZ patterns
-		bsr.w	NemDec
 		moveq	#1,d0		; load title screen pallet
 		bsr.w	PalLoad1
 		move.b	#$8A,d0		; play title screen music
@@ -13766,7 +13760,7 @@ Obj0E_Main:				; XREF: Obj0E_Index
 		move.w	#240+42,8(a0)
 		move.w	#200,$A(a0)
 		move.l	#Map_obj0E,4(a0)
-		move.w	#$0300,2(a0)
+		move.w	#$0100,2(a0)
 		move.b	#1,$18(a0)
 		move.b	#1,$1A(a0)
 		addq.b	#2,$24(a0)	; go to	next routine
