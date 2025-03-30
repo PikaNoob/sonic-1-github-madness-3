@@ -9244,7 +9244,7 @@ loc_6DC4:
 Resize_Index:	dc.w Resize_GHZ-Resize_Index, Resize_LZ-Resize_Index
 		dc.w Resize_MZ-Resize_Index, Resize_SLZ-Resize_Index
 		dc.w Resize_SYZ-Resize_Index, Resize_SBZ-Resize_Index
-		dc.w Resize_Ending-Resize_Index, Resize_GHZ-Resize_Index
+		dc.w Resize_Ending-Resize_Index, Resize_BHZ-Resize_Index
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Green	Hill Zone dynamic screen resizing
@@ -9887,6 +9887,120 @@ Resize_FZend2:
 ; ---------------------------------------------------------------------------
 
 Resize_Ending:				; XREF: Resize_Index
+		rts	
+; ===========================================================================
+; ---------------------------------------------------------------------------
+; Makoto Kino AKA Sailor Jupiter zone Zone dynamic screen resizing
+;- my waifu
+; ---------------------------------------------------------------------------
+
+Resize_BHZ:				; XREF: Resize_Index
+		moveq	#0,d0
+		move.b	($FFFFFE11).w,d0
+		add.w	d0,d0
+		move.w	Resize_BHZx(pc,d0.w),d0
+		jmp	Resize_BHZx(pc,d0.w)
+; ===========================================================================
+Resize_BHZx:	dc.w Resize_BHZ1-Resize_BHZx
+		dc.w Resize_BHZ2-Resize_BHZx
+		dc.w Resize_BHZ3-Resize_BHZx
+; ===========================================================================
+
+Resize_BHZ1:
+		move.w	#$300,($FFFFF726).w ; set lower	y-boundary
+		cmpi.w	#$1780,($FFFFF700).w ; has the camera reached $1780 on x-axis?
+		bcs.s	locret_6E08B	; if not, branch
+		move.w	#$400,($FFFFF726).w ; set lower	y-boundary
+
+locret_6E08B:
+		rts	
+; ===========================================================================
+
+Resize_BHZ2:
+		move.w	#$300,($FFFFF726).w
+		cmpi.w	#$ED0,($FFFFF700).w
+		bcs.s	locret_6E3AB
+		move.w	#$200,($FFFFF726).w
+		cmpi.w	#$1600,($FFFFF700).w
+		bcs.s	locret_6E3AB
+		move.w	#$400,($FFFFF726).w
+		cmpi.w	#$1D60,($FFFFF700).w
+		bcs.s	locret_6E3AB
+		move.w	#$300,($FFFFF726).w
+		
+locret_6E3AB:
+		rts	
+; ===========================================================================
+
+Resize_BHZ3:
+		moveq	#0,d0
+		move.b	($FFFFF742).w,d0
+		move.w	off_6E4AB(pc,d0.w),d0
+		jmp	off_6E4AB(pc,d0.w)
+; ===========================================================================
+off_6E4AB:	dc.w Resize_BHZ3main-off_6E4AB
+		dc.w Resize_BHZ3boss-off_6E4AB
+		dc.w Resize_BHZ3end-off_6E4AB
+; ===========================================================================
+
+Resize_BHZ3main:
+		move.w	#$300,($FFFFF726).w
+		cmpi.w	#$380,($FFFFF700).w
+		bcs.s	locret_6E96B
+		move.w	#$310,($FFFFF726).w
+		cmpi.w	#$960,($FFFFF700).w
+		bcs.s	locret_6E96B
+		cmpi.w	#$280,($FFFFF704).w
+		bcs.s	loc_6E98B
+		move.w	#$400,($FFFFF726).w
+		cmpi.w	#$1380,($FFFFF700).w
+		bcc.s	loc_6E8EB
+		move.w	#$4C0,($FFFFF726).w
+		move.w	#$4C0,($FFFFF72E).w
+
+loc_6E8EB:
+		cmpi.w	#$1700,($FFFFF700).w
+		bcc.s	loc_6E98B
+
+locret_6E96B:
+		rts	
+; ===========================================================================
+
+loc_6E98B:
+		move.w	#$300,($FFFFF726).w
+		addq.b	#2,($FFFFF742).w
+		rts	
+; ===========================================================================
+
+Resize_BHZ3boss:
+		cmpi.w	#$960,($FFFFF700).w
+		bcc.s	loc_6EB0B
+		subq.b	#2,($FFFFF742).w
+
+loc_6EB0B:
+		cmpi.w	#$2960,($FFFFF700).w
+		bcs.s	locret_6EE8B
+		bsr.w	SingleObjLoad
+		bne.s	loc_6ED0B
+		move.b	#$77,0(a1)	; load LZ boss object
+		move.w	#$2A60,8(a1)
+		move.w	#$280,$C(a1)
+
+loc_6ED0B:
+		move.w	#$8C,d0
+		bsr.w	PlaySound	; play boss music
+		move.b	#1,($FFFFF7AA).w ; lock	screen
+		addq.b	#2,($FFFFF742).w
+		moveq	#$22,d0
+		bra.w	LoadPLC		; load boss patterns
+; ===========================================================================
+
+locret_6EE8B:
+		rts	
+; ===========================================================================
+
+Resize_BHZ3end:
+		move.w	($FFFFF700).w,($FFFFF728).w
 		rts	
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -13361,7 +13475,7 @@ Obj37_MakeRings:			; XREF: Obj37_CountRings
 		tst.w	d4
 		bmi.s	loc_9D62
 		move.w	d4,d0
-		bsr.w	CalcSine
+		jsr	CalcSine
 		move.w	d4,d2
 		lsr.w	#8,d2
 		asl.w	d2,d0
