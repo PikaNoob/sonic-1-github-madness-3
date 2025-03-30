@@ -2214,8 +2214,7 @@ PalCycle:	dc.w PalCycle_GHZ-PalCycle
 
 
 PalCycle_Title:				; XREF: TitleScreen
-		lea	(Pal_TitleCyc).l,a0
-		bra.s	loc_196A
+		rts
 ; ===========================================================================
 
 PalCycle_GHZ:				; XREF: PalCycle
@@ -3423,8 +3422,6 @@ Title_LoadText:
 		move.w	#0,($FFFFFE10).w ; set level to	GHZ (00)
 		move.w	#0,($FFFFF634).w ; disable pallet cycling
 		bsr.w	LevelSizeLoad
-		bsr.w	DeformBgLayer
-
 		lea	($FFFFB000).w,a1
 		lea	(Blk16_GHZ).l,a0 ; load	GHZ 16x16 mappings
 		move.w	#0,d0
@@ -3433,7 +3430,6 @@ Title_LoadText:
 		lea	($FF0000).l,a1
 		bsr.w	KosDec
 		bsr.w	LevelLayoutLoad
-
 		move	#$2700,sr
 		bsr.w	ClearScreen
 		lea	($C00004).l,a5
@@ -3451,7 +3447,14 @@ Title_LoadText:
 		moveq	#$21,d1
 		moveq	#$15,d2
 		bsr.w	ShowVDPGraphics
-
+		lea	($FF0000).l,a1
+		lea	(Eni_TitleBG).l,a0 ; load	title screen mappings
+		move.w	#0,d0
+		bsr.w	EniDec
+		move.l	#$60000003,d0
+		moveq	#64-1,d1
+		moveq	#32-1,d2
+		bsr.w	ShowVDPGraphics
 		move.b	#0,($FFFFFFFA).w ; disable debug mode
 		move.w	#$178,($FFFFF614).w ; run title	screen for $178	frames
 		lea	($FFFFD080).w,a1
@@ -3468,9 +3471,6 @@ Title_ClrObjRam2:
 		move.b	#3,($FFFFD0DA).w
 		move.b	#$F,($FFFFD100).w
 		move.b	#2,($FFFFD11A).w
-		;jsr	ObjectsLoad
-		;bsr.w	DeformBgLayer
-		;jsr	BuildSprites
 		moveq	#0,d0
 		bsr.w	LoadPLC2
 		move.w	#0,($FFFFFFE4).w
@@ -3481,8 +3481,13 @@ Title_ClrObjRam2:
 		move.b  #SMNO_TITLE_SCR,titlemode.w
 		move.w  #60*2,titleScrCnt.w
 		move.w  #0,titleSinCntr.w
-		moveq	#1,d0		; load title screen pallet
-		bsr.w	PalLoad2
+        	moveq   #(32/2)-1,d7
+		lea     Pal_Title,a2
+		lea     palette,a3
+
+initLoadToBuffer:                         
+		move.l  (a2)+,(a3)+
+		dbf     d7,initLoadToBuffer
 		move.b	#$CA,d0
 		bra.w	PlaySound
 
@@ -3506,6 +3511,13 @@ TITLE_SCR:
 	bsr.w	PlaySound_Special
 
 	move.b  #SMNO_TITLE_MAIN,titlemode.w
+        moveq   #(32/2)-1,d7
+	lea     Pal_Title+(32*2),a2
+	lea     palette+(32*2),a3
+
+scrLoadToBuffer:                         
+	move.l  (a2)+,(a3)+
+	dbf     d7,scrLoadToBuffer
 	rts
 
 
@@ -3537,9 +3549,7 @@ TITLE_MAIN:
 		bsr.w	DelayProgram
 		jsr	RandomNumber	; for better randomness for the level IDs
 		jsr	ObjectsLoad
-		; bsr.w	 DeformBgLayer
 		jsr	BuildSprites
-		bsr.w	PalCycle_Title
 		bsr.w	RunPLC_RAM
 		move.w	($FFFFD008).w,d0
 		addq.w	#2,d0
@@ -39398,6 +39408,8 @@ Nem_Gomer:	incbin	artnem\gomer.bin
 Eni_Gomer:	incbin	mapeni\gomer.bin
 		even
 Eni_Title:	incbin	mapeni\titlescr.bin	; title screen foreground (mappings)
+		even
+Eni_TitleBG:	incbin	mapeni\titlescr_bg.bin	; title screen foreground (mappings)
 		even
 Nem_TitleFg:	incbin	artnem\titlefor.bin	; title screen foreground
 		even
