@@ -42440,7 +42440,7 @@ Kos_Z80:	incbin	sound\z80_1.bin
 		even
 Music01:	include	sound\LimitedInvincibility.asm
 		even
-Music03:	include	sound\coffinman.asm
+Music03:	include	sound\drcoffinman.asm
 		even
 Music04:	include	sound\eggmancutscene.asm
 		even
