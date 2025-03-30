@@ -3439,7 +3439,7 @@ Title_LoadText:
 		move.w	#$6000,d2
 		bsr.w	LoadTilesFromStart2
 		lea	($FF0000).l,a1
-		lea	(Eni_Title).l,a0 ; load	title screen mappings
+		lea	(Eni_Title).l,a0 	; load	title screen mappings
 		move.w	#0,d0
 		bsr.w	EniDec
 		lea	($FF0000).l,a1
@@ -3447,16 +3447,8 @@ Title_LoadText:
 		moveq	#$21,d1
 		moveq	#$15,d2
 		bsr.w	ShowVDPGraphics
-		lea	($FF0000).l,a1
-		lea	(Eni_TitleBG).l,a0 ; load	title screen mappings
-		move.w	#0,d0
-		bsr.w	EniDec
-		move.l	#$60000003,d0
-		moveq	#64-1,d1
-		moveq	#32-1,d2
-		bsr.w	ShowVDPGraphics
-		move.b	#0,($FFFFFFFA).w ; disable debug mode
-		move.w	#$178,($FFFFF614).w ; run title	screen for $178	frames
+		move.b	#0,($FFFFFFFA).w 	; disable debug mode
+		move.w	#600*3,($FFFFF614).w 	; run titlescreen for 30 seconds
 		lea	($FFFFD080).w,a1
 		moveq	#0,d0
 		move.w	#$F,d1
@@ -3481,6 +3473,7 @@ Title_ClrObjRam2:
 		move.b  #SMNO_TITLE_SCR,titlemode.w
 		move.w  #60*2,titleScrCnt.w
 		move.w  #0,titleSinCntr.w
+
         	moveq   #(32/2)-1,d7
 		lea     Pal_Title,a2
 		lea     palette,a3
@@ -3503,14 +3496,18 @@ TITLE_SCR:
 	sub.w   #1,titleScrCnt.w
 	bmi.s   .Exit
 	bra.w   _titleSineSlide
+
 .Exit:
-	move.b	#$8A,d0
-	bsr.w	PlaySound
 
-	move.b	#$AC,d0
-	bsr.w	PlaySound_Special
+	lea	($FF0000).l,a1
+	lea	(Eni_TitleBG).l,a0 ; load	title screen mappings
+	move.w	#0,d0
+	bsr.w	EniDec
+	move.l	#$60000003,d0
+	moveq	#64-1,d1
+	moveq	#32-1,d2
+	bsr.w	ShowVDPGraphics
 
-	move.b  #SMNO_TITLE_MAIN,titlemode.w
         moveq   #(32/2)-1,d7
 	lea     Pal_Title+(32*2),a2
 	lea     palette+(32*2),a3
@@ -3518,8 +3515,17 @@ TITLE_SCR:
 scrLoadToBuffer:                         
 	move.l  (a2)+,(a3)+
 	dbf     d7,scrLoadToBuffer
+
+	move.b	#$8A,d0
+	bsr.w	PlaySound
+
+	move.b	#$AC,d0
+	bsr.w	PlaySound_Special
+	move.b  #SMNO_TITLE_MAIN,titlemode.w
 	rts
 
+; ---------------------------------------------------------------------------
+; Bouncy sine-wavey effect for the emblem
 ; ---------------------------------------------------------------------------
 
 _titleSineSlide:
@@ -3544,16 +3550,23 @@ _titleSineSlide:
 
 ; ---------------------------------------------------------------------------
 ; main scr
+; ---------------------------------------------------------------------------
+
 _titleScroll:
         lea     titleHScroll.w,a1
         add.b   #2,beeSinCntr.w
         move.b  beeSinCntr.w,d0
         jsr     CalcSinCos
         asr.w   #1,d1
-        neg.w   d0
+
         move.w  #0,(a1)+
+        add.w   $FFFFF618+$A.w,d0
         move.w  d0,(a1)
+        add.w   $FFFFF618+8.w,d1
         move.w  d1,$FFFFF618.w
+
+        addq.w  #1,$FFFFF618+8.w
+        addq.w  #1,$FFFFF618+$A.w
         rts
 
 ; ---------------------------------------------------------------------------
