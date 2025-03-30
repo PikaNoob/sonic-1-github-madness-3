@@ -36889,6 +36889,9 @@ loc_1B730:
 SS_MapIndex:
 	include "_inc\Special stage mappings and VRAM pointers.asm"
 
+Map_SS_Microplastics:
+	include "_maps\ssmicroplastics.asm"
+
 ; ---------------------------------------------------------------------------
 ; Sprite mappings - special stage "R" block
 ; ---------------------------------------------------------------------------
@@ -36959,7 +36962,7 @@ Obj09_Main:				; XREF: Obj09_Index
 		addq.b	#2,$24(a0)
 		move.b	#$E,$16(a0)
 		move.b	#7,$17(a0)
-		move.l	#Map_Sonic,4(a0)
+		move.l	#Map_SS_Microplastics,4(a0)
 		move.w	#$780,2(a0)
 		move.b	#4,1(a0)
 		move.b	#0,$18(a0)
@@ -36976,13 +36979,10 @@ Obj09_ChkDebug:				; XREF: Obj09_Index
 
 Obj09_NoDebug:
 		move.b	#0,$30(a0)
-		moveq	#0,d0
-		move.b	$22(a0),d0
-		andi.w	#2,d0
-		move.w	Obj09_Modes(pc,d0.w),d1
-		jsr	Obj09_Modes(pc,d1.w)
-		jsr	LoadSonicDynPLC
-		jmp	DisplaySprite
+		moveq	#2,d0
+		and.b	$22(a0),d0
+		move.w	Obj09_Modes(pc,d0.w),d0
+		jmp	Obj09_Modes(pc,d0.w)
 ; ===========================================================================
 Obj09_Modes:	dc.w Obj09_OnWall-Obj09_Modes
 		dc.w Obj09_InAir-Obj09_Modes
@@ -37008,8 +37008,9 @@ Obj09_Display:				; XREF: Obj09_OnWall
 		move.w	($FFFFF780).w,d0
 		add.w	($FFFFF782).w,d0
 		move.w	d0,($FFFFF780).w
-		jsr	Sonic_Animate
-		rts	
+	;	jsr	Sonic_Animate
+	;	jsr	LoadSonicDynPLC
+		jmp	DisplaySprite
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -37256,8 +37257,8 @@ loc_1BC12:
 ;		move.w	($FFFFF780).w,d0
 ;		add.w	($FFFFF782).w,d0
 ;		move.w	d0,($FFFFF780).w
-		jsr	Sonic_Animate
-		jsr	LoadSonicDynPLC
+	;	jsr	Sonic_Animate
+	;	jsr	LoadSonicDynPLC
 		bsr.w	SS_FixCamera
 		jmp	DisplaySprite
 ; ===========================================================================
@@ -37268,8 +37269,8 @@ Obj09_Exit2:				; XREF: Obj09_Index
 		move.b	#$C,($FFFFF600).w
 
 loc_1BC40:
-		jsr	Sonic_Animate
-		jsr	LoadSonicDynPLC
+	;	jsr	Sonic_Animate
+	;	jsr	LoadSonicDynPLC
 		bsr.w	SS_FixCamera
 		jmp	DisplaySprite
 
@@ -39289,6 +39290,8 @@ Nem_SSGhost:	incbin	artnem\ssghost.bin	; special stage ghost block
 Nem_SSWBlock:	incbin	artnem\ssw.bin		; special stage W block
 		even
 Nem_SSGlass:	incbin	artnem\ssglass.bin	; special stage destroyable glass block
+		even
+Nem_SSMicroplastics:	incbin artnem\ssmicroplastics.bin
 		even
 Nem_ResultEm:	incbin	artnem\ssresems.bin	; chaos emeralds on special stage results screen
 		even
