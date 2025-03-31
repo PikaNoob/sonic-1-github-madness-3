@@ -126,7 +126,7 @@ PLC_LZ:		dc.w $B
 		dc.w $7980
 		dc.l Nem_Burrobot	; burrobot enemy
 		dc.w $94C0
-PLC_LZ2:	dc.w $C
+PLC_LZ2:	dc.w $B
 		dc.l Nem_LzPole		; pole that breaks
 		dc.w $7BC0
 		dc.l Nem_LzDoor2	; large	horizontal door
@@ -135,8 +135,6 @@ PLC_LZ2:	dc.w $C
 		dc.w $7EC0
 		dc.l Nem_Gargoyle	; gargoyle head
 		dc.w $5D20
-		dc.l Nem_LzSonic	; Sonic	holding	his breath
-		dc.w $8800
 		dc.l Nem_LzPlatfm	; rising platform
 		dc.w $89E0
 		dc.l Nem_Orbinaut	; orbinaut enemy
@@ -323,7 +321,7 @@ PLC_BHZ:	dc.w $A
 		dc.w $8000
 		dc.l Nem_Buzz		; buzz bomber enemy
 		dc.w $8880
-		dc.l Nem_Chopper	; chopper enemy
+		dc.l Nem_BHZChopper	; chopper enemy
 		dc.w $8F60
 		dc.l Nem_Newtron	; newtron enemy
 		dc.w $9360

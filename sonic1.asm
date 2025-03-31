@@ -3461,7 +3461,6 @@ Title_ClrObjRam2:
 
 		move.b	#$E,($FFFFD040).w ; load big Sonic object
 		move.b	#$F,($FFFFD080).w ; load "PRESS	START BUTTON" object
-		move.b	#$F,($FFFFD0C0).w ; load "TM" object
 		move.b	#3,($FFFFD0DA).w
 		move.b	#$F,($FFFFD100).w
 		move.b	#2,($FFFFD11A).w
@@ -9244,7 +9243,7 @@ loc_6DC4:
 Resize_Index:	dc.w Resize_GHZ-Resize_Index, Resize_LZ-Resize_Index
 		dc.w Resize_MZ-Resize_Index, Resize_SLZ-Resize_Index
 		dc.w Resize_SYZ-Resize_Index, Resize_SBZ-Resize_Index
-		dc.w Resize_Ending-Resize_Index, Resize_GHZ-Resize_Index
+		dc.w Resize_Ending-Resize_Index, Resize_BHZ-Resize_Index
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Green	Hill Zone dynamic screen resizing
@@ -9887,6 +9886,120 @@ Resize_FZend2:
 ; ---------------------------------------------------------------------------
 
 Resize_Ending:				; XREF: Resize_Index
+		rts	
+; ===========================================================================
+; ---------------------------------------------------------------------------
+; Makoto Kino AKA Sailor Jupiter zone Zone dynamic screen resizing
+;- my waifu
+; ---------------------------------------------------------------------------
+
+Resize_BHZ:				; XREF: Resize_Index
+		moveq	#0,d0
+		move.b	($FFFFFE11).w,d0
+		add.w	d0,d0
+		move.w	Resize_BHZx(pc,d0.w),d0
+		jmp	Resize_BHZx(pc,d0.w)
+; ===========================================================================
+Resize_BHZx:	dc.w Resize_BHZ1-Resize_BHZx
+		dc.w Resize_BHZ2-Resize_BHZx
+		dc.w Resize_BHZ3-Resize_BHZx
+; ===========================================================================
+
+Resize_BHZ1:
+		move.w	#$300,($FFFFF726).w ; set lower	y-boundary
+		cmpi.w	#$1780,($FFFFF700).w ; has the camera reached $1780 on x-axis?
+		bcs.s	locret_6E08B	; if not, branch
+		move.w	#$400,($FFFFF726).w ; set lower	y-boundary
+
+locret_6E08B:
+		rts	
+; ===========================================================================
+
+Resize_BHZ2:
+		move.w	#$300,($FFFFF726).w
+		cmpi.w	#$ED0,($FFFFF700).w
+		bcs.s	locret_6E3AB
+		move.w	#$200,($FFFFF726).w
+		cmpi.w	#$1600,($FFFFF700).w
+		bcs.s	locret_6E3AB
+		move.w	#$400,($FFFFF726).w
+		cmpi.w	#$1D60,($FFFFF700).w
+		bcs.s	locret_6E3AB
+		move.w	#$300,($FFFFF726).w
+		
+locret_6E3AB:
+		rts	
+; ===========================================================================
+
+Resize_BHZ3:
+		moveq	#0,d0
+		move.b	($FFFFF742).w,d0
+		move.w	off_6E4AB(pc,d0.w),d0
+		jmp	off_6E4AB(pc,d0.w)
+; ===========================================================================
+off_6E4AB:	dc.w Resize_BHZ3main-off_6E4AB
+		dc.w Resize_BHZ3boss-off_6E4AB
+		dc.w Resize_BHZ3end-off_6E4AB
+; ===========================================================================
+
+Resize_BHZ3main:
+		move.w	#$300,($FFFFF726).w
+		cmpi.w	#$380,($FFFFF700).w
+		bcs.s	locret_6E96B
+		move.w	#$310,($FFFFF726).w
+		cmpi.w	#$960,($FFFFF700).w
+		bcs.s	locret_6E96B
+		cmpi.w	#$280,($FFFFF704).w
+		bcs.s	loc_6E98B
+		move.w	#$400,($FFFFF726).w
+		cmpi.w	#$1380,($FFFFF700).w
+		bcc.s	loc_6E8EB
+		move.w	#$4C0,($FFFFF726).w
+		move.w	#$4C0,($FFFFF72E).w
+
+loc_6E8EB:
+		cmpi.w	#$1700,($FFFFF700).w
+		bcc.s	loc_6E98B
+
+locret_6E96B:
+		rts	
+; ===========================================================================
+
+loc_6E98B:
+		move.w	#$300,($FFFFF726).w
+		addq.b	#2,($FFFFF742).w
+		rts	
+; ===========================================================================
+
+Resize_BHZ3boss:
+		cmpi.w	#$960,($FFFFF700).w
+		bcc.s	loc_6EB0B
+		subq.b	#2,($FFFFF742).w
+
+loc_6EB0B:
+		cmpi.w	#$2960,($FFFFF700).w
+		bcs.s	locret_6EE8B
+		bsr.w	SingleObjLoad
+		bne.s	loc_6ED0B
+		move.b	#$77,0(a1)	; load LZ boss object
+		move.w	#$2A60,8(a1)
+		move.w	#$280,$C(a1)
+
+loc_6ED0B:
+		move.w	#$8C,d0
+		bsr.w	PlaySound	; play boss music
+		move.b	#1,($FFFFF7AA).w ; lock	screen
+		addq.b	#2,($FFFFF742).w
+		moveq	#$22,d0
+		bra.w	LoadPLC		; load boss patterns
+; ===========================================================================
+
+locret_6EE8B:
+		rts	
+; ===========================================================================
+
+Resize_BHZ3end:
+		move.w	($FFFFF700).w,($FFFFF728).w
 		rts	
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -13361,7 +13474,7 @@ Obj37_MakeRings:			; XREF: Obj37_CountRings
 		tst.w	d4
 		bmi.s	loc_9D62
 		move.w	d4,d0
-		bsr.w	CalcSine
+		jsr	CalcSine
 		move.w	d4,d2
 		lsr.w	#8,d2
 		asl.w	d2,d0
@@ -20229,11 +20342,123 @@ Map_obj40:
 
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
-; Object 4F - blank
+; Object 4F - splats, aka kagamine leg
+; ---------------------------------------------------------------------------
+v_framecount:		equ $FFFFFE04 ; for good measure
+Obj4F:					; XREF: Obj_Index
+		moveq	#0,d0
+		move.b	$24(a0),d0
+		move.w	off_D202(pc,d0.w),d1
+		jmp	off_D202(pc,d1.w)
 ; ---------------------------------------------------------------------------
 
-Obj4F:					; XREF: Obj_Index
-		rts	
+off_D202:	dc.w loc_D20A-off_D202, loc_D246-off_D202, loc_D274-off_D202, loc_D2C8-off_D202
+; ---------------------------------------------------------------------------
+
+loc_D20A:
+		addq.b	#2,$24(a0)
+		move.l	#Map_Splats,4(a0)
+		move.w	#$24E4,2(a0)
+		move.b	#4,1(a0)
+		move.b	#4,$18(a0)
+		move.b	#$C,$19(a0)
+		move.b	#$14,$16(a0)
+		move.b	#2,$20(a0)
+		tst.b	$28(a0)
+		beq.s	loc_D246
+		move.w	#$300,d2
+		bra.s	loc_D24A
+; ---------------------------------------------------------------------------
+
+loc_D246:
+		move.w	#$E0,d2
+
+loc_D24A:
+		move.w	#$100,d1
+		bset	#0,1(a0)
+		move.w	($FFFFD000+8).w,d0
+		sub.w	8(a0),d0
+		bcc.s	loc_D268SP
+		neg.w	d0
+		neg.w	d1
+		bclr	#0,1(a0)
+
+loc_D268SP:
+		cmp.w	d2,d0
+		bcc.s	loc_D274
+		move.w	d1,$10(a0)
+		addq.b	#2,$24(a0)
+
+loc_D274:
+		bsr.w	ObjectFall
+		move.b	#1,$1A(a0)
+		tst.w	$12(a0)
+		bmi.s	loc_D2AE
+		move.b	#0,$1A(a0)
+		bsr.w	ObjHitFloor
+		tst.w	d1
+		bpl.s	loc_D2AE
+		move.w	(a1),d0
+		andi.w	#$3FF,d0
+		cmpi.w	#$2D2,d0
+		bcs.s	loc_D2A4
+		addq.b	#2,$24(a0)
+		bra.s	loc_D2AE
+; ---------------------------------------------------------------------------
+
+loc_D2A4:
+		add.w	d1,$C(a0)
+		move.w	#-$400,$12(a0)
+
+loc_D2AE:
+		bsr.w	sub_D2DA
+		beq.s	loc_D2C4
+		neg.w	$10(a0)
+		bchg	#0,1(a0)
+		bchg	#0,$22(a0)
+
+loc_D2C4:
+		bra.w	MarkObjGone
+; ---------------------------------------------------------------------------
+
+loc_D2C8:
+		bsr.w	ObjectFall
+		bsr.w	DisplaySprite
+		tst.b	1(a0)
+		bpl.w	DeleteObject
+		rts
+; ---------------------------------------------------------------------------
+
+sub_D2DA:
+		move.w	(v_framecount).w,d0
+		add.w	d7,d0
+		andi.w	#3,d0
+		bne.s	loc_D308
+		moveq	#0,d3
+		move.b	$19(a0),d3
+		tst.w	$10(a0)
+		bmi.s	loc_D2FE
+		bsr.w	ObjHitWallRight
+		tst.w	d1
+		bpl.s	loc_D308
+
+loc_D2FA:
+		moveq	#1,d0
+		rts
+; ---------------------------------------------------------------------------
+
+loc_D2FE:
+		not.w	d3
+		bsr.w	ObjHitWallLeft
+		tst.w	d1
+		bmi.s	loc_D2FA
+
+loc_D308:
+		moveq	#0,d0
+		rts
+
+Map_Splats:
+	include "_maps\splats.asm"
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -26650,17 +26875,6 @@ loc_13B26:
 	include	"_inc\LimitedSonic\Limit_Animate.asm"
 
 ; ===========================================================================
-PurpleAniData:
-	include "_anim\Purple.asm"
-
-SonicAniData:
-	include "_anim\Sonic.asm"
-
-LimitedSonicAniData:
-	include "_anim\LimitedSonic.asm"
-	
-KiryuAniData:
-	include "_anim\kiryu.asm"
 
 ; ---------------------------------------------------------------------------
 ; Sonic	pattern	loading	subroutine
@@ -39449,8 +39663,6 @@ MainLoadBlocks:
 ArtLoadCues:
 	include "_inc\Pattern load cues.asm"
 
-		incbin	misc\padding.bin
-		even
 Nem_SegaLogo:	incbin	artnem\segalogo.bin	; large Sega logo
 		even
 Eni_SegaLogo:	incbin	mapeni\segalogo.bin	; large Sega logo (mappings)
@@ -39498,6 +39710,21 @@ Map_Kiryu:
 	include "_maps\Kiryu.asm"
 Map_Purple:
 	include "_maps\Purple.asm"
+
+; ---------------------------------------------------------------------------
+; Animation data array for the players
+; ---------------------------------------------------------------------------
+SonicAniData:
+	include "_anim\Sonic.asm"
+
+LimitedSonicAniData:
+	include "_anim\LimitedSonic.asm"
+	
+KiryuAniData:
+	include "_anim\kiryu.asm"
+
+PurpleAniData:
+	include "_anim\Purple.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	loading	array for the players
 ; ---------------------------------------------------------------------------
@@ -39535,21 +39762,11 @@ Art_Purple:	incbin  artunc/purple.bin
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
-Nem_Smoke:	incbin	artnem\xxxsmoke.bin	; unused smoke
-		even
-Nem_SyzSparkle:	incbin	artnem\xxxstars.bin	; unused stars
-		even
 Nem_Shield:	incbin	artnem\shield.bin	; shield
 		even
 Nem_Stars:	incbin	artnem\invstars.bin	; invincibility stars
 		even
-Nem_LzSonic:	incbin	artnem\xxxlzson.bin	; unused LZ Sonic holding his breath
-		even
-Nem_UnkFire:	incbin	artnem\xxxfire.bin	; unused fireball
-		even
 Nem_Warp:	incbin	artnem\xxxflash.bin	; unused entry to special stage flash
-		even
-Nem_Goggle:	incbin	artnem\xxxgoggl.bin	; unused goggles
 		even
 ; ---------------------------------------------------------------------------
 ; Sprite mappings - walls of the special stage
@@ -39601,7 +39818,8 @@ Nem_SSWBlock:	incbin	artnem\ssw.bin		; special stage W block
 		even
 Nem_SSGlass:	incbin	artnem\ssglass.bin	; special stage destroyable glass block
 		even
-Nem_SSMicroplastics:	incbin artnem\ssmicroplastics.bin
+Nem_SSMicroplastics:	
+		incbin artnem\ssmicroplastics.bin
 		even
 Nem_ResultEm:	incbin	artnem\ssresems.bin	; chaos emeralds on special stage results screen
 		even
@@ -39614,13 +39832,9 @@ Nem_Swing:	incbin	artnem\ghzswing.bin	; GHZ swinging platform
 		even
 Nem_Bridge:	incbin	artnem\ghzbridg.bin	; GHZ bridge
 		even
-Nem_GhzUnkBlock:incbin	artnem\xxxghzbl.bin	; unused GHZ block
-		even
 Nem_Ball:	incbin	artnem\ghzball.bin	; GHZ giant ball
 		even
 Nem_Spikes:	incbin	artnem\spikes.bin	; spikes
-		even
-Nem_GhzLog:	incbin	artnem\xxxghzlo.bin	; unused GHZ log
 		even
 Nem_SpikePole:	incbin	artnem\ghzlog.bin	; GHZ spiked log
 		even
@@ -39673,8 +39887,6 @@ Nem_MzMetal:	incbin	artnem\mzmetal.bin	; MZ metal blocks
 Nem_MzSwitch:	incbin	artnem\mzswitch.bin	; MZ switch
 		even
 Nem_MzGlass:	incbin	artnem\mzglassy.bin	; MZ green glassy block
-		even
-Nem_GhzGrass:	incbin	artnem\xxxgrass.bin	; unused grass (GHZ or MZ?)
 		even
 Nem_MzFire:	incbin	artnem\mzfire.bin	; MZ fireballs
 		even
@@ -39779,6 +39991,8 @@ Nem_Bomb:	incbin	artnem\bomb.bin		; bomb
 Nem_Orbinaut:	incbin	artnem\orbinaut.bin	; orbinaut
 		even
 Nem_Cater:	incbin	artnem\caterkil.bin	; caterkiller
+		even
+Nem_BHZChopper:	incbin	artnem\BHZchopper.bin	; chopper
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
@@ -39918,8 +40132,6 @@ Nem_EndFlower:	incbin	artnem\endflowe.bin	; ending sequence flowers
 Nem_CreditText:	incbin	artnem\credits.bin	; credits alphabet
 		even
 Nem_EndStH:	incbin	artnem\endtext.bin	; ending sequence "Sonic the Hedgehog" text
-		even
-		incbin	misc\padding2.bin
 		even
 ; ---------------------------------------------------------------------------
 ; Collision data
@@ -40108,10 +40320,6 @@ Level_BHZbg:	incbin	levels\bhzbg.bin
 ; ---------------------------------------------------------------------------
 Art_BigRing:	incbin	artunc\bigring.bin
 		even
-
-		incbin	misc\padding3.bin
-		even
-
 ; ---------------------------------------------------------------------------
 ; Sprite locations index
 ; ---------------------------------------------------------------------------
@@ -40231,7 +40439,6 @@ ObjPos_BHZ3:	incbin	objpos\bhz3.bin
 		even
 ObjPos_Null:	dc.b $FF, $FF, 0, 0, 0,	0
 ; ---------------------------------------------------------------------------
-		incbin	misc\padding4.bin
 		even
 
                 include "MegaPCM.asm"                   ; ++ ADD THIS LINE
@@ -40296,11 +40503,14 @@ MusicIndex:	; $01-$7F
 		dc.l Music0C ; Breaking The Habit, Linkin Park
 		dc.l Music0D ; Megalovania Looped
 		dc.l Music0E ; Go Go Gadget But it actually works correctly, had to sacrifice the DAC though :(
-		dc.l Music0F ; Eggman Encounter Cutscene (Transition to Z Z Z Z Z Z Act 3)
+		dc.l Music0F ; Eggman Encounter Cutscene (USE THIS ONE!!!)
 		dc.l Music10 ; Dr. Coffinman Boss Theme (USE THIS ONE IF WE END UP DOING THE DIFFERENT BOSS TRACKS PER ZONE THING) 
 		dc.l Music11 ; We Are Number One (Why did I make this one I have no idea)
 		dc.l Music12 ; Folgers (I made this in 2023, I guess it has a home now)
 		dc.l Music13 ; Drowning of Puyo Puyo (For STOP splash screen)
+		dc.l Music14 ; Bad Rickroll (Test, credits to MegaPigeon92 since they're the author of the VGM I found)
+		dc.l Music15 ; Matt's Track
+		dc.l Music16 ; IDK (This was made by YoMama2612 if that helps at all)
 
 		dc.l Music92 ; test
 
@@ -42802,6 +43012,12 @@ Music10:	incbin	sound\tg2000tracks\drcoffinman.bin
 Music11:	incbin	sound\tg2000tracks\wearenumberone.bin
 		even
 Music12:	incbin	sound\tg2000tracks\folgers.bin
+		even
+Music14:	incbin	sound\rickroll.bin ; Added in to see if that fixes Matt's track from crashing the game
+		even
+Music15:	incbin	sound\rivalry.bin
+		even
+Music16:	incbin	sound\rabbitthing.bin
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
