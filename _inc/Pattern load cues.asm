@@ -321,7 +321,7 @@ PLC_BHZ:	dc.w $A
 		dc.w $8000
 		dc.l Nem_Buzz		; buzz bomber enemy
 		dc.w $8880
-		dc.l Nem_Chopper	; chopper enemy
+		dc.l Nem_BHZChopper	; chopper enemy
 		dc.w $8F60
 		dc.l Nem_Newtron	; newtron enemy
 		dc.w $9360

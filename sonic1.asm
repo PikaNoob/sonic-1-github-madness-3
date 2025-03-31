@@ -39881,6 +39881,8 @@ Nem_Orbinaut:	incbin	artnem\orbinaut.bin	; orbinaut
 		even
 Nem_Cater:	incbin	artnem\caterkil.bin	; caterkiller
 		even
+Nem_BHZChopper:	incbin	artnem\BHZchopper.bin	; chopper
+		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
