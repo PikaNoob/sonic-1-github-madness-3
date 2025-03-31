@@ -40794,6 +40794,8 @@ MusicIndex:	; $01-$7F
 		dc.l Music19 ; Wormy (Not SpongeBob! Figure it out!)
 		dc.l Music1B ; Rendition of 1UP theme
 		dc.l Music1A ; Ronic Setro splash screen
+		dc.l Music1C ; Something
+		dc.l Music1D ; Mountain King S3M 'cause why not
 
 		dc.l Music92 ; test
 
@@ -43311,6 +43313,10 @@ Music19:	incbin	sound\tg2000tracks\wormy.bin
 Music1B:	incbin	sound\tg2000tracks\son1up.bin
 		even
 Music1A:	include	sound\ronicsetro.asm
+		even
+Music1C:	include	sound\tg2000tracks\MGSFX.asm
+		even
+Music1D:	include	sound\tg2000tracks\hallmountainkings3.asm
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
