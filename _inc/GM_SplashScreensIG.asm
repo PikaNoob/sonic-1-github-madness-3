@@ -135,6 +135,7 @@ GM_SplashScreensListIG:
 	dc.l $81<<24|@nem_urfat,$01<<24|@enifg_urfat,$82<<24|@enibg_urfat,$00<<24|@pal_urfat,0
 	dc.l $81<<24|@nem_BILLglider,$00<<24|@enifg_BILLglider,$00<<24|@enibg_BILLglider,$0B<<24|@pal_BILLglider,0	; homemade aircraft very safe
 	dc.l $81<<24|@nem_stop,$00<<24|@enifg_stop,$00<<24|@enibg_stop,$13<<24|@pal_stop,0
+	dc.l $81<<24|@nem_newbark,$00<<24|@enifg_newbark,$00<<24|@enibg_newbark,$01<<24|@pal_newbark,0
 	dc.l $81<<24|@nem_thx,$03<<24|@enifg_thx,$00<<24|@enibg_thx,$08<<24|@pal_thx,0
 	dc.l $81<<24|@nem_ronicsetro,$00<<24|@enifg_ronicsetro,$00<<24|@enibg_ronicsetro,$1A<<24|@pal_ronicsetro,0
 	dc.l 0	; terminator 2
@@ -145,6 +146,14 @@ GM_SplashScreensListIG:
 @enibg_pillow:	incbin mapeni\splash_pillow.bin
 	even
 @pal_pillow:	incbin pallet\splash_pillow.bin
+	even
+
+@nem_newbark:	incbin artnem\splash_newbark.bin
+	even
+@enifg_newbark:
+@enibg_newbark:	incbin mapeni\splash_newbark.bin
+	even
+@pal_newbark:	incbin pallet\splash_newbark.bin
 	even
 
 @nem_fnaf:	incbin artnem\splash_fnaf.bin
