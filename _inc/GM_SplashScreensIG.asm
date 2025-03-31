@@ -135,6 +135,7 @@ GM_SplashScreensListIG:
 	dc.l $81<<24|@nem_BILLglider,$00<<24|@enifg_BILLglider,$00<<24|@enibg_BILLglider,$0B<<24|@pal_BILLglider,0	; homemade aircraft very safe
 	dc.l $81<<24|@nem_stop,$00<<24|@enifg_stop,$00<<24|@enibg_stop,$13<<24|@pal_stop,0
 	dc.l $81<<24|@nem_thx,$03<<24|@enifg_thx,$00<<24|@enibg_thx,$08<<24|@pal_thx,0
+	dc.l $81<<24|@nem_ronicsetro,$00<<24|@enifg_ronicsetro,$00<<24|@enibg_ronicsetro,$1A<<24|@pal_ronicsetro,0
 	dc.l 0	; terminator 2
 ; -----------------------------------------------------------------------------
 @nem_pillow:	incbin artnem\splash_pillow.bin
@@ -239,6 +240,13 @@ GM_SplashScreensListIG:
 @enibg_thx:	incbin mapeni\splash_thx.bin
 	even
 @pal_thx:	incbin pallet\splash_thx.bin
+	even
+@nem_ronicsetro: incbin artnem\splash_ronicsetro.bin
+	even
+@enifg_ronicsetro:
+@enibg_ronicsetro: incbin mapeni\splash_ronicsetro.bin
+	even
+@pal_ronicsetro: incbin pallet\ronicsetro.bin
 	even
 	
 IntroCutscene:		; no one fucking modify this or i swear to fucking god, except malachi :3

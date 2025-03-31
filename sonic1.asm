@@ -40792,6 +40792,7 @@ MusicIndex:	; $01-$7F
 		dc.l Music17 ; Gadget Mountain Zone (Silvagunnerized an infamous tune)
 		dc.l Music18 ; Bubble Music
 		dc.l Music19 ; Wormy (Not SpongeBob! Figure it out!)
+		dc.l Music1A ; Ronic Setro splash screen
 
 		dc.l Music92 ; test
 
@@ -43305,6 +43306,8 @@ Music17:	incbin	sound\tg2000tracks\gadgetmountain.bin
 Music18:	incbin	sound\tg2000tracks\bubble.bin
 		even
 Music19:	incbin	sound\tg2000tracks\wormy.bin
+		even
+Music1A:	include	sound\ronicsetro.asm
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
