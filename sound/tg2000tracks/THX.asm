@@ -10,11 +10,14 @@ smpsHeaderStartSong = 1
 	smpsHeaderFM        THXLogo_FM3,	$00, $09
 	smpsHeaderFM        THXLogo_FM4,	$00, $00
 	smpsHeaderFM        THXLogo_FM5,	$00, $00
+	smpsHeaderFM        THXLogo_PSG1,	$00, $00
+	smpsHeaderFM        THXLogo_PSG2,	$00, $00
+	smpsHeaderFM        THXLogo_PSG3,	$00, $00
 
 ; FM1 Data
 THXLogo_FM1:
 	smpsSetvoice	$00
-	smpsPan		panCentre,	$00
+	smpsPan		panCenter,	$00
 	smpsAlterNote	$05
 	dc.b		nC4,	$01
 	smpsAlterNote	$EE
@@ -214,7 +217,7 @@ THXLogo_FM1:
 ; FM2 Data
 THXLogo_FM2:
 	smpsSetvoice	$00
-	smpsPan		panCentre,	$00
+	smpsPan		panCenter,	$00
 	smpsAlterNote	$06
 	dc.b		nG3,	$01
 	smpsAlterNote	$16
@@ -418,7 +421,7 @@ THXLogo_FM2:
 ; FM3 Data
 THXLogo_FM3:
 	smpsSetvoice	$00
-	smpsPan		panCentre,	$00
+	smpsPan		panCenter,	$00
 	dc.b		nRst,	$02
 	smpsAlterNote	$05
 	dc.b		nE2,	$01
@@ -623,7 +626,7 @@ THXLogo_FM3:
 ; FM4 Data
 THXLogo_FM4:
 	smpsSetvoice	$00
-	smpsPan		panCentre,	$00
+	smpsPan		panCenter,	$00
 	dc.b		nEb4,	$20
 	smpsAlterNote	$FD
 	dc.b		smpsNoAttack,	$01
@@ -768,7 +771,7 @@ THXLogo_FM4:
 ; FM5 Data
 THXLogo_FM5:
 	smpsSetvoice	$00
-	smpsPan		panCentre,	$00
+	smpsPan		panCenter,	$00
 	dc.b		nEb3,	$1D
 	smpsAlterNote	$F9
 	dc.b		smpsNoAttack,	$01
@@ -918,6 +921,15 @@ THXLogo_FM5:
 
 ; DAC Data
 THXLogo_DAC:
+	smpsStop
+	
+THXLogo_PSG1:
+	smpsStop
+	
+THXLogo_PSG2:
+	smpsStop
+
+THXLogo_PSG3:
 	smpsStop
 
 THXLogo_Voices:
