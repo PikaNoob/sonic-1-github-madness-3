@@ -126,7 +126,7 @@ PLC_LZ:		dc.w $B
 		dc.w $7980
 		dc.l Nem_Burrobot	; burrobot enemy
 		dc.w $94C0
-PLC_LZ2:	dc.w $C
+PLC_LZ2:	dc.w $B
 		dc.l Nem_LzPole		; pole that breaks
 		dc.w $7BC0
 		dc.l Nem_LzDoor2	; large	horizontal door
