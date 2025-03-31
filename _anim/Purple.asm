@@ -35,9 +35,7 @@
 		dc.w @Float4-@index
 @Roll:		dc.b $FE, $2E, $2F, $30, $31, $32, $FF,	$FF
 @Roll2:		dc.b $FE, $2E, $2F, $32, $30, $31, $32,	$FF
-@Push:		dc.b $FD, $45, $46, $47, $48, $FF, $FF,	$FF
 @Wait:		dc.b $17, 1, 1,	1, 1, 1, 1, 1, 1, 1, 1,	1, 1, 3, 2, 2, 2, 3, 4, $FE, 2, 0
-@Balance:	dc.b $1E, $3A, $3B, $FF
 @Duck:		dc.b $3F, $39, $FF, 0
 @Warp1:		dc.b $3F, $33, $FF, 0
 @Warp2:		dc.b $3F, $34, $FF, 0
@@ -45,7 +43,7 @@
 @Warp4:		dc.b $3F, $36, $FF, 0
 @Float1:	dc.b 7,	$3C, $3F, $FF
 @Float2:	dc.b 7,	$3C, $3D, $53, $3E, $54, $FF, 0
-@Spring:	dc.b $2F, $40, $FD, 0
+@Spring:	dc.b $2F, $01, $FD, 0
 @LZHang:	dc.b 4,	$41, $42, $FF
 @Leap1:		dc.b $F, $43, $43, $43,	$FE, 1
 @Leap2:		dc.b $F, $43, $44, $FE,	1, 0
@@ -61,9 +59,11 @@
 @Float3:	dc.b 3,	$3C, $3D, $53, $3E, $54, $FF, 0
 @Float4:	dc.b 3,	$3C, $FD, 0
 
-@Walk:		;dc.b $FF, 6, 7, 8, 9, $A, $B, $FF
-@Run:		;dc.b $FF, $1E, $1F, $20, $21, $FF, $FF, $FF
+@Walk:		dc.b $FF, 6, 7, 8, 9, $A, $B, $FF
+@Run:		dc.b $FF, $1E, $1F, $20, $21, $FF, $FF, $FF
+@Push:		dc.b $FD, $45, $46, $47, $48, $FF, $FF, $FF
 @Stop:		;dc.b 7, $37, $38, $FF
 @LookUp:	;dc.b $3F, 5, $FF, 0
+@Balance:	;dc.b $1E, $3A, $3B, $FF
 @Still:		dc.b 3, 1, $FF		; use standing frame
 		even

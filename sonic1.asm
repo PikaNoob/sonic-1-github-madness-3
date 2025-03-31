@@ -26749,7 +26749,11 @@ SAnim_WalkRun:				; XREF: SAnim_Do
 		addq.b	#1,d0		; is animation walking/running?
 		bne.w	SAnim_RollJump	; if not, branch
 		moveq	#0,d1
+		moveq	#0,d0
+		cmpi.b	#8,(v_character)
+		beq.s	@iamthepurpleguy
 		move.b	$26(a0),d0	; get Sonic's angle
+@iamthepurpleguy:
 		move.b	$22(a0),d2
 		andi.b	#1,d2		; is Sonic mirrored horizontally?
 		bne.s	loc_13A70	; if yes, branch
