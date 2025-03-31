@@ -4869,7 +4869,7 @@ Level_StartGame:
 		dc.b 2,$98	; sailer mercury
 		dc.b 2,$A8 ;  kiryu
 		dc.b 2,$B2	; purple guy
-		dc.b 2,$A7	; sans temporary!!!!!!!!!!!!!
+		dc.b 2,$B3	; sans temporary!!!!!!!!!!!!!
 		even
 @cont:
 ; ---------------------------------------------------------------------------
