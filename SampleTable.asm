@@ -23,7 +23,7 @@ SampleTable:
 	dcSample	TYPE_PCM,		Deagh,		0, FLAGS_SFX		; $92
 	dcSample	TYPE_PCM,		Deaghp,		0, FLAGS_SFX		; $93
 	dcSample	TYPE_DPCM,		Cocktail,	8000, FLAGS_LOOP	; $94
-	dcSample	TYPE_PCM,		Otis,		8000, FLAGS_SFX		; $95
+	dcSample	TYPE_DPCM,		Otis,		8000, FLAGS_SFX		; $95
 	dcSample	TYPE_PCM,		AmbO,		8000, FLAGS_LOOP	; $96
 	dcSample	TYPE_PCM,		Mikuingit,	8000, FLAGS_SFX		; $97
 ; SAILOR MERCURY
@@ -34,13 +34,13 @@ SampleTable:
 	dcSample	TYPE_DPCM,		SM5,	11025, FLAGS_SFX	; $9C
 	dcSample	TYPE_DPCM,		SM6,	11025, FLAGS_SFX	; $9D
 	dcSample	TYPE_DPCM,		SM7,	11025, FLAGS_SFX	; $9E
-	dcSample	TYPE_PCM,		Line1,	11025, FLAGS_SFX	; $9F
+	dcSample	TYPE_DPCM,		Line1,	11025, FLAGS_SFX	; $9F
 	dcSample	TYPE_PCM,		Line2,	11025, FLAGS_SFX	; $A0
 	dcSample	TYPE_PCM,		Line3,	11025, FLAGS_SFX	; $A1
 	dcSample	TYPE_PCM,		Line4,	11025, FLAGS_SFX	; $A2
 	dcSample	TYPE_PCM,		Line5,	11025, FLAGS_SFX	; $A3	
 	dcSample	TYPE_PCM,		Line6,	11025, FLAGS_SFX	; $A4	
-	dcSample	TYPE_PCM,		Fat,	11025, FLAGS_SFX	; $A5
+	dcSample	TYPE_DPCM,		Fat,	16000, FLAGS_SFX	; $A5
 	dcSample	TYPE_PCM,		Crash,	22050	; $A6
 
 	;not sailor mercury sounds start again here
@@ -72,7 +72,7 @@ SampleTable:
 	incdac	Deagh, "sound/dac/deagh.wav"
 	incdac	Deaghp, "sound/dac/pit fall.wav"
 	incdac	Cocktail, "sound/dac/hawaiian-cocktail.dpcm"
-	incdac	Otis, "sound/dac/otis.wav"
+	incdac	Otis, "sound/dac/otis.dpcm"
 	incdac	AmbO, "sound/dac/ambience.wav"
 	incdac	Mikuingit, "sound/dac/mikuing.wav"
 	incdac	SM1, "sound/dac/Mercury_Start.bin"
@@ -82,13 +82,13 @@ SampleTable:
 	incdac	SM5, "sound/dac/Mercury_death.bin"
 	incdac	SM6, "sound/dac/Mercury_bosshit.bin"
 	incdac	SM7, "sound/dac/Mercury_Win.bin"
-	incdac	Line1, "sound/dac/Line 1.wav"
+	incdac	Line1, "sound/dac/Line1.dpcm"
 	incdac	Line2, "sound/dac/Line 2.wav"
 	incdac	Line3, "sound/dac/Line 3.wav"
 	incdac	Line4, "sound/dac/Line 4.wav"
 	incdac	Line5, "sound/dac/Line 5.wav"
 	incdac	Line6, "sound/dac/Line 6.wav"
-	incdac	Fat, "sound/dac/fatty-ingame.wav"
+	incdac	Fat, 	"sound/dac/fatty.dpcm"
 	incdac	futuristicsound, "sound/dac/futuristicsound.wav"
 	incdac	Crash,	"sound/dac/crash0.wav"
 	incdac	KiryuLetsGo,	"sound/dac/kiryu_letsgo.wav"
