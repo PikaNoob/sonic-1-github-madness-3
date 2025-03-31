@@ -2165,6 +2165,7 @@ PalCycle_Load:				; XREF: Demo; Level_MainLoop; End_MainLoop
 		moveq	#0,d0
 		tst.b	($FFFFFFF9).w	; GMZ: Is truth nuke flag set?
 		bne.s	PalCycle_Stop	; GMZ: If yes, branch
+		jsr	PalCycle_BakaSonic
 		move.b	($FFFFFE10).w,d0 ; get level number
 		add.w	d0,d0		; multiply by 2
 		move.w	PalCycle(pc,d0.w),d0 ; load animated pallets offset index into d0
@@ -2398,6 +2399,58 @@ loc_1B52:
 locret_1B64:
 		rts	
 ; End of function PalCycle_SBZ
+; ---------------------------------------------------------------------------
+; Palette cycling routine loading subroutine for invincible baka
+; ---------------------------------------------------------------------------
+
+; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
+
+v_superpal:		equ $FFFFFF49
+v_superpaltime:		equ $FFFFFF4C
+v_superpalframe:	equ $FFFFFF4E
+; cut down super sonic cycle
+PalCycle_BakaSonic:
+		tst.b	(v_superpal).w
+		beq.s	PCycSVZ_Skip			; return, if Conic isn't super
+
+		; run frame timer
+		subq.b	#1,(v_superpaltime).w
+		bpl.s	PCycSVZ_Skip
+		move.b	#7,(v_superpaltime).w
+
+		; increment palette frame and update Conic's palette
+		lea	(Pal_Ibaka).l,a0
+		move.w	(v_superpalframe).w,d0
+		addq.w	#8,(v_superpalframe).w		; next frame
+		cmpi.w	#$18,(v_superpalframe).w	; is it the last frame?
+		bls.s	@br1111				; if not, branch
+		move.w	#$00,(v_superpalframe).w	; reset frame counter
+
+@br1111:
+		lea	($FFFFFB00+4).w,a1
+		move.l	(a0,d0.w),(a1)+
+		move.l	4(a0,d0.w),(a1)
+
+		; underwater palettes
+		cmpi.b	#1,($FFFFFE10).w			; are we in Glacier Tides Zone?
+		bne.s	PCycSVZ_Skip				; if not, branch
+		lea	($FFFFFA80+4).w,a1
+		move.l	(a0,d0.w),(a1)+
+		move.l	4(a0,d0.w),(a1)
+
+PCycSVZ_Skip:
+		CMP.b	#2,(v_superpal).w
+		beq.s	IBreturn	; return, if Conic isn't super
+		rts	
+
+IBreturn:
+		jsr	Obj01_setplayerpalette
+		cmpi.b	#1,($FFFFFE10).w ; is level LZ?
+		bne.s	IBreturne	; if not, branch
+		jsr	Obj01_setplayerpaletteUD
+IBreturne:
+		rts
+; End of function PalCycle_BakaConic
 
 ; ===========================================================================
 Pal_TitleCyc:	incbin	pallet\c_title.bin
@@ -2426,6 +2479,7 @@ Pal_SBZCyc7:	incbin	pallet\c_sbz_7.bin
 Pal_SBZCyc8:	incbin	pallet\c_sbz_8.bin
 Pal_SBZCyc9:	incbin	pallet\c_sbz_9.bin
 Pal_SBZCyc10:	incbin	pallet\c_sbz_10.bin
+Pal_IBaka:	incbin	pallet\invinciblebaka.bin
 ; ---------------------------------------------------------------------------
 ; Subroutine to	fade out and fade in
 ; ---------------------------------------------------------------------------
@@ -4633,41 +4687,16 @@ Level_ClrVars3:
 		clr.b	($FFFFF64D).w	; clear	water routine counter
 		clr.b	($FFFFF64E).w	; clear	water movement
 		move.b	#1,($FFFFF64C).w ; enable water
-		bra.w	Level_LoadPal
-Player_Palette:
-		; normal, lz, sbz, blank
-		dc.w	3,$F,$10,0 ; Sonic 
-		dc.w	23,24,25,0 ; Pal_Gronic 
-		dc.w	26,24,25,0 ; Pal_Anakama 
-		dc.w	28,28,28,0 ; LimitedSonic 
-		dc.w	27,27,$27,0 ; neru
-		dc.w	3,$F,$10,0 ; Gomer Gomer!
-		dc.w	29,29,29,0 ; MERCURY
-		dc.w	30,30,30,0 ; bragon of bojima 
-		dc.w	31,31,31,0 ; I am the purple guy come and see my suit tonight 
-		dc.w	32,32,32,0 ; SANS
-		; add more player palettes
+
 Level_LoadPal:
 		move.w	#$1E,($FFFFFE14).w
 		move	#$2300,sr
-
-		moveq	#0,d1		; >charcount
-		move.b	(v_character),d1
-		add.w	d1,d1
-		add.w	d1,d1
-		add.w	d1,d1
-		move.w	Player_Palette(pc,d1.w),d0	; load palette
-		
-		bsr.w	PalLoad2	; load Sonic's pallet line
+; just like maps and how its handled on debug mode
+; palettes are now a subroutine for the invincibility cycle
+		jsr	Obj01_setplayerpalette
 		cmpi.b	#1,($FFFFFE10).w ; is level LZ?
 		bne.s	Level_GetBgm	; if not, branch
-		move.w	Player_Palette+2(pc,d1.w),d0	; load palette
-		cmpi.b	#3,($FFFFFE11).w ; is act number 3?
-		bne.s	Level_WaterPal	; if not, branch
-		move.w	Player_Palette+4(pc,d1.w),d0	; load palette
-
-Level_WaterPal:
-		bsr.w	PalLoad3_Water	; load underwater pallet (see d0)
+		jsr	Obj01_setplayerpaletteUD
 		tst.b	($FFFFFE30).w
 		beq.s	Level_GetBgm
 		move.b	($FFFFFE53).w,($FFFFF64E).w
@@ -4949,6 +4978,41 @@ loc_3BC8:
 		tst.w	($FFFFF614).w
 		bne.s	loc_3B98
 		rts	
+
+; ===========================================================================
+; ---------------------------------------------------------------------------
+; Subroutine to	set player palette
+; ---------------------------------------------------------------------------
+Obj01_setplayerpalette:
+		moveq	#0,d1		; >charcount
+		move.b	(v_character),d1
+		add.w	d1,d1
+		add.w	d1,d1
+		add.w	d1,d1
+		move.w	Player_Palette(pc,d1.w),d0	; load palette
+		bsr.w	PalLoad2	; load Sonic's pallet line
+		rts	
+Obj01_setplayerpaletteUD:
+		move.w	Player_Palette+2(pc,d1.w),d0	; load palette
+		cmpi.b	#3,($FFFFFE11).w ; is act number 3?
+		bne.s	Level_WaterPal	; if not, branch
+		move.w	Player_Palette+4(pc,d1.w),d0	; load palette
+Level_WaterPal:
+		bsr.w	PalLoad3_Water	; load underwater pallet (see d0)
+		rts	
+Player_Palette:
+		; normal, lz, sbz, blank
+		dc.w	3,$F,$10,0 ; Sonic 
+		dc.w	23,24,25,0 ; Pal_Gronic 
+		dc.w	26,24,25,0 ; Pal_Anakama 
+		dc.w	28,28,28,0 ; LimitedSonic 
+		dc.w	27,27,$27,0 ; neru
+		dc.w	3,$F,$10,0 ; Gomer Gomer!
+		dc.w	29,29,29,0 ; MERCURY
+		dc.w	30,30,30,0 ; bragon of bojima 
+		dc.w	31,31,31,0 ; I am the purple guy come and see my suit tonight 
+		dc.w	32,32,32,0 ; SANS
+		; add more player palettes
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Subroutine to	do special water effects in Labyrinth Zone
@@ -6581,6 +6645,7 @@ End_LoadSonic:
 		move.b	d0,($FFFFFE1B).w
 		move.b	d0,($FFFFFE2C).w
 		move.b	d0,($FFFFFE2D).w
+
 		move.b	d0,($FFFFFE2E).w
 		move.b	d0,($FFFFFE2F).w
 		move.w	d0,($FFFFFE08).w
@@ -13689,6 +13754,7 @@ Obj7C_Collect:				; XREF: Obj7C_ChkDel
 		move.b	#$1C,($FFFFD01C).w ; make Sonic	invisible
 		move.b	#1,($FFFFF7CD).w ; stop	Sonic getting bonuses
 		clr.b	($FFFFFE2D).w	; remove invincibility
+	move.b	#2,(v_superpal).w
 		clr.b	($FFFFFE2C).w	; remove shield
 
 locret_9F76:
@@ -14004,6 +14070,7 @@ Obj2E_ChkInvinc:
 		move.b	#3,($FFFFD29C).w
 		move.b	#$38,($FFFFD2C0).w ; load stars	object ($3804)
 		move.b	#4,($FFFFD2DC).w
+	move.b	#1,(v_superpal).w
 		tst.b	($FFFFF7AA).w	; is boss mode on?
 		bne.s	Obj2E_NoMusic	; if yes, branch
 		cmpi.b 	#3,(v_character)
@@ -19706,6 +19773,7 @@ GotThroughAct:				; XREF: Obj3E_EndAct
 		bne.s	locret_ECEE
 		move.w	($FFFFF72A).w,($FFFFF728).w
 		clr.b	($FFFFFE2D).w	; disable invincibility
+	move.b	#2,(v_superpal).w
 		clr.b	($FFFFFE1E).w	; stop time counter
 		move.b	#$3A,($FFFFD5C0).w
 		moveq	#$10,d0
@@ -25101,6 +25169,7 @@ Obj01_PlayMusic:
 
 Obj01_RmvInvin:
 		move.b	#0,($FFFFFE2D).w ; cancel invincibility
+	move.b	#2,(v_superpal).w
 
 Obj01_ChkShoes:
 		tst.b	($FFFFFE2E).w	; does Sonic have speed	shoes?
@@ -26145,7 +26214,6 @@ invtime:	equ $32	; time left for invincibility
 	move.w	#$1500,(v_conspeedmax).w
 	move.w	#$15,(v_conspeedacc).w
 	move.w	#$150,(v_conspeeddec).w
-
 
 	bset	#$1,(v_invinc).w	; make Conic invincible
 	move.w	#$E4,d0
