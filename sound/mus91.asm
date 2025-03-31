@@ -15,14 +15,14 @@ smpsHeaderStartSong = 1
 	smpsHeaderPSG       Mus91_Credits_PSG3,	$00, $03, $00, fTone_04
 ;	this is just a rip of the track
 ;	ripper, 	part,		joke
-;	undecided, 	intro,		undecided
+;	coninight, 	intro,		oily fella
 ;	coninight, 	ghz,		luka luka night fever -FM1 done
 ;	coninight, 	lz,		the cleveland show (callback) - COMPLETE!
 ;	undecided, 	mz,		undecided
 ;	carlos, 	slz,		meltdown
 ;	undecided, 	sbz,		undecided
 ;	undecided, 	ccz,		undecided
-;	undecided, 	ending,		undecided
+;	thegamer2000, 	ending,		unknown - COMPLETE!
 
 ; FM1 Data
 Mus91_Credits_FM1:

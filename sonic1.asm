@@ -4279,7 +4279,7 @@ LMTSecondRow:
         dc.b    "THE PIG FROM   1"
         dc.b    " BARNYARD      2"
         dc.b    "               3"
-        dc.b    "Z Z Z Z        1"
+        dc.b    "HEINOUS ANUS   1"
         dc.b    "               2"
         dc.b    "               3"
         dc.b    "FINAL ZONE      "
@@ -19335,8 +19335,8 @@ Obj6D_Action:				; XREF: Obj6D_Index
 		bchg	#0,$1C(a0)
 		beq.s	loc_E57A
 		move.w	$32(a0),$30(a0)	; begin	flaming	time
-		move.w	#$B3,d0
-		jsr	(PlaySound_Special).l ;	play flame sound
+		move.w	#$AE,d0
+		jsr	MegaPCM_PlaySample
 
 loc_E57A:
 		lea	(Ani_obj6D).l,a1
@@ -30344,8 +30344,8 @@ Obj6E_Shock:				; XREF: Obj6E_Index
 		move.b	#1,$1C(a0)	; run "shocking" animation
 		tst.b	1(a0)
 		bpl.s	Obj6E_Animate
-		move.w	#$B1,d0
-		jsr	(PlaySound_Special).l ;	play electricity sound
+		move.w	#$AF,d0
+		jsr	MegaPCM_PlaySample
 
 Obj6E_Animate:
 		lea	(Ani_obj6E).l,a1
