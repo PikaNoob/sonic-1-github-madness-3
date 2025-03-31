@@ -17,6 +17,7 @@ align macro
 		include	"sound/smps2asm_inc.asm"
 		include "MapMacros.asm"
 		include "beebush/Mega Drive.inc"
+		include "constants.asm"
 
 	rsset $FFFFC800 
 v_dmaqueueslot:		rs.w	1
@@ -4512,7 +4513,7 @@ MusicList4:	incbin	misc\muslist4.bin
 ;v_levelrandtracker	= $FFFF8000
 InitGetLevelRandom:
 	moveq	#randLevelCount,d1
-	cmp.b	#3,(v_character).w
+	cmp.b	#char_limited,(v_character).w
 	bne.s	@notlimited
 	moveq	#randLevelCountLimited,d1
 @notlimited:
@@ -4531,7 +4532,7 @@ GetLevelRandom:
 	clr.w	d0
 	swap	d0
 	moveq	#randLevelCount,d1
-	cmp.b	#3,(v_character).w
+	cmp.b	#char_limited,(v_character).w
 	bne.s	@notlimited
 	moveq	#randLevelCountLimited,d1
 @notlimited:
@@ -14079,7 +14080,7 @@ Obj2E_ChkInvinc:
 	move.b	#1,(v_superpal).w
 		tst.b	($FFFFF7AA).w	; is boss mode on?
 		bne.s	Obj2E_NoMusic	; if yes, branch
-		cmpi.b 	#3,(v_character)
+		cmpi.b 	#char_limited,(v_character)
 		beq.s	Obj2E_NewBarkTown
 		move.w	#$87,d0
 		jmp	(PlaySound).l	; play invincibility music
@@ -18527,7 +18528,7 @@ loc_DB66:
 
 loc_DB72:
 		andi.w	#$F,d0
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.s	UseLimitedSpringPower
 		move.w	Obj41_Powers(pc,d0.w),$30(a0)
 		rts	
@@ -25306,7 +25307,7 @@ Obj01_MdJump:				; XREF: Obj01_Modes
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_ChgJumpDir
 		bsr.w	Sonic_LevelBound
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		bne.s	NormalPhysics
 		jsr JumpFallSonic
 		bra.s	LimitedFall
@@ -25340,7 +25341,7 @@ Obj01_MdJump2:				; XREF: Obj01_Modes
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_ChgJumpDir
 		bsr.w	Sonic_LevelBound
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		bne.s	NormalPhysics2
 		jsr JumpFallSonic
 		bra.s	LimitedFall2
@@ -25366,7 +25367,7 @@ loc_12EA6:
 
 
 Sonic_Move:				; XREF: Obj01_MdNormal
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.w	Limit_Move
 		move.w	($FFFFF760).w,d6
 		move.w	($FFFFF762).w,d5
@@ -25681,7 +25682,7 @@ loc_13120:
 
 
 Sonic_RollSpeed:			; XREF: Obj01_MdRoll
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.w	Limit_RollSpeed
 		move.w	($FFFFF760).w,d6
 		asl.w	#1,d6
@@ -25857,7 +25858,7 @@ Sonic_AirUnroll:
 
 
 Sonic_ChgJumpDir:			; XREF: Obj01_MdJump; Obj01_MdJump2
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.w	Limit_JumpDirection
 		move.w	($FFFFF760).w,d6
 		move.w	($FFFFF762).w,d5
@@ -26181,7 +26182,7 @@ Sonic_JumpHeight:			; XREF: Obj01_MdJump; Obj01_MdJump2
 		move.w	#-$200,d1
 
 loc_134AE:
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.w	locret_134C2
 		cmp.w	$12(a0),d1
 		ble.w	locret_134C2
@@ -26379,7 +26380,7 @@ locret_13544:
 
 Sonic_SlopeRepel:			; XREF: Obj01_MdNormal; Obj01_MdRoll
 		nop	
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.s	locret_13580
 		tst.b	$38(a0)
 		bne.s	locret_13580
@@ -26670,7 +26671,7 @@ loc_137AE:
 		bclr	#2,$22(a0)
 		move.b	#$13,$16(a0)
 		move.b	#9,$17(a0)
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.s	LimitedFloor
 		move.b	#0,$1C(a0)	; use running/walking animation
 		bra.s	NormalFloor
@@ -26743,7 +26744,7 @@ Sonic_HurtStop:				; XREF: Obj01_Hurt
 
 Obj01_Death:				; XREF: Obj01_Index
 		bsr.w	GameOver
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		bne.s	NormalPhysics3
 		jsr JumpFallSonic
 		bra.s	LimitedFall3
@@ -26919,7 +26920,7 @@ Sonic_Animate:				; XREF: Obj01_Control; et al
 		
 		movea.l	(a1,d0.w),a1	; load Sonic dplc
 
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.w	Limit_Animate
 	
 		moveq	#0,d0
@@ -26991,7 +26992,7 @@ SAnim_WalkRun:				; XREF: SAnim_Do
 		bne.w	SAnim_RollJump	; if not, branch
 		moveq	#0,d1
 		moveq	#0,d0
-		cmpi.b	#8,(v_character)
+		cmpi.b	#char_purple,(v_character)
 		beq.s	@iamthepurpleguy
 		move.b	$26(a0),d0	; get Sonic's angle
 @iamthepurpleguy:
@@ -30750,12 +30751,12 @@ loc_1670E:
 		move.w	8(a0),8(a1)
 		move.w	$C(a0),$C(a1)
 		clr.b	$32(a0)
-;		cmp.b	#5,(v_character).w ; is this gomer?
+;		cmp.b	#char_gomer,(v_character).w ; is this gomer?
 ;		bne.s	SMCsoundCHK6
 ;		move.b  #$90,d0
 ;		jmp	MegaPCM_PlaySample
 ;SMCsoundCHK6:
-;		cmp.b	#6,(v_character).w ; is this sailor mercury?
+;		cmp.b	#char_mercury,(v_character).w ; is this sailor mercury?
 ;		bne.s	NormalsoundCHK6
 ;		move.b  #$9A,d0
 ;		jmp	MegaPCM_PlaySample
@@ -36800,7 +36801,7 @@ KiryuTouchEnemy:
 		bne.w	Touch_ChkHurt	; if not, branch
 		
 Touch_Enemy:				; XREF: Touch_ChkValue
-		cmpi.b	#7,(v_character)
+		cmpi.b	#char_kiryu,(v_character)
 		beq.s	KiryuTouchEnemy
 		tst.b	($FFFFFE2D).w	; is Sonic invincible?
 		bne.s	loc_1AF40	; if yes, branch
@@ -36912,7 +36913,7 @@ Touch_Hurt:				; XREF: Touch_ChkHurt
 
 
 HurtSonic:
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.w	KillLimitedSonic
 		tst.b	($FFFFFE2C).w	; does Sonic have a shield?
 		bne.s	Hurt_Shield	; if yes, branch
