@@ -119,6 +119,7 @@ GM_CustomSplashScreensIG:
 	dc.w 7*60,7*50		; intro 4
 	dc.w 10*60,10*50	; intro 5
 	dc.w 11*60,11*50	; intro 6
+	dc.w 4*60,4*50		; I ALWA
 
 GM_SplashScreensListIG:
 	dc.l $89<<24|@nem_pillow,$00<<24|@enifg_pillow,$94<<24|@enibg_pillow,$00<<24|@pal_pillow,0
@@ -127,6 +128,13 @@ GM_SplashScreensListIG:
 	dc.l $81<<24|@nem_vroom,$00<<24|@enifg_vroom,$00<<24|@enibg_vroom,$02<<24|@pal_vroom,0
 	dc.l $81<<24|@nem_mal,$00<<24|@enifg_mal,$00<<24|@enibg_mal,$97<<24|@pal_mal,0
 	dc.l $81<<24|@nem_sh,$00<<24|@enifg_sh,$00<<24|@enibg_sh,$9F<<24|@pal_sh,0
+	dc.l $81<<24|@nem_sowwy,$00<<24|@enifg_sowwy,$00<<24|@enibg_sowwy,$01<<24|@pal_sowwy,0
+	dc.l $81<<24|@nem_fat,$00<<24|@enifg_fat,$A5<<24|@enibg_fat,$00<<24|@pal_fat,0		; MUST BE NUMBER 8 OR ELSE I NUKE THE WHOLE PROJECT YOUR IMMORAL, uhhh, fuckers, I'm gonna miku you I'm mikuing
+	dc.l $81<<24|@nem_playnow,$00<<24|@enifg_playnow,$00<<24|@enibg_playnow,$07<<24|@pal_playnow,0
+	dc.l $81<<24|@nem_actualpoop,$00<<24|@enifg_actualpoop,$00<<24|@enibg_actualpoop,$09<<24|@pal_actualpoop,0	; GMZ
+	dc.l $81<<24|@nem_BILLglider,$00<<24|@enifg_BILLglider,$00<<24|@enibg_BILLglider,$0B<<24|@pal_BILLglider,0	; homemade aircraft very safe
+	dc.l $81<<24|@nem_stop,$00<<24|@enifg_stop,$00<<24|@enibg_stop,$13<<24|@pal_stop,0
+	dc.l $81<<24|@nem_thx,$03<<24|@enifg_thx,$00<<24|@enibg_thx,$08<<24|@pal_thx,0
 	dc.l 0	; terminator 2
 ; -----------------------------------------------------------------------------
 @nem_pillow:	incbin artnem\splash_pillow.bin
@@ -176,6 +184,62 @@ GM_SplashScreensListIG:
 	even
 @pal_sh:	incbin pallet\splash_sh.bin
 	even
+
+@nem_sowwy:	incbin artnem\splash_sowwy.bin
+	even
+@enifg_sowwy:
+@enibg_sowwy:	incbin mapeni\splash_sowwy.bin
+	even
+@pal_sowwy:	incbin pallet\monochrome.bin
+	even
+
+@nem_fat:	incbin artnem\splash_fat.bin
+	even
+@enifg_fat:
+@enibg_fat:	incbin mapeni\splash_fat.bin
+	even
+@pal_fat:	incbin pallet\splash_fat.bin
+	even
+
+@nem_playnow:	incbin artnem\splash_playnow.bin
+	even
+@enifg_playnow:
+@enibg_playnow:	incbin mapeni\splash_playnow.bin
+	even
+@pal_playnow:	incbin pallet\splash_playnow.bin
+	even
+
+@nem_actualpoop:	incbin artnem\actualpoop.bin	; GMZ
+	even	; GMZ
+@enifg_actualpoop:	; GMZ
+@enibg_actualpoop:	incbin mapeni\actualpoop.bin	; GMZ
+	even	; GMZ
+@pal_actualpoop:	incbin pallet\actualpoop.bin	; GMZ
+	even	; GMZ
+	
+@nem_BILLglider:	incbin artnem\GLIDER11.bin	; THE GLIDER MF
+	even	; GMZ
+@enifg_BILLglider:	; GMZ
+@enibg_BILLglider:	incbin mapeni\GLIDER11.bin	; GLIDER11
+	even	; GMZ im too lazy to chaange thissssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+@pal_BILLglider:	incbin pallet\GLIDER11.bin	;
+	even	; 
+
+@nem_stop:	incbin artnem\splash_stop.bin
+	even
+@enifg_stop:
+@enibg_stop:	incbin mapeni\splash_stop.bin
+	even
+@pal_stop:	incbin pallet\splash_stop.bin
+	even
+
+@nem_thx:	incbin artnem\splash_thx.bin
+	even
+@enifg_thx:
+@enibg_thx:	incbin mapeni\splash_thx.bin
+	even
+@pal_thx:	incbin pallet\splash_thx.bin
+	even
 	
 IntroCutscene:		; no one fucking modify this or i swear to fucking god, except malachi :3
 	dc.l $81<<24|@nem_PicBatch,$02<<24|@enifg_Picture1,$9F<<24|@enibg_Picture1,$85<<24|@pal_monochrome,1
@@ -214,4 +278,29 @@ IntroCutscene:		; no one fucking modify this or i swear to fucking god, except m
 	even
 @enifg_Picture6:
 @enibg_Picture6:	incbin mapeni\Picture6.bin
+	even
+
+
+EndingSleeper:
+	dc.l $81<<24|@nem,$00<<24|@enifg,$B1<<24|@enibg,$00<<24|@pal,0
+	dc.l 0	; terminator 2
+
+@nem:	incbin artnem\ending_kiryu.bin
+	even
+@enifg:
+@enibg:	incbin mapeni\ending_kiryu.bin
+	even
+@pal:	incbin pallet\ending_kiryu.bin
+	even
+
+EndingAlwaysCum:
+	dc.l $81<<24|@nem,$08<<24|@enifg,$AD<<24|@enibg,$99<<24|@pal,0
+	dc.l 0	; terminator 2
+
+@nem:	incbin artnem\splash_fat.bin
+	even
+@enifg:	incbin mapeni\splash_fat_fg.bin
+@enibg:	incbin mapeni\splash_fat.bin
+	even
+@pal:	incbin pallet\splash_fat.bin
 	even

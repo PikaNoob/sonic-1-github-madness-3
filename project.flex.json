@@ -1,15 +1,14 @@
 {
     "Flex": 2,
     "name": "",
-    "node": "1c0e1eff-a75d-4561-9981-6a08d53ca655",
+    "node": "faecf5fe-f4d1-4859-8cdb-d65bae759721",
     "objects": [
         {
-            "name": "players",
+            "name": "animals",
             "children": [
                 {
-                    "uuid": "db436497-8172-4473-ab1a-116ba31d78a9",
                     "format": "Sonic 1.js",
-                    "name": "sonc",
+                    "name": "\"flicky\"",
                     "palettes": [
                         {
                             "path": "pallet\\sonic.bin",
@@ -17,18 +16,308 @@
                         }
                     ],
                     "art": {
-                        "path": "artunc\\sonic.bin",
+                        "path": "artnem/flicky.bin",
+                        "compression": "Nemesis",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "_maps\\obj28a.asm",
+                        "label": ""
+                    },
+                    "dplcs": {
+                        "enabled": false,
+                        "path": "",
+                        "label": ""
+                    },
+                    "uuid": "f5fef4d1-b859-4cdb-965b-ae759721b568"
+                },
+                {
+                    "format": "Sonic 1.js",
+                    "name": "\"cucky\"",
+                    "palettes": [
+                        {
+                            "path": "pallet\\LimitedSonic.bin",
+                            "length": 1
+                        }
+                    ],
+                    "art": {
+                        "path": "artnem/chicken.bin",
+                        "compression": "Nemesis",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "_maps\\obj28a.asm",
+                        "label": ""
+                    },
+                    "dplcs": {
+                        "enabled": false,
+                        "path": "",
+                        "label": ""
+                    },
+                    "uuid": "ecf5fef4-d1b8-494c-9bd6-5bae759721b5"
+                },
+                {
+                    "format": "Sonic 1.js",
+                    "name": "\"pocky\"",
+                    "palettes": [
+                        {
+                            "path": "pallet\\LimitedSonic.bin",
+                            "length": 1
+                        }
+                    ],
+                    "art": {
+                        "path": "artnem/rabbit.bin",
+                        "compression": "Nemesis",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "_maps\\obj28.asm",
+                        "label": ""
+                    },
+                    "dplcs": {
+                        "enabled": false,
+                        "path": "",
+                        "label": ""
+                    },
+                    "uuid": "b8594cdb-d65b-4e75-9721-b56869e0e11e"
+                },
+                {
+                    "format": "Sonic 1.js",
+                    "name": "\"ricky\"",
+                    "palettes": [
+                        {
+                            "path": "pallet\\LimitedSonic.bin",
+                            "length": 1
+                        }
+                    ],
+                    "art": {
+                        "path": "artnem/squirrel.bin",
+                        "compression": "Nemesis",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "_maps\\obj28b.asm",
+                        "label": ""
+                    },
+                    "dplcs": {
+                        "enabled": false,
+                        "path": "",
+                        "label": ""
+                    },
+                    "uuid": "fef4d1b8-594c-4bd6-9bae-759721b56869"
+                },
+                {
+                    "format": "Sonic 1.js",
+                    "name": "\"pecky\"",
+                    "palettes": [
+                        {
+                            "path": "pallet\\LimitedSonic.bin",
+                            "length": 1
+                        }
+                    ],
+                    "art": {
+                        "path": "artnem/blackbrd.bin",
+                        "compression": "Nemesis",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "_maps\\obj28.asm",
+                        "label": ""
+                    },
+                    "dplcs": {
+                        "enabled": false,
+                        "path": "",
+                        "label": ""
+                    },
+                    "uuid": "d1b8594c-dbd6-4bae-b597-21b56869e0e1"
+                },
+                {
+                    "format": "Sonic 1.js",
+                    "name": "\"rocky\"",
+                    "palettes": [
+                        {
+                            "path": "pallet\\sonic.bin",
+                            "length": 1
+                        }
+                    ],
+                    "art": {
+                        "path": "artnem/seal.bin",
+                        "compression": "Nemesis",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "_maps\\obj28a.asm",
+                        "label": ""
+                    },
+                    "dplcs": {
+                        "enabled": false,
+                        "path": "",
+                        "label": ""
+                    },
+                    "uuid": "f4d1b859-4cdb-465b-ae75-9721b56869e0"
+                },
+                {
+                    "format": "Sonic 1.js",
+                    "name": "\"picky\"",
+                    "palettes": [
+                        {
+                            "path": "pallet\\LimitedSonic.bin",
+                            "length": 1
+                        }
+                    ],
+                    "art": {
+                        "path": "artnem/pig.bin",
+                        "compression": "Nemesis",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "_maps\\obj28b.asm",
+                        "label": ""
+                    },
+                    "dplcs": {
+                        "enabled": false,
+                        "path": "",
+                        "label": ""
+                    },
+                    "uuid": "faecf5fe-f4d1-4859-8cdb-d65bae759721"
+                }
+            ],
+            "isDirectory": true,
+            "expanded": true,
+            "uuid": "00bd42b3-caa7-443b-af0b-bd66a9856b53"
+        },
+        {
+            "uuid": "146fcbea-4a13-4e56-92d0-b3342f1e361a",
+            "format": "Sonic 1.js",
+            "name": "sans NOW",
+            "palettes": [
+                {
+                    "path": "pallet\\sans.bin",
+                    "length": 1
+                }
+            ],
+            "art": {
+                "path": "artunc\\sans.bin",
+                "compression": "Uncompressed",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "_maps\\sans.asm",
+                "label": ""
+            },
+            "dplcs": {
+                "enabled": true,
+                "path": "_inc\\Sans dynamic pattern load cues.asm",
+                "label": ""
+            }
+        },
+        {
+            "uuid": "988f990c-af11-4993-9ca7-f2c8a7e5e296",
+            "format": "Sonic 1.js",
+            "name": "special microplas",
+            "palettes": [
+                {
+                    "path": "pallet\\special.bin",
+                    "length": 4
+                }
+            ],
+            "art": {
+                "path": "artnem\\ssmicroplastics.bin",
+                "compression": "Nemesis",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "_maps\\ssmicroplastics.asm",
+                "label": "",
+                "customDefinition": ""
+            },
+            "dplcs": {
+                "enabled": false,
+                "path": "",
+                "label": "",
+                "customDefinition": ""
+            }
+        },
+        {
+            "name": "players",
+            "children": [
+                {
+                    "uuid": "d2a6e803-a319-4e98-bcf6-bd821b46d798",
+                    "format": "Sonic 1.js",
+                    "name": "sonc",
+                    "palettes": [
+                        {
+                            "path": "pallet/sonic.bin",
+                            "length": 1
+                        }
+                    ],
+                    "art": {
+                        "path": "artunc/sonic.bin",
                         "compression": "Uncompressed",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "_maps\\Sonic.asm",
+                        "path": "_maps/Sonic.asm",
                         "label": "",
                         "customDefinition": ""
                     },
                     "dplcs": {
                         "enabled": true,
-                        "path": "_inc\\Sonic dynamic pattern load cues.asm",
+                        "path": "_inc/Sonic dynamic pattern load cues.asm",
+                        "label": "",
+                        "customDefinition": ""
+                    }
+                },
+                {
+                    "uuid": "cd533db5-b393-4aab-8f7e-0379f4c3dabf",
+                    "format": "Sonic 1.js",
+                    "name": "purple",
+                    "palettes": [
+                        {
+                            "path": "pallet/purple.bin",
+                            "length": 1
+                        }
+                    ],
+                    "art": {
+                        "path": "artunc/purple.bin",
+                        "compression": "Uncompressed",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "_maps/purple.asm",
+                        "label": "",
+                        "customDefinition": ""
+                    },
+                    "dplcs": {
+                        "enabled": true,
+                        "path": "_inc/Purple dynamic pattern load cues.asm",
+                        "label": "",
+                        "customDefinition": ""
+                    }
+                },
+                {
+                    "uuid": "db436497-8172-4473-ab1a-116ba31d78a9",
+                    "format": "Sonic 1 Raw.js",
+                    "name": "kiryu",
+                    "palettes": [
+                        {
+                            "path": "pallet/kiryu.bin",
+                            "length": 1
+                        }
+                    ],
+                    "art": {
+                        "path": "artunc/kiryu.bin",
+                        "compression": "Uncompressed",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "_maps/Kiryu.asm",
+                        "label": "",
+                        "customDefinition": ""
+                    },
+                    "dplcs": {
+                        "enabled": true,
+                        "path": "_inc/Kiryu dynamic pattern load cues.asm",
                         "label": "",
                         "customDefinition": ""
                     }
@@ -70,24 +359,45 @@
                         }
                     ],
                     "art": {
-                        "path": "artunc\\neru.bin",
+                        "path": "artunc/neru.bin",
                         "compression": "Uncompressed",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "_maps\\neru.asm",
+                        "path": "_maps/neru.asm",
                         "label": ""
                     },
                     "dplcs": {
                         "enabled": true,
-                        "path": "_inc\\neruDPLC.asm",
+                        "path": "_inc/neruDPLC.asm",
                         "label": ""
                     },
                     "uuid": "1c0e1eff-a75d-4561-9981-6a08d53ca655"
                 }
             ],
             "isDirectory": true,
-            "expanded": true
+            "expanded": true,
+            "uuid": "b2e21f93-0756-4fbf-86a0-596a53748fd7"
+        },
+        {
+            "format": "Sonic 1.js",
+            "name": "psb",
+            "palettes": [],
+            "art": {
+                "path": "artnem/titlefor.bin",
+                "compression": "Nemesis",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "_maps/obj0F.asm",
+                "label": ""
+            },
+            "dplcs": {
+                "enabled": false,
+                "path": "",
+                "label": ""
+            },
+            "uuid": "07566fbf-46a0-496a-9374-8fd79bebf175"
         },
         {
             "format": "Sonic 1.js",
@@ -308,14 +618,19 @@
         },
         {
             "name": "title sonic",
-            "palettes": [],
+            "palettes": [
+                {
+                    "path": "pallet/title.bin",
+                    "length": 4
+                }
+            ],
             "art": {
-                "path": "artnem\\titleson.bin",
+                "path": "artnem/titleson.bin",
                 "compression": "Nemesis",
                 "offset": 0
             },
             "mappings": {
-                "path": "_maps\\obj0E.asm",
+                "path": "_maps/obj0E.asm",
                 "format": "Sonic 1",
                 "customDefinition": "",
                 "label": ""
@@ -334,12 +649,12 @@
             "name": "Credits Text",
             "palettes": [],
             "art": {
-                "path": "artnem\\credits.bin",
+                "path": "artnem/credits.bin",
                 "compression": "Nemesis",
                 "offset": 0
             },
             "mappings": {
-                "path": "_maps\\obj8A.asm",
+                "path": "_maps/obj8A.asm",
                 "format": "Sonic 1",
                 "customDefinition": "",
                 "label": ""
@@ -352,7 +667,7 @@
                 "label": ""
             },
             "uuid": "c5e02c60-bf44-489e-8767-8f359839fecb",
-            "format": "Sonic 1.js"
+            "format": "Sonic 1 MapMacros.js"
         }
     ]
 }

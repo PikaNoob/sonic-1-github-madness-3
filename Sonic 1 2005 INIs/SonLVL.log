@@ -1,79 +1,792 @@
-Operating system: Microsoft Windows NT 6.2.9200.0
-Opening INI file "C:\Users\Azul\Documents\GitHub\sonic-1-github-madness-3\Sonic 1 2005 INIs\SonLVL.ini"...
+Mono runtime detected.
+Operating system: Unix 6.1.0.31
+Opening INI file "/home/katsushimi/Documents/GitHub/sonic-1-github-madness-3/Sonic 1 2005 INIs/SonLVL.ini"...
 Game type is S1.
-Loading Scrap Brain Zone Act 1...
-Loading 256x256 chunks from file "../map256/sbz.bin", using compression Kosinski...
-Loading 16x16 blocks from file "../map16/sbz.bin", using compression Enigma...
+Loading Scrap Brain Zone Act 2...
 Loading 8x8 tiles from file "../artnem/8x8sbz.bin", using compression Nemesis...
+Loading 16x16 blocks from file "../map16/sbz.bin", using compression Enigma...
+Loading palette file "../pallet/sonic.bin"...
+Source: 0 Destination: 0 Length: 16
+Loading palette file "../pallet/sbz_act2.bin"...
+Source: 0 Destination: 16 Length: 48
+Loading FG layout from file "../levels/sbz2.bin", using compression Uncompressed...
+Loading 256x256 chunks from file "../map256/sbz.bin", using compression Kosinski...
+Loading BG layout from file "../levels/sbz2bg.bin", using compression Uncompressed...
 Loading FG layout from file "../levels/sbz1.bin", using compression Uncompressed...
 Loading BG layout from file "../levels/sbz1bg.bin", using compression Uncompressed...
+Loading object definition file "obj.ini".
+Loading object definition file "objSBZ.ini".
+Loading ObjectDefinition type S1ObjectDefinitions.Common.InvisibleBlock from "Common/InvisibleBlock.cs"...
+Loading ObjectDefinition type S1ObjectDefinitions.SBZ.SwingingSpikeball from "SBZ/SwingingSpikeball.cs"...
+Loading ObjectDefinition type S1ObjectDefinitions.Common.Ring from "Common/Ring.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.Common.InvisibleBlock.dll"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.SBZ.SwingingSpikeball.dll"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.Common.Ring.dll"...
+Loading ObjectDefinition type S1ObjectDefinitions.SBZ.Flamethrower from "SBZ/Flamethrower.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.SBZ.Flamethrower.dll"...
+Loading objects from file "../objpos/sbz2.bin", using compression Uncompressed...
+Loading start position "Level Start" from file "../misc/sloc_lev.bin"...
+Loading start position "Credits Demo" from file "../misc/sloc_end.bin"...
+Drawing block bitmaps...
+Drawing chunk bitmaps...
+Level loaded in 0.4686356 second(s).
+Load completed.
+Saving Scrap Brain Zone Act 2...
+Loading Scrap Brain Zone Act 1...
+Loading 8x8 tiles from file "../artnem/8x8sbz.bin", using compression Nemesis...
+Loading palette file "../pallet/sonic.bin"...
+Source: 0 Destination: 0 Length: 16
+Loading FG layout from file "../levels/sbz1.bin", using compression Uncompressed...
+Loading 16x16 blocks from file "../map16/sbz.bin", using compression Enigma...
+Loading 256x256 chunks from file "../map256/sbz.bin", using compression Kosinski...
+Loading BG layout from file "../levels/sbz1bg.bin", using compression Uncompressed...
+Loading palette file "../pallet/sbz_act1.bin"...
+Source: 0 Destination: 16 Length: 48
 Loading FG layout from file "../levels/sbz2.bin", using compression Uncompressed...
+Loading BG layout from file "../levels/sbz2bg.bin", using compression Uncompressed...
+Loading object definition file "obj.ini".
+Loading object definition file "objSBZ.ini".
+Loading ObjectDefinition type S1ObjectDefinitions.Common.Ring from "Common/Ring.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.Common.Ring.dll"...
+Loading ObjectDefinition type S1ObjectDefinitions.Common.InvisibleBlock from "Common/InvisibleBlock.cs"...
+Loading ObjectDefinition type S1ObjectDefinitions.SBZ.SwingingSpikeball from "SBZ/SwingingSpikeball.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.Common.InvisibleBlock.dll"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.SBZ.SwingingSpikeball.dll"...
+Loading ObjectDefinition type S1ObjectDefinitions.SBZ.Flamethrower from "SBZ/Flamethrower.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.SBZ.Flamethrower.dll"...
+Loading start position "Level Start" from file "../misc/sloc_lev.bin"...
+Loading objects from file "../objpos/sbz1.bin", using compression Uncompressed...
+Loading start position "Credits Demo" from file "../misc/sloc_end.bin"...
+Drawing block bitmaps...
+Drawing chunk bitmaps...
+Level loaded in 0.2290757 second(s).
+Load completed.
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.TilePicture_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x00047] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmLButtonDown (System.Windows.Forms.Message& m) [0x00097] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x00177] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.TilePicture_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x00047] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmLButtonDown (System.Windows.Forms.Message& m) [0x00097] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x00177] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.TilePicture_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x0007b] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmRButtonDown (System.Windows.Forms.Message& m) [0x00072] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x001a7] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.TilePicture_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x0007b] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmRButtonDown (System.Windows.Forms.Message& m) [0x00072] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x001a7] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.NullReferenceException: Object reference not set to an instance of an object
+  at SonicRetro.SonLVL.GUI.MainForm.pasteChunkBlocksToolStripMenuItem_Click (System.Object sender, System.EventArgs e) [0x000b6] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.ToolStripItem.OnClick (System.EventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripMenuItem.OnClick (System.EventArgs e) [0x000a5] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripMenuItem.HandleClick (System.Int32 mouse_clicks, System.EventArgs e) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripItem.FireEvent (System.EventArgs e, System.Windows.Forms.ToolStripItemEventType met) [0x00061] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at (wrapper remoting-invoke-with-check) System.Windows.Forms.ToolStripItem.FireEvent(System.EventArgs,System.Windows.Forms.ToolStripItemEventType)
+  at System.Windows.Forms.ToolStrip.OnMouseUp (System.Windows.Forms.MouseEventArgs mea) [0x00057] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripDropDown.OnMouseUp (System.Windows.Forms.MouseEventArgs mea) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmLButtonUp (System.Windows.Forms.Message& m) [0x0007e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x0016f] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStrip.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripDropDown.WndProc (System.Windows.Forms.Message& m) [0x0001a] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+Saving Scrap Brain Zone Act 1...
+System.NullReferenceException: Object reference not set to an instance of an object
+  at SonicRetro.SonLVL.GUI.MainForm.pasteOverToolStripMenuItem_Click (System.Object sender, System.EventArgs e) [0x00720] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.ToolStripItem.OnClick (System.EventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripMenuItem.OnClick (System.EventArgs e) [0x000a5] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripMenuItem.HandleClick (System.Int32 mouse_clicks, System.EventArgs e) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripItem.FireEvent (System.EventArgs e, System.Windows.Forms.ToolStripItemEventType met) [0x00061] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at (wrapper remoting-invoke-with-check) System.Windows.Forms.ToolStripItem.FireEvent(System.EventArgs,System.Windows.Forms.ToolStripItemEventType)
+  at System.Windows.Forms.ToolStrip.OnMouseUp (System.Windows.Forms.MouseEventArgs mea) [0x00057] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripDropDown.OnMouseUp (System.Windows.Forms.MouseEventArgs mea) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmLButtonUp (System.Windows.Forms.Message& m) [0x0007e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x0016f] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStrip.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripDropDown.WndProc (System.Windows.Forms.Message& m) [0x0001a] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.ArgumentNullException: Value cannot be null.
+Parameter name: collection
+  at System.Collections.Generic.List`1[T].InsertRange (System.Int32 index, System.Collections.Generic.IEnumerable`1[T] collection) [0x00006] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at System.Collections.Generic.List`1[T].AddRange (System.Collections.Generic.IEnumerable`1[T] collection) [0x00000] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at SonicRetro.SonLVL.API.LevelData.UpdateTileArray () [0x0001a] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at SonicRetro.SonLVL.GUI.MainForm.DeleteTile () [0x0002c] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at SonicRetro.SonLVL.GUI.MainForm.deleteTilesToolStripMenuItem_Click (System.Object sender, System.EventArgs e) [0x00028] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at SonicRetro.SonLVL.GUI.MainForm.TileList_KeyDown (System.Object sender, System.Windows.Forms.KeyEventArgs e) [0x0015d] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at (wrapper delegate-invoke) <Module>.invoke_void_object_KeyEventArgs(object,System.Windows.Forms.KeyEventArgs)
+  at System.Windows.Forms.Control.OnKeyDown (System.Windows.Forms.KeyEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.ProcessKeyEventArgs (System.Windows.Forms.Message& m) [0x0004e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.ProcessKeyMessage (System.Windows.Forms.Message& m) [0x0001e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmKeys (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x001ff] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ContainerControl.WndProc (System.Windows.Forms.Message& m) [0x0003c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.UserControl.WndProc (System.Windows.Forms.Message& m) [0x00036] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.ArgumentNullException: Value cannot be null.
+Parameter name: collection
+  at System.Collections.Generic.List`1[T].InsertRange (System.Int32 index, System.Collections.Generic.IEnumerable`1[T] collection) [0x00006] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at System.Collections.Generic.List`1[T].AddRange (System.Collections.Generic.IEnumerable`1[T] collection) [0x00000] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at SonicRetro.SonLVL.API.LevelData.UpdateTileArray () [0x0001a] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at SonicRetro.SonLVL.GUI.MainForm.DeleteTile () [0x0002c] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at SonicRetro.SonLVL.GUI.MainForm.deleteTilesToolStripMenuItem_Click (System.Object sender, System.EventArgs e) [0x00028] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at SonicRetro.SonLVL.GUI.MainForm.TileList_KeyDown (System.Object sender, System.Windows.Forms.KeyEventArgs e) [0x0015d] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at (wrapper delegate-invoke) <Module>.invoke_void_object_KeyEventArgs(object,System.Windows.Forms.KeyEventArgs)
+  at System.Windows.Forms.Control.OnKeyDown (System.Windows.Forms.KeyEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.ProcessKeyEventArgs (System.Windows.Forms.Message& m) [0x0004e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.ProcessKeyMessage (System.Windows.Forms.Message& m) [0x0001e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmKeys (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x001ff] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ContainerControl.WndProc (System.Windows.Forms.Message& m) [0x0003c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.UserControl.WndProc (System.Windows.Forms.Message& m) [0x00036] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.ArgumentNullException: Value cannot be null.
+Parameter name: collection
+  at System.Collections.Generic.List`1[T].InsertRange (System.Int32 index, System.Collections.Generic.IEnumerable`1[T] collection) [0x00006] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at System.Collections.Generic.List`1[T].AddRange (System.Collections.Generic.IEnumerable`1[T] collection) [0x00000] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at SonicRetro.SonLVL.API.LevelData.UpdateTileArray () [0x0001a] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at SonicRetro.SonLVL.GUI.MainForm.DeleteTile () [0x0002c] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at SonicRetro.SonLVL.GUI.MainForm.deleteTilesToolStripMenuItem_Click (System.Object sender, System.EventArgs e) [0x00028] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.ToolStripItem.OnClick (System.EventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripMenuItem.OnClick (System.EventArgs e) [0x000a5] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripMenuItem.HandleClick (System.Int32 mouse_clicks, System.EventArgs e) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripItem.FireEvent (System.EventArgs e, System.Windows.Forms.ToolStripItemEventType met) [0x00061] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at (wrapper remoting-invoke-with-check) System.Windows.Forms.ToolStripItem.FireEvent(System.EventArgs,System.Windows.Forms.ToolStripItemEventType)
+  at System.Windows.Forms.ToolStrip.OnMouseUp (System.Windows.Forms.MouseEventArgs mea) [0x00057] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripDropDown.OnMouseUp (System.Windows.Forms.MouseEventArgs mea) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmLButtonUp (System.Windows.Forms.Message& m) [0x0007e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x0016f] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStrip.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripDropDown.WndProc (System.Windows.Forms.Message& m) [0x0001a] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+Saving Scrap Brain Zone Act 1...
+System.AggregateException: One or more errors occurred. (Value cannot be null.
+Parameter name: collection) ---> System.ArgumentNullException: Value cannot be null.
+Parameter name: collection
+  at System.Collections.Generic.List`1[T].InsertRange (System.Int32 index, System.Collections.Generic.IEnumerable`1[T] collection) [0x00006] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at System.Collections.Generic.List`1[T].AddRange (System.Collections.Generic.IEnumerable`1[T] collection) [0x00000] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at SonicRetro.SonLVL.API.LevelData.SaveLevelTiles () [0x00055] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at System.Threading.Tasks.Parallel+<Invoke>c__AnonStorey0.<>m__0 (System.Object& state, System.Int32 timeout, System.Boolean& replicationDelegateYieldedBeforeCompletion) [0x00014] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+   --- End of inner exception stack trace ---
+  at System.Threading.Tasks.Parallel.ThrowSingleCancellationExceptionOrOtherException (System.Collections.ICollection exceptions, System.Threading.CancellationToken cancelToken, System.Exception otherException) [0x00010] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at System.Threading.Tasks.Parallel.Invoke (System.Threading.Tasks.ParallelOptions parallelOptions, System.Action[] actions) [0x0025b] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at System.Threading.Tasks.Parallel.Invoke (System.Action[] actions) [0x00000] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at SonicRetro.SonLVL.API.LevelData.SaveLevel () [0x001c9] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at SonicRetro.SonLVL.GUI.MainForm.saveToolStripMenuItem_Click (System.Object sender, System.EventArgs e) [0x0047a] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.ToolStripItem.OnClick (System.EventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripMenuItem.OnClick (System.EventArgs e) [0x000a5] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripMenuItem.HandleClick (System.Int32 mouse_clicks, System.EventArgs e) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripItem.FireEvent (System.EventArgs e, System.Windows.Forms.ToolStripItemEventType met) [0x00061] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at (wrapper remoting-invoke-with-check) System.Windows.Forms.ToolStripItem.FireEvent(System.EventArgs,System.Windows.Forms.ToolStripItemEventType)
+  at System.Windows.Forms.ToolStrip.OnMouseUp (System.Windows.Forms.MouseEventArgs mea) [0x00057] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripDropDown.OnMouseUp (System.Windows.Forms.MouseEventArgs mea) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmLButtonUp (System.Windows.Forms.Message& m) [0x0007e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x0016f] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStrip.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripDropDown.WndProc (System.Windows.Forms.Message& m) [0x0001a] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+---> (Inner Exception #0) System.ArgumentNullException: Value cannot be null.
+Parameter name: collection
+  at System.Collections.Generic.List`1[T].InsertRange (System.Int32 index, System.Collections.Generic.IEnumerable`1[T] collection) [0x00006] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at System.Collections.Generic.List`1[T].AddRange (System.Collections.Generic.IEnumerable`1[T] collection) [0x00000] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at SonicRetro.SonLVL.API.LevelData.SaveLevelTiles () [0x00055] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at System.Threading.Tasks.Parallel+<Invoke>c__AnonStorey0.<>m__0 (System.Object& state, System.Int32 timeout, System.Boolean& replicationDelegateYieldedBeforeCompletion) [0x00014] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 <---
+
+Saving Scrap Brain Zone Act 1...
+System.AggregateException: One or more errors occurred. (Value cannot be null.
+Parameter name: collection) ---> System.ArgumentNullException: Value cannot be null.
+Parameter name: collection
+  at System.Collections.Generic.List`1[T].InsertRange (System.Int32 index, System.Collections.Generic.IEnumerable`1[T] collection) [0x00006] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at System.Collections.Generic.List`1[T].AddRange (System.Collections.Generic.IEnumerable`1[T] collection) [0x00000] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at SonicRetro.SonLVL.API.LevelData.SaveLevelTiles () [0x00055] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at System.Threading.Tasks.Parallel+<Invoke>c__AnonStorey0.<>m__0 (System.Object& state, System.Int32 timeout, System.Boolean& replicationDelegateYieldedBeforeCompletion) [0x00014] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+   --- End of inner exception stack trace ---
+  at System.Threading.Tasks.Parallel.ThrowSingleCancellationExceptionOrOtherException (System.Collections.ICollection exceptions, System.Threading.CancellationToken cancelToken, System.Exception otherException) [0x00010] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at System.Threading.Tasks.Parallel.Invoke (System.Threading.Tasks.ParallelOptions parallelOptions, System.Action[] actions) [0x0025b] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at System.Threading.Tasks.Parallel.Invoke (System.Action[] actions) [0x00000] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at SonicRetro.SonLVL.API.LevelData.SaveLevel () [0x001c9] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at SonicRetro.SonLVL.GUI.MainForm.saveToolStripMenuItem_Click (System.Object sender, System.EventArgs e) [0x0047a] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at SonicRetro.SonLVL.GUI.MainForm.LevelToolStripMenuItem_Clicked (System.Object sender, System.EventArgs e) [0x00038] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.ToolStripItem.OnClick (System.EventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripMenuItem.OnClick (System.EventArgs e) [0x000a5] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripMenuItem.HandleClick (System.Int32 mouse_clicks, System.EventArgs e) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripItem.FireEvent (System.EventArgs e, System.Windows.Forms.ToolStripItemEventType met) [0x00061] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at (wrapper remoting-invoke-with-check) System.Windows.Forms.ToolStripItem.FireEvent(System.EventArgs,System.Windows.Forms.ToolStripItemEventType)
+  at System.Windows.Forms.ToolStrip.OnMouseUp (System.Windows.Forms.MouseEventArgs mea) [0x00057] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripDropDown.OnMouseUp (System.Windows.Forms.MouseEventArgs mea) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmLButtonUp (System.Windows.Forms.Message& m) [0x0007e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x0016f] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStrip.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripDropDown.WndProc (System.Windows.Forms.Message& m) [0x0001a] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+---> (Inner Exception #0) System.ArgumentNullException: Value cannot be null.
+Parameter name: collection
+  at System.Collections.Generic.List`1[T].InsertRange (System.Int32 index, System.Collections.Generic.IEnumerable`1[T] collection) [0x00006] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at System.Collections.Generic.List`1[T].AddRange (System.Collections.Generic.IEnumerable`1[T] collection) [0x00000] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at SonicRetro.SonLVL.API.LevelData.SaveLevelTiles () [0x00055] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at System.Threading.Tasks.Parallel+<Invoke>c__AnonStorey0.<>m__0 (System.Object& state, System.Int32 timeout, System.Boolean& replicationDelegateYieldedBeforeCompletion) [0x00014] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 <---
+
+Loading Scrap Brain Zone Act 1...
+Loading 8x8 tiles from file "../artnem/8x8sbz.bin", using compression Nemesis...
+Loading 16x16 blocks from file "../map16/sbz.bin", using compression Enigma...
+Loading 256x256 chunks from file "../map256/sbz.bin", using compression Kosinski...
+Loading FG layout from file "../levels/sbz1.bin", using compression Uncompressed...
+Loading BG layout from file "../levels/sbz1bg.bin", using compression Uncompressed...
 Loading palette file "../pallet/sonic.bin"...
 Source: 0 Destination: 0 Length: 16
 Loading palette file "../pallet/sbz_act1.bin"...
 Source: 0 Destination: 16 Length: 48
+Loading FG layout from file "../levels/sbz2.bin", using compression Uncompressed...
 Loading BG layout from file "../levels/sbz2bg.bin", using compression Uncompressed...
 Loading object definition file "obj.ini".
 Loading object definition file "objSBZ.ini".
-Loading ObjectDefinition type S1ObjectDefinitions.Common.Ring from "Common\Ring.cs"...
-Loading type from cached assembly "dllcache\S1ObjectDefinitions.Common.Ring.dll"...
-Loading ObjectDefinition type S1ObjectDefinitions.Common.InvisibleBlock from "Common\InvisibleBlock.cs"...
-Loading type from cached assembly "dllcache\S1ObjectDefinitions.Common.InvisibleBlock.dll"...
-Loading ObjectDefinition type S1ObjectDefinitions.SBZ.SwingingSpikeball from "SBZ\SwingingSpikeball.cs"...
-Loading type from cached assembly "dllcache\S1ObjectDefinitions.SBZ.SwingingSpikeball.dll"...
-Loading ObjectDefinition type S1ObjectDefinitions.SBZ.Flamethrower from "SBZ\Flamethrower.cs"...
-Loading type from cached assembly "dllcache\S1ObjectDefinitions.SBZ.Flamethrower.dll"...
+Loading ObjectDefinition type S1ObjectDefinitions.Common.Ring from "Common/Ring.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.Common.Ring.dll"...
+Loading ObjectDefinition type S1ObjectDefinitions.Common.InvisibleBlock from "Common/InvisibleBlock.cs"...
+Loading ObjectDefinition type S1ObjectDefinitions.SBZ.SwingingSpikeball from "SBZ/SwingingSpikeball.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.Common.InvisibleBlock.dll"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.SBZ.SwingingSpikeball.dll"...
+Loading ObjectDefinition type S1ObjectDefinitions.SBZ.Flamethrower from "SBZ/Flamethrower.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.SBZ.Flamethrower.dll"...
 Loading objects from file "../objpos/sbz1.bin", using compression Uncompressed...
 Loading start position "Level Start" from file "../misc/sloc_lev.bin"...
 Loading start position "Credits Demo" from file "../misc/sloc_end.bin"...
 Drawing block bitmaps...
 Drawing chunk bitmaps...
-Level loaded in 0.6401248 second(s).
+Level loaded in 0.2878428 second(s).
 Load completed.
-Loading Green Hill Zone Act 3...
-Loading 8x8 tiles from file "../artnem/8x8ghz1.bin", using compression Nemesis...
-Loading 16x16 blocks from file "../map16/ghz.bin", using compression Enigma...
-Loading 256x256 chunks from file "../map256/ghz.bin", using compression Kosinski...
+Loading Final Zone...
+Loading 8x8 tiles from file "../artnem/8x8sbz.bin", using compression Nemesis...
 Loading palette file "../pallet/sonic.bin"...
 Source: 0 Destination: 0 Length: 16
-Loading palette file "../pallet/ghz.bin"...
+Loading 256x256 chunks from file "../map256/sbz.bin", using compression Kosinski...
+Loading 16x16 blocks from file "../map16/sbz.bin", using compression Enigma...
+Loading FG layout from file "../levels/sbz2.bin", using compression Uncompressed...
+Loading palette file "../pallet/sbz_act2.bin"...
 Source: 0 Destination: 16 Length: 48
-Loading FG layout from file "../levels/ghz3.bin", using compression Uncompressed...
-Loading BG layout from file "../levels/ghzbg.bin", using compression Uncompressed...
-Loading 8x8 tiles from file "../artnem/8x8ghz2.bin", using compression Nemesis...
-Loading FG layout from file "../levels/ghz1.bin", using compression Uncompressed...
-Loading FG layout from file "../levels/ghz2.bin", using compression Uncompressed...
-Loading FG layout from file "../levels/ending.bin", using compression Uncompressed...
+Loading BG layout from file "../levels/sbz2bg.bin", using compression Uncompressed...
+Loading FG layout from file "../levels/sbz1.bin", using compression Uncompressed...
+Loading BG layout from file "../levels/sbz1bg.bin", using compression Uncompressed...
 Loading object definition file "obj.ini".
-Loading object definition file "objGHZ.ini".
-Loading ObjectDefinition type S1ObjectDefinitions.Common.Ring from "Common\Ring.cs"...
-Loading type from cached assembly "dllcache\S1ObjectDefinitions.Common.Ring.dll"...
-Loading ObjectDefinition type S1ObjectDefinitions.Common.InvisibleBlock from "Common\InvisibleBlock.cs"...
-Loading type from cached assembly "dllcache\S1ObjectDefinitions.Common.InvisibleBlock.dll"...
-Loading ObjectDefinition type S1ObjectDefinitions.GHZ.SwingingPlatform from "GHZ\SwingingPlatform.cs"...
-Loading type from cached assembly "dllcache\S1ObjectDefinitions.GHZ.SwingingPlatform.dll"...
-Loading ObjectDefinition type S1ObjectDefinitions.GHZ.Bridge from "GHZ\Bridge.cs"...
-Loading type from cached assembly "dllcache\S1ObjectDefinitions.GHZ.Bridge.dll"...
-Loading ObjectDefinition type S1ObjectDefinitions.GHZ.SpikedPole from "GHZ\SpikedPole.cs"...
-Loading type from cached assembly "dllcache\S1ObjectDefinitions.GHZ.SpikedPole.dll"...
+Loading object definition file "objSBZ.ini".
+Loading ObjectDefinition type S1ObjectDefinitions.Common.Ring from "Common/Ring.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.Common.Ring.dll"...
+Loading ObjectDefinition type S1ObjectDefinitions.Common.InvisibleBlock from "Common/InvisibleBlock.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.Common.InvisibleBlock.dll"...
+Loading ObjectDefinition type S1ObjectDefinitions.SBZ.SwingingSpikeball from "SBZ/SwingingSpikeball.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.SBZ.SwingingSpikeball.dll"...
+Loading ObjectDefinition type S1ObjectDefinitions.SBZ.Flamethrower from "SBZ/Flamethrower.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.SBZ.Flamethrower.dll"...
 Loading start position "Level Start" from file "../misc/sloc_lev.bin"...
-Loading objects from file "../objpos/ghz3.bin", using compression Uncompressed...
+Loading objects from file "../objpos/fz.bin", using compression Uncompressed...
 Drawing block bitmaps...
 Drawing chunk bitmaps...
-Level loaded in 0.3963864 second(s).
+Level loaded in 0.2639805 second(s).
 Load completed.
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-   at System.ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument argument, ExceptionResource resource)
-   at SonicRetro.SonLVL.GUI.MainForm.objectPanel_MouseUp(Object sender, MouseEventArgs e) in C:\Programs\SonLVL\SonLVL\MainForm.cs:line 2798
-   at System.Windows.Forms.MouseEventHandler.Invoke(Object sender, MouseEventArgs e)
-   at SonicRetro.SonLVL.ScrollingPanel.panel_MouseUp(Object sender, MouseEventArgs e) in C:\Programs\SonLVL\SonLVL\ScrollingPanel.cs:line 145
-   at System.Windows.Forms.Control.OnMouseUp(MouseEventArgs e)
-   at System.Windows.Forms.Control.WmMouseUp(Message& m, MouseButtons button, Int32 clicks)
-   at System.Windows.Forms.Control.WndProc(Message& m)
-   at System.Windows.Forms.ScrollableControl.WndProc(Message& m)
-   at System.Windows.Forms.ContainerControl.WndProc(Message& m)
-   at System.Windows.Forms.UserControl.WndProc(Message& m)
-   at System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
-   at System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
-   at System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+Loading Scrap Brain Zone Act 1...
+Loading palette file "../pallet/sonic.bin"...
+Source: 0 Destination: 0 Length: 16
+Loading 8x8 tiles from file "../artnem/8x8sbz.bin", using compression Nemesis...
+Loading 256x256 chunks from file "../map256/sbz.bin", using compression Kosinski...
+Loading 16x16 blocks from file "../map16/sbz.bin", using compression Enigma...
+Loading FG layout from file "../levels/sbz1.bin", using compression Uncompressed...
+Loading palette file "../pallet/sbz_act1.bin"...
+Source: 0 Destination: 16 Length: 48
+Loading BG layout from file "../levels/sbz1bg.bin", using compression Uncompressed...
+Loading FG layout from file "../levels/sbz2.bin", using compression Uncompressed...
+Loading BG layout from file "../levels/sbz2bg.bin", using compression Uncompressed...
+Loading object definition file "obj.ini".
+Loading object definition file "objSBZ.ini".
+Loading ObjectDefinition type S1ObjectDefinitions.Common.Ring from "Common/Ring.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.Common.Ring.dll"...
+Loading ObjectDefinition type S1ObjectDefinitions.Common.InvisibleBlock from "Common/InvisibleBlock.cs"...
+Loading ObjectDefinition type S1ObjectDefinitions.SBZ.SwingingSpikeball from "SBZ/SwingingSpikeball.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.Common.InvisibleBlock.dll"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.SBZ.SwingingSpikeball.dll"...
+Loading ObjectDefinition type S1ObjectDefinitions.SBZ.Flamethrower from "SBZ/Flamethrower.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.SBZ.Flamethrower.dll"...
+Loading objects from file "../objpos/sbz1.bin", using compression Uncompressed...
+Loading start position "Level Start" from file "../misc/sloc_lev.bin"...
+Loading start position "Credits Demo" from file "../misc/sloc_end.bin"...
+Drawing block bitmaps...
+Drawing chunk bitmaps...
+Level loaded in 0.3262901 second(s).
+Load completed.
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.TilePicture_MouseMove (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x0006c] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseMove (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmMouseMove (System.Windows.Forms.Message& m) [0x000ae] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x001c7] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.TilePicture_MouseMove (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x0006c] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseMove (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmMouseMove (System.Windows.Forms.Message& m) [0x000ae] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x001c7] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.TilePicture_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x0007b] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmRButtonDown (System.Windows.Forms.Message& m) [0x00072] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x001a7] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.BlockPicture_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x00097] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.UserControl.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmRButtonDown (System.Windows.Forms.Message& m) [0x00072] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x001a7] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ContainerControl.WndProc (System.Windows.Forms.Message& m) [0x0003c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.UserControl.WndProc (System.Windows.Forms.Message& m) [0x00036] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.TilePicture_MouseMove (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x0006c] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseMove (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmMouseMove (System.Windows.Forms.Message& m) [0x000ae] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x001c7] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.TilePicture_MouseMove (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x0006c] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseMove (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmMouseMove (System.Windows.Forms.Message& m) [0x000ae] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x001c7] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.TilePicture_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x0007b] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmRButtonDown (System.Windows.Forms.Message& m) [0x00072] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x001a7] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.TilePicture_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x0007b] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmRButtonDown (System.Windows.Forms.Message& m) [0x00072] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x001a7] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.TilePicture_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x0007b] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmRButtonDown (System.Windows.Forms.Message& m) [0x00072] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x001a7] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.TilePicture_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x0007b] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmRButtonDown (System.Windows.Forms.Message& m) [0x00072] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x001a7] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.TilePicture_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x0007b] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmRButtonDown (System.Windows.Forms.Message& m) [0x00072] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x001a7] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.TilePicture_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x0007b] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmRButtonDown (System.Windows.Forms.Message& m) [0x00072] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x001a7] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.BlockPicture_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x00097] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.UserControl.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmRButtonDown (System.Windows.Forms.Message& m) [0x00072] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x001a7] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ContainerControl.WndProc (System.Windows.Forms.Message& m) [0x0003c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.UserControl.WndProc (System.Windows.Forms.Message& m) [0x00036] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.NullReferenceException: Object reference not set to an instance of an object
+  at SonicRetro.SonLVL.GUI.MainForm.pasteOverToolStripMenuItem_Click (System.Object sender, System.EventArgs e) [0x00720] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.ToolStripItem.OnClick (System.EventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripMenuItem.OnClick (System.EventArgs e) [0x000a5] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripMenuItem.HandleClick (System.Int32 mouse_clicks, System.EventArgs e) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripItem.FireEvent (System.EventArgs e, System.Windows.Forms.ToolStripItemEventType met) [0x00061] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at (wrapper remoting-invoke-with-check) System.Windows.Forms.ToolStripItem.FireEvent(System.EventArgs,System.Windows.Forms.ToolStripItemEventType)
+  at System.Windows.Forms.ToolStrip.OnMouseUp (System.Windows.Forms.MouseEventArgs mea) [0x00057] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripDropDown.OnMouseUp (System.Windows.Forms.MouseEventArgs mea) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmLButtonUp (System.Windows.Forms.Message& m) [0x0007e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x0016f] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStrip.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripDropDown.WndProc (System.Windows.Forms.Message& m) [0x0001a] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.NullReferenceException: Object reference not set to an instance of an object
+  at SonicRetro.SonLVL.API.BitmapBits.FromTile (System.Byte[] art, System.Int32 index) [0x00008] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at SonicRetro.SonLVL.GUI.MainForm.TileSelector_SelectedIndexChanged (System.Object sender, System.EventArgs e) [0x000c4] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at (wrapper delegate-invoke) <Module>.invoke_void_object_EventArgs(object,System.EventArgs)
+  at SonicRetro.SonLVL.API.TileList.set_SelectedIndex (System.Int32 value) [0x00021] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at SonicRetro.SonLVL.API.TileList.TileList_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x0001e] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at (wrapper delegate-invoke) <Module>.invoke_void_object_MouseEventArgs(object,System.Windows.Forms.MouseEventArgs)
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.UserControl.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmLButtonDown (System.Windows.Forms.Message& m) [0x00097] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x00177] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ContainerControl.WndProc (System.Windows.Forms.Message& m) [0x0003c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.UserControl.WndProc (System.Windows.Forms.Message& m) [0x00036] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.NullReferenceException: Object reference not set to an instance of an object
+  at SonicRetro.SonLVL.API.BitmapBits.FromTile (System.Byte[] art, System.Int32 index) [0x00008] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at SonicRetro.SonLVL.GUI.MainForm.TileSelector_SelectedIndexChanged (System.Object sender, System.EventArgs e) [0x000c4] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at (wrapper delegate-invoke) <Module>.invoke_void_object_EventArgs(object,System.EventArgs)
+  at SonicRetro.SonLVL.API.TileList.set_SelectedIndex (System.Int32 value) [0x00021] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at SonicRetro.SonLVL.API.TileList.TileList_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x0001e] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at (wrapper delegate-invoke) <Module>.invoke_void_object_MouseEventArgs(object,System.Windows.Forms.MouseEventArgs)
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.UserControl.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmLButtonDown (System.Windows.Forms.Message& m) [0x00097] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x00177] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ContainerControl.WndProc (System.Windows.Forms.Message& m) [0x0003c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.UserControl.WndProc (System.Windows.Forms.Message& m) [0x00036] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.NullReferenceException: Object reference not set to an instance of an object
+  at SonicRetro.SonLVL.API.BitmapBits.FromTile (System.Byte[] art, System.Int32 index) [0x00008] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at SonicRetro.SonLVL.GUI.MainForm.TileSelector_SelectedIndexChanged (System.Object sender, System.EventArgs e) [0x000c4] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at (wrapper delegate-invoke) <Module>.invoke_void_object_EventArgs(object,System.EventArgs)
+  at SonicRetro.SonLVL.API.TileList.set_SelectedIndex (System.Int32 value) [0x00021] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at SonicRetro.SonLVL.API.TileList.TileList_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x0001e] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at (wrapper delegate-invoke) <Module>.invoke_void_object_MouseEventArgs(object,System.Windows.Forms.MouseEventArgs)
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.UserControl.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmLButtonDown (System.Windows.Forms.Message& m) [0x00097] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x00177] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ContainerControl.WndProc (System.Windows.Forms.Message& m) [0x0003c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.UserControl.WndProc (System.Windows.Forms.Message& m) [0x00036] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.NullReferenceException: Object reference not set to an instance of an object
+  at SonicRetro.SonLVL.API.BitmapBits.FromTile (System.Byte[] art, System.Int32 index) [0x00008] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at SonicRetro.SonLVL.GUI.MainForm.TileSelector_SelectedIndexChanged (System.Object sender, System.EventArgs e) [0x000c4] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at (wrapper delegate-invoke) <Module>.invoke_void_object_EventArgs(object,System.EventArgs)
+  at SonicRetro.SonLVL.API.TileList.set_SelectedIndex (System.Int32 value) [0x00021] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at SonicRetro.SonLVL.API.TileList.TileList_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x0001e] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at (wrapper delegate-invoke) <Module>.invoke_void_object_MouseEventArgs(object,System.Windows.Forms.MouseEventArgs)
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.UserControl.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmLButtonDown (System.Windows.Forms.Message& m) [0x00097] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x00177] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ContainerControl.WndProc (System.Windows.Forms.Message& m) [0x0003c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.UserControl.WndProc (System.Windows.Forms.Message& m) [0x00036] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+Saving Scrap Brain Zone Act 1...
+System.AggregateException: One or more errors occurred. (Value cannot be null.
+Parameter name: collection) ---> System.ArgumentNullException: Value cannot be null.
+Parameter name: collection
+  at System.Collections.Generic.List`1[T].InsertRange (System.Int32 index, System.Collections.Generic.IEnumerable`1[T] collection) [0x00006] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at System.Collections.Generic.List`1[T].AddRange (System.Collections.Generic.IEnumerable`1[T] collection) [0x00000] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at SonicRetro.SonLVL.API.LevelData.SaveLevelTiles () [0x00055] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at System.Threading.Tasks.Parallel+<Invoke>c__AnonStorey0.<>m__0 (System.Object& state, System.Int32 timeout, System.Boolean& replicationDelegateYieldedBeforeCompletion) [0x00014] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+   --- End of inner exception stack trace ---
+  at System.Threading.Tasks.Parallel.ThrowSingleCancellationExceptionOrOtherException (System.Collections.ICollection exceptions, System.Threading.CancellationToken cancelToken, System.Exception otherException) [0x00010] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at System.Threading.Tasks.Parallel.Invoke (System.Threading.Tasks.ParallelOptions parallelOptions, System.Action[] actions) [0x0025b] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at System.Threading.Tasks.Parallel.Invoke (System.Action[] actions) [0x00000] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at SonicRetro.SonLVL.API.LevelData.SaveLevel () [0x001c9] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at SonicRetro.SonLVL.GUI.MainForm.saveToolStripMenuItem_Click (System.Object sender, System.EventArgs e) [0x0047a] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.ToolStripItem.OnClick (System.EventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripMenuItem.OnClick (System.EventArgs e) [0x000a5] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripMenuItem.HandleClick (System.Int32 mouse_clicks, System.EventArgs e) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripItem.FireEvent (System.EventArgs e, System.Windows.Forms.ToolStripItemEventType met) [0x00061] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at (wrapper remoting-invoke-with-check) System.Windows.Forms.ToolStripItem.FireEvent(System.EventArgs,System.Windows.Forms.ToolStripItemEventType)
+  at System.Windows.Forms.ToolStrip.OnMouseUp (System.Windows.Forms.MouseEventArgs mea) [0x00057] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripDropDown.OnMouseUp (System.Windows.Forms.MouseEventArgs mea) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmLButtonUp (System.Windows.Forms.Message& m) [0x0007e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x0016f] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStrip.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripDropDown.WndProc (System.Windows.Forms.Message& m) [0x0001a] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+---> (Inner Exception #0) System.ArgumentNullException: Value cannot be null.
+Parameter name: collection
+  at System.Collections.Generic.List`1[T].InsertRange (System.Int32 index, System.Collections.Generic.IEnumerable`1[T] collection) [0x00006] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at System.Collections.Generic.List`1[T].AddRange (System.Collections.Generic.IEnumerable`1[T] collection) [0x00000] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at SonicRetro.SonLVL.API.LevelData.SaveLevelTiles () [0x00055] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at System.Threading.Tasks.Parallel+<Invoke>c__AnonStorey0.<>m__0 (System.Object& state, System.Int32 timeout, System.Boolean& replicationDelegateYieldedBeforeCompletion) [0x00014] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 <---
+
+Saving Scrap Brain Zone Act 1...
+System.AggregateException: One or more errors occurred. (Value cannot be null.
+Parameter name: collection) ---> System.ArgumentNullException: Value cannot be null.
+Parameter name: collection
+  at System.Collections.Generic.List`1[T].InsertRange (System.Int32 index, System.Collections.Generic.IEnumerable`1[T] collection) [0x00006] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at System.Collections.Generic.List`1[T].AddRange (System.Collections.Generic.IEnumerable`1[T] collection) [0x00000] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at SonicRetro.SonLVL.API.LevelData.SaveLevelTiles () [0x00055] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at System.Threading.Tasks.Parallel+<Invoke>c__AnonStorey0.<>m__0 (System.Object& state, System.Int32 timeout, System.Boolean& replicationDelegateYieldedBeforeCompletion) [0x00014] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+   --- End of inner exception stack trace ---
+  at System.Threading.Tasks.Parallel.ThrowSingleCancellationExceptionOrOtherException (System.Collections.ICollection exceptions, System.Threading.CancellationToken cancelToken, System.Exception otherException) [0x00010] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at System.Threading.Tasks.Parallel.Invoke (System.Threading.Tasks.ParallelOptions parallelOptions, System.Action[] actions) [0x0025b] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at System.Threading.Tasks.Parallel.Invoke (System.Action[] actions) [0x00000] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at SonicRetro.SonLVL.API.LevelData.SaveLevel () [0x001c9] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at SonicRetro.SonLVL.GUI.MainForm.saveToolStripMenuItem_Click (System.Object sender, System.EventArgs e) [0x0047a] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at SonicRetro.SonLVL.GUI.MainForm.LevelToolStripMenuItem_Clicked (System.Object sender, System.EventArgs e) [0x00038] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.ToolStripItem.OnClick (System.EventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripMenuItem.OnClick (System.EventArgs e) [0x000a5] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripMenuItem.HandleClick (System.Int32 mouse_clicks, System.EventArgs e) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripItem.FireEvent (System.EventArgs e, System.Windows.Forms.ToolStripItemEventType met) [0x00061] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at (wrapper remoting-invoke-with-check) System.Windows.Forms.ToolStripItem.FireEvent(System.EventArgs,System.Windows.Forms.ToolStripItemEventType)
+  at System.Windows.Forms.ToolStrip.OnMouseUp (System.Windows.Forms.MouseEventArgs mea) [0x00057] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripDropDown.OnMouseUp (System.Windows.Forms.MouseEventArgs mea) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmLButtonUp (System.Windows.Forms.Message& m) [0x0007e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x0016f] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStrip.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ToolStripDropDown.WndProc (System.Windows.Forms.Message& m) [0x0001a] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+---> (Inner Exception #0) System.ArgumentNullException: Value cannot be null.
+Parameter name: collection
+  at System.Collections.Generic.List`1[T].InsertRange (System.Int32 index, System.Collections.Generic.IEnumerable`1[T] collection) [0x00006] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at System.Collections.Generic.List`1[T].AddRange (System.Collections.Generic.IEnumerable`1[T] collection) [0x00000] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 
+  at SonicRetro.SonLVL.API.LevelData.SaveLevelTiles () [0x00055] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at System.Threading.Tasks.Parallel+<Invoke>c__AnonStorey0.<>m__0 (System.Object& state, System.Int32 timeout, System.Boolean& replicationDelegateYieldedBeforeCompletion) [0x00014] in <12b418a7818c4ca0893feeaaf67f1e7f>:0 <---
+
+Loading Scrap Brain Zone Act 1...
+Loading 8x8 tiles from file "../artnem/8x8sbz.bin", using compression Nemesis...
+Loading 16x16 blocks from file "../map16/sbz.bin", using compression Enigma...
+Loading FG layout from file "../levels/sbz1.bin", using compression Uncompressed...
+Loading BG layout from file "../levels/sbz1bg.bin", using compression Uncompressed...
+Loading 256x256 chunks from file "../map256/sbz.bin", using compression Kosinski...
+Loading palette file "../pallet/sonic.bin"...
+Source: 0 Destination: 0 Length: 16
+Loading palette file "../pallet/sbz_act1.bin"...
+Source: 0 Destination: 16 Length: 48
+Loading FG layout from file "../levels/sbz2.bin", using compression Uncompressed...
+Loading BG layout from file "../levels/sbz2bg.bin", using compression Uncompressed...
+Loading object definition file "obj.ini".
+Loading object definition file "objSBZ.ini".
+Loading ObjectDefinition type S1ObjectDefinitions.Common.Ring from "Common/Ring.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.Common.Ring.dll"...
+Loading ObjectDefinition type S1ObjectDefinitions.Common.InvisibleBlock from "Common/InvisibleBlock.cs"...
+Loading ObjectDefinition type S1ObjectDefinitions.SBZ.SwingingSpikeball from "SBZ/SwingingSpikeball.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.SBZ.SwingingSpikeball.dll"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.Common.InvisibleBlock.dll"...
+Loading ObjectDefinition type S1ObjectDefinitions.SBZ.Flamethrower from "SBZ/Flamethrower.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.SBZ.Flamethrower.dll"...
+Loading objects from file "../objpos/sbz1.bin", using compression Uncompressed...
+Loading start position "Level Start" from file "../misc/sloc_lev.bin"...
+Loading start position "Credits Demo" from file "../misc/sloc_end.bin"...
+Drawing block bitmaps...
+Drawing chunk bitmaps...
+Level loaded in 0.2385014 second(s).
+Load completed.
+Saving Scrap Brain Zone Act 1...
+Saving Scrap Brain Zone Act 1...
+Loading Scrap Brain Zone Act 2...
+Loading 8x8 tiles from file "../artnem/8x8sbz.bin", using compression Nemesis...
+Loading 16x16 blocks from file "../map16/sbz.bin", using compression Enigma...
+Loading FG layout from file "../levels/sbz2.bin", using compression Uncompressed...
+Loading 256x256 chunks from file "../map256/sbz.bin", using compression Kosinski...
+Loading BG layout from file "../levels/sbz2bg.bin", using compression Uncompressed...
+Loading palette file "../pallet/sonic.bin"...
+Source: 0 Destination: 0 Length: 16
+Loading palette file "../pallet/sbz_act2.bin"...
+Source: 0 Destination: 16 Length: 48
+Loading FG layout from file "../levels/sbz1.bin", using compression Uncompressed...
+Loading BG layout from file "../levels/sbz1bg.bin", using compression Uncompressed...
+Loading object definition file "obj.ini".
+Loading object definition file "objSBZ.ini".
+Loading ObjectDefinition type S1ObjectDefinitions.Common.Ring from "Common/Ring.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.Common.Ring.dll"...
+Loading ObjectDefinition type S1ObjectDefinitions.Common.InvisibleBlock from "Common/InvisibleBlock.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.Common.InvisibleBlock.dll"...
+Loading ObjectDefinition type S1ObjectDefinitions.SBZ.SwingingSpikeball from "SBZ/SwingingSpikeball.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.SBZ.SwingingSpikeball.dll"...
+Loading ObjectDefinition type S1ObjectDefinitions.SBZ.Flamethrower from "SBZ/Flamethrower.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.SBZ.Flamethrower.dll"...
+Loading start position "Level Start" from file "../misc/sloc_lev.bin"...
+Loading objects from file "../objpos/sbz2.bin", using compression Uncompressed...
+Loading start position "Credits Demo" from file "../misc/sloc_end.bin"...
+Drawing block bitmaps...
+Drawing chunk bitmaps...
+Level loaded in 0.24999 second(s).
+Load completed.
+Saving Scrap Brain Zone Act 2...
+Saving Scrap Brain Zone Act 2...
+Saving Scrap Brain Zone Act 2...
+Saving Scrap Brain Zone Act 2...
+Saving Scrap Brain Zone Act 2...
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.TilePicture_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x0007b] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmRButtonDown (System.Windows.Forms.Message& m) [0x00072] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x001a7] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+Saving Scrap Brain Zone Act 2...
+Saving Scrap Brain Zone Act 2...
+Loading Scrap Brain Zone Act 2...
+Loading palette file "../pallet/sonic.bin"...
+Source: 0 Destination: 0 Length: 16
+Loading 8x8 tiles from file "../artnem/8x8sbz.bin", using compression Nemesis...
+Loading 16x16 blocks from file "../map16/sbz.bin", using compression Enigma...
+Loading FG layout from file "../levels/sbz2.bin", using compression Uncompressed...
+Loading 256x256 chunks from file "../map256/sbz.bin", using compression Kosinski...
+Loading palette file "../pallet/sbz_act2.bin"...
+Source: 0 Destination: 16 Length: 48
+Loading BG layout from file "../levels/sbz2bg.bin", using compression Uncompressed...
+Loading FG layout from file "../levels/sbz1.bin", using compression Uncompressed...
+Loading BG layout from file "../levels/sbz1bg.bin", using compression Uncompressed...
+Loading object definition file "obj.ini".
+Loading object definition file "objSBZ.ini".
+Loading ObjectDefinition type S1ObjectDefinitions.Common.Ring from "Common/Ring.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.Common.Ring.dll"...
+Loading ObjectDefinition type S1ObjectDefinitions.Common.InvisibleBlock from "Common/InvisibleBlock.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.Common.InvisibleBlock.dll"...
+Unable to read file "../artnem/signpost.bin" with compression Nemesis:
+Error loading object definition Signpost:
+SonicRetro.KensSharp.CompressionException: A bit code prefix is already used for a complete bit code.
+  at SonicRetro.KensSharp.Nemesis+DecodingCodeTreeNode.SetCode (System.Byte code, System.Int32 length, SonicRetro.KensSharp.Nemesis+NibbleRun nibbleRun) [0x0003d] in <33a8bdb15e9a4ad8b5d0c26fa3228fcf>:0 
+  at SonicRetro.KensSharp.Nemesis.DecodeHeader (System.IO.Stream input, System.IO.Stream output, SonicRetro.KensSharp.Nemesis+DecodingCodeTreeNode codeTree) [0x00034] in <33a8bdb15e9a4ad8b5d0c26fa3228fcf>:0 
+  at SonicRetro.KensSharp.Nemesis.Decode (System.IO.Stream input, System.IO.Stream output) [0x00021] in <33a8bdb15e9a4ad8b5d0c26fa3228fcf>:0 
+  at SonicRetro.KensSharp.Nemesis.Decompress (System.IO.Stream input, System.IO.Stream output) [0x0001c] in <33a8bdb15e9a4ad8b5d0c26fa3228fcf>:0 
+  at SonicRetro.KensSharp.Nemesis.Decompress (System.String sourceFilePath) [0x0000d] in <33a8bdb15e9a4ad8b5d0c26fa3228fcf>:0 
+  at SonicRetro.SonLVL.API.Compression.Decompress (System.String file, SonicRetro.SonLVL.API.CompressionType cmp) [0x0010e] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at SonicRetro.SonLVL.API.LevelData.ReadFile (System.String file, SonicRetro.SonLVL.API.CompressionType cmp) [0x00040] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at SonicRetro.SonLVL.API.ObjectHelper.OpenArtFile (System.String file, SonicRetro.SonLVL.API.CompressionType comp) [0x00000] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+  at SonicRetro.SonLVL.API.DefaultObjectDefinition.Init (SonicRetro.SonLVL.API.ObjectData data) [0x00064] in <d12d38bc6dfa4f6d94906dfa26120bbf>:0 
+Loading ObjectDefinition type S1ObjectDefinitions.SBZ.SwingingSpikeball from "SBZ/SwingingSpikeball.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.SBZ.SwingingSpikeball.dll"...
+Loading ObjectDefinition type S1ObjectDefinitions.SBZ.Flamethrower from "SBZ/Flamethrower.cs"...
+Loading type from cached assembly "dllcache/S1ObjectDefinitions.SBZ.Flamethrower.dll"...
+Loading start position "Level Start" from file "../misc/sloc_lev.bin"...
+Loading objects from file "../objpos/sbz2.bin", using compression Uncompressed...
+Loading start position "Credits Demo" from file "../misc/sloc_end.bin"...
+Drawing block bitmaps...
+Drawing chunk bitmaps...
+Level loaded in 0.2773743 second(s).
+Load completed.
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.BlockPicture_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x00097] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.UserControl.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmRButtonDown (System.Windows.Forms.Message& m) [0x00072] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x001a7] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ContainerControl.WndProc (System.Windows.Forms.Message& m) [0x0003c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.UserControl.WndProc (System.Windows.Forms.Message& m) [0x00036] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.TilePicture_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x00047] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmLButtonDown (System.Windows.Forms.Message& m) [0x00097] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x00177] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.TilePicture_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x0007b] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmRButtonDown (System.Windows.Forms.Message& m) [0x00072] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x001a7] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.TilePicture_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x0007b] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmRButtonDown (System.Windows.Forms.Message& m) [0x00072] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x001a7] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 

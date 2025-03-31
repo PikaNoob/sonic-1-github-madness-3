@@ -16,8 +16,19 @@ align macro
 	endm
 		include	"sound/smps2asm_inc.asm"
 		include "MapMacros.asm"
+		include "beebush/Mega Drive.inc"
+		include "constants.asm"
 
-randLevelCount		= 18	; 31 max (32 is reserved for linear path flag)
+	rsset $FFFFC800 
+v_dmaqueueslot:		rs.w	1
+v_dmaqueuecount:	rs.w	1
+v_dmaqueue:		rs.b	18*14
+; free space until $FFD000!
+v_tetoxstart		rs.w	1
+v_tetoystart		rs.w	1
+
+randLevelCount		= 15	; 31 max (32 is reserved for linear path flag)
+randLevelCountLimited	= 10
 v_levelrandtracker	= $FFFFF5FC	; longword
 ;level select constants (to not give the foward reference warning this was moved here)
 f_checksum	= $FFFFFFF9
@@ -48,7 +59,7 @@ optcharpos = lsscrpos+$960000 ; character
 
 ; NOTES FOR ANYONE MAKING CHARACTERS
 v_character = $FFFFFFE8
-charcount = 7 ; 6, +1 for the check
+charcount = 10
 ; pointers for:
 ; PLAYER MAPPINGS -> Player_Maps
 ; PLAYER ANIM SCRIPTS -> Player_Anim
@@ -56,6 +67,23 @@ charcount = 7 ; 6, +1 for the check
 ; PLAYER DPLC -> Player_DPLC
 ; PLAYER PALETTE -> Player_Palette
 ; MENU NAME -> Player_Names
+; Player Specific Sounds: every instance of @sndlut
+; Player Specific Misc Data: Anything with the comment ">charcount", hopefully
+;thanks for the tutorial :)
+
+kdebugtext: macro
+	move.w	d0,-(sp)
+	move.l	a1,-(sp)
+	lea	@text\@,a1
+	pea	@cont\@
+	jmp	KDebug_WriteToCmd
+@text\@:
+	dc.b \1,0
+	even
+@cont\@:
+	move.l	(sp)+,a1
+	move.w	(sp)+,d0
+	endm
 
 StartOfRom:
 Vectors:	dc.l 'P'<<24|$FFFE00,		'O'<<24|EntryPoint,	'Y'<<24|BusError,	'S'<<24|AddressError
@@ -285,8 +313,12 @@ GameClrRAM:
 		tst.b	(f_checksum).w		; Is checksum correct?
 		beq.s   @validcheck		; if yes, branch
 		jsr	GM_Otis ; if incorrect, start otis.exe creepypasta
+		kdebugtext "bro is really mikuing it"
 		bsr.w	VDPSetupGame
+		bra.w	@invalidcheck
 @validcheck:
+		kdebugtext "umm excuse me what the actual fuck are you doing in my house?"
+@invalidcheck:
 		move.b	#0,($FFFFF600).w ; set Game Mode to Sega Screen
 		cmpi.l	#'init',($FFFFFFFC).w	; has checksum routine already run?
 		beq.w	@nosplashscreens	; if yes, branch
@@ -298,6 +330,7 @@ GameClrRAM:
 		jsr	GM_AntiTMSS
 @notmss:
 		jsr	GM_SplashScreensIG
+		kdebugtext "you can soft reset to skip all those splash screens btw"
 @nosplashscreens:
 	;	move.b	#$20,($FFFFF600).w ; set Game Mode to Minecraft
 	;	move.b	#$24,($FFFFF600).w ; set Game Mode to Bee Bush
@@ -345,9 +378,33 @@ jmpto_BeeBush:
 jmpto_Otis:
 		jmp     GM_Otis
 jmpto_IntroCutscene:
-		lea	(IntroCutscene),a6
-		jsr	GM_CustomSplashScreensIG
-		jmp	PlayLevel
+		pea	PlayLevel
+		moveq	#0,d0			; >charcount
+		move.b	(v_character).w,d0
+		lsl.w	#2,d0
+		jmp	@lut(pc,d0.w)
+@lut:	bra.w 	@sonic		; sonic
+	bra.w	@null
+	bra.w	@null
+	bra.w	@limited	; limited
+	bra.w	@null		; neru
+	bra.w	@null		; gomer
+	bra.w	@null		; sailor mercury
+	bra.w	@null		; kiryu
+	bra.w	@null		; purple guy
+	bra.w	@null		; purple guy
+@limited:
+		lea	@limitedtext,a1
+		jmp	KDebug_WriteToCmd
+@null:
+		rts
+@sonic:
+		lea	IntroCutscene,a6
+		jmp	GM_CustomSplashScreensIG
+
+@limitedtext:	dc.b "IT IS LIMITED",0
+; ===========================================================================
+
 CheckSumError:
 		illegal
 ; ===========================================================================
@@ -534,6 +591,19 @@ Art_Text:	incbin	artunc\menutext.bin	; text used in level select and debug mode
 Art_Text_end:		even
 
 ; ===========================================================================
+KDebug_WriteToCmd:
+		move.w	sr,-(sp)
+		move	#$2700,sr
+		move.w	#$9E00,d0
+@loop:
+		move.b	(a1)+,d0
+		move.w	d0,$C00004
+		tst.b	d0
+		bne.s	@loop
+
+		move.w	(sp)+,sr
+		rts
+; ===========================================================================
 ;VBlank
 loc_B10:				; XREF: Vectors
 		movem.l	d0-a6,-(sp)
@@ -710,16 +780,7 @@ loc_CD4:				; XREF: loc_C76
 		move.w	#$7800,(a5)
 		move.w	#$83,($FFFFF640).w
 		move.w	($FFFFF640).w,(a5)
-		tst.b	($FFFFF767).w
-		beq.s	loc_D50
-		lea	($C00004).l,a5
-		move.l	#$94019370,(a5)
-		move.l	#$96E49500,(a5)
-		move.w	#$977F,(a5)
-		move.w	#$7000,(a5)
-		move.w	#$83,($FFFFF640).w
-		move.w	($FFFFF640).w,(a5)
-		move.b	#0,($FFFFF767).w
+		jsr	Process_DMA_Queue
 
 loc_D50:
 		movem.l	($FFFFF700).w,d0-d7
@@ -778,16 +839,7 @@ loc_DA6:				; XREF: off_B6E
 		move.w	#$83,($FFFFF640).w
 		move.w	($FFFFF640).w,(a5)
 		bsr.w	PalCycle_SS
-		tst.b	($FFFFF767).w
-		beq.s	loc_E64
-		lea	($C00004).l,a5
-		move.l	#$94019370,(a5)
-		move.l	#$96E49500,(a5)
-		move.w	#$977F,(a5)
-		move.w	#$7000,(a5)
-		move.w	#$83,($FFFFF640).w
-		move.w	($FFFFF640).w,(a5)
-		move.b	#0,($FFFFF767).w
+		jsr	Process_DMA_Queue
 
 loc_E64:
 		tst.w	($FFFFF614).w
@@ -839,16 +891,7 @@ loc_EEE:
 		move.w	#$7800,(a5)
 		move.w	#$83,($FFFFF640).w
 		move.w	($FFFFF640).w,(a5)
-		tst.b	($FFFFF767).w
-		beq.s	loc_F54
-		lea	($C00004).l,a5
-		move.l	#$94019370,(a5)
-		move.l	#$96E49500,(a5)
-		move.w	#$977F,(a5)
-		move.w	#$7000,(a5)
-		move.w	#$83,($FFFFF640).w
-		move.w	($FFFFF640).w,(a5)
-		move.b	#0,($FFFFF767).w
+		jsr	Process_DMA_Queue
 
 loc_F54:
 		movem.l	($FFFFF700).w,d0-d7
@@ -898,16 +941,7 @@ loc_FA6:				; XREF: off_B6E
 		move.w	#$7C00,(a5)
 		move.w	#$83,($FFFFF640).w
 		move.w	($FFFFF640).w,(a5)
-		tst.b	($FFFFF767).w
-		beq.s	loc_1060
-		lea	($C00004).l,a5
-		move.l	#$94019370,(a5)
-		move.l	#$96E49500,(a5)
-		move.w	#$977F,(a5)
-		move.w	#$7000,(a5)
-		move.w	#$83,($FFFFF640).w
-		move.w	($FFFFF640).w,(a5)
-		move.b	#0,($FFFFF767).w
+		jsr	Process_DMA_Queue
 
 loc_1060:
 		tst.w	($FFFFF614).w
@@ -1181,7 +1215,8 @@ loc_133A:
 loc_134A:
 		move.l	d0,(a1)+
 		dbf	d1,loc_134A
-		rts	
+
+		jmp	Reset_DMA_Queue
 ; End of function ClearScreen
 
 ; ---------------------------------------------------------------------------
@@ -1257,6 +1292,31 @@ PlaySound_Unk:
 		move.b	d0,($FFFFF00C).w
 		rts	
 
+
+; ---------------------------------------------------------------------------
+; Play specific sound for specific characters
+; ---------------------------------------------------------------------------
+; a1 = array
+PlayerSpecificSound:
+		clr.w	d0
+		move.b	(v_character).w,d0
+		add.w	d0,d0
+		adda.w	d0,a1
+
+		clr.w	d0
+		move.b	(a1)+,d0
+		add.w	d0,d0
+		jmp	@rout(pc,d0.w)
+@rout:
+		rts		; 0
+		bra.s	@fm	; 1
+;		bra.s	@pcm	; 2
+@pcm:
+		move.b	(a1),d0
+		jmp	MegaPCM_PlaySample
+@fm:
+		move.b	(a1),d0
+		jmp	PlaySound_Special
 ; ---------------------------------------------------------------------------
 ; Subroutine to	pause the game
 ; ---------------------------------------------------------------------------
@@ -2106,6 +2166,7 @@ PalCycle_Load:				; XREF: Demo; Level_MainLoop; End_MainLoop
 		moveq	#0,d0
 		tst.b	($FFFFFFF9).w	; GMZ: Is truth nuke flag set?
 		bne.s	PalCycle_Stop	; GMZ: If yes, branch
+		jsr	PalCycle_BakaSonic
 		move.b	($FFFFFE10).w,d0 ; get level number
 		add.w	d0,d0		; multiply by 2
 		move.w	PalCycle(pc,d0.w),d0 ; load animated pallets offset index into d0
@@ -2132,8 +2193,7 @@ PalCycle:	dc.w PalCycle_GHZ-PalCycle
 
 
 PalCycle_Title:				; XREF: TitleScreen
-		lea	(Pal_TitleCyc).l,a0
-		bra.s	loc_196A
+		rts
 ; ===========================================================================
 
 PalCycle_GHZ:				; XREF: PalCycle
@@ -2340,6 +2400,60 @@ loc_1B52:
 locret_1B64:
 		rts	
 ; End of function PalCycle_SBZ
+; ---------------------------------------------------------------------------
+; Palette cycling routine loading subroutine for invincible baka
+; ---------------------------------------------------------------------------
+
+; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
+
+v_superpal:		equ $FFFFFF49
+v_superpaltime:		equ $FFFFFF4C
+v_superpalframe:	equ $FFFFFF4E
+; cut down super sonic cycle
+PalCycle_BakaSonic:
+	cmp.b	#3,(v_character).w	; is character limited
+	beq.s	PCycSVZ_Skip	; if not, do not cycle
+		tst.b	(v_superpal).w
+		beq.s	PCycSVZ_Skip			; return, if Conic isn't super
+
+		; run frame timer
+		subq.b	#1,(v_superpaltime).w
+		bpl.s	PCycSVZ_Skip
+		move.b	#7,(v_superpaltime).w
+
+		; increment palette frame and update Conic's palette
+		lea	(Pal_Ibaka).l,a0
+		move.w	(v_superpalframe).w,d0
+		addq.w	#8,(v_superpalframe).w		; next frame
+		cmpi.w	#$18,(v_superpalframe).w	; is it the last frame?
+		bls.s	@br1111				; if not, branch
+		move.w	#$00,(v_superpalframe).w	; reset frame counter
+
+@br1111:
+		lea	($FFFFFB00+4).w,a1
+		move.l	(a0,d0.w),(a1)+
+		move.l	4(a0,d0.w),(a1)
+
+		; underwater palettes
+		cmpi.b	#1,($FFFFFE10).w			; are we in Glacier Tides Zone?
+		bne.s	PCycSVZ_Skip				; if not, branch
+		lea	($FFFFFA80+4).w,a1
+		move.l	(a0,d0.w),(a1)+
+		move.l	4(a0,d0.w),(a1)
+
+PCycSVZ_Skip:
+		CMP.b	#2,(v_superpal).w
+		beq.s	IBreturn	; return, if Conic isn't super
+		rts	
+
+IBreturn:
+		jsr	Obj01_setplayerpalette
+		cmpi.b	#1,($FFFFFE10).w ; is level LZ?
+		bne.s	IBreturne	; if not, branch
+		jsr	Obj01_setplayerpaletteUD
+IBreturne:
+		rts
+; End of function PalCycle_BakaConic
 
 ; ===========================================================================
 Pal_TitleCyc:	incbin	pallet\c_title.bin
@@ -2368,6 +2482,7 @@ Pal_SBZCyc7:	incbin	pallet\c_sbz_7.bin
 Pal_SBZCyc8:	incbin	pallet\c_sbz_8.bin
 Pal_SBZCyc9:	incbin	pallet\c_sbz_9.bin
 Pal_SBZCyc10:	incbin	pallet\c_sbz_10.bin
+Pal_IBaka:	incbin	pallet\invinciblebaka.bin
 ; ---------------------------------------------------------------------------
 ; Subroutine to	fade out and fade in
 ; ---------------------------------------------------------------------------
@@ -2965,8 +3080,10 @@ Pal_SBZ3GroWat:	incbin	pallet\gronicsbz3uw.bin	; Gronic (underwater in SBZ act 3
 Pal_Anakama:incbin	pallet\anakama.bin	; anakama char
 Pal_neru:incbin	pallet\neru.bin	; kosaku  kosaku  kosaku  kosaku  kosaku 
 Pal_Limit:incbin pallet\LimitedSonic.bin	;	Soo limited-core
-Pal_mercury:incbin	pallet\LimitedSonic.bin	; mercury power make up!
-
+Pal_mercury:incbin	pallet\mercury.bin	; mercury power make up!
+Pal_Kiryu:incbin	pallet\kiryu.bin	; I AM THE YAKUZA KIWAMI
+Pal_Purple:incbin	pallet\purple.bin	; I ALWAYS CUM
+Pal_Sans:	incbin	pallet\sans.bin
 ; ---------------------------------------------------------------------------
 ; Subroutine to	delay the program by ($FFFFF62A) frames
 ; ---------------------------------------------------------------------------
@@ -3011,24 +3128,7 @@ loc_29C0:
 ; End of function RandomNumber
 
 
-; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-CalcSinCos:
-CalcSine:				; XREF: SS_BGAnimate; et al
-		andi.w	#$FF,d0
-		add.w	d0,d0
-		addi.w	#$80,d0
-		move.w	Sine_Data(pc,d0.w),d1
-		subi.w	#$80,d0
-		move.w	Sine_Data(pc,d0.w),d0
-		rts	
-; End of function CalcSine
-
-; ===========================================================================
-
-Sine_Data:	incbin	misc\sinewave.bin	; values for a 360º sine wave
-
-; ===========================================================================
 		movem.l	d1-d2,-(sp)
 		move.w	d0,d1
 		swap	d1
@@ -3121,6 +3221,29 @@ loc_2D04:				; XREF: CalcAngle
 
 Angle_Data:	incbin	misc\angles.bin
 
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+; Moved this here to avoid bsr.w breaking without making it a jsr
+CalcSinCos:
+CalcSine:				; XREF: SS_BGAnimate; et al
+		andi.w	#$FF,d0
+		add.w	d0,d0
+		addi.w	#$80,d0
+		move.w	Sine_Data(pc,d0.w),d1
+		subi.w	#$80,d0
+		move.w	Sine_Data(pc,d0.w),d0
+		rts	
+; End of function CalcSine
+
+; ===========================================================================
+
+Sine_Data:	incbin	misc\sinewave.bin	; values for a 360º sine wave
+
+; ===========================================================================
+
+	include "_inc\DMA Queue.asm"
+
 ; ===========================================================================
 
 ; ---------------------------------------------------------------------------
@@ -3201,25 +3324,55 @@ Sega_GotoTitle:
 ; ---------------------------------------------------------------------------
 ; Title	screen
 ; ---------------------------------------------------------------------------
+; for my own convenience
 
-TitleScreen:				; XREF: GameModeArray
+titlemode 	= $FFFFF601 	; AKA "submode"
+titleHScroll    = $FFFFCC00	; hscroll buffer
+
+titleSinCntr 	= $FFFFF760	; sine info
+titleScrCnt	= $FFFFF762      
+titleCos	= $FFFFF764
+
+TitleScreen:
+	move.b  titlemode.w,d0
+        andi.w  #$1C,d0
+        jsr     TitleMdTbl(pc,d0.w)
+        rts
+
+; ---------------------------------------------------------------------------
+
+SMNO_TITLE_INIT       	= 0*4   ; Init 
+SMNO_TITLE_SCR      	= 1*4   ; Intro seq.
+SMNO_TITLE_MAIN      	= 2*4   ; Intro seq.
+
+TitleMdTbl:      
+        bra.w   TITLE_INIT
+        bra.w   TITLE_SCR
+        bra.w   TITLE_MAIN
+
+; ---------------------------------------------------------------------------
+; Title "initialization", (don't worry, i won't touch Gomer)
+; ---------------------------------------------------------------------------
+
+TITLE_INIT:
 		move.b	#$E4,d0
 		bsr.w	PlaySound_Special ; stop music
 		bsr.w	Pal_FadeFrom
 		bsr.w	ClearPLC
+		jsr 	SHC21
+		jsr 	SHC
 		move	#$2700,sr
 		lea	($C00004).l,a6
 		move.w	#$8004,(a6)
 		move.w	#$8230,(a6)
 		move.w	#$8407,(a6)
+		move.w	#$8720,(a6)
+		move.w	#$8B03,(a6)
+		move.w	#$8C81,(a6)
 		move.w	#$9001,(a6)
 		move.w	#$9200,(a6)
-		move.w	#$8B03,(a6)
-		move.w	#$8720,(a6)
 		clr.b	($FFFFF64E).w
 		bsr.w	ClearScreen
-		jsr 	SHC21
-		jsr 	SHC
 		lea	($FFFFD000).w,a1
 		moveq	#0,d0
 		move.w	#$7FF,d1
@@ -3288,16 +3441,13 @@ Title_ClrPallet:
 		move.l	#$40000001,($C00004).l
 		lea	(Nem_TitleFg).l,a0 ; load title	screen patterns
 		bsr.w	NemDec
-		move.l	#$60000001,($C00004).l
+		move.l	#$68000000,($C00004).l
 		lea	(Nem_TitleSonic).l,a0 ;	load Sonic title screen	patterns
-		bsr.w	NemDec
-		move.l	#$62000002,($C00004).l
-		lea	(Nem_TitleTM).l,a0 ; load "TM" patterns
 		bsr.w	NemDec
 		lea	($C00000).l,a6
 		move.l	#$50000003,4(a6)
 		lea	(Art_Text).l,a5
-		move.w	#(Art_Text_end-Art_Text/4)-1,d1
+		move.w	#((Art_Text_end-Art_Text)/4)-1,d1
 
 Title_LoadText:
 		move.l	(a5)+,(a6)
@@ -3310,8 +3460,6 @@ Title_LoadText:
 		move.w	#0,($FFFFFE10).w ; set level to	GHZ (00)
 		move.w	#0,($FFFFF634).w ; disable pallet cycling
 		bsr.w	LevelSizeLoad
-		bsr.w	DeformBgLayer
-
 		lea	($FFFFB000).w,a1
 		lea	(Blk16_GHZ).l,a0 ; load	GHZ 16x16 mappings
 		move.w	#0,d0
@@ -3320,7 +3468,6 @@ Title_LoadText:
 		lea	($FF0000).l,a1
 		bsr.w	KosDec
 		bsr.w	LevelLayoutLoad
-
 		move	#$2700,sr
 		bsr.w	ClearScreen
 		lea	($C00004).l,a5
@@ -3330,7 +3477,7 @@ Title_LoadText:
 		move.w	#$6000,d2
 		bsr.w	LoadTilesFromStart2
 		lea	($FF0000).l,a1
-		lea	(Eni_Title).l,a0 ; load	title screen mappings
+		lea	(Eni_Title).l,a0 	; load	title screen mappings
 		move.w	#0,d0
 		bsr.w	EniDec
 		lea	($FF0000).l,a1
@@ -3338,15 +3485,8 @@ Title_LoadText:
 		moveq	#$21,d1
 		moveq	#$15,d2
 		bsr.w	ShowVDPGraphics
-		move.l	#$40000000,($C00004).l
-		lea	(Nem_GHZ_1st).l,a0 ; load GHZ patterns
-		bsr.w	NemDec
-		moveq	#1,d0		; load title screen pallet
-		bsr.w	PalLoad1
-		move.b	#$8A,d0		; play title screen music
-		bsr.w	PlaySound_Special
-		move.b	#0,($FFFFFFFA).w ; disable debug mode
-		move.w	#$178,($FFFFF614).w ; run title	screen for $178	frames
+		move.b	#0,($FFFFFFFA).w 	; disable debug mode
+		move.w	#600*3,($FFFFF614).w 	; run titlescreen for 30 seconds
 		lea	($FFFFD080).w,a1
 		moveq	#0,d0
 		move.w	#$F,d1
@@ -3357,13 +3497,9 @@ Title_ClrObjRam2:
 
 		move.b	#$E,($FFFFD040).w ; load big Sonic object
 		move.b	#$F,($FFFFD080).w ; load "PRESS	START BUTTON" object
-		move.b	#$F,($FFFFD0C0).w ; load "TM" object
 		move.b	#3,($FFFFD0DA).w
 		move.b	#$F,($FFFFD100).w
 		move.b	#2,($FFFFD11A).w
-		jsr	ObjectsLoad
-		bsr.w	DeformBgLayer
-		jsr	BuildSprites
 		moveq	#0,d0
 		bsr.w	LoadPLC2
 		move.w	#0,($FFFFFFE4).w
@@ -3371,16 +3507,116 @@ Title_ClrObjRam2:
 		move.w	($FFFFF60C).w,d0
 		ori.b	#$40,d0
 		move.w	d0,($C00004).l
-		bsr.w	Pal_FadeTo
+		move.b  #SMNO_TITLE_SCR,titlemode.w
+		move.w  #60*2,titleScrCnt.w
+		move.w  #0,titleSinCntr.w
 
-loc_317C:
+        	moveq   #(32/2)-1,d7
+		lea     Pal_Title,a2
+		lea     palette,a3
+
+initLoadToBuffer:                         
+		move.l  (a2)+,(a3)+
+		dbf     d7,initLoadToBuffer
+		move.b	#$CA,d0
+		bra.w	PlaySound
+
+; ---------------------------------------------------------------------------
+; Title screen scroll in
+; I have never written anything like this, nor have I seen any code for it
+; so THIS SUCKS!!!!! maybe someone can improve it. I don't know Lolol. 
+; ---------------------------------------------------------------------------
+
+TITLE_SCR:
+	move.b	#4,($FFFFF62A).w ; set vblank cmd and do vsync
+	bsr.w	DelayProgram
+	sub.w   #1,titleScrCnt.w
+	bmi.s   .Exit
+	bra.w   _titleSineSlide
+
+.Exit:
+
+	lea	($FF0000).l,a1
+	lea	(Eni_TitleBG).l,a0 ; load	title screen mappings
+	move.w	#0,d0
+	bsr.w	EniDec
+	move.l	#$60000003,d0
+	moveq	#64-1,d1
+	moveq	#32-1,d2
+	bsr.w	ShowVDPGraphics
+
+        moveq   #(32/2)-1,d7
+	lea     Pal_Title+(32*2),a2
+	lea     palette+(32*2),a3
+
+scrLoadToBuffer:                         
+	move.l  (a2)+,(a3)+
+	dbf     d7,scrLoadToBuffer
+
+	move.b	#$8A,d0
+	bsr.w	PlaySound
+
+	move.b	#$AC,d0
+	bsr.w	PlaySound_Special
+	move.b  #SMNO_TITLE_MAIN,titlemode.w
+	rts
+
+; ---------------------------------------------------------------------------
+; Bouncy sine-wavey effect for the emblem
+; ---------------------------------------------------------------------------
+
+_titleSineSlide:
+        lea     titleHScroll.w,a1
+        moveq   #240/2,d7
+        moveq   #0,d2
+        move.w  titleScrCnt.w,d2
+.ScrLoop:
+	addq.w  #1,titleSinCntr.w
+       	move.w  titleSinCntr.w,d0
+        jsr     CalcSinCos
+        mulu.w  d2,d0
+        asr.w   #7,d0
+        move.w  d0,(a1)+
+        move.w  #0,(a1)+
+        neg     d0
+        move.w  d0,(a1)+
+        move.w  #0,(a1)+
+        dbf     d7,.ScrLoop
+
+        rts
+
+; ---------------------------------------------------------------------------
+; main scr
+; ---------------------------------------------------------------------------
+
+_titleScroll:
+        lea     titleHScroll.w,a1
+        add.b   #2,beeSinCntr.w
+        move.b  beeSinCntr.w,d0
+        jsr     CalcSinCos
+        asr.w   #1,d1
+
+        move.w  #0,(a1)+
+        add.w   $FFFFF618+$A.w,d0
+        move.w  d0,(a1)
+        add.w   $FFFFF618+8.w,d1
+        move.w  d1,$FFFFF618.w
+
+        addq.w  #1,$FFFFF618+8.w
+        addq.w  #1,$FFFFF618+$A.w
+        rts
+
+; ---------------------------------------------------------------------------
+; Title screen main loop
+; ---------------------------------------------------------------------------
+TITLE_MAIN:
+	        move.w  #$8B00+%00000000,VDPCTRL
 		move.b	#4,($FFFFF62A).w
 		bsr.w	DelayProgram
+		bsr.w   _titleScroll
 		jsr	RandomNumber	; for better randomness for the level IDs
 		jsr	ObjectsLoad
-		bsr.w	DeformBgLayer
 		jsr	BuildSprites
-		bsr.w	PalCycle_Title
 		bsr.w	RunPLC_RAM
 		move.w	($FFFFD008).w,d0
 		addq.w	#2,d0
@@ -3448,11 +3684,11 @@ Title_CountC:
 loc_3230:
 		tst.w	($FFFFF614).w
 		beq.w	Demo
-		; (temporary until we have an actual options screen)
+		; nvm we're gonna keep this as a second way
 		btst	#5,	($FFFFF605).w ; check if c pressed
 		beq.s	@notc
 
-		add.b	#1,(v_character).w ; sonic/gronic 
+		add.b	#1,(v_character).w
 
 		cmpi.b	#charcount,(v_character).w
 		blt.s	@notoverflow
@@ -3462,7 +3698,7 @@ loc_3230:
 		bsr.w	PlaySound_Special
 	@notc:
 		andi.b	#$80,($FFFFF605).w ; check if Start is pressed
-		beq.w	loc_317C	; if not, branch
+		beq.w	TITLE_MAIN	; if not, branch
 
 Title_ChkLevSel:
 		btst	#6,($FFFFF604).w ; check if A is pressed
@@ -3541,7 +3777,7 @@ LevelSelect:
 
 		cmpi.w	#lsjackass,d0		; have you selected item $16 (jackass/beebush)
 		bne.s	@waitbees		; if not, we're just waiting for the bees. 
-
+		move.b  #$0,titlemode.w
 		move.b	#$24,($FFFFF600).w 	; set screen	mode to	$24 BEEBUSH
 		rts	
 
@@ -3716,7 +3952,7 @@ Demo:					; XREF: TitleScreen
 loc_33B6:				; XREF: loc_33E4
 		move.b	#4,($FFFFF62A).w
 		bsr.w	DelayProgram
-		bsr.w	DeformBgLayer
+		bsr.w   _titleScroll
 		bsr.w	PalCycle_Load
 		bsr.w	RunPLC_RAM
 		move.w	($FFFFD008).w,d0
@@ -4113,6 +4349,9 @@ Player_Names:
 		dc.b "NERU    "
 		dc.b "GOMER G."
 		dc.b "MERCURY "
+		dc.b "KIRYU K."
+		dc.b "PRPL GUY"
+		dc.b "SANS    "		
 	even
 	
 ; give the vram setting on d3
@@ -4139,7 +4378,22 @@ OptionsHighlight:
 ; ---------------------------------------------------------------------------
 ; give the vram setting on d3
 CharDraw:
-		lea	(Player_Names).l,a1
+		; counter thing
+		moveq	#0,d0			; >charcount
+		move.b	(v_character).w,d0
+		add.b	#$31,d0
+		
+		move.l	#optcharpos+$120000,d4	; screen position (character)
+		add.w	d3,d0
+		move.l	d4,4(a6)
+		move.w	d0,(a6)
+		sub.b	(v_character).w,d0
+		add.b	#'/'-$31,d0
+		move.w	d0,(a6)
+		add.b	#charcount+1,d0
+		move.w	d0,(a6)
+		
+		lea	(Player_Names).l,a1	; >charcount
 		moveq	#0,d0
 		move.b	(v_character).w,d0
 		add.w	d0,d0
@@ -4175,7 +4429,7 @@ OptionsMenu:
 		beq.s	OptionsMenu	; if not, branch
 		move.w	($FFFFFF82).w,d0
 		tst.w	d0
-		beq.w	PlayLevel
+		beq.w	PlayIntro
 		bra.s	OptionsMenu
 		
 OptReturn:
@@ -4255,9 +4509,18 @@ MusicList4:	incbin	misc\muslist4.bin
 ; move.b #$C,($FFFFF600).w
 ; Obj3A_NextLevel
 ;randLevelCount		= 20	; 31 max (32 is reserved for linear path flag)
+;randLevelCountLimited	= 10
 ;v_levelrandtracker	= $FFFF8000
 InitGetLevelRandom:
-	move.l	#(1<<randLevelCount)-1,(v_levelrandtracker).w	; set all bits from 0-19
+	moveq	#randLevelCount,d1
+	cmp.b	#char_limited,(v_character).w
+	bne.s	@notlimited
+	moveq	#randLevelCountLimited,d1
+@notlimited:
+	moveq	#0,d0
+	bset	d1,d0
+	subq.l	#1,d0
+	move.l	d0,(v_levelrandtracker).w	; set all bits from 0-19
 
 GetLevelRandom:
 	move.l	(v_levelrandtracker).w,d2
@@ -4268,7 +4531,12 @@ GetLevelRandom:
 	swap	d0			; modulo(random16,val)
 	clr.w	d0
 	swap	d0
-	divu.w	#randLevelCount,d0
+	moveq	#randLevelCount,d1
+	cmp.b	#char_limited,(v_character).w
+	bne.s	@notlimited
+	moveq	#randLevelCountLimited,d1
+@notlimited:
+	divu.w	d1,d0
 	swap	d0
 @repeat:
 	btst	d0,d2
@@ -4302,24 +4570,27 @@ GetLevelRandom:
 	rts
 ; must match randLevelCount!
 @randomlut:
+; beatable as limited sonic
 	dc.w 0<<8|0	; GHZ
-	dc.w 0<<8|1
-	dc.w 0<<8|2
-	dc.w 1<<8|0	; LZ
-	dc.w 1<<8|1
-	dc.w 1<<8|2
 	dc.w 2<<8|0	; MZ
-	dc.w 2<<8|1
-	dc.w 2<<8|2
-	dc.w 3<<8|0	; SLZ
+	dc.w 2<<8|1	; MZ
+	dc.w 2<<8|2	; MZ
+	dc.w 4<<8|0	; SYZ
+	dc.w 4<<8|1	; SYZ
+	dc.w 4<<8|2	; SYZ
+	dc.w 7<<8|0	; Makoto
+	dc.w 7<<8|1	; Makoto
+	dc.w 7<<8|2	; Makoto
+; beatable as everyone else
+	dc.w 0<<8|1	; GHZ
+	dc.w 0<<8|2	; GHZ
+	dc.w 1<<8|0	; LZ
+	dc.w 1<<8|1	; LZ
+	dc.w 1<<8|2	; LZ
+; unbeatable
+	dc.w 3<<8|0	; SLZ ; dutch
 	dc.w 3<<8|1
 	dc.w 3<<8|2
-	dc.w 4<<8|0	; SYZ
-	dc.w 4<<8|1
-	dc.w 4<<8|2
-	dc.w 7<<8|0	; Makoto
-	dc.w 7<<8|1
-	dc.w 7<<8|2
 	even
 ; ===========================================================================
 
@@ -4328,6 +4599,7 @@ GetLevelRandom:
 ; ---------------------------------------------------------------------------
 
 Level:					; XREF: GameModeArray
+		move.b  #0,titlemode.w
 		bset	#7,($FFFFF600).w ; add $80 to screen mode (for pre level sequence)
 		tst.w	($FFFFFFF0).w
 		bmi.s	loc_37B6
@@ -4405,7 +4677,7 @@ Level_ClrVars3:
 		move.w	#$8ADF,($FFFFF624).w
 		move.w	($FFFFF624).w,(a6)
 		cmpi.b	#1,($FFFFFE10).w ; is level LZ?
-		bne.s	Level_LoadPal	; if not, branch
+		bne.w	Level_LoadPal	; if not, branch
 		move.w	#$8014,(a6)
 		moveq	#0,d0
 		move.b	($FFFFFE11).w,d0
@@ -4418,38 +4690,16 @@ Level_ClrVars3:
 		clr.b	($FFFFF64D).w	; clear	water routine counter
 		clr.b	($FFFFF64E).w	; clear	water movement
 		move.b	#1,($FFFFF64C).w ; enable water
-		bra.w	Level_LoadPal
-Player_Palette:
-		; normal, lz, sbz, blank
-		dc.w	3,$F,$10,0 ; Sonic 
-		dc.w	23,24,25,0 ; Pal_Gronic 
-		dc.w	26,24,25,0 ; Pal_Anakama 
-		dc.w	28,28,28,0 ; LimitedSonic 
-		dc.w	26,26,$26,0 ; neru
-		dc.w	3,$F,$10,0 ; Gomer Gomer!
-		dc.w	28,28,28,0 ; MERCURY
-		; add more player palettes
+
 Level_LoadPal:
 		move.w	#$1E,($FFFFFE14).w
 		move	#$2300,sr
-
-		moveq	#0,d1
-		move.b	(v_character),d1
-		add.w	d1,d1
-		add.w	d1,d1
-		add.w	d1,d1
-		move.w	Player_Palette(pc,d1.w),d0	; load palette
-		
-		bsr.w	PalLoad2	; load Sonic's pallet line
+; just like maps and how its handled on debug mode
+; palettes are now a subroutine for the invincibility cycle
+		jsr	Obj01_setplayerpalette
 		cmpi.b	#1,($FFFFFE10).w ; is level LZ?
 		bne.s	Level_GetBgm	; if not, branch
-		move.w	Player_Palette+2(pc,d1.w),d0	; load palette
-		cmpi.b	#3,($FFFFFE11).w ; is act number 3?
-		bne.s	Level_WaterPal	; if not, branch
-		move.w	Player_Palette+4(pc,d1.w),d0	; load palette
-
-Level_WaterPal:
-		bsr.w	PalLoad3_Water	; load underwater pallet (see d0)
+		jsr	Obj01_setplayerpaletteUD
 		tst.b	($FFFFFE30).w
 		beq.s	Level_GetBgm
 		move.b	($FFFFFE53).w,($FFFFF64E).w
@@ -4638,16 +4888,22 @@ Level_StartGame:
 		bclr	#7,($FFFFF600).w ; subtract 80 from screen mode
 
 ;START SOUNDS
-		cmp.b	#5,(v_character).w ; has gomer spawned?
-		bne.s	SMCsoundCHKSRT
-		move.b  #$90,d0
-		jsr	MegaPCM_PlaySample
-		jmp	Level_MainLoop
-SMCsoundCHKSRT:
-		cmp.b	#6,(v_character).w ; has sailor mercury spawned?
-		bne.s	Level_MainLoop
-		move.b  #$98,d0
-		jsr	MegaPCM_PlaySample
+		lea	@sndlut(pc),a1		; >charcount
+		jsr	PlayerSpecificSound
+		bra.w	@cont
+@sndlut:
+		dc.b 0,$00	; sonic
+		dc.b 0,$00
+		dc.b 0,$00
+		dc.b 0,$00	; limited
+		dc.b 0,$00
+		dc.b 2,$90	; gomer
+		dc.b 2,$98	; sailer mercury
+		dc.b 2,$A8 ;  kiryu
+		dc.b 2,$B2	; purple guy
+		dc.b 2,$B3	; sans temporary!!!!!!!!!!!!!
+		even
+@cont:
 ; ---------------------------------------------------------------------------
 ; Main level loop (when	all title card and loading sequences are finished)
 ; ---------------------------------------------------------------------------
@@ -4725,6 +4981,41 @@ loc_3BC8:
 		tst.w	($FFFFF614).w
 		bne.s	loc_3B98
 		rts	
+
+; ===========================================================================
+; ---------------------------------------------------------------------------
+; Subroutine to	set player palette
+; ---------------------------------------------------------------------------
+Obj01_setplayerpalette:
+		moveq	#0,d1		; >charcount
+		move.b	(v_character),d1
+		add.w	d1,d1
+		add.w	d1,d1
+		add.w	d1,d1
+		move.w	Player_Palette(pc,d1.w),d0	; load palette
+		bsr.w	PalLoad2	; load Sonic's pallet line
+		rts	
+Obj01_setplayerpaletteUD:
+		move.w	Player_Palette+2(pc,d1.w),d0	; load palette
+		cmpi.b	#3,($FFFFFE11).w ; is act number 3?
+		bne.s	Level_WaterPal	; if not, branch
+		move.w	Player_Palette+4(pc,d1.w),d0	; load palette
+Level_WaterPal:
+		bsr.w	PalLoad3_Water	; load underwater pallet (see d0)
+		rts	
+Player_Palette:
+		; normal, lz, sbz, blank
+		dc.w	3,$F,$10,0 ; Sonic 
+		dc.w	23,24,25,0 ; Pal_Gronic 
+		dc.w	26,24,25,0 ; Pal_Anakama 
+		dc.w	28,28,28,0 ; LimitedSonic 
+		dc.w	27,27,$27,0 ; neru
+		dc.w	3,$F,$10,0 ; Gomer Gomer!
+		dc.w	29,29,29,0 ; MERCURY
+		dc.w	30,30,30,0 ; bragon of bojima 
+		dc.w	31,31,31,0 ; I am the purple guy come and see my suit tonight 
+		dc.w	32,32,32,0 ; SANS
+		; add more player palettes
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Subroutine to	do special water effects in Labyrinth Zone
@@ -6241,6 +6532,28 @@ Map_obj80:
 ; ---------------------------------------------------------------------------
 
 EndingSequence:				; XREF: GameModeArray
+		moveq	#0,d0			; >charcount
+		move.b	(v_character).w,d0
+		lsl.w	#2,d0
+		jmp	@lut(pc,d0.w)
+@lut:	bra.w 	@null		; sonic
+	bra.w	@null
+	bra.w	@null
+	bra.w	@null		; limited
+	bra.w	@null		; neru
+	bra.w	@null		; gomer
+	bra.w	@null		; sailor mercury
+	bra.w	@kiryu		; kiryu
+	bra.w	@purpleguy	; purple guy
+@kiryu:
+		pea	End_GotoCredits
+		lea	EndingSleeper,a6
+		jmp	GM_CustomSplashScreensIG
+@purpleguy:
+		pea	End_GotoCredits
+		lea	EndingAlwaysCum,a6
+		jmp	GM_CustomSplashScreensIG
+@null:
 		move.b	#$E4,d0
 		bsr.w	PlaySound_Special ; stop music
 		bsr.w	Pal_FadeFrom
@@ -6335,6 +6648,7 @@ End_LoadSonic:
 		move.b	d0,($FFFFFE1B).w
 		move.b	d0,($FFFFFE2C).w
 		move.b	d0,($FFFFFE2D).w
+
 		move.b	d0,($FFFFFE2E).w
 		move.b	d0,($FFFFFE2F).w
 		move.w	d0,($FFFFFE08).w
@@ -6372,6 +6686,7 @@ End_MainLoop:
 		bsr.w	ChangeRingFrame
 		cmpi.b	#$18,($FFFFF600).w ; is	scene number $18 (ending)?
 		beq.s	loc_52DA	; if yes, branch
+End_GotoCredits:
 		move.b	#$1C,($FFFFF600).w ; set scene to $1C (credits)
 		move.b	#$91,d0
 		bsr.w	PlaySound_Special ; play credits music
@@ -7384,6 +7699,29 @@ BgScroll_End:				; XREF: BgScroll_Index
 		move.w	#$1E,($FFFFF714).w
 		rts
 
+Deform_Title:
+		move.w	($FFFFFFF2).w,d0
+		lsl.w	#2,d0
+		jmp	@lut(pc,d0.w)
+@lut:		bra.w	Deform_GHZ
+		bra.w	@type2
+		bra.w	Deform_LZ		; TODO: idk replace it with something fancier
+		bra.w	Deform_Ripple
+@type2:
+		move.w	($FFFFF70C).w,($FFFFF618).w
+		lea	($FFFFCC00).w,a1
+		move.w	#240-1,d1	; v30
+		move.w	($FFFFF700).w,d0	; set FG
+		swap	d0
+		clr.w	d0			; set BG
+@t2loop:
+		neg.w	d0
+		swap	d0
+		neg.w	d0
+		swap	d0
+		move.l	d0,(a1)+
+		dbf	d1,@t2loop
+		rts
 ; ---------------------------------------------------------------------------
 ; Background layer deformation subroutines
 ; ---------------------------------------------------------------------------
@@ -7411,6 +7749,8 @@ loc_628E:
 		move.w	($FFFFF70C).w,($FFFFF618).w
 		move.w	($FFFFF718).w,($FFFFF620).w
 		move.w	($FFFFF71C).w,($FFFFF61E).w
+		cmp.b	#4,($FFFFF600).w
+		beq.w	Deform_Title
 		moveq	#0,d0
 		tst.b	($FFFFFFF9).w	; GMZ
 		beq.s	GetDeformRoutine	; GMZ
@@ -8993,7 +9333,7 @@ loc_6DC4:
 Resize_Index:	dc.w Resize_GHZ-Resize_Index, Resize_LZ-Resize_Index
 		dc.w Resize_MZ-Resize_Index, Resize_SLZ-Resize_Index
 		dc.w Resize_SYZ-Resize_Index, Resize_SBZ-Resize_Index
-		dc.w Resize_Ending-Resize_Index, Resize_GHZ-Resize_Index
+		dc.w Resize_Ending-Resize_Index, Resize_BHZ-Resize_Index
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Green	Hill Zone dynamic screen resizing
@@ -9340,6 +9680,7 @@ Resize_MZ3end:
 
 Resize_SLZ:				; XREF: Resize_Index
 		moveq	#0,d0
+		rts
 		move.b	($FFFFFE11).w,d0
 		add.w	d0,d0
 		move.w	Resize_SLZx(pc,d0.w),d0
@@ -9636,6 +9977,120 @@ Resize_FZend2:
 ; ---------------------------------------------------------------------------
 
 Resize_Ending:				; XREF: Resize_Index
+		rts	
+; ===========================================================================
+; ---------------------------------------------------------------------------
+; Makoto Kino AKA Sailor Jupiter zone Zone dynamic screen resizing
+;- my waifu
+; ---------------------------------------------------------------------------
+
+Resize_BHZ:				; XREF: Resize_Index
+		moveq	#0,d0
+		move.b	($FFFFFE11).w,d0
+		add.w	d0,d0
+		move.w	Resize_BHZx(pc,d0.w),d0
+		jmp	Resize_BHZx(pc,d0.w)
+; ===========================================================================
+Resize_BHZx:	dc.w Resize_BHZ1-Resize_BHZx
+		dc.w Resize_BHZ2-Resize_BHZx
+		dc.w Resize_BHZ3-Resize_BHZx
+; ===========================================================================
+
+Resize_BHZ1:
+		move.w	#$300,($FFFFF726).w ; set lower	y-boundary
+		cmpi.w	#$1780,($FFFFF700).w ; has the camera reached $1780 on x-axis?
+		bcs.s	locret_6E08B	; if not, branch
+		move.w	#$400,($FFFFF726).w ; set lower	y-boundary
+
+locret_6E08B:
+		rts	
+; ===========================================================================
+
+Resize_BHZ2:
+		move.w	#$300,($FFFFF726).w
+		cmpi.w	#$ED0,($FFFFF700).w
+		bcs.s	locret_6E3AB
+		move.w	#$200,($FFFFF726).w
+		cmpi.w	#$1600,($FFFFF700).w
+		bcs.s	locret_6E3AB
+		move.w	#$400,($FFFFF726).w
+		cmpi.w	#$1D60,($FFFFF700).w
+		bcs.s	locret_6E3AB
+		move.w	#$300,($FFFFF726).w
+		
+locret_6E3AB:
+		rts	
+; ===========================================================================
+
+Resize_BHZ3:
+		moveq	#0,d0
+		move.b	($FFFFF742).w,d0
+		move.w	off_6E4AB(pc,d0.w),d0
+		jmp	off_6E4AB(pc,d0.w)
+; ===========================================================================
+off_6E4AB:	dc.w Resize_BHZ3main-off_6E4AB
+		dc.w Resize_BHZ3boss-off_6E4AB
+		dc.w Resize_BHZ3end-off_6E4AB
+; ===========================================================================
+
+Resize_BHZ3main:
+		move.w	#$300,($FFFFF726).w
+		cmpi.w	#$380,($FFFFF700).w
+		bcs.s	locret_6E96B
+		move.w	#$310,($FFFFF726).w
+		cmpi.w	#$960,($FFFFF700).w
+		bcs.s	locret_6E96B
+		cmpi.w	#$280,($FFFFF704).w
+		bcs.s	loc_6E98B
+		move.w	#$400,($FFFFF726).w
+		cmpi.w	#$1380,($FFFFF700).w
+		bcc.s	loc_6E8EB
+		move.w	#$4C0,($FFFFF726).w
+		move.w	#$4C0,($FFFFF72E).w
+
+loc_6E8EB:
+		cmpi.w	#$1700,($FFFFF700).w
+		bcc.s	loc_6E98B
+
+locret_6E96B:
+		rts	
+; ===========================================================================
+
+loc_6E98B:
+		move.w	#$300,($FFFFF726).w
+		addq.b	#2,($FFFFF742).w
+		rts	
+; ===========================================================================
+
+Resize_BHZ3boss:
+		cmpi.w	#$960,($FFFFF700).w
+		bcc.s	loc_6EB0B
+		subq.b	#2,($FFFFF742).w
+
+loc_6EB0B:
+		cmpi.w	#$2960,($FFFFF700).w
+		bcs.s	locret_6EE8B
+		bsr.w	SingleObjLoad
+		bne.s	loc_6ED0B
+		move.b	#$77,0(a1)	; load LZ boss object
+		move.w	#$2B00,8(a1)
+		move.w	#$3A0,$C(a1)
+
+loc_6ED0B:
+		move.w	#$8C,d0
+		bsr.w	PlaySound	; play boss music
+		move.b	#1,($FFFFF7AA).w ; lock	screen
+		addq.b	#2,($FFFFF742).w
+		moveq	#$22,d0
+		bra.w	LoadPLC		; load boss patterns
+; ===========================================================================
+
+locret_6EE8B:
+		rts	
+; ===========================================================================
+
+Resize_BHZ3end:
+		move.w	($FFFFF700).w,($FFFFF728).w
 		rts	
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -13110,7 +13565,7 @@ Obj37_MakeRings:			; XREF: Obj37_CountRings
 		tst.w	d4
 		bmi.s	loc_9D62
 		move.w	d4,d0
-		bsr.w	CalcSine
+		jsr	CalcSine
 		move.w	d4,d2
 		lsr.w	#8,d2
 		asl.w	d2,d0
@@ -13302,6 +13757,7 @@ Obj7C_Collect:				; XREF: Obj7C_ChkDel
 		move.b	#$1C,($FFFFD01C).w ; make Sonic	invisible
 		move.b	#1,($FFFFF7CD).w ; stop	Sonic getting bonuses
 		clr.b	($FFFFFE2D).w	; remove invincibility
+	move.b	#2,(v_superpal).w
 		clr.b	($FFFFFE2C).w	; remove shield
 
 locret_9F76:
@@ -13586,6 +14042,8 @@ ExtraLife:
 Obj2E_ChkShoes:
 		cmpi.b	#3,d0		; does monitor contain speed shoes?
 		bne.s	Obj2E_ChkShield
+	tst.b	(f_superconic).w	; Ignore all this code if not Super Conic
+	bne.w	Obj2E_NoMusic
 		move.b	#1,($FFFFFE2E).w ; speed up the	BG music
 		move.w	#$4B0,($FFFFD034).w ; time limit for the power-up
 		move.w	#$C00,($FFFFF760).w ; change Sonic's top speed
@@ -13607,6 +14065,8 @@ Obj2E_ChkShield:
 Obj2E_ChkInvinc:
 		cmpi.b	#5,d0		; does monitor contain invincibility?
 		bne.s	Obj2E_ChkRings
+	tst.b	(f_superconic).w	; Ignore all this code if not Super Conic
+	bne.s	Obj2E_NoMusic
 		move.b	#1,($FFFFFE2D).w ; make	Sonic invincible
 		move.w	#$4B0,($FFFFD032).w ; time limit for the power-up
 		move.b	#$38,($FFFFD200).w ; load stars	object ($3801)
@@ -13617,9 +14077,10 @@ Obj2E_ChkInvinc:
 		move.b	#3,($FFFFD29C).w
 		move.b	#$38,($FFFFD2C0).w ; load stars	object ($3804)
 		move.b	#4,($FFFFD2DC).w
+	move.b	#1,(v_superpal).w
 		tst.b	($FFFFF7AA).w	; is boss mode on?
 		bne.s	Obj2E_NoMusic	; if yes, branch
-		cmpi.b 	#3,(v_character)
+		cmpi.b 	#char_limited,(v_character)
 		beq.s	Obj2E_NewBarkTown
 		move.w	#$87,d0
 		jmp	(PlaySound).l	; play invincibility music
@@ -13655,7 +14116,11 @@ Obj2E_RingSound:
 Obj2E_ChkS:
 		cmpi.b	#7,d0		; does monitor contain 'S'
 		bne.s	Obj2E_ChkEnd
+	tst.b	(f_superconic).w	; Ignore all this code if not Super Conic
+	bne.s	Obj2E_ChkEnd
 		; nop	
+		move.w #$A7,d0 ;play futuristic
+		jsr MegaPCM_PlaySample ;aaaa
 		moveq	#1,d1
 		eor.b	d1,($FFFFFE2F).w	; GMZ: Set reverse controls flag when broken, revert when another monitor of same type is broken again
 
@@ -13756,52 +14221,23 @@ Obj0E:					; XREF: Obj_Index
 		jmp	Obj0E_Index(pc,d1.w)
 ; ===========================================================================
 Obj0E_Index:	dc.w Obj0E_Main-Obj0E_Index
-		dc.w Obj0E_Delay-Obj0E_Index
-		dc.w Obj0E_Move-Obj0E_Index
-		dc.w Obj0E_Animate-Obj0E_Index
+		dc.w Obj0E_Show-Obj0E_Index
+		dc.w Obj0E_Show-Obj0E_Index
+		dc.w Obj0E_Show-Obj0E_Index
 ; ===========================================================================
 
 Obj0E_Main:				; XREF: Obj0E_Index
 		addq.b	#2,$24(a0)
-		move.w	#$F0,8(a0)
-		move.w	#$DE,$A(a0)
+		move.w	#240+42,8(a0)
+		move.w	#200,$A(a0)
 		move.l	#Map_obj0E,4(a0)
-		move.w	#$2300,2(a0)
+		move.w	#$0140,2(a0)
 		move.b	#1,$18(a0)
-		move.b	#29,$1F(a0)	; set time delay to 0.5	seconds
-		lea	(Ani_obj0E).l,a1
-		bsr.w	AnimateSprite
-
-Obj0E_Delay:				; XREF: Obj0E_Index
-		subq.b	#1,$1F(a0)	; subtract 1 from time delay
-		bpl.s	Obj0E_Wait	; if time remains, branch
+		move.b	#1,$1A(a0)
 		addq.b	#2,$24(a0)	; go to	next routine
+Obj0E_Show:				; XREF: Obj0E_Index
 		bra.w	DisplaySprite
-; ===========================================================================
 
-Obj0E_Wait:				; XREF: Obj0E_Delay
-		rts	
-; ===========================================================================
-
-Obj0E_Move:				; XREF: Obj0E_Index
-		subq.w	#8,$A(a0)
-		cmpi.w	#$96,$A(a0)
-		bne.s	Obj0E_Display
-		addq.b	#2,$24(a0)
-
-Obj0E_Display:
-		bra.w	DisplaySprite
-; ===========================================================================
-		rts	
-; ===========================================================================
-
-Obj0E_Animate:				; XREF: Obj0E_Index
-		lea	(Ani_obj0E).l,a1
-		bsr.w	AnimateSprite
-		bra.w	DisplaySprite
-; ===========================================================================
-		rts	
-; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Object 0F - "PRESS START BUTTON" and "TM" from title screen
 ; ---------------------------------------------------------------------------
@@ -16235,18 +16671,23 @@ loc_C61A:				; XREF: Obj3A_ChkPos
 		addq.b	#2,$24(a0)
 
 		move.w	#180,$1E(a0)	; set time delay to 3 seconds
-CHAR_WIN_SND:
-		cmp.b	#5,(v_character).w ; has gomer spawned?
-		bne.s	SMCsoundCHKWN
-		move.b  #$90,d0
-		jsr	MegaPCM_PlaySample
-		jmp	NormalsoundCHKWN
-SMCsoundCHKWN:
-		cmp.b	#6,(v_character).w ; has sailor mercury spawned?
-		bne.s	NormalsoundCHKWN
-		move.b  #$9E,d0
-		jsr	MegaPCM_PlaySample
-NormalsoundCHKWN:
+; CHAR_WIN_SND: SMCsoundCHKWN: NormalsoundCHKWN:
+		lea	@sndlut(pc),a1		; >charcount
+		jsr	PlayerSpecificSound
+		bra.w	@contgame
+@sndlut:
+		dc.b 0,$00	; sonic
+		dc.b 0,$00
+		dc.b 0,$00
+		dc.b 0,$00	; limited
+		dc.b 0,$00
+		dc.b 2,$90	; gomer
+		dc.b 2,$9E	; sailer mercury
+		dc.b 2,$AD	; purple guy
+		dc.b 0,$00	; sans maybe temporary????
+		even
+@contgame:
+
 Obj3A_Wait:				; XREF: Obj3A_Index
 		subq.w	#1,$1E(a0)	; subtract 1 from time delay
 		bne.s	Obj3A_Display
@@ -16326,8 +16767,16 @@ Obj3A_Display2:				; XREF: Obj3A_NextLevel, Obj3A_ChkSS
 ; ---------------------------------------------------------------------------
 ; Level	order array
 ; ---------------------------------------------------------------------------
-LevelOrder:	incbin	misc\lvl_ord.bin
-		even
+LevelOrder:	;incbin	misc\lvl_ord.bin
+	dc.w $001,$002,$200,$000	; GHZ
+	dc.w $101,$102,$300,$502	; LZ
+	dc.w $201,$202,$400,$000	; MZ
+	dc.w $301,$302,$500,$000	; SLZ
+	dc.w $401,$402,$700,$000	; SYZ
+	dc.w $501,$502,$400,$000	; SBZ
+	dc.w $701,$702,$400,$000	; ending
+	dc.w $701,$702,$100,$000	; makoto
+	even
 ; ===========================================================================
 
 Obj3A_ChkPos2:				; XREF: Obj3A_Index
@@ -18079,7 +18528,7 @@ loc_DB66:
 
 loc_DB72:
 		andi.w	#$F,d0
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.s	UseLimitedSpringPower
 		move.w	Obj41_Powers(pc,d0.w),$30(a0)
 		rts	
@@ -19333,6 +19782,7 @@ GotThroughAct:				; XREF: Obj3E_EndAct
 		bne.s	locret_ECEE
 		move.w	($FFFFF72A).w,($FFFFF728).w
 		clr.b	($FFFFFE2D).w	; disable invincibility
+	move.b	#2,(v_superpal).w
 		clr.b	($FFFFFE1E).w	; stop time counter
 		move.b	#$3A,($FFFFD5C0).w
 		moveq	#$10,d0
@@ -19992,11 +20442,123 @@ Map_obj40:
 
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
-; Object 4F - blank
+; Object 4F - splats, aka kagamine leg
+; ---------------------------------------------------------------------------
+v_framecount:		equ $FFFFFE04 ; for good measure
+Obj4F:					; XREF: Obj_Index
+		moveq	#0,d0
+		move.b	$24(a0),d0
+		move.w	off_D202(pc,d0.w),d1
+		jmp	off_D202(pc,d1.w)
 ; ---------------------------------------------------------------------------
 
-Obj4F:					; XREF: Obj_Index
-		rts	
+off_D202:	dc.w loc_D20A-off_D202, loc_D246-off_D202, loc_D274-off_D202, loc_D2C8-off_D202
+; ---------------------------------------------------------------------------
+
+loc_D20A:
+		addq.b	#2,$24(a0)
+		move.l	#Map_Splats,4(a0)
+		move.w	#$24E4,2(a0)
+		move.b	#4,1(a0)
+		move.b	#4,$18(a0)
+		move.b	#$C,$19(a0)
+		move.b	#$14,$16(a0)
+		move.b	#2,$20(a0)
+		tst.b	$28(a0)
+		beq.s	loc_D246
+		move.w	#$300,d2
+		bra.s	loc_D24A
+; ---------------------------------------------------------------------------
+
+loc_D246:
+		move.w	#$E0,d2
+
+loc_D24A:
+		move.w	#$100,d1
+		bset	#0,1(a0)
+		move.w	($FFFFD000+8).w,d0
+		sub.w	8(a0),d0
+		bcc.s	loc_D268SP
+		neg.w	d0
+		neg.w	d1
+		bclr	#0,1(a0)
+
+loc_D268SP:
+		cmp.w	d2,d0
+		bcc.s	loc_D274
+		move.w	d1,$10(a0)
+		addq.b	#2,$24(a0)
+
+loc_D274:
+		bsr.w	ObjectFall
+		move.b	#1,$1A(a0)
+		tst.w	$12(a0)
+		bmi.s	loc_D2AE
+		move.b	#0,$1A(a0)
+		bsr.w	ObjHitFloor
+		tst.w	d1
+		bpl.s	loc_D2AE
+		move.w	(a1),d0
+		andi.w	#$3FF,d0
+		cmpi.w	#$2D2,d0
+		bcs.s	loc_D2A4
+		addq.b	#2,$24(a0)
+		bra.s	loc_D2AE
+; ---------------------------------------------------------------------------
+
+loc_D2A4:
+		add.w	d1,$C(a0)
+		move.w	#-$400,$12(a0)
+
+loc_D2AE:
+		bsr.w	sub_D2DA
+		beq.s	loc_D2C4
+		neg.w	$10(a0)
+		bchg	#0,1(a0)
+		bchg	#0,$22(a0)
+
+loc_D2C4:
+		bra.w	MarkObjGone
+; ---------------------------------------------------------------------------
+
+loc_D2C8:
+		bsr.w	ObjectFall
+		bsr.w	DisplaySprite
+		tst.b	1(a0)
+		bpl.w	DeleteObject
+		rts
+; ---------------------------------------------------------------------------
+
+sub_D2DA:
+		move.w	(v_framecount).w,d0
+		add.w	d7,d0
+		andi.w	#3,d0
+		bne.s	loc_D308
+		moveq	#0,d3
+		move.b	$19(a0),d3
+		tst.w	$10(a0)
+		bmi.s	loc_D2FE
+		bsr.w	ObjHitWallRight
+		tst.w	d1
+		bpl.s	loc_D308
+
+loc_D2FA:
+		moveq	#1,d0
+		rts
+; ---------------------------------------------------------------------------
+
+loc_D2FE:
+		not.w	d3
+		bsr.w	ObjHitWallLeft
+		tst.w	d1
+		bmi.s	loc_D2FA
+
+loc_D308:
+		moveq	#0,d0
+		rts
+
+Map_Splats:
+	include "_maps\splats.asm"
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -24487,29 +25049,14 @@ Obj01_Index:	dc.w Obj01_Main-Obj01_Index
 		dc.w Obj01_Death-Obj01_Index
 		dc.w Obj01_ResetLevel-Obj01_Index
 ; ===========================================================================
-
-Player_Maps:
-	dc.l	Map_Sonic
-	dc.l	Map_Sonic ; gronic
-	dc.l	Map_Sonic ; anakama
-	dc.l	Map_Limit ; LimitedSonic
-	dc.l    map_neru
-	dc.l    map_gomer
-;	dc.l    map_mercury
-	dc.l    map_neru
-	; insert player mapping here
 	
 Obj01_Main:				; XREF: Obj01_Index
 		addq.b	#2,$24(a0)
 		move.b	#$13,$16(a0)
 		move.b	#9,$17(a0)
-		
-		moveq	#0,d0
-		move.b	(v_character),d0
-		lsl.w	#2,d0
-		lea 	Player_Maps(pc),a1
-		move.l	(a1,d0.w),4(a0)	; load Map patterns
-		
+;map setting is a routine so it can be done by debug mode!
+		jsr	Obj01_setplayermap
+
 		move.w	#$780,2(a0)
 		move.b	#2,$18(a0)
 		move.b	#$18,$19(a0)
@@ -24544,6 +25091,7 @@ loc_12C64:
 
 loc_12C7E:
 		bsr.s	Sonic_Display
+		bsr.w	Conic_Super
 		bsr.w	Sonic_RecordPos
 		bsr.w	Sonic_Water
 		move.b	($FFFFF768).w,$36(a0)
@@ -24585,8 +25133,9 @@ Obj01_Display:
 		jsr	DisplaySprite
 
 ; Second part of the NineKode. Play different music on different acts - after invincibility wears off
- 
 Obj01_ChkInvin:
+ 	tst.b	(f_superconic).w	; Ignore all this code if not Super Conic
+	bne.w	Obj01_ExitChk
 		tst.b	($FFFFFE2D).w	; does Sonic have invincibility?
 		beq.w	Obj01_ChkShoes	; if not, branch	; change to beq.w
 		tst.w	$32(a0)		; check	time remaining for invinciblity
@@ -24630,6 +25179,7 @@ Obj01_PlayMusic:
 
 Obj01_RmvInvin:
 		move.b	#0,($FFFFFE2D).w ; cancel invincibility
+	move.b	#2,(v_superpal).w
 
 Obj01_ChkShoes:
 		tst.b	($FFFFFE2E).w	; does Sonic have speed	shoes?
@@ -24638,9 +25188,14 @@ Obj01_ChkShoes:
 		beq.s	Obj01_ExitChk
 		subq.w	#1,$34(a0)	; subtract 1 from time
 		bne.s	Obj01_ExitChk
-		move.w	#$600,($FFFFF760).w ; restore Sonic's speed
-		move.w	#$C,($FFFFF762).w ; restore Sonic's acceleration
-		move.w	#$80,($FFFFF764).w ; restore Sonic's deceleration
+;		move.w	#$600,($FFFFF760).w ; restore Sonic's speed
+;		move.w	#$C,($FFFFF762).w ; restore Sonic's acceleration
+;		move.w	#$80,($FFFFF764).w ; restore Sonic's deceleration
+; no normal sonic
+		move.w	#$FFF,($FFFFF760).w ; Sonic's top speed
+		move.w	#$F,($FFFFF762).w ; Sonic's acceleration
+		move.w	#$AAA,($FFFFF764).w ; Sonic's deceleration
+
 		move.b	#0,($FFFFFE2E).w ; cancel speed	shoes
 		move.w	#$E3,d0
 		jmp	(PlaySound).l	; run music at normal speed
@@ -24706,9 +25261,19 @@ Obj01_OutWater:
 		bclr	#6,$22(a0)
 		beq.s	locret_12D80
 		bsr.w	ResumeMusic
-		move.w	#$600,($FFFFF760).w ; restore Sonic's speed
-		move.w	#$C,($FFFFF762).w ; restore Sonic's acceleration
-		move.w	#$80,($FFFFF764).w ; restore Sonic's deceleration
+;		move.w	#$600,($FFFFF760).w ; restore Sonic's speed
+;		move.w	#$C,($FFFFF762).w ; restore Sonic's acceleration
+;		move.w	#$80,($FFFFF764).w ; restore Sonic's deceleration
+;not normal
+		move.w	#$FFF,($FFFFF760).w ; Sonic's top speed
+		move.w	#$F,($FFFFF762).w ; Sonic's acceleration
+		move.w	#$AAA,($FFFFF764).w ; Sonic's deceleration
+		tst.b	(f_superconic).w	; is conic super?
+		beq.w	@normalwato 	; if not, branch
+		move.w	#$1500,(v_conspeedmax).w
+		move.w	#$15,(v_conspeedacc).w
+		move.w	#$150,(v_conspeeddec).w
+@normalwato:
 		asl	$12(a0)
 		beq.w	locret_12D80
 		move.b	#8,($FFFFD300).w ; load	splash object
@@ -24742,7 +25307,7 @@ Obj01_MdJump:				; XREF: Obj01_Modes
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_ChgJumpDir
 		bsr.w	Sonic_LevelBound
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		bne.s	NormalPhysics
 		jsr JumpFallSonic
 		bra.s	LimitedFall
@@ -24776,7 +25341,7 @@ Obj01_MdJump2:				; XREF: Obj01_Modes
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_ChgJumpDir
 		bsr.w	Sonic_LevelBound
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		bne.s	NormalPhysics2
 		jsr JumpFallSonic
 		bra.s	LimitedFall2
@@ -24802,7 +25367,7 @@ loc_12EA6:
 
 
 Sonic_Move:				; XREF: Obj01_MdNormal
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.w	Limit_Move
 		move.w	($FFFFF760).w,d6
 		move.w	($FFFFF762).w,d5
@@ -25024,6 +25589,8 @@ loc_1309A:
 loc_130A6:
 		move.w	d0,$14(a0)
 		move.b	#0,$1C(a0)	; use walking animation
+
+locret_130E8:
 		rts	
 ; ===========================================================================
 
@@ -25042,22 +25609,22 @@ loc_130BA:
 		blt.s	locret_130E8
 		move.b	#$D,$1C(a0)	; use "stopping" animation
 		bclr	#0,$22(a0)
-
-		cmp.b	#5,(v_character).w ; is this gomer?
-		bne.s	SMCsoundCHK1
-		move.b  #$90,d0
-		jmp	MegaPCM_PlaySample
 SMCsoundCHK1:
-		cmp.b	#6,(v_character).w ; is this sailor mercury?
-		bne.s	NormalsoundCHK1
-		move.b  #$9A,d0
-		jmp	MegaPCM_PlaySample
-NormalsoundCHK1:
-		move.w	#$A4,d0
-		jsr	(PlaySound_Special).l ;	play stopping sound
-
-locret_130E8:
-		rts	
+; NormalsoundCHK1:
+		lea	@sndlut(pc),a1		; >charcount
+		jmp	PlayerSpecificSound
+@sndlut:
+		dc.b 1,$A4	; sonic
+		dc.b 1,$A4
+		dc.b 1,$A4
+		dc.b 1,$A4	; limited
+		dc.b 1,$A4
+		dc.b 2,$90	; gomer
+		dc.b 2,$9A	; sailer mercury
+		dc.b 1,$A4
+		dc.b 1,$A4	; purple guy
+		dc.b 1,$A1	; sans
+		even
 ; End of function Sonic_MoveLeft
 
 
@@ -25081,6 +25648,8 @@ loc_13104:
 loc_1310C:
 		move.w	d0,$14(a0)
 		move.b	#0,$1C(a0)	; use walking animation
+
+locret_1314E:
 		rts	
 ; ===========================================================================
 
@@ -25100,21 +25669,7 @@ loc_13120:
 		move.b	#$D,$1C(a0)	; use "stopping" animation
 		bset	#0,$22(a0)
 
-		cmp.b	#5,(v_character).w ; is this gomer?
-		bne.s	SMCsoundCHK2
-		move.b  #$90,d0
-		jmp	MegaPCM_PlaySample
-SMCsoundCHK2:
-		cmp.b	#6,(v_character).w ; is this sailor mercury?
-		bne.s	NormalsoundCHK2
-		move.b  #$9A,d0
-		jmp	MegaPCM_PlaySample
-NormalsoundCHK2:
-		move.w	#$A4,d0
-		jsr	(PlaySound_Special).l ;	play stopping sound
-
-locret_1314E:
-		rts	
+		bra.w	SMCsoundCHK1
 ; End of function Sonic_MoveRight
 
 		include	"_inc\LimitedSonic\Limit Move.asm"
@@ -25127,7 +25682,7 @@ locret_1314E:
 
 
 Sonic_RollSpeed:			; XREF: Obj01_MdRoll
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.w	Limit_RollSpeed
 		move.w	($FFFFF760).w,d6
 		asl.w	#1,d6
@@ -25269,21 +25824,22 @@ Sonic_AirUnroll:
 		move.b	#9,$17(a0)
 		move.b	#14,$1C(a0)	; use dunk animation
 
-		cmp.b	#5,(v_character).w ; is this gomer?
-		bne.s	SMCsoundCHK3
-		move.b  #$90,d0
-		jsr	MegaPCM_PlaySample
-		jmp	NormalsoundCHK33
-SMCsoundCHK3:
-		cmp.b	#6,(v_character).w ; is this sailor mercury?
-		bne.s	NormalsoundCHK3
-		move.b  #$9A,d0
-		jsr	MegaPCM_PlaySample
-		jmp	NormalsoundCHK33
-NormalsoundCHK3:
-		move.w	#$A5,d0
-		jsr	(PlaySound_Special).l ;	play fart sound
-NormalsoundCHK33
+		lea	@sndlut(pc),a1		; >charcount
+		jsr	PlayerSpecificSound
+		bra.w	@contgame
+@sndlut:
+		dc.b 1,$A5	; sonic
+		dc.b 1,$A5
+		dc.b 1,$A5
+		dc.b 1,$A5	; limited
+		dc.b 1,$A5
+		dc.b 2,$90	; gomer
+		dc.b 2,$9A	; sailer mercury
+		dc.b 2,$AC
+		dc.b 1,$A5
+		dc.b 1,$CD
+		even
+@contgame:
 		move.l	$10(a0),d0
 		add.l	d0,d0
 		move.l	d0,$10(a0)
@@ -25302,7 +25858,7 @@ NormalsoundCHK33
 
 
 Sonic_ChgJumpDir:			; XREF: Obj01_MdJump; Obj01_MdJump2
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.w	Limit_JumpDirection
 		move.w	($FFFFF760).w,d6
 		move.w	($FFFFF762).w,d5
@@ -25455,10 +26011,21 @@ Boundary_Bottom:
 		rts	
 
 CallKillSonic:
-		move.b	#02,($FFFFF003).w ; pause music (this is for pit fall)
-		jsr	KillSonic	; GMZ
-		move.b  #$93, d0 ; scream in hell
-		jmp     MegaPCM_PlaySample
+; this is gonna be removed unfortunately
+; this is a reference to the mario games made by BMB, in which falling into a pit
+; plays a long scream pcm, said pcm also has the sound driver freeze
+; 1. there used to be a line that intentionally froze it by setting the pause value to 2
+;		move.b	#02,($FFFFF003).w ; pause music (this is for pit fall)
+; this would be replaced by -
+;		move.b	#$E4,d0		; stop music
+;		jsr	PlaySound
+; broke the classic fasion it had though
+; 2. this below was commented out after streamlining character specific sounds
+; this will remain commented until otherwise reimplemented
+; -Coninight, MARCH 30 SAT
+;;;;;;;		move.b  #$93, d0	; scream in hell
+;;;;;;;		jsr	MegaPCM_PlaySample
+		jmp	KillSonic	; GMZ
 ; ===========================================================================
 
 Boundary_Sides:
@@ -25508,28 +26075,25 @@ Obj01_DoRoll:
 		move.b	#7,$17(a0)
 		move.b	#2,$1C(a0)	; use "rolling"	animation
 		addq.w	#5,$C(a0)
-
-		cmp.b	#5,(v_character).w ; is this gomer?
-		bne.s	SMCsoundCHK4
-		move.b  #$90,d0
-		jsr	MegaPCM_PlaySample
-		jmp	NormalsoundCHK44
-SMCsoundCHK4:
-		cmp.b	#6,(v_character).w ; is this sailor mercury?
-		bne.s	NormalsoundCHK4
-		move.b  #$9A,d0
-		jsr	MegaPCM_PlaySample
-		jmp	NormalsoundCHK44
-NormalsoundCHK4:
-		move.w	#$BE,d0
-		jsr	(PlaySound_Special).l ;	play rolling sound
-NormalsoundCHK44:
 		tst.w	$14(a0)
 		bne.s	locret_133E8
 		move.w	#$200,$14(a0)
-
 locret_133E8:
-		rts	
+		lea	@sndlut(pc),a1		; >charcount
+		jmp	PlayerSpecificSound
+@sndlut:
+		dc.b 1,$BE	; sonic
+		dc.b 1,$BE
+		dc.b 1,$BE
+		dc.b 1,$BE	; limited
+		dc.b 1,$BE
+;placeholder, remove soon
+		dc.b 2,$90	; gomer
+		dc.b 2,$9A	; sailer mercury
+		dc.b 1,$BE
+		dc.b 1,$BE
+		dc.b 1,$A8
+		even
 ; End of function Sonic_Roll
 
 ; ---------------------------------------------------------------------------
@@ -25539,16 +26103,18 @@ locret_133E8:
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 
+locret_1348E:
+		rts
 Sonic_Jump:				; XREF: Obj01_MdNormal; Obj01_MdRoll
 		move.b	($FFFFF603).w,d0
 		andi.b	#$70,d0		; is A,	B or C pressed?
-		beq.w	locret_1348E	; if not, branch
+		beq.s	locret_1348E	; if not, branch
 		moveq	#0,d0
 		move.b	$26(a0),d0
 		addi.b	#$80,d0
 		bsr.w	sub_14D48
 		cmpi.w	#6,d1
-		blt.w	locret_1348E
+		blt.s	locret_1348E
 		move.w	#$680,d2
 		btst	#6,$22(a0)
 		beq.s	loc_1341C
@@ -25570,39 +26136,37 @@ loc_1341C:
 		addq.l	#4,sp
 		move.b	#1,$3C(a0)
 		clr.b	$38(a0)
-		cmp.b	#5,(v_character).w ; is this gomer?
-		bne.s	SMCsoundCHK5
-		move.b  #$90,d0
-		jsr	MegaPCM_PlaySample
-		jmp	NormalsoundCHK55
-SMCsoundCHK5:
-		cmp.b	#6,(v_character).w ; is this sailor mercury?
-		bne.s	NormalsoundCHK5
-		move.b  #$99,d0
-		jsr	MegaPCM_PlaySample
-		jmp	NormalsoundCHK55
-NormalsoundCHK5:
-		move.w	#$A0,d0
-		jsr	(PlaySound_Special).l ;	play jumping sound
-NormalsoundCHK55:
 		move.b	#$13,$16(a0)
 		move.b	#9,$17(a0)
-		btst	#2,$22(a0)
-		bne.s	loc_13490
+
+		lea	@sndlut(pc),a1		; >charcount
+		jsr	PlayerSpecificSound
+;		btst	#2,$22(a0)
+;		bne.s	loc_13490
 		move.b	#$E,$16(a0)
 		move.b	#7,$17(a0)
 		move.b	#2,$1C(a0)	; use "jumping"	animation
 		bset	#2,$22(a0)
 		addq.w	#5,$C(a0)
 		move.b	#10,$3A(a0) ; timer
-
-locret_1348E:
 		rts	
+@sndlut:
+		dc.b 1,$A0	; sonic
+		dc.b 1,$A0
+		dc.b 1,$A0
+		dc.b 1,$A0	; limited
+		dc.b 1,$A0
+		dc.b 2,$90	; gomer
+		dc.b 2,$99	; sailer mercury
+		dc.b 2,$AA
+		dc.b 1,$A0
+		dc.b 1,$CD
+		even
 ; ===========================================================================
 
-loc_13490:
-		bset	#4,$22(a0)
-		rts	
+;loc_13490:
+;		bset	#4,$22(a0)
+;		rts	
 ; End of function Sonic_Jump
 
 
@@ -25611,22 +26175,71 @@ loc_13490:
 
 Sonic_JumpHeight:			; XREF: Obj01_MdJump; Obj01_MdJump2
 		tst.b	$3C(a0)
-		beq.s	loc_134C4
+		beq.w	loc_134C4
 		move.w	#-$400,d1
 		btst	#6,$22(a0)
 		beq.s	loc_134AE
 		move.w	#-$200,d1
 
 loc_134AE:
-		cmpi.b	#3,(v_character)
-		beq.s	locret_134C2
+		cmpi.b	#char_limited,(v_character)
+		beq.w	locret_134C2
 		cmp.w	$12(a0),d1
-		ble.s	locret_134C2
+		ble.w	locret_134C2
 		move.b	($FFFFF602).w,d0
 		andi.b	#$70,d0		; is A,	B or C pressed?
-		bne.s	locret_134C2	; if yes, branch
+		bne.s	locret_134C22	; if yes, branch
 		move.w	d1,$12(a0)
 
+locret_134C22:
+;VARIBLES TO NOT MESS UP BUILDING
+v_player:		equ $FFFFD000	; object variable space for Conic ($40 bytes)
+v_conspeedmax:		equ $FFFFF760	; Conic's maximum speed (2 bytes)
+v_conspeedacc:		equ $FFFFF762	; Conic's acceleration (2 bytes)
+v_conspeeddec:		equ $FFFFF764	; Conic's deceleration (2 bytes)
+f_playerctrl:		equ $FFFFF7C8	; Player control override flags (object ineraction, control enable)
+f_timecount:		equ $FFFFFE1E	; time counter update flag
+v_rings:		equ $FFFFFE20	; rings (2 bytes)
+v_invinc:		equ $FFFFFE2D	; invinciblity status (00 = no; 01 = yes)
+v_emeralds:		equ $FFFFFE57	; number of chaos emeralds
+f_superconic:		equ $FFFFFF48	; we are so super!
+v_supertime:		equ $FFFFFF4A
+invtime:	equ $32	; time left for invincibility
+;THIS CHECKS SUICIDE BARNEY
+;ignore that its conic lmao
+;pls dont remove
+	tst.b	(f_superconic).w	; is Conic already Super?
+	bne.s	locret_134C2	; if yes, branch
+	cmpi.b	#6,(v_emeralds).w	; does Conic have exactly 6 emeralds?
+	bne.s	locret_134C2	; if not, branch
+	cmpi.w	#50,(v_rings).w		; does Conic have at least 50 rings?
+	blo.s	locret_134C2	; if not, branch
+	tst.b	(f_timecount).w	; has Conic reached the end of the act?
+	beq.s	locret_134C2	; if yes, branch
+	move.b	#1,(f_superconic).w
+	move.l	#Map_Barney,4(a0)
+	move.b	#$81,(f_playerctrl).w	; lock controls
+	move.b	#$12,$1C(a0)	; use transformation animation
+	move.w	#$1500,(v_conspeedmax).w
+	move.w	#$15,(v_conspeedacc).w
+	move.w	#$150,(v_conspeeddec).w
+	clr.b	($FFFFFE2F).w	; no reverse controls sorrgy
+	bset	#$1,(v_invinc).w	; make Conic invincible
+	move.b	#2,(v_superpal).w ; remove cycle
+	move.w	#$E4,d0
+	jsr	(PlaySound).l	; load the Super Conic song and return
+	move.w	#$B4,d0
+	jsr	MegaPCM_PlaySample	; load the Super Conic song and return
+; test frame
+;$72
+	cmp.b	#$72,$1A(A0)	; are they done aura farming
+	bne.s	locret_134C2	; if not, branch
+; this does not work help
+; the lines below happen when $72 shows up
+
+	move.b	#$00,(f_playerctrl).w	; unlock controls
+	move.w	#$15,d0
+	jsr	(PlaySound).l	; load the Super Conic song and return
 locret_134C2:
 		rts	
 ; ===========================================================================
@@ -25639,6 +26252,51 @@ loc_134C4:
 locret_134D2:
 		rts	
 ; End of function Sonic_JumpHeight
+
+; ---------------------------------------------------------------------------
+; Subroutine doing the extra logic for Super Conic
+; ---------------------------------------------------------------------------
+
+; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
+f_ringcount:		equ $FFFFFE1D	; ring counter update flag
+; loc_1ABA6:
+Conic_Super:
+	tst.b	(f_superconic).w	; Ignore all this code if not Super Conic
+	beq.w	@return
+	tst.b	(f_timecount).w
+	beq.s	Conic_RevertToNormal
+	subq.w	#1,(v_supertime).w
+	bhi.w	@return
+
+	move.w	#60,(v_supertime).w	; Reset frame counter to 60
+	tst.w	(v_rings).w
+	beq.s	Conic_RevertToNormal
+	ori.b	#1,(f_ringcount).w
+	cmpi.w	#1,(v_rings).w
+	beq.s	@onering
+	cmpi.w	#10,(v_rings).w
+	beq.s	@onering
+	cmpi.w	#100,(v_rings).w
+	bne.s	@subtractring
+@onering:
+	ori.b	#$80,(f_ringcount).w
+@subtractring:
+	subq.w	#1,(v_rings).w
+	beq.s	Conic_RevertToNormal
+@return:
+		rts
+; loc_1ABF2:
+Conic_RevertToNormal:
+	move.b	#0,(f_superconic).w
+	move.b	#1,$1d(a0)	; Force Conic's animation to restart
+	add.w	#1,(v_player+invtime).w
+	jsr	Obj01_setplayermap ; fix sonic
+		move.w	#$FFF,($FFFFF760).w ; Sonic's top speed
+		move.w	#$F,($FFFFF762).w ; Sonic's acceleration
+		move.w	#$AAA,($FFFFF764).w ; Sonic's deceleration
+return_1AC3C:
+	rts
+; End of subroutine Conic_Super
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	slow Sonic walking up a	slope
@@ -25722,7 +26380,7 @@ locret_13544:
 
 Sonic_SlopeRepel:			; XREF: Obj01_MdNormal; Obj01_MdRoll
 		nop	
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.s	locret_13580
 		tst.b	$38(a0)
 		bne.s	locret_13580
@@ -26013,7 +26671,7 @@ loc_137AE:
 		bclr	#2,$22(a0)
 		move.b	#$13,$16(a0)
 		move.b	#9,$17(a0)
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.s	LimitedFloor
 		move.b	#0,$1C(a0)	; use running/walking animation
 		bra.s	NormalFloor
@@ -26061,10 +26719,10 @@ Sonic_HurtStop:				; XREF: Obj01_Hurt
 		move.w	($FFFFF72E).w,d0
 		addi.w	#$E0,d0
 		cmp.w	$C(a0),d0
-		bcs.w	KillSonic
+		bcs.s	@kill
 		bsr.w	Sonic_Floor
 		btst	#1,$22(a0)
-		bne.s	locret_13860
+		bne.s	@exit
 		moveq	#0,d0
 		move.w	d0,$12(a0)
 		move.w	d0,$10(a0)
@@ -26072,9 +26730,11 @@ Sonic_HurtStop:				; XREF: Obj01_Hurt
 		move.b	#0,$1C(a0)
 		subq.b	#2,$24(a0)
 		move.w	#$78,$30(a0)
-
-locret_13860:
-		rts	
+; locret_13860:
+@exit:
+		rts
+@kill:
+		jmp	KillSonic
 ; End of function Sonic_HurtStop
 
 ; ===========================================================================
@@ -26084,7 +26744,7 @@ locret_13860:
 
 Obj01_Death:				; XREF: Obj01_Index
 		bsr.w	GameOver
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		bne.s	NormalPhysics3
 		jsr JumpFallSonic
 		bra.s	LimitedFall3
@@ -26247,17 +26907,20 @@ Player_Anim:
 	dc.l	SonicAniData ; neru
 	dc.l	SonicAniData ; gomer gomer!
 	dc.l	SonicAniData ; mercury
+	dc.l	KiryuAniData ; Kiryu
+	dc.l	PurpleAniData ; Purple guy
+	dc.l	SonicAniData ; sans the guy
 	; Insert more animation data for other characters here
 	
 Sonic_Animate:				; XREF: Obj01_Control; et al
-			moveq	#0,d0
-		move.b	(v_character),d0
+		moveq	#0,d0		; >charcount
+		move.b	(v_character).w,d0
 		lsl.w	#2,d0
 		lea 	Player_Anim(pc),a1
 		
 		movea.l	(a1,d0.w),a1	; load Sonic dplc
 
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.w	Limit_Animate
 	
 		moveq	#0,d0
@@ -26328,7 +26991,11 @@ SAnim_WalkRun:				; XREF: SAnim_Do
 		addq.b	#1,d0		; is animation walking/running?
 		bne.w	SAnim_RollJump	; if not, branch
 		moveq	#0,d1
+		moveq	#0,d0
+		cmpi.b	#char_purple,(v_character)
+		beq.s	@iamthepurpleguy
 		move.b	$26(a0),d0	; get Sonic's angle
+@iamthepurpleguy:
 		move.b	$22(a0),d2
 		andi.b	#1,d2		; is Sonic mirrored horizontally?
 		bne.s	loc_13A70	; if yes, branch
@@ -26429,11 +27096,6 @@ loc_13B26:
 	include	"_inc\LimitedSonic\Limit_Animate.asm"
 
 ; ===========================================================================
-SonicAniData:
-	include "_anim\Sonic.asm"
-
-LimitedSonicAniData:
-	include "_anim\LimitedSonic.asm"
 
 ; ---------------------------------------------------------------------------
 ; Sonic	pattern	loading	subroutine
@@ -26447,8 +27109,10 @@ Player_DPLC:
 	dc.l	LimitDynPLC ; LimitedSonic
 	dc.l	NeruDynPLC ; neru
 	dc.l	GomerDynPLC ; gomer gomer!
-;	dc.l	mercuryDynPLC ; mercury
-	dc.l	NeruDynPLC ; neru
+	dc.l	mercuryDynPLC ; mercury
+	dc.l	KiryuDynPLC ; kiryu kasuga from the oni alliance
+	dc.l	PurpleDynPLC
+	dc.l	SansDynPLC
 	; add pointers for player dplc here
 Player_Art:
 	dc.l	Art_Sonic
@@ -26457,57 +27121,66 @@ Player_Art:
 	dc.l	Art_Limit ; LimitedSonic
 	dc.l	Art_neru ; neru
 	dc.l	Art_gomer ; gomer gomer!
-;	dc.l	Art_mercury ; mercury
-	dc.l	Art_neru ; neru
+	dc.l	Art_mercury ; mercury
+	dc.l	Art_Kiryu ; kiryuing
+	dc.l	Art_Purple
+	dc.l	Art_Sans
 	; add pointers for player art here
 
 LoadSonicDynPLC:			; XREF: Obj01_Control; et al
 		moveq	#0,d0
 		move.b	$1A(a0),d0	; load frame number
 		cmp.b	($FFFFF766).w,d0
-		beq.s	locret_13C96
+		beq.w	locret_13C96
 		move.b	d0,($FFFFF766).w
 		
-		move.w	#0,d1
+		move.w	#0,d1		; >charcount
 		move.b	(v_character),d1
 		lsl.w	#2,d1
 		lea 	Player_DPLC(pc),a2
-
 		movea.l	(a2,d1.w),a2	; load Sonic dplc
+
+	tst.b	(f_superconic).w	; barney graphics
+	beq.w	.return
+		lea 	barneyDynPLC,a2
+.return:
 		
 		add.w	d0,d0
 		adda.w	(a2,d0.w),a2
-		moveq	#0,d1
-		move.b	(a2)+,d1	; read "number of entries" value
-		subq.b	#1,d1
+		moveq	#0,d5
+		move.b	(a2)+,d5	; read "number of entries" value
+		subq.b	#1,d5
 		bmi.s	locret_13C96
-		lea	($FFFFC800).w,a3
-		move.b	#1,($FFFFF767).w
 
-SPLC_ReadEntry:
-		move.w	#0,d0
+		move.w	#0,d0		; >charcount
 		move.b	(v_character),d0
 		lsl.w	#2,d0
 		lea 	Player_Art(pc),a1
+		movea.l	(a1,d0.w),a3	; load Sonic art
 
-		movea.l	(a1,d0.w),a1	; load Sonic art
+	tst.b	(f_superconic).w	; barney graphics
+	beq.w	.return1
+		lea 	Art_barney,a3
+.return1:
 
-		moveq	#0,d2
-		move.b	(a2)+,d2
-		move.w	d2,d0
-		lsr.b	#4,d0
-		lsl.w	#8,d2
-		move.b	(a2)+,d2
-		lsl.w	#5,d2
-		adda.l	d2,a1
-
-SPLC_LoadTile:
-		movem.l	(a1)+,d2-d6/a4-a6
-		movem.l	d2-d6/a4-a6,(a3)
-		lea	$20(a3),a3	; next tile
-		dbf	d0,SPLC_LoadTile ; repeat for number of	tiles
-
-		dbf	d1,SPLC_ReadEntry ; repeat for number of entries
+		move.w	#$780<<5,d4	; load Sonic vram loc
+SPLC_ReadEntry:
+		moveq	#0,d1
+		move.b	(a2)+,d1
+		lsl.w	#8,d1
+		move.b	(a2)+,d1
+		move.w	d1,d3
+		lsr.w	#8,d3
+		andi.w	#$F0,d3
+		addi.w	#$10,d3
+		andi.w	#$FFF,d1
+		lsl.l	#5,d1
+		add.l	a3,d1
+		move.w	d4,d2
+		add.w	d3,d4
+		add.w	d3,d4
+		jsr	(Add_To_DMA_Queue).l
+		dbf	d5,SPLC_ReadEntry ; repeat for number of entries
 
 locret_13C96:
 		rts	
@@ -26909,6 +27582,8 @@ Obj38_DoStars:
 
 Obj38_Shield:				; XREF: Obj38_Index
 		tst.b	($FFFFFE2D).w	; does Sonic have invincibility?
+	tst.b	(f_superconic).w	; Ignore all this code if not Super Conic
+	bne.s	Obj38_RmvShield
 		bne.s	Obj38_RmvShield	; if yes, branch
 		tst.b	($FFFFFE2C).w	; does Sonic have shield?
 		beq.s	Obj38_Delete	; if not, branch
@@ -28430,7 +29105,7 @@ Obj66_Main:				; XREF: Obj66_Index
 ; ===========================================================================
 
 Obj66_Loop:
-		bsr.w	SingleObjLoad
+		jsr	SingleObjLoad
 		bne.s	loc_150FE
 		move.b	#$66,0(a1)
 		addq.b	#4,$24(a1)
@@ -30076,12 +30751,12 @@ loc_1670E:
 		move.w	8(a0),8(a1)
 		move.w	$C(a0),$C(a1)
 		clr.b	$32(a0)
-;		cmp.b	#5,(v_character).w ; is this gomer?
+;		cmp.b	#char_gomer,(v_character).w ; is this gomer?
 ;		bne.s	SMCsoundCHK6
 ;		move.b  #$90,d0
 ;		jmp	MegaPCM_PlaySample
 ;SMCsoundCHK6:
-;		cmp.b	#6,(v_character).w ; is this sailor mercury?
+;		cmp.b	#char_mercury,(v_character).w ; is this sailor mercury?
 ;		bne.s	NormalsoundCHK6
 ;		move.b  #$9A,d0
 ;		jmp	MegaPCM_PlaySample
@@ -31085,17 +31760,20 @@ loc_1784C:				; XREF: loc_177E6
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 CHAR_BOSSHIT_SND:
-		cmp.b	#5,(v_character).w ; did gomer hit?
-		bne.s	SMCsoundCHKBH
-		move.b  #$90,d0
-		jmp	MegaPCM_PlaySample
-SMCsoundCHKBH:
-		cmp.b	#6,(v_character).w ; did sailor mercury hit?
-		bne.s	NormalsoundCHKBH
-		move.b  #$9D,d0
-		jmp	MegaPCM_PlaySample
-NormalsoundCHKBH:
-		rts
+		lea	@sndlut(pc),a1		; >charcount
+		jmp	PlayerSpecificSound
+@sndlut:
+		dc.b 0,$00	; sonic
+		dc.b 0,$00
+		dc.b 0,$00
+		dc.b 0,$00	; limited
+		dc.b 0,$00
+		dc.b 2,$90	; gomer
+		dc.b 2,$9D	; sailer mercury
+		dc.b 0,$00
+		dc.b 2,$AD
+		dc.b 0,$00
+		even
 
 ; ---------------------------------------------------------------------------
 ; Defeated boss	subroutine
@@ -31636,8 +32314,12 @@ obj77_LoadBoss:				; XREF: obj77_Main
 		dbf	d1,obj77_Loop	; repeat sequence 2 more times
 
 loc2_17772:
-		move.w	8(a0),$30(a0)
-		move.w	$C(a0),$38(a0)
+		move.w	8(a0),d0
+		move.w	d0,$30(a0)
+		move.w	d0,(v_tetoxstart).w
+		move.w	$C(a0),d0
+		move.w	d0,$38(a0)
+		move.w	d0,(v_tetoystart).w
 		move.b	#$F,$20(a0)
 		move.b	#8,$21(a0)	; set number of	hits to	8
 
@@ -31667,18 +32349,21 @@ obj77_ShipIndex:dc.w obj77_ShipStart-obj77_ShipIndex
 obj77_ShipStart:			; XREF: obj77_ShipIndex
 	;	move.w	#$100,$12(a0)	; move ship down
 		bsr.w	BossMove
-		cmpi.w	#$6E0,$38(a0)
+		move.w	(v_tetoystart).w,d0
+		cmp.w	$38(a0),d0
 		bne.s	loc2_177E6
 		move.w	#0,$12(a0)	; stop ship
 		addq.b	#2,$25(a0)	; goto next routine
 
 loc2_177E6:
+		moveq	#0,d0
 ;		move.b	$3F(a0),d0
 ;		jsr	(CalcSine).l
 		asr.w	#6,d0
 		add.w	$38(a0),d0
 		move.w	d0,$C(a0)
 		move.w	$30(a0),8(a0)
+
 		addq.b	#2,$3F(a0)
 		cmpi.b	#$A,$25(a0)
 		bcc.s	locret_1784A2
@@ -31722,7 +32407,9 @@ obj77_MakeBall:				; XREF: obj77_ShipIndex
 		move.w	#-$100,$10(a0)
 		move.b	#1,$1C(a0)	; it runs
 		bsr.w	BossMove
-		cmpi.w	#$1E00,$30(a0)
+		move.w	(v_tetoxstart).w,d0
+		sub.w	#$A0,d0
+		cmp.w	$30(a0),d0
 		bne.s	loc2_17916
 		move.w	#0,$10(a0)
 		move.b	#2,$1C(a0)	; stare
@@ -31743,13 +32430,17 @@ obj77_ShipMove:				; XREF: obj77_ShipIndex
 		move.b	#0,$1C(a0)	; make it spin
 		move.b	#$87,$20(a0) ; the spinning hurts you
 		move.w	#-$200,$10(a0)	; move the ship	sideways
-		cmpi.w	#$1D10,$30(a0) ; is teto here
+		move.w	(v_tetoxstart).w,d0
+		sub.w	#$A0+$F0,d0
+		cmp.w	$30(a0),d0 ; is teto here
 		bne.s	loc2_17950 ; if not branch
 
 fatass_attack:
 		move.w	#0,$10(a0) ; stop her
 		move.w	#-$200,$12(a0) ; OH SHIT SHES GOING UP
- 		cmpi.w	#$680,$38(a0) ; is she here
+		move.w	(v_tetoystart).w,d0
+		sub.w	#$40,d0
+		cmp.w	$38(a0),d0 ; is she here
 		bne.s	loc2_17950    ; if not you know the drill
 		addq.b	#2,$25(a0)	; next routine!
 		move.w	#0,$12(a0) ; stop her		
@@ -31762,32 +32453,39 @@ loc2_17954:				; XREF: obj77_ShipIndex
 		bsr.w	BossMove
 		move.w	#$400,$12(a0) ; RUN A EARTHQUAKE!!
 		; i suck at programming
- 		cmpi.w	#$6E0,$38(a0) ; is she back to the ground
+		move.w	(v_tetoystart).w,d0
+		cmp.w	$38(a0),d0 ; is she back to the ground
 		bne.s	loc2_17976    ; if not blah blah
 		move.w	#0,$12(a0) ; stop her		
 		addq.b	#2,$25(a0)	; next routine!
 		move.w	#$B9,d0
 		jsr	(PlaySound).l	; play the earthquake sound
 
-Peartobombs:	
-   		jsr	SingleObjLoad2
-		bne.s	secondone
+Peartobombs:
+   		jsr	SingleObjLoad
+		bne.s	@nullius
 		move.b	#$19,0(a1)	; load pearto bomb
-		move.w	#$1D70,8(a1)
-		move.w	#$670,$C(a1)
-secondone:		
-   		jsr	SingleObjLoad2
-		bne.s	loc2_17976		
+		move.w	(v_tetoystart).w,d3
+		sub.w	#$70,d3
+		move.w	(v_tetoxstart).w,d2	; $1EA0
+		sub.w	#$A0+$90,d2
+		move.w	d2,8(a1)	; $1D70
+		move.w	d3,$C(a1)
+
+   		jsr	SingleObjLoad
+		bne.s	@nullius		
 		move.b	#$19,0(a1)	; load pearto bomb 2
-		move.w	#$1D20,8(a1)
-		move.w	#$670,$C(a1)
-lastone:
-   		jsr	SingleObjLoad2
-		bne.s	loc2_17976		
+		sub.w	#$50,d2
+		move.w	d2,8(a1)	; $1D20
+		move.w	d3,$C(a1)
+
+   		jsr	SingleObjLoad
+		bne.s	@nullius		
 		move.b	#$19,0(a1)	; load pearto bomb 3
-		move.w	#$1E00,8(a1)
-		move.w	#$670,$C(a1)
-		
+		add.w	#$E0,d2
+		move.w	d2,8(a1)	; $1E00
+		move.w	d3,$C(a1)
+@nullius:
 loc2_17976:
 		bra.w	loc2_177E6
 		
@@ -31795,7 +32493,9 @@ loc2_17976:
 Fatassruns:
  		bsr.w	BossMove
 		move.w	#$200,$10(a0)	; IT RUNS!!
-		cmpi.w	#$1E00,$30(a0) ; is she back here
+		move.w	(v_tetoxstart).w,d0
+		sub.w	#$A0,d0
+		cmp.w	$30(a0),d0 ; is she back here
 		bne.s	processstuff ; is not go here
 		move.w	#0,$10(a0)	; stop'
 		move.b	#2,$1C(a0)	; stareeeee
@@ -31869,7 +32569,12 @@ loc2_179EE:
 loc2_179F6:				; XREF: obj77_ShipIndex
 		move.w	#$400,$10(a0)
 		move.w	#-$40,$12(a0)
-		cmpi.w	#$1F00,($FFFFF72A).w
+		move.w	#$1F00,d0
+		cmp.b	#7,($FFFFFE10).w
+		bne.s	@notbhz
+		move.w	#$2AC0,d0
+@notbhz:
+		cmp.w	($FFFFF72A).w,d0
 		beq.s	loc2_17A10
 		addq.w	#2,($FFFFF72A).w
 		bra.s	loc2_17A16
@@ -36087,8 +36792,17 @@ loc_1AF1E:
 locret_1AF2E:
 		rts	
 ; ===========================================================================
-
+KiryuTouchEnemy:
+		tst.b	($FFFFFE2D).w	; is invincible?
+		bne.s	loc_1AF40	; if yes, branch
+		cmpi.b	#2,$1C(a0)	; is rolling?
+		bne.s	loc_1AF40	; if so, branch
+		cmpi.b	#$14,$1C(a0)	; is fisting?
+		bne.w	Touch_ChkHurt	; if not, branch
+		
 Touch_Enemy:				; XREF: Touch_ChkValue
+		cmpi.b	#char_kiryu,(v_character)
+		beq.s	KiryuTouchEnemy
 		tst.b	($FFFFFE2D).w	; is Sonic invincible?
 		bne.s	loc_1AF40	; if yes, branch
 		cmpi.b	#2,$1C(a0)	; is Sonic rolling?
@@ -36199,7 +36913,7 @@ Touch_Hurt:				; XREF: Touch_ChkHurt
 
 
 HurtSonic:
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.w	KillLimitedSonic
 		tst.b	($FFFFFE2C).w	; does Sonic have a shield?
 		bne.s	Hurt_Shield	; if yes, branch
@@ -36214,7 +36928,7 @@ HurtSonic:
 Hurt_Shield:
 		move.b	#0,($FFFFFE2C).w ; remove shield
 		move.b	#4,$24(a0)
-		bsr.w	Sonic_ResetOnFloor
+		jsr	Sonic_ResetOnFloor
 		bset	#1,$22(a0)
 		move.w	#-$400,$12(a0)	; make Sonic bounce away from the object
 		move.w	#-$200,$10(a0)
@@ -36233,29 +36947,38 @@ Hurt_ChkSpikes:
 		move.w	#0,$14(a0)
 		move.b	#$1A,$1C(a0)
 		move.w	#$78,$30(a0)
-		move.w	#$A3,d0		; load normal damage sound
-		cmpi.b	#$36,(a2)	; was damage caused by spikes?
-		bne.s	Hurt_Sound	; if not, branch
-		cmpi.b	#$16,(a2)	; was damage caused by LZ harpoon?
-		bne.s	Hurt_Sound	; if not, branch
 		move.w	#$A6,d0		; load spikes damage sound
-
+		cmpi.b	#$36,(a2)	; was damage caused by spikes?
+		beq.s	Hurt_Sound	; if so, branch
+		cmpi.b	#$16,(a2)	; was damage caused by LZ harpoon?
+		beq.s	Hurt_Sound	; if so, branch
+		move.w	#$A3,d0		; load normal damage sound
 Hurt_Sound:
 		jsr	(PlaySound_Special).l
-		moveq	#-1,d0
 
-		cmp.b	#5,(v_character).w ; is this gomer?
-		bne.s	SMCsoundCHKD
-		move.b  #$90,d0
-		jmp	MegaPCM_PlaySample
-SMCsoundCHKD:
-		cmp.b	#6,(v_character).w ; is this sailor mercury?
-		bne.s	NormalsoundCHKD
-		move.b  #$9B,d0
-		jmp	MegaPCM_PlaySample
-NormalsoundCHKD:
+; SMCsoundCHKD: NormalsoundCHKD:
+		move.l	a1,-(sp)
+		lea	@sndlut(pc),a1		; >charcount
+		jsr	PlayerSpecificSound
+		move.l	(sp)+,a1
+		moveq	#-1,d0
 		rts	
+@sndlut:
+		dc.b 0,$00	; sonic
+		dc.b 0,$00
+		dc.b 0,$00
+		dc.b 0,$00	; limited
+		dc.b 0,$00
+		dc.b 2,$90	; gomer
+		dc.b 2,$9B	; sailer mercury
+		dc.b 2,$AB
+		dc.b 0,$00
+		dc.b 0,$00
+		even
 ; ===========================================================================
+
+Kill_NoDeath:
+		rts
 
 Hurt_NoRings:
 		tst.w	($FFFFFFFA).w	; is debug mode	cheat on?
@@ -36272,11 +36995,12 @@ Hurt_NoRings:
 KillSonic:
 		tst.w	($FFFFFE08).w	; is debug mode	active?
 		bne.s	Kill_NoDeath	; if yes, branch
-
+ 		tst.b	(f_superconic).w
+		bne.w	SUPERdeath; bounce off the floor if Super Conic
 KillLimitedSonic:
 		move.b	#0,($FFFFFE2D).w ; remove invincibility
 		move.b	#6,$24(a0)
-		bsr.w	Sonic_ResetOnFloor
+		jsr	Sonic_ResetOnFloor
 		bset	#1,$22(a0)
 		move.w	#-$700,$12(a0)
 		move.w	#0,$10(a0)
@@ -36288,25 +37012,31 @@ KillLimitedSonic:
 		cmpi.b	#$36,(a2)	; check	if you were killed by spikes
 		bne.s	Kill_Sound
 		move.w	#$A6,d0		; play spikes death sound
-
 Kill_Sound:
 		jsr	(PlaySound_Special).l
 
-		move.b  #$92, d0
-		cmp.b	#5,(v_character).w ; is this gomer?
-		bne.s	SMCsoundCHK7
-		move.b  #$90,d0
-		jmp	NormalsoundCHK7
-SMCsoundCHK7:
-		cmp.b	#6,(v_character).w ; is this sailor mercury?
-		bne.s	NormalsoundCHK7
-		move.b  #$9C,d0
-		jmp	NormalsoundCHK7
-NormalsoundCHK7:
-		jsr     MegaPCM_PlaySample
-
-Kill_NoDeath:
+		move.l	a1,-(sp)
+		lea	@sndlut(pc),a1		; >charcount
+		jsr	PlayerSpecificSound
+		move.l	(sp)+,a1
 		moveq	#-1,d0
+		rts	
+@sndlut:
+		dc.b 0,$00	; sonic
+		dc.b 0,$00
+		dc.b 0,$00
+		dc.b 0,$00	; limited
+		dc.b 0,$00
+		dc.b 2,$90	; gomer
+		dc.b 2,$9C	; sailer mercury
+		dc.b 2,$A9
+		dc.b 2,$B0
+		dc.b 0,$C5	; sans mf
+		even
+SUPERdeath:
+		move.w	#-$700,$12(a0)
+		move.w	#$AE,d0 ; play WAP sound
+		jsr	(PlaySound_Special).l
 		rts	
 ; End of function KillSonic
 
@@ -36916,6 +37646,9 @@ loc_1B730:
 SS_MapIndex:
 	include "_inc\Special stage mappings and VRAM pointers.asm"
 
+Map_SS_Microplastics:
+	include "_maps\ssmicroplastics.asm"
+
 ; ---------------------------------------------------------------------------
 ; Sprite mappings - special stage "R" block
 ; ---------------------------------------------------------------------------
@@ -36986,7 +37719,7 @@ Obj09_Main:				; XREF: Obj09_Index
 		addq.b	#2,$24(a0)
 		move.b	#$E,$16(a0)
 		move.b	#7,$17(a0)
-		move.l	#Map_Sonic,4(a0)
+		move.l	#Map_SS_Microplastics,4(a0)
 		move.w	#$780,2(a0)
 		move.b	#4,1(a0)
 		move.b	#0,$18(a0)
@@ -37003,13 +37736,10 @@ Obj09_ChkDebug:				; XREF: Obj09_Index
 
 Obj09_NoDebug:
 		move.b	#0,$30(a0)
-		moveq	#0,d0
-		move.b	$22(a0),d0
-		andi.w	#2,d0
-		move.w	Obj09_Modes(pc,d0.w),d1
-		jsr	Obj09_Modes(pc,d1.w)
-		jsr	LoadSonicDynPLC
-		jmp	DisplaySprite
+		moveq	#2,d0
+		and.b	$22(a0),d0
+		move.w	Obj09_Modes(pc,d0.w),d0
+		jmp	Obj09_Modes(pc,d0.w)
 ; ===========================================================================
 Obj09_Modes:	dc.w Obj09_OnWall-Obj09_Modes
 		dc.w Obj09_InAir-Obj09_Modes
@@ -37035,8 +37765,9 @@ Obj09_Display:				; XREF: Obj09_OnWall
 		move.w	($FFFFF780).w,d0
 		add.w	($FFFFF782).w,d0
 		move.w	d0,($FFFFF780).w
-		jsr	Sonic_Animate
-		rts	
+	;	jsr	Sonic_Animate
+	;	jsr	LoadSonicDynPLC
+		jmp	DisplaySprite
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -37283,8 +38014,8 @@ loc_1BC12:
 ;		move.w	($FFFFF780).w,d0
 ;		add.w	($FFFFF782).w,d0
 ;		move.w	d0,($FFFFF780).w
-		jsr	Sonic_Animate
-		jsr	LoadSonicDynPLC
+	;	jsr	Sonic_Animate
+	;	jsr	LoadSonicDynPLC
 		bsr.w	SS_FixCamera
 		jmp	DisplaySprite
 ; ===========================================================================
@@ -37295,8 +38026,8 @@ Obj09_Exit2:				; XREF: Obj09_Index
 		move.b	#$C,($FFFFF600).w
 
 loc_1BC40:
-		jsr	Sonic_Animate
-		jsr	LoadSonicDynPLC
+	;	jsr	Sonic_Animate
+	;	jsr	LoadSonicDynPLC
 		bsr.w	SS_FixCamera
 		jmp	DisplaySprite
 
@@ -39083,26 +39814,48 @@ Debug_Exit:
 		beq.s	Debug_DoNothing	; if not, branch
 		moveq	#0,d0
 		move.w	d0,($FFFFFE08).w ; deactivate debug mode
-		move.l	#Map_Sonic,($FFFFD004).w
+;fix to get correct map!
+		bsr.w	Obj01_setplayermap
 		move.w	#$780,($FFFFD002).w
 		move.b	d0,($FFFFD01C).w
 		move.w	d0,$A(a0)
 		move.w	d0,$E(a0)
 		move.w	($FFFFFEF0).w,($FFFFF72C).w ; restore level boundaries
 		move.w	($FFFFFEF2).w,($FFFFF726).w
-		cmpi.b	#$10,($FFFFF600).w ; are you in	the special stage?
-		bne.s	Debug_DoNothing	; if not, branch
-		clr.w	($FFFFF780).w
-		move.w	#$40,($FFFFF782).w ; set new level rotation speed
-		move.l	#Map_Sonic,($FFFFD004).w
-		move.w	#$780,($FFFFD002).w
-		move.b	#2,($FFFFD01C).w
-		bset	#2,($FFFFD022).w
-		bset	#1,($FFFFD022).w
-
+; this isnt needed because of the limitedsonic special stage
+;		cmpi.b	#$10,($FFFFF600).w ; are you in	the special stage?
+;		bne.s	Debug_DoNothing	; if not, branch
+;		clr.w	($FFFFF780).w
+;		move.w	#$40,($FFFFF782).w ; set new level rotation speed
+;		move.l	#Map_Sonic,($FFFFD004).w
+;		move.w	#$780,($FFFFD002).w
+;		move.b	#2,($FFFFD01C).w
+;		bset	#2,($FFFFD022).w
+;		bset	#1,($FFFFD022).w
+;
 Debug_DoNothing:
 		rts	
 ; End of function Debug_Control
+
+Obj01_setplayermap:
+		moveq	#0,d0		; >charcount
+		move.b	(v_character),d0
+		lsl.w	#2,d0
+		lea 	Player_Maps(pc),a1
+		move.l	(a1,d0.w),4(a0)	; load Map patterns
+		rts	
+Player_Maps:
+	dc.l	Map_Sonic
+	dc.l	Map_Sonic ; gronic
+	dc.l	Map_Sonic ; anakama
+	dc.l	Map_Limit ; LimitedSonic
+	dc.l    map_neru
+	dc.l    map_gomer
+	dc.l    map_mercury
+	dc.l	Map_Kiryu
+	dc.l	Map_Purple
+	dc.l	Map_Sans
+	; insert player mapping here
 
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
@@ -39179,8 +39932,6 @@ MainLoadBlocks:
 ArtLoadCues:
 	include "_inc\Pattern load cues.asm"
 
-		incbin	misc\padding.bin
-		even
 Nem_SegaLogo:	incbin	artnem\segalogo.bin	; large Sega logo
 		even
 Eni_SegaLogo:	incbin	mapeni\segalogo.bin	; large Sega logo (mappings)
@@ -39190,6 +39941,8 @@ Nem_Gomer:	incbin	artnem\gomer.bin
 Eni_Gomer:	incbin	mapeni\gomer.bin
 		even
 Eni_Title:	incbin	mapeni\titlescr.bin	; title screen foreground (mappings)
+		even
+Eni_TitleBG:	incbin	mapeni\titlescr_bg.bin	; title screen foreground (mappings)
 		even
 Nem_TitleFg:	incbin	artnem\titlefor.bin	; title screen foreground
 		even
@@ -39220,8 +39973,30 @@ map_neru:
 	include "_maps\neru.asm"
 map_gomer:
 	include "_maps\gomer.asm"
-;map_mercury:
-;	include "_maps\neru.asm"
+map_mercury:
+	include "_maps\mercury.asm"
+Map_Kiryu:
+	include "_maps\Kiryu.asm"
+Map_Purple:
+	include "_maps\Purple.asm"
+Map_Sans:
+	include "_maps\Sans.asm"
+Map_barney:
+	include "_maps\barney.asm"
+; ---------------------------------------------------------------------------
+; Animation data array for the players
+; ---------------------------------------------------------------------------
+SonicAniData:
+	include "_anim\Sonic.asm"
+
+LimitedSonicAniData:
+	include "_anim\LimitedSonic.asm"
+	
+KiryuAniData:
+	include "_anim\kiryu.asm"
+
+PurpleAniData:
+	include "_anim\Purple.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	loading	array for the players
 ; ---------------------------------------------------------------------------
@@ -39233,8 +40008,16 @@ NeruDynPLC:
 	include "_inc\NeruDPLC.asm"
 gomerDynPLC:
 	include "_inc\gomerDPLC.asm"
-;mercuryDynPLC:
-;	include "_inc\NeruDPLC.asm"
+mercuryDynPLC:
+	include "_inc\mercuryDPLC.asm"
+KiryuDynPLC:
+	include "_inc\Kiryu dynamic pattern load cues.asm"
+PurpleDynPLC:
+	include "_inc\Purple dynamic pattern load cues.asm"
+SansDynPLC:
+	include "_inc\Sans dynamic pattern load cues.asm"	
+barneyDynPLC:
+	include "_inc\barneyDPLC.asm"	
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	- players
 ; ---------------------------------------------------------------------------
@@ -39246,26 +40029,24 @@ Art_neru:	incbin	artunc\neru.bin	; gocha gocha urusee!
 		even
 Art_gomer:	incbin	artunc\gomer.bin	; gomer gomer!
 		even
-;Art_mercury:	incbin	artunc\neru.bin
-;		even
+Art_mercury:	incbin	artunc\mercury.bin
+		even
+Art_Kiryu:	incbin	artunc/kiryu.bin	; Kiryu
+		even
+Art_Purple:	incbin  artunc/purple.bin
+		even
+Art_Sans:	incbin  artunc/Sans.bin
+		even
+Art_barney:	incbin	artunc\barney.bin
+		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
-Nem_Smoke:	incbin	artnem\xxxsmoke.bin	; unused smoke
-		even
-Nem_SyzSparkle:	incbin	artnem\xxxstars.bin	; unused stars
-		even
 Nem_Shield:	incbin	artnem\shield.bin	; shield
 		even
 Nem_Stars:	incbin	artnem\invstars.bin	; invincibility stars
 		even
-Nem_LzSonic:	incbin	artnem\xxxlzson.bin	; unused LZ Sonic holding his breath
-		even
-Nem_UnkFire:	incbin	artnem\xxxfire.bin	; unused fireball
-		even
 Nem_Warp:	incbin	artnem\xxxflash.bin	; unused entry to special stage flash
-		even
-Nem_Goggle:	incbin	artnem\xxxgoggl.bin	; unused goggles
 		even
 ; ---------------------------------------------------------------------------
 ; Sprite mappings - walls of the special stage
@@ -39317,6 +40098,9 @@ Nem_SSWBlock:	incbin	artnem\ssw.bin		; special stage W block
 		even
 Nem_SSGlass:	incbin	artnem\ssglass.bin	; special stage destroyable glass block
 		even
+Nem_SSMicroplastics:	
+		incbin artnem\ssmicroplastics.bin
+		even
 Nem_ResultEm:	incbin	artnem\ssresems.bin	; chaos emeralds on special stage results screen
 		even
 ; ---------------------------------------------------------------------------
@@ -39328,13 +40112,9 @@ Nem_Swing:	incbin	artnem\ghzswing.bin	; GHZ swinging platform
 		even
 Nem_Bridge:	incbin	artnem\ghzbridg.bin	; GHZ bridge
 		even
-Nem_GhzUnkBlock:incbin	artnem\xxxghzbl.bin	; unused GHZ block
-		even
 Nem_Ball:	incbin	artnem\ghzball.bin	; GHZ giant ball
 		even
 Nem_Spikes:	incbin	artnem\spikes.bin	; spikes
-		even
-Nem_GhzLog:	incbin	artnem\xxxghzlo.bin	; unused GHZ log
 		even
 Nem_SpikePole:	incbin	artnem\ghzlog.bin	; GHZ spiked log
 		even
@@ -39387,8 +40167,6 @@ Nem_MzMetal:	incbin	artnem\mzmetal.bin	; MZ metal blocks
 Nem_MzSwitch:	incbin	artnem\mzswitch.bin	; MZ switch
 		even
 Nem_MzGlass:	incbin	artnem\mzglassy.bin	; MZ green glassy block
-		even
-Nem_GhzGrass:	incbin	artnem\xxxgrass.bin	; unused grass (GHZ or MZ?)
 		even
 Nem_MzFire:	incbin	artnem\mzfire.bin	; MZ fireballs
 		even
@@ -39494,6 +40272,8 @@ Nem_Orbinaut:	incbin	artnem\orbinaut.bin	; orbinaut
 		even
 Nem_Cater:	incbin	artnem\caterkil.bin	; caterkiller
 		even
+Nem_BHZChopper:	incbin	artnem\BHZchopper.bin	; chopper
+		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
@@ -39554,9 +40334,7 @@ Nem_Squirrel:	incbin	artnem\squirrel.bin	; squirrel
 ; ---------------------------------------------------------------------------
 Blk16_GHZ:	incbin	map16\ghz.bin
 		even
-Nem_GHZ_1st:	incbin	artnem\8x8ghz1.bin	; GHZ primary patterns
-		even
-Nem_GHZ_2nd:	incbin	artnem\8x8ghz2.bin	; GHZ secondary patterns
+Nem_GHZ:	incbin	artnem\8x8ghz.bin	; GHZ primary patterns
 		even
 Blk256_GHZ:	incbin	map256\ghz.bin
 		even
@@ -39632,8 +40410,6 @@ Nem_EndFlower:	incbin	artnem\endflowe.bin	; ending sequence flowers
 Nem_CreditText:	incbin	artnem\credits.bin	; credits alphabet
 		even
 Nem_EndStH:	incbin	artnem\endtext.bin	; ending sequence "Sonic the Hedgehog" text
-		even
-		incbin	misc\padding2.bin
 		even
 ; ---------------------------------------------------------------------------
 ; Collision data
@@ -39822,10 +40598,6 @@ Level_BHZbg:	incbin	levels\bhzbg.bin
 ; ---------------------------------------------------------------------------
 Art_BigRing:	incbin	artunc\bigring.bin
 		even
-
-		incbin	misc\padding3.bin
-		even
-
 ; ---------------------------------------------------------------------------
 ; Sprite locations index
 ; ---------------------------------------------------------------------------
@@ -39945,7 +40717,6 @@ ObjPos_BHZ3:	incbin	objpos\bhz3.bin
 		even
 ObjPos_Null:	dc.b $FF, $FF, 0, 0, 0,	0
 ; ---------------------------------------------------------------------------
-		incbin	misc\padding4.bin
 		even
 
                 include "MegaPCM.asm"                   ; ++ ADD THIS LINE
@@ -40000,8 +40771,28 @@ MusicIndex:	; $01-$7F
 		dc.l Music02 ; Invincible Coconut
 		dc.l Music03 ; Dr. Coffinman (Boss Theme)
 		dc.l Music04 ; Eggman Encounter Cutscene (Transition to Z Z Z Z Z Z Act 3)
-		dc.l Music05 ; IDK (Originally for Sonic RPG Project - TG2000 Was Here)
+		dc.l Music05 ; IDK
 		dc.l Music06 ; Go Go Gadget
+		dc.l Music07 ; The Angry Hedgehog (For Play Now splash screen)
+		dc.l Music08 ; THX Logo
+		dc.l Music09 ; Poop
+		dc.l Music0A ; TG2000 Jingle (Gotta mark my presence somewhere - TG2000 was here)
+		dc.l Music0B ; hill climb DAMN
+		dc.l Music0C ; Breaking The Habit, Linkin Park
+		dc.l Music0D ; Megalovania Looped
+		dc.l Music0E ; Go Go Gadget But it actually works correctly, had to sacrifice the DAC though :(
+		dc.l Music0F ; Eggman Encounter Cutscene (USE THIS ONE!!!)
+		dc.l Music10 ; Dr. Coffinman Boss Theme (USE THIS ONE IF WE END UP DOING THE DIFFERENT BOSS TRACKS PER ZONE THING) 
+		dc.l Music11 ; We Are Number One (Why did I make this one I have no idea)
+		dc.l Music12 ; Folgers (I made this in 2023, I guess it has a home now)
+		dc.l Music13 ; Drowning of Puyo Puyo (For STOP splash screen)
+		dc.l Music14 ; Bad Rickroll (Test, credits to MegaPigeon92 since they're the author of the VGM I found)
+		dc.l Music15 ; Matt's Track
+		dc.l Music16 ; IDK (This was made by YoMama2612 if that helps at all)
+		dc.l Music17 ; Gadget Mountain Zone (Silvagunnerized an infamous tune)
+		dc.l Music18 ; Bubble Music
+		dc.l Music19 ; Wormy (Not SpongeBob! Figure it out!)
+
 		dc.l Music92 ; test
 
 MusicIndex80:	; $81-$9F
@@ -42467,15 +43258,53 @@ Kos_Z80:	incbin	sound\z80_1.bin
 		even
 Music01:	include	sound\LimitedInvincibility.asm
 		even
-Music03:	include	sound\coffinman.asm
+Music03:	include	sound\tg2000tracks\drcoffinman.asm
 		even
-Music04:	include	sound\eggmancutscene.asm
+Music04:	include	sound\tg2000tracks\eggmancutscene.asm
 		even
-Music05:	include	sound\music05.bin
+Music05:	include	sound\tg2000tracks\music05.asm
 		even
-Music06:	include	sound\gogogadget.asm
+Music06:	include	sound\tg2000tracks\gogogadget.asm
 		even
-Music02:	include	sound\vroom.asm
+Music02:	include	sound\tg2000tracks\vroom.asm
+		even
+Music07:	include	sound\tg2000tracks\anger.asm
+		even
+Music08:	include	sound\tg2000tracks\THX.asm
+		even
+Music09:	include	sound\tg2000tracks\curburenthusiasm.asm
+		even
+Music0A:	include	sound\tg2000tracks\TG2000JingleIDK.asm
+		even
+Music0B:	incbin	sound\professionalhcrsong.bin
+		even
+Music0C:	include	sound\BTH.asm
+		even
+Music13:	incbin	sound\tg2000tracks\drowningofpuyopuyo.bin
+		even
+Music0D:	incbin	sound\tg2000tracks\megalovanialooped.bin
+		even
+Music0E:	incbin	sound\tg2000tracks\gadget.bin
+		even
+Music0F:	incbin	sound\tg2000tracks\eggmancutscene.bin
+		even
+Music10:	incbin	sound\tg2000tracks\drcoffinman.bin
+		even
+Music11:	incbin	sound\tg2000tracks\wearenumberone.bin
+		even
+Music12:	incbin	sound\tg2000tracks\folgers.bin
+		even
+Music14:	incbin	sound\rickroll.bin ; Added in to see if that fixes Matt's track from crashing the game
+		even
+Music15:	incbin	sound\rivalry.bin
+		even
+Music16:	incbin	sound\rabbitthing.bin
+		even
+Music17:	incbin	sound\tg2000tracks\gadgetmountain.bin
+		even
+Music18:	incbin	sound\tg2000tracks\bubble.bin
+		even
+Music19:	incbin	sound\tg2000tracks\wormy.bin
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
@@ -42668,9 +43497,9 @@ IdiotPCM_end:
 	even
 GM_AntiTMSS:	include _inc\GM_AntiTMSS.asm
 GM_SplashScreensIG:	include _inc\GM_SplashScreensIG.asm
-SHC21:  incbin "SHC21_Lite_Sonic12.bin"
+SHC21:		incbin "SHC21_Lite_Sonic12.bin"
                 even
-SHC:    incbin "SHC_Sonic12.bin"
+SHC:		incbin "SHC_Sonic12.bin"
                 even
 
 

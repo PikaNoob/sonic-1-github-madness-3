@@ -60,11 +60,9 @@ PLC_GameOver:	dc.w 0
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - Green Hill
 ; ---------------------------------------------------------------------------
-PLC_GHZ:	dc.w $B
-		dc.l Nem_GHZ_1st	; GHZ main patterns
+PLC_GHZ:	dc.w $A
+		dc.l Nem_GHZ	    ; GHZ main patterns
 		dc.w 0
-		dc.l Nem_GHZ_2nd	; GHZ secondary	patterns
-		dc.w $39A0
 		dc.l Nem_Stalk		; flower stalk
 		dc.w $6B00
 		dc.l Nem_PplRock	; purple rock
@@ -126,7 +124,7 @@ PLC_LZ:		dc.w $B
 		dc.w $7980
 		dc.l Nem_Burrobot	; burrobot enemy
 		dc.w $94C0
-PLC_LZ2:	dc.w $C
+PLC_LZ2:	dc.w $B
 		dc.l Nem_LzPole		; pole that breaks
 		dc.w $7BC0
 		dc.l Nem_LzDoor2	; large	horizontal door
@@ -135,8 +133,6 @@ PLC_LZ2:	dc.w $C
 		dc.w $7EC0
 		dc.l Nem_Gargoyle	; gargoyle head
 		dc.w $5D20
-		dc.l Nem_LzSonic	; Sonic	holding	his breath
-		dc.w $8800
 		dc.l Nem_LzPlatfm	; rising platform
 		dc.w $89E0
 		dc.l Nem_Orbinaut	; orbinaut enemy
@@ -323,7 +319,7 @@ PLC_BHZ:	dc.w $A
 		dc.w $8000
 		dc.l Nem_Buzz		; buzz bomber enemy
 		dc.w $8880
-		dc.l Nem_Chopper	; chopper enemy
+		dc.l Nem_BHZChopper	; chopper enemy
 		dc.w $8F60
 		dc.l Nem_Newtron	; newtron enemy
 		dc.w $9360
@@ -389,7 +385,7 @@ PLC_Warp:	dc.w 0
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - special stage
 ; ---------------------------------------------------------------------------
-PLC_SpeStage:	dc.w $10
+PLC_SpeStage:	dc.w 15-1
 		dc.l Nem_SSBgCloud	; bubble and cloud background
 		dc.w 0
 		dc.l Nem_SSBgFish	; bird and fish	background
@@ -418,18 +414,21 @@ PLC_SpeStage:	dc.w $10
 		dc.w $BE00
 		dc.l Nem_SSEmerald	; emeralds
 		dc.w $EE00
-		dc.l Nem_SSZone1	; ZONE 1 block
-		dc.w $F2E0
-		dc.l Nem_SSZone2	; ZONE 2 block
-		dc.w $F400
-		dc.l Nem_SSZone3	; ZONE 3 block
-		dc.w $F520
-		dc.l Nem_SSZone4	; ZONE 4 block
-		dc.w $F2E0
-		dc.l Nem_SSZone5	; ZONE 5 block
-		dc.w $F400
-		dc.l Nem_SSZone6	; ZONE 6 block
-		dc.w $F520
+		dc.l Nem_SSMicroplastics	; da playar
+		dc.w $F000
+
+;		dc.l Nem_SSZone1	; ZONE 1 block
+;		dc.w $F2E0
+;		dc.l Nem_SSZone2	; ZONE 2 block
+;		dc.w $F400
+;		dc.l Nem_SSZone3	; ZONE 3 block
+;		dc.w $F520
+;		dc.l Nem_SSZone4	; ZONE 4 block
+;		dc.w $F2E0
+;		dc.l Nem_SSZone5	; ZONE 5 block
+;		dc.w $F400
+;		dc.l Nem_SSZone6	; ZONE 6 block
+;		dc.w $F520
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - GHZ animals
 ; ---------------------------------------------------------------------------
@@ -489,11 +488,9 @@ PLC_SpeStResult:dc.w 1
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - ending sequence
 ; ---------------------------------------------------------------------------
-PLC_Ending:	dc.w $E
-		dc.l Nem_GHZ_1st	; GHZ main patterns
+PLC_Ending:	dc.w $D
+		dc.l Nem_GHZ	    ; GHZ main patterns
 		dc.w 0
-		dc.l Nem_GHZ_2nd	; GHZ secondary	patterns
-		dc.w $39A0
 		dc.l Nem_Stalk		; flower stalk
 		dc.w $6B00
 		dc.l Nem_EndFlower	; flowers

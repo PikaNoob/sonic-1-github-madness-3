@@ -1,7 +1,7 @@
 ; Minecraft: Very Legacy Console Edition
 ; Main file
 
-;	align	$20000
+	align	$20000
 	opt	l.
 	include	"minecraft\code\variables.asm"
 	include	"minecraft\code\macros.asm"
@@ -34,6 +34,8 @@ MC_Init:
 	dma68k	MC_Palette,$0000,$40*2,CRAM				; load in the palette
 	dma68k	MC_Terrain,vramTerrain,MC_Terrain_End-MC_Terrain,VRAM	; load in the block art
 	dma68k	MC_Steve,vramSteve,MC_Steve_End-MC_Steve,VRAM		; load player art
+	dma68k	MC_Cursor,vramCursor,MC_Cursor_End-MC_Cursor,VRAM	; load cursor art
+	
 		bsr.w	MC_LoadBackground
 		bsr.w	MC_LoadWorld
 
@@ -44,7 +46,7 @@ MC_Init:
 		clr.w	(cloudFrameCnt).w
 
 		move.w	#128,(playerObjVars+xPos).w
-		move.w	#128,(playerObjVars+yPos).w
+		move.w	#240,(playerObjVars+yPos).w
 
 .gameLoop:
 		st.b	(vblankWait).w
@@ -78,7 +80,7 @@ MC_Init:
 ; ---------------------------------------------------------------------------
 MC_RenderBlocks:
 		lea	(mapCollBlocks).l,a0	; Load the world map collision layer into a0
-		lea	(mapCollBlocks).l,a1	; Load the world map wall layer into a1
+		lea	(mapWallBlocks).l,a1	; Load the world map wall layer into a1
 		lea	(planeBuffer).w,a2	; Load the plane A buffer into a2
 		moveq	#0,d3			; Clear d3
 		moveq	#28,d6			; Load the number of rows as the outer loop counter
@@ -90,7 +92,7 @@ MC_RenderBlocks:
 		move.w	(camYPosFG).w,d1	; Get the camera's y coordinate
 		lsl.w	#5,d1			; Make into row offset
 		andi.w	#$FF00,d1		; ^
-		bpl.s	.renderScreen
+		bra.s	.renderScreen
 
 .abovePlayfield:
 		moveq	#40,d7			; Load the number of blocks in each row as the inner loop counter
@@ -100,7 +102,7 @@ MC_RenderBlocks:
 		dbf	d7,.renderNullRow	; Loop until the entire null row is rendered
 
 		adda.w	#(64-41)*2,a2		; Skip the rest of the row in the plane buffer
-		add.w	#$100,d1		; Increment to the next row
+		addi.w	#$100,d1		; Increment to the next row
 		bpl.s	.inBounds		; If the result has flipped to a positive index, switch to world rendering
 
 		dbf	d6,.abovePlayfield	; Loop until the entire screen is rendered
@@ -135,7 +137,7 @@ MC_RenderBlocks:
 
 .endRenderRow:
 		adda.w	#(64-41)*2,a2		; Skip the rest of the row in the plane buffer
-		add.w	#$100,d1		; Increment to the next row
+		addi.w	#$100,d1		; Increment to the next row
 		cmpi.w	#$3F00,d1		; Check to make sure we're still in bounds
 		blt.s	.inBounds		; If so, branch
 		move.w	#$3F00,d1		; If not, render the last row for the rest of the screen (Bedrock)
@@ -419,6 +421,14 @@ MC_Steve:
 MC_Steve_End:
 	even
 ; ---------------------------------------------------------------------------
+MC_Cursor:
+	dcb.b	32,$0E	; 50% Highlight
+	dcb.b	32,$EE	; 100% Highlight
+	dcb.b	32,$0F	; 50% Shadow
+	dcb.b	32,$FF	; 100% Shadow
+MC_Cursor_End:
+	even
+; ---------------------------------------------------------------------------
 MC_Terrain:
 	incbin	"minecraft\assets\bin\terrain.bin"
 MC_Terrain_End:
@@ -461,14 +471,13 @@ MC_TestMap:
 	dcb.b	256,$00	; Row 06
 	dcb.b	256,$00	; Row 07
 	dcb.b	256,$00	; Row 08
-	dcb.b	256,$00	; Row 09
+	dcb.b	256,$01	; Row 09
 	dcb.b	256,$00	; Row 0A
 	dcb.b	256,$00	; Row 0B
 	dcb.b	256,$00	; Row 0C
 	dcb.b	256,$00	; Row 0D
 	dcb.b	256,$00	; Row 0E
-	dcb.b	255,$00	; Row 0F
-	dc.b	$11
+	dcb.b	256,$00	; Row 0F
 
 	dcb.b	256,$03	; Row 20
 	dcb.b	256,$02	; Row 21

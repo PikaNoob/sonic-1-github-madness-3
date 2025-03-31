@@ -6,7 +6,12 @@
         {
             "format": "Sonic 1.js",
             "name": "Quagmire Player",
-            "palettes": [],
+            "palettes": [
+                {
+                    "path": "Data/BEEBUSH.PAL",
+                    "length": 1
+                }
+            ],
             "art": {
                 "path": "Data/QUAGMIRE_ART.NEM",
                 "compression": "Nemesis",

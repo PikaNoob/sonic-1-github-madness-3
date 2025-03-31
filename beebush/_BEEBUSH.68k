@@ -2,7 +2,7 @@
 ; I'm Glenn Quagmire, and this is Code Bush.
 ; ---------------------------------------------------------------------------
 
-        include "beebush/Mega Drive.inc"
+        ;include "beebush/Mega Drive.inc"
         include "beebush/Macros.inc"
 
         opt     l.
@@ -98,17 +98,20 @@ OBJECTRAME:
 
 GM_BEEBUSH:  
       	move.b  submode.w,d0
-        andi.w  #$1C,d0
         jsr     .Index(pc,d0.w)
         rts
 
 ; ---------------------------------------------------------------------------
 
-SMNO_BEEBUSH_INIT       = 0*4   ; Init 
-SMNO_BEEBUSH_INTRO      = 1*4   ; Intro seq.
-SMNO_BEEBUSH_STATIC     = 2*4   ; Static scr.
-SMNO_BEEBUSH_INITMAIN   = 3*4   ; Main Init
-SMNO_BEEBUSH_MAIN       = 4*4   ; Main game
+SMNO_BEEBUSH_INIT       	= 0*4   ; Init 
+SMNO_BEEBUSH_INTRO      	= 1*4   ; Intro seq.
+SMNO_BEEBUSH_STATIC     	= 2*4   ; Static scr.
+SMNO_BEEBUSH_INITMAIN   	= 3*4   ; Main Init
+SMNO_BEEBUSH_MAIN       	= 4*4   ; Main game
+SMNO_BEEBUSH_WIN       		= 5*4   ; Main game
+SMNO_BEEBUSH_LOSE       	= 6*4   ; Main game
+SMNO_BEEBUSH_EXITWIN       	= 7*4   ; Main game
+SMNO_BEEBUSH_EXITLOSE           = 8*4   ; Main game
 
 .Index:      
         bra.w   BEEBUSH_INIT
@@ -116,6 +119,10 @@ SMNO_BEEBUSH_MAIN       = 4*4   ; Main game
         bra.w   BEEBUSH_STATIC
         bra.w   BEEBUSH_INITMAIN
         bra.w   BEEBUSH_MAIN
+        bra.w   BEEBUSH_WIN
+        bra.w   BEEBUSH_LOSE
+        bra.w   BEEBUSH_EXITWIN
+        bra.w   BEEBUSH_EXITLOSE
 .Null:
         rts 
 
@@ -251,7 +258,7 @@ BEEBUSH_INTRO:
         move.w  #60,genericTimer.w
         bsr.w   _beebushClrSprites
         move.b  #$CB,d0
-        jsr    PlaySound_Special
+        jsr     PlaySound_Special
 .NoChg: 
         rts 
 
@@ -295,19 +302,18 @@ BEEBUSH_INITMAIN:
         dbf     d1,.ClearObjects
         move.b  #BBUSH_OBJNO_PLAYER,objSlot02.w
         move.b  #BBUSH_OBJNO_BEES,objSlot01.w
-
-        move.w  $FFFFFE56.w,d0
+        move.b  #BBUSH_OBJNO_HIVE,objSlot00.w
+        clr.w   d0
+        move.b  $FFFFFE57.w,d0
         lsl.w   #2,d0
         btst    #6,$FFFFFFF8.w
         bne.s   .PALHardware
         move.l  DistanceTbl(pc,d0.w),distance
-        move.b  #SMNO_BEEBUSH_MAIN,submode.w ; Move to next mode
-        moveq   #$FFFFFF8E, d0          ; request SEGA PCM sample
-        jsr     MegaPCM_PlaySample
-        rts
+        bra.s   .Cont
 
 .PALHardware
         move.l  DistanceTbl_PAL(pc,d0.w),distance
+.Cont:
         move.b  #SMNO_BEEBUSH_MAIN,submode.w ; Move to next mode
         moveq   #$FFFFFF8E, d0          ; request SEGA PCM sample
         jsr     MegaPCM_PlaySample
@@ -346,9 +352,90 @@ BEEBUSH_MAIN:
         jsr     DrawObjects
         move.l  distance,d0 
         bne.s   .NoWin
-        move.b  #$10,gamemode.w
+        move.b  #SMNO_BEEBUSH_WIN,submode.w ; Move to next mode
+        move.b  #4,(membushBees+obj.Action).w
+        move.b  #$C,(membushPlayer+obj.Action).w
+        move.b  #0,(membushPlayer+$30).w
+        move.w  #60*3,genericTimer.w
+        rts
 .NoWin
-        rts     
+        move.b  (membushPlayer+$30).w,d0
+        bpl.s   .NoLose
+        move.b  #SMNO_BEEBUSH_LOSE,submode.w ; Move to next mode
+        move.w  #60*3,genericTimer.w
+.NoLose:
+        rts   
+
+; ---------------------------------------------------------------------------
+; Exit routine
+; ---------------------------------------------------------------------------
+
+BEEBUSH_LOSE:
+        move.b  #VBLNO_BEEBUSHSCR,vblankCmd.w
+        jsr     VSync
+        addq.w  #1,frameCntr.w
+        bsr.w   _beebushScroll
+        bsr.w   _beebushRunObjects    
+        jsr     DrawObjects
+        subq.w  #1,genericTimer.w
+        bne.w  .Exit
+        move.b  #SMNO_BEEBUSH_EXITLOSE,submode.w ; Move to next mode
+        move.w  #60,genericTimer.w
+        bsr.w   _beebushClrSprites
+        move.b  #$CB,d0
+        jsr     PlaySound_Special
+        jmp     MegaPCM_StopPlayback
+
+.Exit: 
+        rts
+
+BEEBUSH_WIN:                              
+        move.b  #VBLNO_BEEBUSHSCR,vblankCmd.w
+        jsr     VSync
+        addq.w  #1,frameCntr.w
+        bsr.w   _beebushScroll
+        bsr.w   _beebushRunObjects    
+        jsr     DrawObjects
+        subq.w  #1,genericTimer.w
+        bne.w   .Exit
+        move.b  #SMNO_BEEBUSH_EXITWIN,submode.w ; Move to next mode
+        move.w  #60,genericTimer.w
+        bsr.w   _beebushClrSprites
+        move.b  #$CB,d0
+        jsr     PlaySound_Special
+        jmp    MegaPCM_StopPlayback
+.Exit:
+        rts
+
+; ---------------------------------------------------------------------------
+; Static Transition sequence my code is so ass i'm so sorry man
+; ---------------------------------------------------------------------------
+
+BEEBUSH_EXITLOSE:                              
+        move.b  #VBLNO_BEEBUSH,vblankCmd.w
+        jsr     VSync
+        addq.w  #1,frameCntr.w
+        bsr.w   _beebushDrawStatic
+        subq.w  #1,genericTimer.w
+        bne.w   .Exit
+        move.b  #$C,gamemode.w          ; Exit to level
+        move.b  #0,submode.w
+.Exit:
+        rts
+
+BEEBUSH_EXITWIN:                              
+        move.b  #VBLNO_BEEBUSH,vblankCmd.w
+        jsr     VSync
+        addq.w  #1,frameCntr.w
+        bsr.w   _beebushDrawStatic
+        subq.w  #1,genericTimer.w
+        bne.w   .Exit
+        move.b  #$10,gamemode.w         ; Go to special stage
+        move.b  #0,submode.w
+.Exit:
+        rts
+
+
 
 ; ---------------------------------------------------------------------------
 
@@ -383,8 +470,6 @@ ArtNem_QUAGMIRE:
 ; camera B = background (moves)
 ; ---------------------------------------------------------------------------
 
-
-
 _beebushCamShake:
         add.b   #2,beeSinCntr.w
         move.b  beeSinCntr.w,d0
@@ -407,10 +492,14 @@ _beebushCamShake:
 ; Main scrolling for gameplay
 ; ---------------------------------------------------------------------------
 
-
-_beebushScroll:                    
+_beebushScroll:      
+        moveq   #0,d0
+        moveq   #0,d1
+        moveq   #0,d2
+        moveq   #0,d3              
         lea     hscroll.w,a1
-
+        andi.w  #$1FF,cameraAPosX
+        andi.w  #$1FF,cameraCPosX
         move.w  cameraAPosX.w,d1
         asr.w   #1,d1
         move.w  d1,cameraBPosX
