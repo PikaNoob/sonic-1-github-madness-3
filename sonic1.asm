@@ -4279,7 +4279,7 @@ LMTSecondRow:
         dc.b    "THE PIG FROM   1"
         dc.b    " BARNYARD      2"
         dc.b    "               3"
-        dc.b    "Z Z Z Z        1"
+        dc.b    "HEINOUS ANUS   1"
         dc.b    "               2"
         dc.b    "               3"
         dc.b    "FINAL ZONE      "
