@@ -9243,7 +9243,7 @@ loc_6DC4:
 Resize_Index:	dc.w Resize_GHZ-Resize_Index, Resize_LZ-Resize_Index
 		dc.w Resize_MZ-Resize_Index, Resize_SLZ-Resize_Index
 		dc.w Resize_SYZ-Resize_Index, Resize_SBZ-Resize_Index
-		dc.w Resize_Ending-Resize_Index, Resize_GHZ-Resize_Index
+		dc.w Resize_Ending-Resize_Index, Resize_BHZ-Resize_Index
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Green	Hill Zone dynamic screen resizing
@@ -9886,6 +9886,120 @@ Resize_FZend2:
 ; ---------------------------------------------------------------------------
 
 Resize_Ending:				; XREF: Resize_Index
+		rts	
+; ===========================================================================
+; ---------------------------------------------------------------------------
+; Makoto Kino AKA Sailor Jupiter zone Zone dynamic screen resizing
+;- my waifu
+; ---------------------------------------------------------------------------
+
+Resize_BHZ:				; XREF: Resize_Index
+		moveq	#0,d0
+		move.b	($FFFFFE11).w,d0
+		add.w	d0,d0
+		move.w	Resize_BHZx(pc,d0.w),d0
+		jmp	Resize_BHZx(pc,d0.w)
+; ===========================================================================
+Resize_BHZx:	dc.w Resize_BHZ1-Resize_BHZx
+		dc.w Resize_BHZ2-Resize_BHZx
+		dc.w Resize_BHZ3-Resize_BHZx
+; ===========================================================================
+
+Resize_BHZ1:
+		move.w	#$300,($FFFFF726).w ; set lower	y-boundary
+		cmpi.w	#$1780,($FFFFF700).w ; has the camera reached $1780 on x-axis?
+		bcs.s	locret_6E08B	; if not, branch
+		move.w	#$400,($FFFFF726).w ; set lower	y-boundary
+
+locret_6E08B:
+		rts	
+; ===========================================================================
+
+Resize_BHZ2:
+		move.w	#$300,($FFFFF726).w
+		cmpi.w	#$ED0,($FFFFF700).w
+		bcs.s	locret_6E3AB
+		move.w	#$200,($FFFFF726).w
+		cmpi.w	#$1600,($FFFFF700).w
+		bcs.s	locret_6E3AB
+		move.w	#$400,($FFFFF726).w
+		cmpi.w	#$1D60,($FFFFF700).w
+		bcs.s	locret_6E3AB
+		move.w	#$300,($FFFFF726).w
+		
+locret_6E3AB:
+		rts	
+; ===========================================================================
+
+Resize_BHZ3:
+		moveq	#0,d0
+		move.b	($FFFFF742).w,d0
+		move.w	off_6E4AB(pc,d0.w),d0
+		jmp	off_6E4AB(pc,d0.w)
+; ===========================================================================
+off_6E4AB:	dc.w Resize_BHZ3main-off_6E4AB
+		dc.w Resize_BHZ3boss-off_6E4AB
+		dc.w Resize_BHZ3end-off_6E4AB
+; ===========================================================================
+
+Resize_BHZ3main:
+		move.w	#$300,($FFFFF726).w
+		cmpi.w	#$380,($FFFFF700).w
+		bcs.s	locret_6E96B
+		move.w	#$310,($FFFFF726).w
+		cmpi.w	#$960,($FFFFF700).w
+		bcs.s	locret_6E96B
+		cmpi.w	#$280,($FFFFF704).w
+		bcs.s	loc_6E98B
+		move.w	#$400,($FFFFF726).w
+		cmpi.w	#$1380,($FFFFF700).w
+		bcc.s	loc_6E8EB
+		move.w	#$4C0,($FFFFF726).w
+		move.w	#$4C0,($FFFFF72E).w
+
+loc_6E8EB:
+		cmpi.w	#$1700,($FFFFF700).w
+		bcc.s	loc_6E98B
+
+locret_6E96B:
+		rts	
+; ===========================================================================
+
+loc_6E98B:
+		move.w	#$300,($FFFFF726).w
+		addq.b	#2,($FFFFF742).w
+		rts	
+; ===========================================================================
+
+Resize_BHZ3boss:
+		cmpi.w	#$960,($FFFFF700).w
+		bcc.s	loc_6EB0B
+		subq.b	#2,($FFFFF742).w
+
+loc_6EB0B:
+		cmpi.w	#$2960,($FFFFF700).w
+		bcs.s	locret_6EE8B
+		bsr.w	SingleObjLoad
+		bne.s	loc_6ED0B
+		move.b	#$77,0(a1)	; load LZ boss object
+		move.w	#$2A60,8(a1)
+		move.w	#$280,$C(a1)
+
+loc_6ED0B:
+		move.w	#$8C,d0
+		bsr.w	PlaySound	; play boss music
+		move.b	#1,($FFFFF7AA).w ; lock	screen
+		addq.b	#2,($FFFFF742).w
+		moveq	#$22,d0
+		bra.w	LoadPLC		; load boss patterns
+; ===========================================================================
+
+locret_6EE8B:
+		rts	
+; ===========================================================================
+
+Resize_BHZ3end:
+		move.w	($FFFFF700).w,($FFFFF728).w
 		rts	
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -13360,7 +13474,7 @@ Obj37_MakeRings:			; XREF: Obj37_CountRings
 		tst.w	d4
 		bmi.s	loc_9D62
 		move.w	d4,d0
-		bsr.w	CalcSine
+		jsr	CalcSine
 		move.w	d4,d2
 		lsr.w	#8,d2
 		asl.w	d2,d0
@@ -39437,8 +39551,6 @@ MainLoadBlocks:
 ArtLoadCues:
 	include "_inc\Pattern load cues.asm"
 
-		incbin	misc\padding.bin
-		even
 Nem_SegaLogo:	incbin	artnem\segalogo.bin	; large Sega logo
 		even
 Eni_SegaLogo:	incbin	mapeni\segalogo.bin	; large Sega logo (mappings)
@@ -39538,21 +39650,11 @@ Art_Purple:	incbin  artunc/purple.bin
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
-Nem_Smoke:	incbin	artnem\xxxsmoke.bin	; unused smoke
-		even
-Nem_SyzSparkle:	incbin	artnem\xxxstars.bin	; unused stars
-		even
 Nem_Shield:	incbin	artnem\shield.bin	; shield
 		even
 Nem_Stars:	incbin	artnem\invstars.bin	; invincibility stars
 		even
-Nem_LzSonic:	incbin	artnem\xxxlzson.bin	; unused LZ Sonic holding his breath
-		even
-Nem_UnkFire:	incbin	artnem\xxxfire.bin	; unused fireball
-		even
 Nem_Warp:	incbin	artnem\xxxflash.bin	; unused entry to special stage flash
-		even
-Nem_Goggle:	incbin	artnem\xxxgoggl.bin	; unused goggles
 		even
 ; ---------------------------------------------------------------------------
 ; Sprite mappings - walls of the special stage
@@ -39604,7 +39706,8 @@ Nem_SSWBlock:	incbin	artnem\ssw.bin		; special stage W block
 		even
 Nem_SSGlass:	incbin	artnem\ssglass.bin	; special stage destroyable glass block
 		even
-Nem_SSMicroplastics:	incbin artnem\ssmicroplastics.bin
+Nem_SSMicroplastics:	
+		incbin artnem\ssmicroplastics.bin
 		even
 Nem_ResultEm:	incbin	artnem\ssresems.bin	; chaos emeralds on special stage results screen
 		even
@@ -39617,13 +39720,9 @@ Nem_Swing:	incbin	artnem\ghzswing.bin	; GHZ swinging platform
 		even
 Nem_Bridge:	incbin	artnem\ghzbridg.bin	; GHZ bridge
 		even
-Nem_GhzUnkBlock:incbin	artnem\xxxghzbl.bin	; unused GHZ block
-		even
 Nem_Ball:	incbin	artnem\ghzball.bin	; GHZ giant ball
 		even
 Nem_Spikes:	incbin	artnem\spikes.bin	; spikes
-		even
-Nem_GhzLog:	incbin	artnem\xxxghzlo.bin	; unused GHZ log
 		even
 Nem_SpikePole:	incbin	artnem\ghzlog.bin	; GHZ spiked log
 		even
@@ -39676,8 +39775,6 @@ Nem_MzMetal:	incbin	artnem\mzmetal.bin	; MZ metal blocks
 Nem_MzSwitch:	incbin	artnem\mzswitch.bin	; MZ switch
 		even
 Nem_MzGlass:	incbin	artnem\mzglassy.bin	; MZ green glassy block
-		even
-Nem_GhzGrass:	incbin	artnem\xxxgrass.bin	; unused grass (GHZ or MZ?)
 		even
 Nem_MzFire:	incbin	artnem\mzfire.bin	; MZ fireballs
 		even
@@ -39922,8 +40019,6 @@ Nem_CreditText:	incbin	artnem\credits.bin	; credits alphabet
 		even
 Nem_EndStH:	incbin	artnem\endtext.bin	; ending sequence "Sonic the Hedgehog" text
 		even
-		incbin	misc\padding2.bin
-		even
 ; ---------------------------------------------------------------------------
 ; Collision data
 ; ---------------------------------------------------------------------------
@@ -40111,10 +40206,6 @@ Level_BHZbg:	incbin	levels\bhzbg.bin
 ; ---------------------------------------------------------------------------
 Art_BigRing:	incbin	artunc\bigring.bin
 		even
-
-		incbin	misc\padding3.bin
-		even
-
 ; ---------------------------------------------------------------------------
 ; Sprite locations index
 ; ---------------------------------------------------------------------------
@@ -40234,7 +40325,6 @@ ObjPos_BHZ3:	incbin	objpos\bhz3.bin
 		even
 ObjPos_Null:	dc.b $FF, $FF, 0, 0, 0,	0
 ; ---------------------------------------------------------------------------
-		incbin	misc\padding4.bin
 		even
 
                 include "MegaPCM.asm"                   ; ++ ADD THIS LINE
