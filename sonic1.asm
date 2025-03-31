@@ -24,7 +24,8 @@ v_dmaqueuecount:	rs.w	1
 v_dmaqueue:		rs.b	18*14
 ; free space until $FFD000!
 
-randLevelCount		= 18	; 31 max (32 is reserved for linear path flag)
+randLevelCount		= 14	; 31 max (32 is reserved for linear path flag)
+randLevelCountLimited	= 9
 v_levelrandtracker	= $FFFFF5FC	; longword
 ;level select constants (to not give the foward reference warning this was moved here)
 f_checksum	= $FFFFFFF9
@@ -4446,9 +4447,18 @@ MusicList4:	incbin	misc\muslist4.bin
 ; move.b #$C,($FFFFF600).w
 ; Obj3A_NextLevel
 ;randLevelCount		= 20	; 31 max (32 is reserved for linear path flag)
+;randLevelCountLimited	= 10
 ;v_levelrandtracker	= $FFFF8000
 InitGetLevelRandom:
-	move.l	#(1<<randLevelCount)-1,(v_levelrandtracker).w	; set all bits from 0-19
+	moveq	#randLevelCount,d1
+	cmp.b	#3,(v_character).w
+	bne.s	@notlimited
+	moveq	#randLevelCountLimited,d1
+@notlimited:
+	moveq	#0,d0
+	bset	d1,d0
+	subq.l	#1,d0
+	move.l	d0,(v_levelrandtracker).w	; set all bits from 0-19
 
 GetLevelRandom:
 	move.l	(v_levelrandtracker).w,d2
@@ -4459,7 +4469,12 @@ GetLevelRandom:
 	swap	d0			; modulo(random16,val)
 	clr.w	d0
 	swap	d0
-	divu.w	#randLevelCount,d0
+	moveq	#randLevelCount,d1
+	cmp.b	#3,(v_character).w
+	bne.s	@notlimited
+	moveq	#randLevelCountLimited,d1
+@notlimited:
+	divu.w	d1,d0
 	swap	d0
 @repeat:
 	btst	d0,d2
@@ -4493,24 +4508,27 @@ GetLevelRandom:
 	rts
 ; must match randLevelCount!
 @randomlut:
+; beatable as limited sonic
 	dc.w 0<<8|0	; GHZ
-	dc.w 0<<8|1
-	dc.w 0<<8|2
-	dc.w 1<<8|0	; LZ
-	dc.w 1<<8|1
-	dc.w 1<<8|2
 	dc.w 2<<8|0	; MZ
-	dc.w 2<<8|1
-	dc.w 2<<8|2
-	dc.w 3<<8|0	; SLZ
+	dc.w 2<<8|1	; MZ
+	dc.w 2<<8|2	; MZ
+	dc.w 4<<8|0	; SYZ
+	dc.w 4<<8|1	; SYZ
+	dc.w 4<<8|2	; SYZ
+	dc.w 7<<8|0	; Makoto
+	dc.w 7<<8|1	; Makoto
+; beatable as everyone else
+	dc.w 0<<8|1	; GHZ
+	dc.w 0<<8|2	; GHZ
+	dc.w 1<<8|0	; LZ
+	dc.w 1<<8|1	; LZ
+	dc.w 1<<8|2	; LZ
+; unbeatable
+	dc.w 3<<8|0	; SLZ ; dutch
 	dc.w 3<<8|1
 	dc.w 3<<8|2
-	dc.w 4<<8|0	; SYZ
-	dc.w 4<<8|1
-	dc.w 4<<8|2
-	dc.w 7<<8|0	; Makoto
-	dc.w 7<<8|1
-	dc.w 7<<8|2
+	dc.w 7<<8|2	; Makoto ; Teto(?) boss doesn't load properly
 	even
 ; ===========================================================================
 
