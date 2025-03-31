@@ -25109,9 +25109,15 @@ Obj01_ChkShoes:
 		beq.s	Obj01_ExitChk
 		subq.w	#1,$34(a0)	; subtract 1 from time
 		bne.s	Obj01_ExitChk
-		move.w	#$600,($FFFFF760).w ; restore Sonic's speed
-		move.w	#$C,($FFFFF762).w ; restore Sonic's acceleration
-		move.w	#$80,($FFFFF764).w ; restore Sonic's deceleration
+;		move.w	#$600,($FFFFF760).w ; restore Sonic's speed
+;		move.w	#$C,($FFFFF762).w ; restore Sonic's acceleration
+;		move.w	#$80,($FFFFF764).w ; restore Sonic's deceleration
+; no normal sonic
+
+		move.w	#$FFF,($FFFFF760).w ; Sonic's top speed
+		move.w	#$F,($FFFFF762).w ; Sonic's acceleration
+		move.w	#$AAA,($FFFFF764).w ; Sonic's deceleration
+
 		move.b	#0,($FFFFFE2E).w ; cancel speed	shoes
 		move.w	#$E3,d0
 		jmp	(PlaySound).l	; run music at normal speed
@@ -25177,9 +25183,19 @@ Obj01_OutWater:
 		bclr	#6,$22(a0)
 		beq.s	locret_12D80
 		bsr.w	ResumeMusic
-		move.w	#$600,($FFFFF760).w ; restore Sonic's speed
-		move.w	#$C,($FFFFF762).w ; restore Sonic's acceleration
-		move.w	#$80,($FFFFF764).w ; restore Sonic's deceleration
+;		move.w	#$600,($FFFFF760).w ; restore Sonic's speed
+;		move.w	#$C,($FFFFF762).w ; restore Sonic's acceleration
+;		move.w	#$80,($FFFFF764).w ; restore Sonic's deceleration
+;not normal
+		move.w	#$FFF,($FFFFF760).w ; Sonic's top speed
+		move.w	#$F,($FFFFF762).w ; Sonic's acceleration
+		move.w	#$AAA,($FFFFF764).w ; Sonic's deceleration
+		tst.b	(f_superconic).w	; is conic super?
+		beq.w	@normalwato 	; if not, branch
+		move.w	#$1500,(v_conspeedmax).w
+		move.w	#$15,(v_conspeedacc).w
+		move.w	#$150,(v_conspeeddec).w
+@normalwato:
 		asl	$12(a0)
 		beq.w	locret_12D80
 		move.b	#8,($FFFFD300).w ; load	splash object
@@ -26195,6 +26211,9 @@ Conic_RevertToNormal:
 	move.b	#1,$1d(a0)	; Force Conic's animation to restart
 	add.w	#1,(v_player+invtime).w
 	jsr	Obj01_setplayermap ; fix sonic
+		move.w	#$FFF,($FFFFF760).w ; Sonic's top speed
+		move.w	#$F,($FFFFF762).w ; Sonic's acceleration
+		move.w	#$AAA,($FFFFF764).w ; Sonic's deceleration
 return_1AC3C:
 	rts
 ; End of subroutine Conic_Super
