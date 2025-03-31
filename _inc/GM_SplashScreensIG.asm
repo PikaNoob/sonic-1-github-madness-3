@@ -132,6 +132,7 @@ GM_SplashScreensListIG:
 	dc.l $81<<24|@nem_fat,$00<<24|@enifg_fat,$A5<<24|@enibg_fat,$00<<24|@pal_fat,0		; MUST BE NUMBER 8 OR ELSE I NUKE THE WHOLE PROJECT YOUR IMMORAL, uhhh, fuckers, I'm gonna miku you I'm mikuing
 	dc.l $81<<24|@nem_playnow,$00<<24|@enifg_playnow,$00<<24|@enibg_playnow,$07<<24|@pal_playnow,0
 	dc.l $81<<24|@nem_actualpoop,$00<<24|@enifg_actualpoop,$00<<24|@enibg_actualpoop,$09<<24|@pal_actualpoop,0	; GMZ
+	dc.l $81<<24|@nem_urfat,$01<<24|@enifg_urfat,$82<<24|@enibg_urfat,$00<<24|@pal_urfat,0
 	dc.l $81<<24|@nem_BILLglider,$00<<24|@enifg_BILLglider,$00<<24|@enibg_BILLglider,$0B<<24|@pal_BILLglider,0	; homemade aircraft very safe
 	dc.l $81<<24|@nem_stop,$00<<24|@enifg_stop,$00<<24|@enibg_stop,$13<<24|@pal_stop,0
 	dc.l $81<<24|@nem_ronicsetro,$00<<24|@enifg_ronicsetro,$00<<24|@enibg_ronicsetro,$1A<<24|@pal_ronicsetro,0
@@ -226,6 +227,14 @@ GM_SplashScreensListIG:
 	even	; GMZ
 @pal_actualpoop:	incbin pallet\actualpoop.bin	; GMZ
 	even	; GMZ
+
+@nem_urfat:	incbin artnem\urfat.bin
+	even
+@enifg_urfat:
+@enibg_urfat:	incbin mapeni\urfat.bin
+	even
+@pal_urfat:	incbin pallet\urfat.bin
+	even
 	
 @nem_BILLglider:	incbin artnem\GLIDER11.bin	; THE GLIDER MF
 	even	; GMZ
