@@ -40704,6 +40704,7 @@ MusicIndex:	; $01-$7F
 		dc.l Music17 ; Gadget Mountain Zone (Silvagunnerized an infamous tune)
 		dc.l Music18 ; Bubble Music
 		dc.l Music19 ; Wormy (Not SpongeBob! Figure it out!)
+		dc.l Music1A ; Rendition of 1UP theme
 
 		dc.l Music92 ; test
 
@@ -43174,7 +43175,7 @@ Music03:	include	sound\tg2000tracks\drcoffinman.asm
 		even
 Music04:	include	sound\tg2000tracks\eggmancutscene.asm
 		even
-Music05:	include	sound\tg2000tracks\music05.asm
+Music05:	include	sound\tg2000tracks\tgsend.asm
 		even
 Music06:	include	sound\tg2000tracks\gogogadget.asm
 		even
@@ -43217,6 +43218,8 @@ Music17:	incbin	sound\tg2000tracks\gadgetmountain.bin
 Music18:	incbin	sound\tg2000tracks\bubble.bin
 		even
 Music19:	incbin	sound\tg2000tracks\wormy.bin
+		even
+Music1A:	incbin	sound\tg2000tracks\son1up.bin
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
