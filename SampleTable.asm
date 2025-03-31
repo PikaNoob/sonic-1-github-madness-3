@@ -22,7 +22,7 @@ SampleTable:
 	dcSample	TYPE_PCM,		OhYeah,		0, FLAGS_SFX		; $91
 	dcSample	TYPE_PCM,		Deagh,		0, FLAGS_SFX		; $92
 	dcSample	TYPE_PCM,		Deaghp,		0, FLAGS_SFX		; $93
-	dcSample	TYPE_DPCM,		Cocktail,	11025, FLAGS_LOOP	; $94
+	dcSample	TYPE_DPCM,		Cocktail,	8000, FLAGS_LOOP	; $94
 	dcSample	TYPE_PCM,		Otis,		8000, FLAGS_SFX		; $95
 	dcSample	TYPE_PCM,		AmbO,		8000, FLAGS_LOOP	; $96
 	dcSample	TYPE_PCM,		Mikuingit,	8000, FLAGS_SFX		; $97
