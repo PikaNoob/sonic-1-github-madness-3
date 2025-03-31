@@ -18,6 +18,12 @@ align macro
 		include "MapMacros.asm"
 		include "beebush/Mega Drive.inc"
 
+	rsset $FFFFC800 
+v_dmaqueueslot:		rs.w	1
+v_dmaqueuecount:	rs.w	1
+v_dmaqueue:		rs.b	18*14
+; free space until $FFD000!
+
 randLevelCount		= 18	; 31 max (32 is reserved for linear path flag)
 v_levelrandtracker	= $FFFFF5FC	; longword
 ;level select constants (to not give the foward reference warning this was moved here)
@@ -768,16 +774,7 @@ loc_CD4:				; XREF: loc_C76
 		move.w	#$7800,(a5)
 		move.w	#$83,($FFFFF640).w
 		move.w	($FFFFF640).w,(a5)
-		tst.b	($FFFFF767).w
-		beq.s	loc_D50
-		lea	($C00004).l,a5
-		move.l	#$94019370,(a5)
-		move.l	#$96E49500,(a5)
-		move.w	#$977F,(a5)
-		move.w	#$7000,(a5)
-		move.w	#$83,($FFFFF640).w
-		move.w	($FFFFF640).w,(a5)
-		move.b	#0,($FFFFF767).w
+		jsr	Process_DMA_Queue
 
 loc_D50:
 		movem.l	($FFFFF700).w,d0-d7
@@ -836,16 +833,7 @@ loc_DA6:				; XREF: off_B6E
 		move.w	#$83,($FFFFF640).w
 		move.w	($FFFFF640).w,(a5)
 		bsr.w	PalCycle_SS
-		tst.b	($FFFFF767).w
-		beq.s	loc_E64
-		lea	($C00004).l,a5
-		move.l	#$94019370,(a5)
-		move.l	#$96E49500,(a5)
-		move.w	#$977F,(a5)
-		move.w	#$7000,(a5)
-		move.w	#$83,($FFFFF640).w
-		move.w	($FFFFF640).w,(a5)
-		move.b	#0,($FFFFF767).w
+		jsr	Process_DMA_Queue
 
 loc_E64:
 		tst.w	($FFFFF614).w
@@ -897,16 +885,7 @@ loc_EEE:
 		move.w	#$7800,(a5)
 		move.w	#$83,($FFFFF640).w
 		move.w	($FFFFF640).w,(a5)
-		tst.b	($FFFFF767).w
-		beq.s	loc_F54
-		lea	($C00004).l,a5
-		move.l	#$94019370,(a5)
-		move.l	#$96E49500,(a5)
-		move.w	#$977F,(a5)
-		move.w	#$7000,(a5)
-		move.w	#$83,($FFFFF640).w
-		move.w	($FFFFF640).w,(a5)
-		move.b	#0,($FFFFF767).w
+		jsr	Process_DMA_Queue
 
 loc_F54:
 		movem.l	($FFFFF700).w,d0-d7
@@ -956,16 +935,7 @@ loc_FA6:				; XREF: off_B6E
 		move.w	#$7C00,(a5)
 		move.w	#$83,($FFFFF640).w
 		move.w	($FFFFF640).w,(a5)
-		tst.b	($FFFFF767).w
-		beq.s	loc_1060
-		lea	($C00004).l,a5
-		move.l	#$94019370,(a5)
-		move.l	#$96E49500,(a5)
-		move.w	#$977F,(a5)
-		move.w	#$7000,(a5)
-		move.w	#$83,($FFFFF640).w
-		move.w	($FFFFF640).w,(a5)
-		move.b	#0,($FFFFF767).w
+		jsr	Process_DMA_Queue
 
 loc_1060:
 		tst.w	($FFFFF614).w
@@ -1239,7 +1209,8 @@ loc_133A:
 loc_134A:
 		move.l	d0,(a1)+
 		dbf	d1,loc_134A
-		rts	
+
+		jmp	Reset_DMA_Queue
 ; End of function ClearScreen
 
 ; ---------------------------------------------------------------------------
@@ -3208,6 +3179,8 @@ CalcSine:				; XREF: SS_BGAnimate; et al
 Sine_Data:	incbin	misc\sinewave.bin	; values for a 360º sine wave
 
 ; ===========================================================================
+
+	include "_inc\DMA Queue.asm"
 
 ; ===========================================================================
 
@@ -26922,37 +26895,34 @@ LoadSonicDynPLC:			; XREF: Obj01_Control; et al
 		
 		add.w	d0,d0
 		adda.w	(a2,d0.w),a2
-		moveq	#0,d1
-		move.b	(a2)+,d1	; read "number of entries" value
-		subq.b	#1,d1
+		moveq	#0,d5
+		move.b	(a2)+,d5	; read "number of entries" value
+		subq.b	#1,d5
 		bmi.s	locret_13C96
-		lea	($FFFFC800).w,a3
-		move.b	#1,($FFFFF767).w
 
-SPLC_ReadEntry:
 		move.w	#0,d0		; >charcount
 		move.b	(v_character),d0
 		lsl.w	#2,d0
 		lea 	Player_Art(pc),a1
-
-		movea.l	(a1,d0.w),a1	; load Sonic art
-
-		moveq	#0,d2
-		move.b	(a2)+,d2
-		move.w	d2,d0
-		lsr.b	#4,d0
-		lsl.w	#8,d2
-		move.b	(a2)+,d2
-		lsl.w	#5,d2
-		adda.l	d2,a1
-
-SPLC_LoadTile:
-		movem.l	(a1)+,d2-d6/a4-a6
-		movem.l	d2-d6/a4-a6,(a3)
-		lea	$20(a3),a3	; next tile
-		dbf	d0,SPLC_LoadTile ; repeat for number of	tiles
-
-		dbf	d1,SPLC_ReadEntry ; repeat for number of entries
+		movea.l	(a1,d0.w),a3	; load Sonic art
+		move.w	#$780<<5,d4	; load Sonic vram loc
+SPLC_ReadEntry:
+		moveq	#0,d1
+		move.b	(a2)+,d1
+		lsl.w	#8,d1
+		move.b	(a2)+,d1
+		move.w	d1,d3
+		lsr.w	#8,d3
+		andi.w	#$F0,d3
+		addi.w	#$10,d3
+		andi.w	#$FFF,d1
+		lsl.l	#5,d1
+		add.l	a3,d1
+		move.w	d4,d2
+		add.w	d3,d4
+		add.w	d3,d4
+		jsr	(Add_To_DMA_Queue).l
+		dbf	d5,SPLC_ReadEntry ; repeat for number of entries
 
 locret_13C96:
 		rts	
