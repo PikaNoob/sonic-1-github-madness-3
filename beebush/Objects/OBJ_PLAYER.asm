@@ -2,8 +2,8 @@
 ; Player object and dependent objects+routines
 ; ---------------------------------------------------------------------------    
 
-bbplay.MvFlag          equ     $30
-
+bbplay.MvFlag           equ     $30
+bbplay.Timer            equ     $32
 ; ---------------------------------------------------------------------------
 ; Main player 
 ; ---------------------------------------------------------------------------      
@@ -18,7 +18,9 @@ BbushObj_Player:
         dc.w BbushPlayer_InitMain-.Index
         dc.w BbushPlayer_Main-.Index
         dc.w BbushPlayer_Left-.Index
-        dc.w BbushPlayer_Show-.Index
+        dc.w BbushPlayer_Wait-.Index      
+        dc.w BbushPlayer_Die-.Index
+        dc.w BbushPlayer_Dead-.Index
         dc.w BbushPlayer_Show-.Index
 ; ---------------------------------------------------------------------------
 
@@ -53,10 +55,39 @@ BbushPlayer_Left:
         move.b  joypad.w,d4
         move.b  joypadPress.w,d5    
         bsr.w   _bbplayNormalCtrl 
+        jmp     _objectDraw  
+
+BbushPlayer_Wait:
+        sub.w  #1,bbplay.Timer(a0)
+        tst.w   bbplay.Timer(a0)
+        beq.s   .TimeOut
+        jmp     _objectDraw  
+.TimeOut:
+        addq.b  #2,obj.Action(a0)  
+        move.b  #$E,obj.Frame(a0) 
+        move.b  #-1,bbplay.MvFlag(a0)  
+        move.b  #$AC,d0
+        jsr     PlaySound_Special 
+
+BbushPlayer_Die:      
+        addi.w  #$40,cameraAPosX
+        addi.w  #$40,cameraCPosX
+        move.w  obj.YScr(a0),obj.Y(a0)  
+        jsr     _objectFallSlow   
+        move.w  obj.Y(a0),obj.YScr(a0)
+        moveq   #0,d0
+        move.w  #100+128+16,d0
+        cmp.w   obj.YScr(a0),d0
+        blo.s   .Finish
+        jmp     _objectDraw   
+.Finish:
+        addq.b  #2,obj.Action(a0)  
+
+BbushPlayer_Dead:
+        jmp     _objectDraw  
 
 BbushPlayer_Show:
         jmp     _objectDraw   
-
 ; ---------------------------------------------------------------------------
 ; Player control subroutine
 ; ---------------------------------------------------------------------------
@@ -64,7 +95,7 @@ BbushPlayer_Show:
 _bbplayNormalCtrl:                                                 
         btst    #2,d4
         beq.s   .NoLeft
-        move.b  #1,bbplay.MvFlag(a0)
+        move.b  #7,bbplay.MvFlag(a0)
         addi.w  #1,cameraAPosX
         addi.w  #1,cameraCPosX
         subi.l  #1,distance
@@ -72,8 +103,8 @@ _bbplayNormalCtrl:
         jmp    _objectAnimate
 .NoLeft:  
         addq.b  #2,obj.Action(a0)    
-        move.b  #$F,obj.Frame(a0)    
-	move.b  #-1,bbplay.MvFlag(a0)                                         
+        move.w  #-$200,obj.YSpeed(a0)
+        move.w  #$20,bbplay.Timer(a0)
         rts
 
 AniSpr_QuagmirePlayer:

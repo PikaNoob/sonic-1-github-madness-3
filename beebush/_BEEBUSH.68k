@@ -98,7 +98,6 @@ OBJECTRAME:
 
 GM_BEEBUSH:  
       	move.b  submode.w,d0
-        andi.w  #$1C,d0
         jsr     .Index(pc,d0.w)
         rts
 
@@ -111,7 +110,8 @@ SMNO_BEEBUSH_INITMAIN   	= 3*4   ; Main Init
 SMNO_BEEBUSH_MAIN       	= 4*4   ; Main game
 SMNO_BEEBUSH_WIN       		= 5*4   ; Main game
 SMNO_BEEBUSH_LOSE       	= 6*4   ; Main game
-SMNO_BEEBUSH_EXIT       	= 7*4   ; Main game
+SMNO_BEEBUSH_EXITWIN       	= 7*4   ; Main game
+SMNO_BEEBUSH_EXITLOSE           = 8*4   ; Main game
 
 .Index:      
         bra.w   BEEBUSH_INIT
@@ -121,7 +121,8 @@ SMNO_BEEBUSH_EXIT       	= 7*4   ; Main game
         bra.w   BEEBUSH_MAIN
         bra.w   BEEBUSH_WIN
         bra.w   BEEBUSH_LOSE
-        bra.w   BEEBUSH_EXIT
+        bra.w   BEEBUSH_EXITWIN
+        bra.w   BEEBUSH_EXITLOSE
 .Null:
         rts 
 
@@ -356,7 +357,13 @@ BEEBUSH_MAIN:
         move.b  #8,(membushPlayer+obj.Action).w
         move.b  #0,(membushPlayer+$30).w
         move.w  #60*3,genericTimer.w
+        rts
 .NoWin
+        move.b  (membushPlayer+$30).w,d0
+        bpl.s   .NoLose
+        move.b  #SMNO_BEEBUSH_LOSE,submode.w ; Move to next mode
+        move.w  #60*3,genericTimer.w
+.NoLose:
         rts   
 
 ; ---------------------------------------------------------------------------
@@ -364,6 +371,24 @@ BEEBUSH_MAIN:
 ; ---------------------------------------------------------------------------
 
 BEEBUSH_LOSE:
+        move.b  #VBLNO_BEEBUSHSCR,vblankCmd.w
+        jsr     VSync
+        addq.w  #1,frameCntr.w
+        bsr.w   _beebushScroll
+        bsr.w   _beebushRunObjects    
+        jsr     DrawObjects
+        subq.w  #1,genericTimer.w
+        bne.w  .Exit
+        move.b  #SMNO_BEEBUSH_EXITLOSE,submode.w ; Move to next mode
+        move.w  #60,genericTimer.w
+        bsr.w   _beebushClrSprites
+        move.b  #$CB,d0
+        jsr     PlaySound_Special
+        jmp     MegaPCM_StopPlayback
+
+.Exit: 
+        rts
+
 BEEBUSH_WIN:                              
         move.b  #VBLNO_BEEBUSHSCR,vblankCmd.w
         jsr     VSync
@@ -373,30 +398,44 @@ BEEBUSH_WIN:
         jsr     DrawObjects
         subq.w  #1,genericTimer.w
         bne.w   .Exit
-        move.b  #SMNO_BEEBUSH_EXIT,submode.w ; Move to next mode
+        move.b  #SMNO_BEEBUSH_EXITWIN,submode.w ; Move to next mode
         move.w  #60,genericTimer.w
         bsr.w   _beebushClrSprites
         move.b  #$CB,d0
         jsr     PlaySound_Special
-        jsr     MegaPCM_StopPlayback
-.Exit
+        jmp    MegaPCM_StopPlayback
+.Exit:
         rts
 
 ; ---------------------------------------------------------------------------
-; Static Transition sequence
+; Static Transition sequence my code is so ass i'm so sorry man
 ; ---------------------------------------------------------------------------
 
-BEEBUSH_EXIT:                              
+BEEBUSH_EXITLOSE:                              
         move.b  #VBLNO_BEEBUSH,vblankCmd.w
         jsr     VSync
         addq.w  #1,frameCntr.w
         bsr.w   _beebushDrawStatic
         subq.w  #1,genericTimer.w
         bne.w   .Exit
-        move.b  #$10,gamemode.w ; Move to next mode
+        move.b  #$C,gamemode.w          ; Exit to level
         move.b  #0,submode.w
 .Exit:
         rts
+
+BEEBUSH_EXITWIN:                              
+        move.b  #VBLNO_BEEBUSH,vblankCmd.w
+        jsr     VSync
+        addq.w  #1,frameCntr.w
+        bsr.w   _beebushDrawStatic
+        subq.w  #1,genericTimer.w
+        bne.w   .Exit
+        move.b  #$10,gamemode.w         ; Go to special stage
+        move.b  #0,submode.w
+.Exit:
+        rts
+
+
 
 ; ---------------------------------------------------------------------------
 
@@ -459,7 +498,8 @@ _beebushScroll:
         moveq   #0,d2
         moveq   #0,d3              
         lea     hscroll.w,a1
-
+        andi.w  #$1FF,cameraAPosX
+        andi.w  #$1FF,cameraCPosX
         move.w  cameraAPosX.w,d1
         asr.w   #1,d1
         move.w  d1,cameraBPosX
