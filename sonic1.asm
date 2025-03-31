@@ -4862,7 +4862,7 @@ Level_StartGame:
 		dc.b 2,$90	; gomer
 		dc.b 2,$98	; sailer mercury
 		dc.b 2,$A8 ;  kiryu
-		dc.b 2,$AD	; purple guy
+		dc.b 2,$B2	; purple guy
 		even
 @cont:
 ; ---------------------------------------------------------------------------
@@ -16601,7 +16601,7 @@ loc_C61A:				; XREF: Obj3A_ChkPos
 		dc.b 2,$90	; gomer
 		dc.b 2,$9E	; sailer mercury
 		dc.b 0,$00
-		dc.b 0,$00	; purple guy
+		dc.b 2,$AD	; purple guy
 		even
 @contgame:
 
