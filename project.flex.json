@@ -1,8 +1,33 @@
 {
     "Flex": 2,
     "name": "",
-    "node": "cd533db5-b393-4aab-8f7e-0379f4c3dabf",
+    "node": "146fcbea-4a13-4e56-92d0-b3342f1e361a",
     "objects": [
+        {
+            "uuid": "146fcbea-4a13-4e56-92d0-b3342f1e361a",
+            "format": "Sonic 1.js",
+            "name": "sans soon",
+            "palettes": [
+                {
+                    "path": "pallet\\sans.bin",
+                    "length": 1
+                }
+            ],
+            "art": {
+                "path": "artunc\\sans.bin",
+                "compression": "Uncompressed",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "_maps\\sans.asm",
+                "label": ""
+            },
+            "dplcs": {
+                "enabled": true,
+                "path": "_inc\\Sans dynamic pattern load cues.asm",
+                "label": ""
+            }
+        },
         {
             "uuid": "988f990c-af11-4993-9ca7-f2c8a7e5e296",
             "format": "Sonic 1.js",

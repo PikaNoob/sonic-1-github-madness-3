@@ -56,7 +56,7 @@ optcharpos = lsscrpos+$960000 ; character
 
 ; NOTES FOR ANYONE MAKING CHARACTERS
 v_character = $FFFFFFE8
-charcount = 9
+charcount = 10
 ; pointers for:
 ; PLAYER MAPPINGS -> Player_Maps
 ; PLAYER ANIM SCRIPTS -> Player_Anim
@@ -66,6 +66,7 @@ charcount = 9
 ; MENU NAME -> Player_Names
 ; Player Specific Sounds: every instance of @sndlut
 ; Player Specific Misc Data: Anything with the comment ">charcount", hopefully
+;thanks for the tutorial :)
 
 kdebugtext: macro
 	move.w	d0,-(sp)
@@ -387,6 +388,7 @@ jmpto_IntroCutscene:
 	bra.w	@null		; gomer
 	bra.w	@null		; sailor mercury
 	bra.w	@null		; kiryu
+	bra.w	@null		; purple guy
 	bra.w	@null		; purple guy
 @limited:
 		lea	@limitedtext,a1
@@ -3022,7 +3024,7 @@ Pal_Limit:incbin pallet\LimitedSonic.bin	;	Soo limited-core
 Pal_mercury:incbin	pallet\mercury.bin	; mercury power make up!
 Pal_Kiryu:incbin	pallet\kiryu.bin	; I AM THE YAKUZA KIWAMI
 Pal_Purple:incbin	pallet\purple.bin	; I ALWAYS CUM
-
+Pal_Sans:	incbin	pallet\sans.bin
 ; ---------------------------------------------------------------------------
 ; Subroutine to	delay the program by ($FFFFF62A) frames
 ; ---------------------------------------------------------------------------
@@ -4290,6 +4292,7 @@ Player_Names:
 		dc.b "MERCURY "
 		dc.b "KIRYU K."
 		dc.b "PRPL GUY"
+		dc.b "SANS    "		
 	even
 	
 ; give the vram setting on d3
@@ -4615,7 +4618,7 @@ Level_ClrVars3:
 		move.w	#$8ADF,($FFFFF624).w
 		move.w	($FFFFF624).w,(a6)
 		cmpi.b	#1,($FFFFFE10).w ; is level LZ?
-		bne.s	Level_LoadPal	; if not, branch
+		bne.w	Level_LoadPal	; if not, branch
 		move.w	#$8014,(a6)
 		moveq	#0,d0
 		move.b	($FFFFFE11).w,d0
@@ -4640,6 +4643,7 @@ Player_Palette:
 		dc.w	29,29,29,0 ; MERCURY
 		dc.w	30,30,30,0 ; bragon of bojima 
 		dc.w	31,31,31,0 ; I am the purple guy come and see my suit tonight 
+		dc.w	32,32,32,0 ; SANS
 		; add more player palettes
 Level_LoadPal:
 		move.w	#$1E,($FFFFFE14).w
@@ -4863,6 +4867,7 @@ Level_StartGame:
 		dc.b 2,$98	; sailer mercury
 		dc.b 2,$A8 ;  kiryu
 		dc.b 2,$AD	; purple guy
+		dc.b 0,$00	; sans temporary!!!!!!!!!!!!!
 		even
 @cont:
 ; ---------------------------------------------------------------------------
@@ -16602,6 +16607,7 @@ loc_C61A:				; XREF: Obj3A_ChkPos
 		dc.b 2,$9E	; sailer mercury
 		dc.b 0,$00
 		dc.b 0,$00	; purple guy
+		dc.b 0,$00	; sans maybe temporary????
 		even
 @contgame:
 
@@ -25521,6 +25527,7 @@ SMCsoundCHK1:
 		dc.b 2,$9A	; sailer mercury
 		dc.b 1,$A4
 		dc.b 1,$A4	; purple guy
+		dc.b 1,$A1	; sans
 		even
 ; End of function Sonic_MoveLeft
 
@@ -25734,6 +25741,7 @@ Sonic_AirUnroll:
 		dc.b 2,$9A	; sailer mercury
 		dc.b 2,$AC
 		dc.b 1,$A5
+		dc.b 1,$CD
 		even
 @contgame:
 		move.l	$10(a0),d0
@@ -25988,6 +25996,7 @@ locret_133E8:
 		dc.b 2,$9A	; sailer mercury
 		dc.b 1,$BE
 		dc.b 1,$BE
+		dc.b 1,$A8
 		even
 ; End of function Sonic_Roll
 
@@ -26055,6 +26064,7 @@ loc_1341C:
 		dc.b 2,$99	; sailer mercury
 		dc.b 2,$AA
 		dc.b 1,$A0
+		dc.b 1,$CD
 		even
 ; ===========================================================================
 
@@ -26709,6 +26719,7 @@ Player_Anim:
 	dc.l	SonicAniData ; mercury
 	dc.l	KiryuAniData ; Kiryu
 	dc.l	PurpleAniData ; Purple guy
+	dc.l	SonicAniData ; Purple guy
 	; Insert more animation data for other characters here
 	
 Sonic_Animate:				; XREF: Obj01_Control; et al
@@ -26911,6 +26922,7 @@ Player_DPLC:
 	dc.l	mercuryDynPLC ; mercury
 	dc.l	KiryuDynPLC ; kiryu kasuga from the oni alliance
 	dc.l	PurpleDynPLC
+	dc.l	SansDynPLC
 	; add pointers for player dplc here
 Player_Art:
 	dc.l	Art_Sonic
@@ -26921,7 +26933,7 @@ Player_Art:
 	dc.l	Art_gomer ; gomer gomer!
 	dc.l	Art_mercury ; mercury
 	dc.l	Art_Kiryu ; kiryuing
-	dc.l	Art_Purple
+	dc.l	Art_Sans
 	; add pointers for player art here
 
 LoadSonicDynPLC:			; XREF: Obj01_Control; et al
@@ -31557,6 +31569,7 @@ CHAR_BOSSHIT_SND:
 		dc.b 2,$9D	; sailer mercury
 		dc.b 0,$00
 		dc.b 2,$AD
+		dc.b 0,$00
 		even
 
 ; ---------------------------------------------------------------------------
@@ -36730,6 +36743,7 @@ Hurt_Sound:
 		dc.b 2,$9B	; sailer mercury
 		dc.b 2,$AB
 		dc.b 0,$00
+		dc.b 0,$00
 		even
 ; ===========================================================================
 
@@ -36786,6 +36800,7 @@ Kill_Sound:
 		dc.b 2,$9C	; sailer mercury
 		dc.b 2,$A9
 		dc.b 2,$B0
+		dc.b 0,$C5	; sans mf
 		even
 ; End of function KillSonic
 
@@ -39603,6 +39618,7 @@ Player_Maps:
 	dc.l    map_mercury
 	dc.l	Map_Kiryu
 	dc.l	Map_Purple
+	dc.l	Map_Sans
 	; insert player mapping here
 
 
@@ -39727,6 +39743,8 @@ Map_Kiryu:
 	include "_maps\Kiryu.asm"
 Map_Purple:
 	include "_maps\Purple.asm"
+Map_Sans:
+	include "_maps\Sans.asm"
 
 ; ---------------------------------------------------------------------------
 ; Animation data array for the players
@@ -39759,6 +39777,8 @@ KiryuDynPLC:
 	include "_inc\Kiryu dynamic pattern load cues.asm"
 PurpleDynPLC:
 	include "_inc\Purple dynamic pattern load cues.asm"
+SansDynPLC:
+	include "_inc\Sans dynamic pattern load cues.asm"	
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	- players
 ; ---------------------------------------------------------------------------
@@ -39775,6 +39795,8 @@ Art_mercury:	incbin	artunc\mercury.bin
 Art_Kiryu:	incbin	artunc/kiryu.bin	; Kiryu
 		even
 Art_Purple:	incbin  artunc/purple.bin
+		even
+Art_Sans:	incbin  artunc/Sans.bin
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
