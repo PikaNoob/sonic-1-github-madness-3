@@ -98,6 +98,7 @@ BBUSH_OBJNO_EYES        = 4
 BBUSH_OBJNO_MOUTH       = 5
 BBUSH_OBJNO_BEES        = 6
 BBUSH_OBJNO_HIVE        = 7
+BBUSH_OBJNO_PETER       = 8
 
 .ObjectIndex:    
         dc.l BbushObj_Player
@@ -107,11 +108,33 @@ BBUSH_OBJNO_HIVE        = 7
         dc.l BbushObj_QuagmireMouth
         dc.l BbushObj_Bees
         dc.l BbushObj_Hive
+        dc.l BbushObj_Hive
 .Null:
         rts 
 
         include  "beebush/Objects/OBJ_QUAGMIRE.asm"
         include  "beebush/Objects/OBJ_PLAYER.asm"
+
+; ---------------------------------------------------------------------------
+; Slow object fall
+; ---------------------------------------------------------------------------
+
+_objectFallSlow:                            
+        move.l  obj.X(a0),d2
+        move.l  obj.Y(a0),d3
+        move.w  obj.XSpeed(a0),d0
+        ext.l   d0
+        asl.l   #8,d0
+        add.l   d0,d2
+        move.w  obj.YSpeed(a0),d0
+        addi.w  #10,d0
+        move.w  d0,obj.YSpeed(a0)
+        ext.l   d0
+        asl.l   #8,d0
+        add.l   d0,d3
+        move.l  d2,obj.X(a0)
+        move.l  d3,obj.Y(a0)
+        rts
 
 ; ---------------------------------------------------------------------------
 ; Animate an object based on an animation script
