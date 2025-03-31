@@ -39552,8 +39552,6 @@ MainLoadBlocks:
 ArtLoadCues:
 	include "_inc\Pattern load cues.asm"
 
-		incbin	misc\padding.bin
-		even
 Nem_SegaLogo:	incbin	artnem\segalogo.bin	; large Sega logo
 		even
 Eni_SegaLogo:	incbin	mapeni\segalogo.bin	; large Sega logo (mappings)
@@ -39653,21 +39651,11 @@ Art_Purple:	incbin  artunc/purple.bin
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
-Nem_Smoke:	incbin	artnem\xxxsmoke.bin	; unused smoke
-		even
-Nem_SyzSparkle:	incbin	artnem\xxxstars.bin	; unused stars
-		even
 Nem_Shield:	incbin	artnem\shield.bin	; shield
 		even
 Nem_Stars:	incbin	artnem\invstars.bin	; invincibility stars
 		even
-Nem_LzSonic:	incbin	artnem\xxxlzson.bin	; unused LZ Sonic holding his breath
-		even
-Nem_UnkFire:	incbin	artnem\xxxfire.bin	; unused fireball
-		even
 Nem_Warp:	incbin	artnem\xxxflash.bin	; unused entry to special stage flash
-		even
-Nem_Goggle:	incbin	artnem\xxxgoggl.bin	; unused goggles
 		even
 ; ---------------------------------------------------------------------------
 ; Sprite mappings - walls of the special stage
@@ -39719,7 +39707,8 @@ Nem_SSWBlock:	incbin	artnem\ssw.bin		; special stage W block
 		even
 Nem_SSGlass:	incbin	artnem\ssglass.bin	; special stage destroyable glass block
 		even
-Nem_SSMicroplastics:	incbin artnem\ssmicroplastics.bin
+Nem_SSMicroplastics:	
+		incbin artnem\ssmicroplastics.bin
 		even
 Nem_ResultEm:	incbin	artnem\ssresems.bin	; chaos emeralds on special stage results screen
 		even
@@ -39732,13 +39721,9 @@ Nem_Swing:	incbin	artnem\ghzswing.bin	; GHZ swinging platform
 		even
 Nem_Bridge:	incbin	artnem\ghzbridg.bin	; GHZ bridge
 		even
-Nem_GhzUnkBlock:incbin	artnem\xxxghzbl.bin	; unused GHZ block
-		even
 Nem_Ball:	incbin	artnem\ghzball.bin	; GHZ giant ball
 		even
 Nem_Spikes:	incbin	artnem\spikes.bin	; spikes
-		even
-Nem_GhzLog:	incbin	artnem\xxxghzlo.bin	; unused GHZ log
 		even
 Nem_SpikePole:	incbin	artnem\ghzlog.bin	; GHZ spiked log
 		even
@@ -39791,8 +39776,6 @@ Nem_MzMetal:	incbin	artnem\mzmetal.bin	; MZ metal blocks
 Nem_MzSwitch:	incbin	artnem\mzswitch.bin	; MZ switch
 		even
 Nem_MzGlass:	incbin	artnem\mzglassy.bin	; MZ green glassy block
-		even
-Nem_GhzGrass:	incbin	artnem\xxxgrass.bin	; unused grass (GHZ or MZ?)
 		even
 Nem_MzFire:	incbin	artnem\mzfire.bin	; MZ fireballs
 		even
@@ -40037,8 +40020,6 @@ Nem_CreditText:	incbin	artnem\credits.bin	; credits alphabet
 		even
 Nem_EndStH:	incbin	artnem\endtext.bin	; ending sequence "Sonic the Hedgehog" text
 		even
-		incbin	misc\padding2.bin
-		even
 ; ---------------------------------------------------------------------------
 ; Collision data
 ; ---------------------------------------------------------------------------
@@ -40226,10 +40207,6 @@ Level_BHZbg:	incbin	levels\bhzbg.bin
 ; ---------------------------------------------------------------------------
 Art_BigRing:	incbin	artunc\bigring.bin
 		even
-
-		incbin	misc\padding3.bin
-		even
-
 ; ---------------------------------------------------------------------------
 ; Sprite locations index
 ; ---------------------------------------------------------------------------
@@ -40349,7 +40326,6 @@ ObjPos_BHZ3:	incbin	objpos\bhz3.bin
 		even
 ObjPos_Null:	dc.b $FF, $FF, 0, 0, 0,	0
 ; ---------------------------------------------------------------------------
-		incbin	misc\padding4.bin
 		even
 
                 include "MegaPCM.asm"                   ; ++ ADD THIS LINE

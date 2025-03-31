@@ -135,8 +135,6 @@ PLC_LZ2:	dc.w $C
 		dc.w $7EC0
 		dc.l Nem_Gargoyle	; gargoyle head
 		dc.w $5D20
-		dc.l Nem_LzSonic	; Sonic	holding	his breath
-		dc.w $8800
 		dc.l Nem_LzPlatfm	; rising platform
 		dc.w $89E0
 		dc.l Nem_Orbinaut	; orbinaut enemy
