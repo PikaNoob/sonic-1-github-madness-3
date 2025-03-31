@@ -6458,6 +6458,28 @@ Map_obj80:
 ; ---------------------------------------------------------------------------
 
 EndingSequence:				; XREF: GameModeArray
+		moveq	#0,d0			; >charcount
+		move.b	(v_character).w,d0
+		lsl.w	#2,d0
+		jmp	@lut(pc,d0.w)
+@lut:	bra.w 	@null		; sonic
+	bra.w	@null
+	bra.w	@null
+	bra.w	@null		; limited
+	bra.w	@null		; neru
+	bra.w	@null		; gomer
+	bra.w	@null		; sailor mercury
+	bra.w	@kiryu		; kiryu
+	bra.w	@purpleguy	; purple guy
+@kiryu:
+		pea	End_GotoCredits
+		lea	EndingSleeper,a6
+		jmp	GM_CustomSplashScreensIG
+@purpleguy:
+		pea	End_GotoCredits
+		lea	EndingAlwaysCum,a6
+		jmp	GM_CustomSplashScreensIG
+@null:
 		move.b	#$E4,d0
 		bsr.w	PlaySound_Special ; stop music
 		bsr.w	Pal_FadeFrom
@@ -6589,6 +6611,7 @@ End_MainLoop:
 		bsr.w	ChangeRingFrame
 		cmpi.b	#$18,($FFFFF600).w ; is	scene number $18 (ending)?
 		beq.s	loc_52DA	; if yes, branch
+End_GotoCredits:
 		move.b	#$1C,($FFFFF600).w ; set scene to $1C (credits)
 		move.b	#$91,d0
 		bsr.w	PlaySound_Special ; play credits music
@@ -36762,7 +36785,7 @@ Kill_Sound:
 		dc.b 2,$90	; gomer
 		dc.b 2,$9C	; sailer mercury
 		dc.b 2,$A9
-		dc.b 0,$00
+		dc.b 2,$B0
 		even
 ; End of function KillSonic
 

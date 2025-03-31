@@ -119,6 +119,7 @@ GM_CustomSplashScreensIG:
 	dc.w 7*60,7*50		; intro 4
 	dc.w 10*60,10*50	; intro 5
 	dc.w 11*60,11*50	; intro 6
+	dc.w 4*60,4*50		; I ALWA
 
 GM_SplashScreensListIG:
 	dc.l $89<<24|@nem_pillow,$00<<24|@enifg_pillow,$94<<24|@enibg_pillow,$00<<24|@pal_pillow,0
@@ -277,4 +278,29 @@ IntroCutscene:		; no one fucking modify this or i swear to fucking god, except m
 	even
 @enifg_Picture6:
 @enibg_Picture6:	incbin mapeni\Picture6.bin
+	even
+
+
+EndingSleeper:
+	dc.l $81<<24|@nem,$00<<24|@enifg,$B1<<24|@enibg,$00<<24|@pal,0
+	dc.l 0	; terminator 2
+
+@nem:	incbin artnem\ending_kiryu.bin
+	even
+@enifg:
+@enibg:	incbin mapeni\ending_kiryu.bin
+	even
+@pal:	incbin pallet\ending_kiryu.bin
+	even
+
+EndingAlwaysCum:
+	dc.l $81<<24|@nem,$08<<24|@enifg,$AD<<24|@enibg,$99<<24|@pal,0
+	dc.l 0	; terminator 2
+
+@nem:	incbin artnem\splash_fat.bin
+	even
+@enifg:	incbin mapeni\splash_fat_fg.bin
+@enibg:	incbin mapeni\splash_fat.bin
+	even
+@pal:	incbin pallet\splash_fat.bin
 	even

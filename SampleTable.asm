@@ -55,7 +55,9 @@ SampleTable:
 
 	dcSample	TYPE_PCM,		Always,		9000, FLAGS_SFX	; $AD
 	dcSample	TYPE_PCM,		BeavFart,	0, FLAGS_SFX	; $AE
-	dcSample	TYPE_PCM,		BeavBurp,	0, FLAGS_SFX	; $AE
+	dcSample	TYPE_PCM,		BeavBurp,	0, FLAGS_SFX	; $AF
+	dcSample	TYPE_PCM,		Michael,	0, FLAGS_SFX	; $B0
+	dcSample	TYPE_PCM,		KiryuSleep,	0, FLAGS_LOOP	; $AC
 	dc.w	-1	; end marker
 
 ; ---------------------------------------------------------------
@@ -96,7 +98,9 @@ SampleTable:
 	incdac	KiryuJump,	"sound/dac/kiryu_jump.wav"
 	incdac	KiryuOuch,	"sound/dac/kiryu_ouch.wav"
 	incdac	KiryuPunch,	"sound/dac/kiryu_punch.wav"
+	incdac  KiryuSleep, "sound/dac/kiryu_sleep.wav"
 	incdac  Always,	"sound/dac/ialwayscum.wav"
+	incdac  Michael,	"sound/dac/michael.wav"
 	incdac	BeavFart,	"sound/dac/beavisfart.wav"
 	incdac	BeavBurp,	"sound/dac/beavisburp.wav"
 	even
