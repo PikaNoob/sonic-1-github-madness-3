@@ -40511,6 +40511,9 @@ MusicIndex:	; $01-$7F
 		dc.l Music14 ; Bad Rickroll (Test, credits to MegaPigeon92 since they're the author of the VGM I found)
 		dc.l Music15 ; Matt's Track
 		dc.l Music16 ; IDK (This was made by YoMama2612 if that helps at all)
+		dc.l Music17 ; Gadget Mountain Zone (Silvagunnerized an infamous tune)
+		dc.l Music18 ; Bubble Music
+		dc.l Music19 ; Wormy (Not SpongeBob! Figure it out!)
 
 		dc.l Music92 ; test
 
@@ -43018,6 +43021,12 @@ Music14:	incbin	sound\rickroll.bin ; Added in to see if that fixes Matt's track 
 Music15:	incbin	sound\rivalry.bin
 		even
 Music16:	incbin	sound\rabbitthing.bin
+		even
+Music17:	incbin	sound\tg2000tracks\gadgetmountain.bin
+		even
+Music18:	incbin	sound\tg2000tracks\bubble.bin
+		even
+Music19:	incbin	sound\tg2000tracks\wormy.bin
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
