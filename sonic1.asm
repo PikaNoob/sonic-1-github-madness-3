@@ -23,9 +23,11 @@ v_dmaqueueslot:		rs.w	1
 v_dmaqueuecount:	rs.w	1
 v_dmaqueue:		rs.b	18*14
 ; free space until $FFD000!
+v_tetoxstart		rs.w	1
+v_tetoystart		rs.w	1
 
-randLevelCount		= 14	; 31 max (32 is reserved for linear path flag)
-randLevelCountLimited	= 9
+randLevelCount		= 15	; 31 max (32 is reserved for linear path flag)
+randLevelCountLimited	= 10
 v_levelrandtracker	= $FFFFF5FC	; longword
 ;level select constants (to not give the foward reference warning this was moved here)
 f_checksum	= $FFFFFFF9
@@ -4521,6 +4523,7 @@ GetLevelRandom:
 	dc.w 4<<8|2	; SYZ
 	dc.w 7<<8|0	; Makoto
 	dc.w 7<<8|1	; Makoto
+	dc.w 7<<8|2	; Makoto
 ; beatable as everyone else
 	dc.w 0<<8|1	; GHZ
 	dc.w 0<<8|2	; GHZ
@@ -4531,7 +4534,6 @@ GetLevelRandom:
 	dc.w 3<<8|0	; SLZ ; dutch
 	dc.w 3<<8|1
 	dc.w 3<<8|2
-	dc.w 7<<8|2	; Makoto ; Teto(?) boss doesn't load properly
 	even
 ; ===========================================================================
 
@@ -10003,8 +10005,8 @@ loc_6EB0B:
 		bsr.w	SingleObjLoad
 		bne.s	loc_6ED0B
 		move.b	#$77,0(a1)	; load LZ boss object
-		move.w	#$2A60,8(a1)
-		move.w	#$280,$C(a1)
+		move.w	#$2B00,8(a1)
+		move.w	#$3A0,$C(a1)
 
 loc_6ED0B:
 		move.w	#$8C,d0
@@ -32111,8 +32113,12 @@ obj77_LoadBoss:				; XREF: obj77_Main
 		dbf	d1,obj77_Loop	; repeat sequence 2 more times
 
 loc2_17772:
-		move.w	8(a0),$30(a0)
-		move.w	$C(a0),$38(a0)
+		move.w	8(a0),d0
+		move.w	d0,$30(a0)
+		move.w	d0,(v_tetoxstart).w
+		move.w	$C(a0),d0
+		move.w	d0,$38(a0)
+		move.w	d0,(v_tetoystart).w
 		move.b	#$F,$20(a0)
 		move.b	#8,$21(a0)	; set number of	hits to	8
 
@@ -32142,18 +32148,21 @@ obj77_ShipIndex:dc.w obj77_ShipStart-obj77_ShipIndex
 obj77_ShipStart:			; XREF: obj77_ShipIndex
 	;	move.w	#$100,$12(a0)	; move ship down
 		bsr.w	BossMove
-		cmpi.w	#$6E0,$38(a0)
+		move.w	(v_tetoystart).w,d0
+		cmp.w	$38(a0),d0
 		bne.s	loc2_177E6
 		move.w	#0,$12(a0)	; stop ship
 		addq.b	#2,$25(a0)	; goto next routine
 
 loc2_177E6:
+		moveq	#0,d0
 ;		move.b	$3F(a0),d0
 ;		jsr	(CalcSine).l
 		asr.w	#6,d0
 		add.w	$38(a0),d0
 		move.w	d0,$C(a0)
 		move.w	$30(a0),8(a0)
+
 		addq.b	#2,$3F(a0)
 		cmpi.b	#$A,$25(a0)
 		bcc.s	locret_1784A2
@@ -32197,7 +32206,9 @@ obj77_MakeBall:				; XREF: obj77_ShipIndex
 		move.w	#-$100,$10(a0)
 		move.b	#1,$1C(a0)	; it runs
 		bsr.w	BossMove
-		cmpi.w	#$1E00,$30(a0)
+		move.w	(v_tetoxstart).w,d0
+		sub.w	#$A0,d0
+		cmp.w	$30(a0),d0
 		bne.s	loc2_17916
 		move.w	#0,$10(a0)
 		move.b	#2,$1C(a0)	; stare
@@ -32218,13 +32229,17 @@ obj77_ShipMove:				; XREF: obj77_ShipIndex
 		move.b	#0,$1C(a0)	; make it spin
 		move.b	#$87,$20(a0) ; the spinning hurts you
 		move.w	#-$200,$10(a0)	; move the ship	sideways
-		cmpi.w	#$1D10,$30(a0) ; is teto here
+		move.w	(v_tetoxstart).w,d0
+		sub.w	#$A0+$F0,d0
+		cmp.w	$30(a0),d0 ; is teto here
 		bne.s	loc2_17950 ; if not branch
 
 fatass_attack:
 		move.w	#0,$10(a0) ; stop her
 		move.w	#-$200,$12(a0) ; OH SHIT SHES GOING UP
- 		cmpi.w	#$680,$38(a0) ; is she here
+		move.w	(v_tetoystart).w,d0
+		sub.w	#$40,d0
+		cmp.w	$38(a0),d0 ; is she here
 		bne.s	loc2_17950    ; if not you know the drill
 		addq.b	#2,$25(a0)	; next routine!
 		move.w	#0,$12(a0) ; stop her		
@@ -32237,32 +32252,39 @@ loc2_17954:				; XREF: obj77_ShipIndex
 		bsr.w	BossMove
 		move.w	#$400,$12(a0) ; RUN A EARTHQUAKE!!
 		; i suck at programming
- 		cmpi.w	#$6E0,$38(a0) ; is she back to the ground
+		move.w	(v_tetoystart).w,d0
+		cmp.w	$38(a0),d0 ; is she back to the ground
 		bne.s	loc2_17976    ; if not blah blah
 		move.w	#0,$12(a0) ; stop her		
 		addq.b	#2,$25(a0)	; next routine!
 		move.w	#$B9,d0
 		jsr	(PlaySound).l	; play the earthquake sound
 
-Peartobombs:	
-   		jsr	SingleObjLoad2
-		bne.s	secondone
+Peartobombs:
+   		jsr	SingleObjLoad
+		bne.s	@nullius
 		move.b	#$19,0(a1)	; load pearto bomb
-		move.w	#$1D70,8(a1)
-		move.w	#$670,$C(a1)
-secondone:		
-   		jsr	SingleObjLoad2
-		bne.s	loc2_17976		
+		move.w	(v_tetoystart).w,d3
+		sub.w	#$70,d3
+		move.w	(v_tetoxstart).w,d2	; $1EA0
+		sub.w	#$A0+$90,d2
+		move.w	d2,8(a1)	; $1D70
+		move.w	d3,$C(a1)
+
+   		jsr	SingleObjLoad
+		bne.s	@nullius		
 		move.b	#$19,0(a1)	; load pearto bomb 2
-		move.w	#$1D20,8(a1)
-		move.w	#$670,$C(a1)
-lastone:
-   		jsr	SingleObjLoad2
-		bne.s	loc2_17976		
+		sub.w	#$50,d2
+		move.w	d2,8(a1)	; $1D20
+		move.w	d3,$C(a1)
+
+   		jsr	SingleObjLoad
+		bne.s	@nullius		
 		move.b	#$19,0(a1)	; load pearto bomb 3
-		move.w	#$1E00,8(a1)
-		move.w	#$670,$C(a1)
-		
+		add.w	#$E0,d2
+		move.w	d2,8(a1)	; $1E00
+		move.w	d3,$C(a1)
+@nullius:
 loc2_17976:
 		bra.w	loc2_177E6
 		
@@ -32270,7 +32292,9 @@ loc2_17976:
 Fatassruns:
  		bsr.w	BossMove
 		move.w	#$200,$10(a0)	; IT RUNS!!
-		cmpi.w	#$1E00,$30(a0) ; is she back here
+		move.w	(v_tetoxstart).w,d0
+		sub.w	#$A0,d0
+		cmp.w	$30(a0),d0 ; is she back here
 		bne.s	processstuff ; is not go here
 		move.w	#0,$10(a0)	; stop'
 		move.b	#2,$1C(a0)	; stareeeee
@@ -32344,7 +32368,12 @@ loc2_179EE:
 loc2_179F6:				; XREF: obj77_ShipIndex
 		move.w	#$400,$10(a0)
 		move.w	#-$40,$12(a0)
-		cmpi.w	#$1F00,($FFFFF72A).w
+		move.w	#$1F00,d0
+		cmp.b	#7,($FFFFFE10).w
+		bne.s	@notbhz
+		move.w	#$2AC0,d0
+@notbhz:
+		cmp.w	($FFFFF72A).w,d0
 		beq.s	loc2_17A10
 		addq.w	#2,($FFFFF72A).w
 		bra.s	loc2_17A16
