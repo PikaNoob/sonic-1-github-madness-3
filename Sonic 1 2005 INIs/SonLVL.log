@@ -1010,3 +1010,45 @@ System.IndexOutOfRangeException: Index was outside the bounds of the array.
   at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
   at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
   at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+Saving Green Hill Zone Act 1...
+Saving Green Hill Zone Act 1...
+Saving Green Hill Zone Act 1...
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.BlockPicture_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x00097] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.UserControl.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmRButtonDown (System.Windows.Forms.Message& m) [0x00072] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x001a7] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ContainerControl.WndProc (System.Windows.Forms.Message& m) [0x0003c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.UserControl.WndProc (System.Windows.Forms.Message& m) [0x00036] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+Saving Green Hill Zone Act 1...
+Saving Green Hill Zone Act 1...
+Saving Green Hill Zone Act 1...
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.BlockPicture_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x00097] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.UserControl.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmRButtonDown (System.Windows.Forms.Message& m) [0x00072] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x001a7] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ContainerControl.WndProc (System.Windows.Forms.Message& m) [0x0003c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.UserControl.WndProc (System.Windows.Forms.Message& m) [0x00036] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at SonicRetro.SonLVL.GUI.MainForm.BlockPicture_MouseDown (System.Object sender, System.Windows.Forms.MouseEventArgs e) [0x00097] in <9fe36962bfd5448f9c233047e47bfa02>:0 
+  at System.Windows.Forms.Control.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x0001c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.UserControl.OnMouseDown (System.Windows.Forms.MouseEventArgs e) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WmRButtonDown (System.Windows.Forms.Message& m) [0x00072] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control.WndProc (System.Windows.Forms.Message& m) [0x001a7] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ScrollableControl.WndProc (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.ContainerControl.WndProc (System.Windows.Forms.Message& m) [0x0003c] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.UserControl.WndProc (System.Windows.Forms.Message& m) [0x00036] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlWindowTarget.OnMessage (System.Windows.Forms.Message& m) [0x00000] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.Control+ControlNativeWindow.WndProc (System.Windows.Forms.Message& m) [0x0000b] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
+  at System.Windows.Forms.NativeWindow.WndProc (System.IntPtr hWnd, System.Windows.Forms.Msg msg, System.IntPtr wParam, System.IntPtr lParam) [0x0008e] in <a3daa9b84fd241a497578a25f68bc3c7>:0 
