@@ -4866,12 +4866,8 @@ Level_StartGame:
 		dc.b 2,$90	; gomer
 		dc.b 2,$98	; sailer mercury
 		dc.b 2,$A8 ;  kiryu
-<<<<<<< HEAD
-		dc.b 2,$AD	; purple guy
-		dc.b 0,$00	; sans temporary!!!!!!!!!!!!!
-=======
 		dc.b 2,$B2	; purple guy
->>>>>>> main
+		dc.b 0,$00	; sans temporary!!!!!!!!!!!!!
 		even
 @cont:
 ; ---------------------------------------------------------------------------
@@ -16609,13 +16605,8 @@ loc_C61A:				; XREF: Obj3A_ChkPos
 		dc.b 0,$00
 		dc.b 2,$90	; gomer
 		dc.b 2,$9E	; sailer mercury
-		dc.b 0,$00
-<<<<<<< HEAD
-		dc.b 0,$00	; purple guy
-		dc.b 0,$00	; sans maybe temporary????
-=======
 		dc.b 2,$AD	; purple guy
->>>>>>> main
+		dc.b 0,$00	; sans maybe temporary????
 		even
 @contgame:
 
@@ -26941,6 +26932,7 @@ Player_Art:
 	dc.l	Art_gomer ; gomer gomer!
 	dc.l	Art_mercury ; mercury
 	dc.l	Art_Kiryu ; kiryuing
+	dc.l	Art_Purple
 	dc.l	Art_Sans
 	; add pointers for player art here
 

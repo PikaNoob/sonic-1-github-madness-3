@@ -97,3 +97,6 @@
 	dc.l Pal_Purple
 	dc.w $FB00
 	dc.w 7
+	dc.l Pal_Sans
+	dc.w $FB00
+	dc.w 7
