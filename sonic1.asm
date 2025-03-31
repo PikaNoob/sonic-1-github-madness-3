@@ -25014,6 +25014,7 @@ loc_12C64:
 
 loc_12C7E:
 		bsr.s	Sonic_Display
+		bsr.w	Conic_Super
 		bsr.w	Sonic_RecordPos
 		bsr.w	Sonic_Water
 		move.b	($FFFFF768).w,$36(a0)
@@ -26080,7 +26081,7 @@ loc_1341C:
 
 Sonic_JumpHeight:			; XREF: Obj01_MdJump; Obj01_MdJump2
 		tst.b	$3C(a0)
-		beq.s	loc_134C4
+		beq.w	loc_134C4
 		move.w	#-$400,d1
 		btst	#6,$22(a0)
 		beq.s	loc_134AE
@@ -26088,14 +26089,61 @@ Sonic_JumpHeight:			; XREF: Obj01_MdJump; Obj01_MdJump2
 
 loc_134AE:
 		cmpi.b	#3,(v_character)
-		beq.s	locret_134C2
+		beq.w	locret_134C2
 		cmp.w	$12(a0),d1
-		ble.s	locret_134C2
+		ble.w	locret_134C2
 		move.b	($FFFFF602).w,d0
 		andi.b	#$70,d0		; is A,	B or C pressed?
-		bne.s	locret_134C2	; if yes, branch
+		bne.s	locret_134C22	; if yes, branch
 		move.w	d1,$12(a0)
 
+locret_134C22:
+;VARIBLES TO NOT MESS UP BUILDING
+v_player:		equ $FFFFD000	; object variable space for Conic ($40 bytes)
+v_conspeedmax:		equ $FFFFF760	; Conic's maximum speed (2 bytes)
+v_conspeedacc:		equ $FFFFF762	; Conic's acceleration (2 bytes)
+v_conspeeddec:		equ $FFFFF764	; Conic's deceleration (2 bytes)
+f_playerctrl:		equ $FFFFF7C8	; Player control override flags (object ineraction, control enable)
+f_timecount:		equ $FFFFFE1E	; time counter update flag
+v_rings:		equ $FFFFFE20	; rings (2 bytes)
+v_invinc:		equ $FFFFFE2D	; invinciblity status (00 = no; 01 = yes)
+v_emeralds:		equ $FFFFFE57	; number of chaos emeralds
+f_superconic:		equ $FFFFFF48	; we are so super!
+v_supertime:		equ $FFFFFF4A
+invtime:	equ $32	; time left for invincibility
+;THIS CHECKS SUICIDE BARNEY
+;ignore that its conic lmao
+;pls dont remove
+	tst.b	(f_superconic).w	; is Conic already Super?
+	bne.s	locret_134C2	; if yes, branch
+	cmpi.b	#6,(v_emeralds).w	; does Conic have exactly 6 emeralds?
+	bne.s	locret_134C2	; if not, branch
+	cmpi.w	#50,(v_rings).w		; does Conic have at least 50 rings?
+	blo.s	locret_134C2	; if not, branch
+	tst.b	(f_timecount).w	; has Conic reached the end of the act?
+	beq.s	locret_134C2	; if yes, branch
+	move.b	#1,(f_superconic).w
+	move.l	#Map_Barney,4(a0)
+	move.b	#$81,(f_playerctrl).w	; lock controls
+	move.b	#$12,$1C(a0)	; use transformation animation
+	move.w	#$1500,(v_conspeedmax).w
+	move.w	#$15,(v_conspeedacc).w
+	move.w	#$150,(v_conspeeddec).w
+
+
+	bset	#$1,(v_invinc).w	; make Conic invincible
+	move.w	#$E4,d0
+	jsr	(PlaySound).l	; load the Super Conic song and return
+	move.w	#$91,d0
+	jsr	MegaPCM_PlaySample	; load the Super Conic song and return
+locret_134C2chk:
+	tst.b	$72,$1A(A0)	; are they done aura farming
+	bne.s	locret_134C2	; if not, branch
+; this shit does not work help
+; the lines below happen when $72 shows up
+	move.b	#$00,(f_playerctrl).w	; unlock controls
+	move.w	#$15,d0
+	jsr	(PlaySound).l	; load the Super Conic song and return
 locret_134C2:
 		rts	
 ; ===========================================================================
@@ -26108,6 +26156,48 @@ loc_134C4:
 locret_134D2:
 		rts	
 ; End of function Sonic_JumpHeight
+
+; ---------------------------------------------------------------------------
+; Subroutine doing the extra logic for Super Conic
+; ---------------------------------------------------------------------------
+
+; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
+f_ringcount:		equ $FFFFFE1D	; ring counter update flag
+; loc_1ABA6:
+Conic_Super:
+	tst.b	(f_superconic).w	; Ignore all this code if not Super Conic
+	beq.w	@return
+	tst.b	(f_timecount).w
+	beq.s	Conic_RevertToNormal
+	subq.w	#1,(v_supertime).w
+	bhi.w	@return
+
+	move.w	#60,(v_supertime).w	; Reset frame counter to 60
+	tst.w	(v_rings).w
+	beq.s	Conic_RevertToNormal
+	ori.b	#1,(f_ringcount).w
+	cmpi.w	#1,(v_rings).w
+	beq.s	@onering
+	cmpi.w	#10,(v_rings).w
+	beq.s	@onering
+	cmpi.w	#100,(v_rings).w
+	bne.s	@subtractring
+@onering:
+	ori.b	#$80,(f_ringcount).w
+@subtractring:
+	subq.w	#1,(v_rings).w
+	beq.s	Conic_RevertToNormal
+@return:
+		rts
+; loc_1ABF2:
+Conic_RevertToNormal:
+	move.b	#0,(f_superconic).w
+	move.b	#1,$1d(a0)	; Force Conic's animation to restart
+	add.w	#1,(v_player+invtime).w
+	jsr	Obj01_setplayermap ; fix sonic
+return_1AC3C:
+	rts
+; End of subroutine Conic_Super
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	slow Sonic walking up a	slope
@@ -26942,15 +27032,19 @@ LoadSonicDynPLC:			; XREF: Obj01_Control; et al
 		moveq	#0,d0
 		move.b	$1A(a0),d0	; load frame number
 		cmp.b	($FFFFF766).w,d0
-		beq.s	locret_13C96
+		beq.w	locret_13C96
 		move.b	d0,($FFFFF766).w
 		
 		move.w	#0,d1		; >charcount
 		move.b	(v_character),d1
 		lsl.w	#2,d1
 		lea 	Player_DPLC(pc),a2
-
 		movea.l	(a2,d1.w),a2	; load Sonic dplc
+
+	tst.b	(f_superconic).w	; barney graphics
+	beq.w	.return
+		lea 	barneyDynPLC,a2
+.return:
 		
 		add.w	d0,d0
 		adda.w	(a2,d0.w),a2
@@ -26964,6 +27058,12 @@ LoadSonicDynPLC:			; XREF: Obj01_Control; et al
 		lsl.w	#2,d0
 		lea 	Player_Art(pc),a1
 		movea.l	(a1,d0.w),a3	; load Sonic art
+
+	tst.b	(f_superconic).w	; barney graphics
+	beq.w	.return1
+		lea 	Art_barney,a3
+.return1:
+
 		move.w	#$780<<5,d4	; load Sonic vram loc
 SPLC_ReadEntry:
 		moveq	#0,d1
@@ -39774,7 +39874,8 @@ Map_Purple:
 	include "_maps\Purple.asm"
 Map_Sans:
 	include "_maps\Sans.asm"
-
+Map_barney:
+	include "_maps\barney.asm"
 ; ---------------------------------------------------------------------------
 ; Animation data array for the players
 ; ---------------------------------------------------------------------------
@@ -39808,6 +39909,8 @@ PurpleDynPLC:
 	include "_inc\Purple dynamic pattern load cues.asm"
 SansDynPLC:
 	include "_inc\Sans dynamic pattern load cues.asm"	
+barneyDynPLC:
+	include "_inc\barneyDPLC.asm"	
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	- players
 ; ---------------------------------------------------------------------------
@@ -39826,6 +39929,8 @@ Art_Kiryu:	incbin	artunc/kiryu.bin	; Kiryu
 Art_Purple:	incbin  artunc/purple.bin
 		even
 Art_Sans:	incbin  artunc/Sans.bin
+		even
+Art_barney:	incbin	artunc\barney.bin
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various

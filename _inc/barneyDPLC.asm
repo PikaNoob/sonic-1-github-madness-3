@@ -1,0 +1,347 @@
+DPLC_eb80:
+DPLC_eb80_0: 	dc.w DPLC_eb80_E6-DPLC_eb80
+DPLC_eb80_2: 	dc.w DPLC_eb80_E9-DPLC_eb80
+DPLC_eb80_4: 	dc.w DPLC_eb80_EC-DPLC_eb80
+DPLC_eb80_6: 	dc.w DPLC_eb80_EF-DPLC_eb80
+DPLC_eb80_8: 	dc.w DPLC_eb80_F2-DPLC_eb80
+DPLC_eb80_A: 	dc.w DPLC_eb80_F5-DPLC_eb80
+DPLC_eb80_C: 	dc.w DPLC_eb80_F8-DPLC_eb80
+DPLC_eb80_E: 	dc.w DPLC_eb80_FB-DPLC_eb80
+DPLC_eb80_10: 	dc.w DPLC_eb80_FE-DPLC_eb80
+DPLC_eb80_12: 	dc.w DPLC_eb80_101-DPLC_eb80
+DPLC_eb80_14: 	dc.w DPLC_eb80_104-DPLC_eb80
+DPLC_eb80_16: 	dc.w DPLC_eb80_107-DPLC_eb80
+DPLC_eb80_18: 	dc.w DPLC_eb80_10A-DPLC_eb80
+DPLC_eb80_1A: 	dc.w DPLC_eb80_10D-DPLC_eb80
+DPLC_eb80_1C: 	dc.w DPLC_eb80_110-DPLC_eb80
+DPLC_eb80_1E: 	dc.w DPLC_eb80_113-DPLC_eb80
+DPLC_eb80_20: 	dc.w DPLC_eb80_116-DPLC_eb80
+DPLC_eb80_22: 	dc.w DPLC_eb80_119-DPLC_eb80
+DPLC_eb80_24: 	dc.w DPLC_eb80_11C-DPLC_eb80
+DPLC_eb80_26: 	dc.w DPLC_eb80_11F-DPLC_eb80
+DPLC_eb80_28: 	dc.w DPLC_eb80_122-DPLC_eb80
+DPLC_eb80_2A: 	dc.w DPLC_eb80_125-DPLC_eb80
+DPLC_eb80_2C: 	dc.w DPLC_eb80_128-DPLC_eb80
+DPLC_eb80_2E: 	dc.w DPLC_eb80_12B-DPLC_eb80
+DPLC_eb80_30: 	dc.w DPLC_eb80_12E-DPLC_eb80
+DPLC_eb80_32: 	dc.w DPLC_eb80_131-DPLC_eb80
+DPLC_eb80_34: 	dc.w DPLC_eb80_134-DPLC_eb80
+DPLC_eb80_36: 	dc.w DPLC_eb80_137-DPLC_eb80
+DPLC_eb80_38: 	dc.w DPLC_eb80_13A-DPLC_eb80
+DPLC_eb80_3A: 	dc.w DPLC_eb80_13D-DPLC_eb80
+DPLC_eb80_3C: 	dc.w DPLC_eb80_140-DPLC_eb80
+DPLC_eb80_3E: 	dc.w DPLC_eb80_143-DPLC_eb80
+DPLC_eb80_40: 	dc.w DPLC_eb80_146-DPLC_eb80
+DPLC_eb80_42: 	dc.w DPLC_eb80_149-DPLC_eb80
+DPLC_eb80_44: 	dc.w DPLC_eb80_14C-DPLC_eb80
+DPLC_eb80_46: 	dc.w DPLC_eb80_14F-DPLC_eb80
+DPLC_eb80_48: 	dc.w DPLC_eb80_152-DPLC_eb80
+DPLC_eb80_4A: 	dc.w DPLC_eb80_155-DPLC_eb80
+DPLC_eb80_4C: 	dc.w DPLC_eb80_158-DPLC_eb80
+DPLC_eb80_4E: 	dc.w DPLC_eb80_15B-DPLC_eb80
+DPLC_eb80_50: 	dc.w DPLC_eb80_15E-DPLC_eb80
+DPLC_eb80_52: 	dc.w DPLC_eb80_161-DPLC_eb80
+DPLC_eb80_54: 	dc.w DPLC_eb80_164-DPLC_eb80
+DPLC_eb80_56: 	dc.w DPLC_eb80_167-DPLC_eb80
+DPLC_eb80_58: 	dc.w DPLC_eb80_16A-DPLC_eb80
+DPLC_eb80_5A: 	dc.w DPLC_eb80_16D-DPLC_eb80
+DPLC_eb80_5C: 	dc.w DPLC_eb80_170-DPLC_eb80
+DPLC_eb80_5E: 	dc.w DPLC_eb80_173-DPLC_eb80
+DPLC_eb80_60: 	dc.w DPLC_eb80_176-DPLC_eb80
+DPLC_eb80_62: 	dc.w DPLC_eb80_179-DPLC_eb80
+DPLC_eb80_64: 	dc.w DPLC_eb80_17C-DPLC_eb80
+DPLC_eb80_66: 	dc.w DPLC_eb80_17F-DPLC_eb80
+DPLC_eb80_68: 	dc.w DPLC_eb80_182-DPLC_eb80
+DPLC_eb80_6A: 	dc.w DPLC_eb80_185-DPLC_eb80
+DPLC_eb80_6C: 	dc.w DPLC_eb80_188-DPLC_eb80
+DPLC_eb80_6E: 	dc.w DPLC_eb80_18B-DPLC_eb80
+DPLC_eb80_70: 	dc.w DPLC_eb80_18E-DPLC_eb80
+DPLC_eb80_72: 	dc.w DPLC_eb80_191-DPLC_eb80
+DPLC_eb80_74: 	dc.w DPLC_eb80_194-DPLC_eb80
+DPLC_eb80_76: 	dc.w DPLC_eb80_197-DPLC_eb80
+DPLC_eb80_78: 	dc.w DPLC_eb80_19A-DPLC_eb80
+DPLC_eb80_7A: 	dc.w DPLC_eb80_19D-DPLC_eb80
+DPLC_eb80_7C: 	dc.w DPLC_eb80_1A0-DPLC_eb80
+DPLC_eb80_7E: 	dc.w DPLC_eb80_1A3-DPLC_eb80
+DPLC_eb80_80: 	dc.w DPLC_eb80_1A6-DPLC_eb80
+DPLC_eb80_82: 	dc.w DPLC_eb80_1A9-DPLC_eb80
+DPLC_eb80_84: 	dc.w DPLC_eb80_1AC-DPLC_eb80
+DPLC_eb80_86: 	dc.w DPLC_eb80_1AF-DPLC_eb80
+DPLC_eb80_88: 	dc.w DPLC_eb80_1B2-DPLC_eb80
+DPLC_eb80_8A: 	dc.w DPLC_eb80_1B5-DPLC_eb80
+DPLC_eb80_8C: 	dc.w DPLC_eb80_1B8-DPLC_eb80
+DPLC_eb80_8E: 	dc.w DPLC_eb80_1BB-DPLC_eb80
+DPLC_eb80_90: 	dc.w DPLC_eb80_1BE-DPLC_eb80
+DPLC_eb80_92: 	dc.w DPLC_eb80_1C1-DPLC_eb80
+DPLC_eb80_94: 	dc.w DPLC_eb80_1C4-DPLC_eb80
+DPLC_eb80_96: 	dc.w DPLC_eb80_1C7-DPLC_eb80
+DPLC_eb80_98: 	dc.w DPLC_eb80_1CA-DPLC_eb80
+DPLC_eb80_9A: 	dc.w DPLC_eb80_1CD-DPLC_eb80
+DPLC_eb80_9C: 	dc.w DPLC_eb80_1D0-DPLC_eb80
+DPLC_eb80_9E: 	dc.w DPLC_eb80_1D3-DPLC_eb80
+DPLC_eb80_A0: 	dc.w DPLC_eb80_1D6-DPLC_eb80
+DPLC_eb80_A2: 	dc.w DPLC_eb80_1D9-DPLC_eb80
+DPLC_eb80_A4: 	dc.w DPLC_eb80_1DC-DPLC_eb80
+DPLC_eb80_A6: 	dc.w DPLC_eb80_1DF-DPLC_eb80
+DPLC_eb80_A8: 	dc.w DPLC_eb80_1E2-DPLC_eb80
+DPLC_eb80_AA: 	dc.w DPLC_eb80_1E5-DPLC_eb80
+DPLC_eb80_AC: 	dc.w DPLC_eb80_1E8-DPLC_eb80
+DPLC_eb80_AE: 	dc.w DPLC_eb80_1EB-DPLC_eb80
+DPLC_eb80_B0: 	dc.w DPLC_eb80_1EE-DPLC_eb80
+DPLC_eb80_B2: 	dc.w DPLC_eb80_1F1-DPLC_eb80
+DPLC_eb80_B4: 	dc.w DPLC_eb80_1F4-DPLC_eb80
+DPLC_eb80_B6: 	dc.w DPLC_eb80_1F7-DPLC_eb80
+DPLC_eb80_B8: 	dc.w DPLC_eb80_1FA-DPLC_eb80
+DPLC_eb80_BA: 	dc.w DPLC_eb80_1FD-DPLC_eb80
+DPLC_eb80_BC: 	dc.w DPLC_eb80_200-DPLC_eb80
+DPLC_eb80_BE: 	dc.w DPLC_eb80_203-DPLC_eb80
+DPLC_eb80_C0: 	dc.w DPLC_eb80_206-DPLC_eb80
+DPLC_eb80_C2: 	dc.w DPLC_eb80_209-DPLC_eb80
+DPLC_eb80_C4: 	dc.w DPLC_eb80_20C-DPLC_eb80
+DPLC_eb80_C6: 	dc.w DPLC_eb80_20F-DPLC_eb80
+DPLC_eb80_C8: 	dc.w DPLC_eb80_212-DPLC_eb80
+DPLC_eb80_CA: 	dc.w DPLC_eb80_215-DPLC_eb80
+DPLC_eb80_CC: 	dc.w DPLC_eb80_218-DPLC_eb80
+DPLC_eb80_CE: 	dc.w DPLC_eb80_21B-DPLC_eb80
+DPLC_eb80_D0: 	dc.w DPLC_eb80_21E-DPLC_eb80
+DPLC_eb80_D2: 	dc.w DPLC_eb80_221-DPLC_eb80
+DPLC_eb80_D4: 	dc.w DPLC_eb80_224-DPLC_eb80
+DPLC_eb80_D6: 	dc.w DPLC_eb80_227-DPLC_eb80
+DPLC_eb80_D8: 	dc.w DPLC_eb80_22A-DPLC_eb80
+DPLC_eb80_DA: 	dc.w DPLC_eb80_22D-DPLC_eb80
+DPLC_eb80_DC: 	dc.w DPLC_eb80_230-DPLC_eb80
+DPLC_eb80_DE: 	dc.w DPLC_eb80_233-DPLC_eb80
+DPLC_eb80_E0: 	dc.w DPLC_eb80_236-DPLC_eb80
+DPLC_eb80_E2: 	dc.w DPLC_eb80_239-DPLC_eb80
+DPLC_eb80_E4: 	dc.w DPLC_eb80_23C-DPLC_eb80
+DPLC_eb80_E6: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_E9: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_EC: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_EF: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_F2: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_F5: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_F8: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_FB: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_FE: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_101: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_104: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_107: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_10A: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_10D: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_110: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_113: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_116: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_119: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_11C: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_11F: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_122: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_125: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_128: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_12B: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_12E: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_131: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_134: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_137: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_13A: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_13D: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_140: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_143: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_146: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_149: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_14C: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_14F: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_152: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_155: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_158: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_15B: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_15E: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_161: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_164: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_167: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_16A: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_16D: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_170: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_173: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_176: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_179: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_17C: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_17F: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_182: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_185: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_188: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_18B: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_18E: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_191: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_194: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_197: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_19A: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_19D: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1A0: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1A3: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1A6: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1A9: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1AC: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1AF: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1B2: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1B5: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1B8: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1BB: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1BE: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1C1: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1C4: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1C7: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1CA: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1CD: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1D0: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1D3: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1D6: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1D9: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1DC: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1DF: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1E2: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1E5: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1E8: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1EB: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1EE: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1F1: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1F4: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1F7: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1FA: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_1FD: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_200: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_203: 	dc.b $1
+	dc.b $F0, $0
+DPLC_eb80_206: 	dc.b $1
+	dc.b $F0, $10
+DPLC_eb80_209: 	dc.b $1
+	dc.b $F0, $20
+DPLC_eb80_20C: 	dc.b $1
+	dc.b $F0, $30
+DPLC_eb80_20F: 	dc.b $1
+	dc.b $F0, $40
+DPLC_eb80_212: 	dc.b $1
+	dc.b $F0, $50
+DPLC_eb80_215: 	dc.b $1
+	dc.b $F0, $60
+DPLC_eb80_218: 	dc.b $1
+	dc.b $F0, $70
+DPLC_eb80_21B: 	dc.b $1
+	dc.b $F0, $80
+DPLC_eb80_21E: 	dc.b $1
+	dc.b $F0, $90
+DPLC_eb80_221: 	dc.b $1
+	dc.b $F0, $A0
+DPLC_eb80_224: 	dc.b $1
+	dc.b $F0, $B0
+DPLC_eb80_227: 	dc.b $1
+	dc.b $F0, $C0
+DPLC_eb80_22A: 	dc.b $1
+	dc.b $F0, $D0
+DPLC_eb80_22D: 	dc.b $1
+	dc.b $F0, $E0
+DPLC_eb80_230: 	dc.b $1
+	dc.b $F0, $F0
+DPLC_eb80_233: 	dc.b $1
+	dc.b $F1, $0
+DPLC_eb80_236: 	dc.b $1
+	dc.b $F1, $10
+DPLC_eb80_239: 	dc.b $1
+	dc.b $F1, $20
+DPLC_eb80_23C: 	dc.b $1
+	dc.b $F1, $30
+	even
