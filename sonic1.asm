@@ -19335,8 +19335,8 @@ Obj6D_Action:				; XREF: Obj6D_Index
 		bchg	#0,$1C(a0)
 		beq.s	loc_E57A
 		move.w	$32(a0),$30(a0)	; begin	flaming	time
-		move.w	#$B3,d0
-		jsr	(PlaySound_Special).l ;	play flame sound
+		move.w	#$AE,d0
+		jsr	MegaPCM_PlaySample
 
 loc_E57A:
 		lea	(Ani_obj6D).l,a1
@@ -30344,8 +30344,8 @@ Obj6E_Shock:				; XREF: Obj6E_Index
 		move.b	#1,$1C(a0)	; run "shocking" animation
 		tst.b	1(a0)
 		bpl.s	Obj6E_Animate
-		move.w	#$B1,d0
-		jsr	(PlaySound_Special).l ;	play electricity sound
+		move.w	#$AF,d0
+		jsr	MegaPCM_PlaySample
 
 Obj6E_Animate:
 		lea	(Ani_obj6E).l,a1
@@ -40792,6 +40792,7 @@ MusicIndex:	; $01-$7F
 		dc.l Music17 ; Gadget Mountain Zone (Silvagunnerized an infamous tune)
 		dc.l Music18 ; Bubble Music
 		dc.l Music19 ; Wormy (Not SpongeBob! Figure it out!)
+		dc.l Music1A ; Ronic Setro splash screen
 
 		dc.l Music92 ; test
 
@@ -43306,6 +43307,8 @@ Music18:	incbin	sound\tg2000tracks\bubble.bin
 		even
 Music19:	incbin	sound\tg2000tracks\wormy.bin
 		even
+Music1A:	include	sound\ronicsetro.asm
+		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
 Music82:	incbin	sound\music82.bin ; Labyrinth Act 1
@@ -43320,7 +43323,7 @@ Music86:	incbin	sound\music86.bin; Scrap Brain Act 1
 		even
 Music87:	include	sound\music87.asm; Invincibility
 		even
-Music88:	incbin	sound\music88.bin; Extra Life
+Music88:	include	sound\music88.asm; Extra Life
 		even
 Music89:	incbin	sound\music89.bin; Special Stage
 		even
