@@ -60,11 +60,9 @@ PLC_GameOver:	dc.w 0
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - Green Hill
 ; ---------------------------------------------------------------------------
-PLC_GHZ:	dc.w $B
-		dc.l Nem_GHZ_1st	; GHZ main patterns
+PLC_GHZ:	dc.w $A
+		dc.l Nem_GHZ	    ; GHZ main patterns
 		dc.w 0
-		dc.l Nem_GHZ_2nd	; GHZ secondary	patterns
-		dc.w $39A0
 		dc.l Nem_Stalk		; flower stalk
 		dc.w $6B00
 		dc.l Nem_PplRock	; purple rock
@@ -490,11 +488,9 @@ PLC_SpeStResult:dc.w 1
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - ending sequence
 ; ---------------------------------------------------------------------------
-PLC_Ending:	dc.w $E
-		dc.l Nem_GHZ_1st	; GHZ main patterns
+PLC_Ending:	dc.w $D
+		dc.l Nem_GHZ	    ; GHZ main patterns
 		dc.w 0
-		dc.l Nem_GHZ_2nd	; GHZ secondary	patterns
-		dc.w $39A0
 		dc.l Nem_Stalk		; flower stalk
 		dc.w $6B00
 		dc.l Nem_EndFlower	; flowers

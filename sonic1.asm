@@ -40122,9 +40122,7 @@ Nem_Squirrel:	incbin	artnem\squirrel.bin	; squirrel
 ; ---------------------------------------------------------------------------
 Blk16_GHZ:	incbin	map16\ghz.bin
 		even
-Nem_GHZ_1st:	incbin	artnem\8x8ghz1.bin	; GHZ primary patterns
-		even
-Nem_GHZ_2nd:	incbin	artnem\8x8ghz2.bin	; GHZ secondary patterns
+Nem_GHZ:	incbin	artnem\8x8ghz.bin	; GHZ primary patterns
 		even
 Blk256_GHZ:	incbin	map256\ghz.bin
 		even

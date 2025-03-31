@@ -7,7 +7,7 @@
 ; 256x256 mappings
 ; blank, music (unused), pal index (unused), pal index
 ; ---------------------------------------------------------------------------
-	dc.l Nem_GHZ_2nd|4<<24
+	dc.l Nem_GHZ|4<<24
 	dc.l Blk16_GHZ|5<<24
 	dc.l Blk256_GHZ
 	dc.b 0,	$81, 4,	4
@@ -31,7 +31,7 @@
 	dc.l Blk16_SBZ|$F<<24
 	dc.l Blk256_SBZ
 	dc.b 0,	$86, 9,	9
-	dc.l Nem_GHZ_2nd	; main load block for ending
+	dc.l Nem_GHZ	; main load block for ending
 	dc.l Blk16_GHZ
 	dc.l Blk256_GHZ
 	dc.b 0,	$86, $13, $13
