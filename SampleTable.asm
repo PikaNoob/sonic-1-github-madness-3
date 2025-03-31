@@ -60,7 +60,7 @@ SampleTable:
 	dcSample	TYPE_PCM,		KiryuSleep,	0, FLAGS_LOOP	; $B1
 	dcSample	TYPE_DPCM,		PurpleGuy,	11025, FLAGS_SFX	; $B2
 	;SANS
-	dcSample	TYPE_DPCM,		Sans,	8000, FLAGS_SFX	; $B3
+	dcSample	TYPE_PCM,		Sans,	8000, FLAGS_SFX	; $B3
 	dc.w	-1	; end marker
 
 ; ---------------------------------------------------------------
