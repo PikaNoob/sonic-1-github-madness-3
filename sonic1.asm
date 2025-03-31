@@ -3324,19 +3324,20 @@ TITLE_INIT:
 		bsr.w	PlaySound_Special ; stop music
 		bsr.w	Pal_FadeFrom
 		bsr.w	ClearPLC
+		jsr 	SHC21
+		jsr 	SHC
 		move	#$2700,sr
 		lea	($C00004).l,a6
 		move.w	#$8004,(a6)
 		move.w	#$8230,(a6)
 		move.w	#$8407,(a6)
+		move.w	#$8720,(a6)
+		move.w	#$8B03,(a6)
+		move.w	#$8C81,(a6)
 		move.w	#$9001,(a6)
 		move.w	#$9200,(a6)
-		move.w	#$8B03,(a6)
-		move.w	#$8720,(a6)
 		clr.b	($FFFFF64E).w
 		bsr.w	ClearScreen
-		jsr 	SHC21
-		jsr 	SHC
 		lea	($FFFFD000).w,a1
 		moveq	#0,d0
 		move.w	#$7FF,d1
@@ -43220,9 +43221,9 @@ IdiotPCM_end:
 	even
 GM_AntiTMSS:	include _inc\GM_AntiTMSS.asm
 GM_SplashScreensIG:	include _inc\GM_SplashScreensIG.asm
-SHC21:  incbin "SHC21_Lite_Sonic12.bin"
+SHC21:		incbin "SHC21_Lite_Sonic12.bin"
                 even
-SHC:    incbin "SHC_Sonic12.bin"
+SHC:		incbin "SHC_Sonic12.bin"
                 even
 
 
