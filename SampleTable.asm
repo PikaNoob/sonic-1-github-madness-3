@@ -61,6 +61,8 @@ SampleTable:
 	dcSample	TYPE_DPCM,		PurpleGuy,	11025, FLAGS_SFX	; $B2
 	;SANS
 	dcSample	TYPE_PCM,		Sans,	8000, FLAGS_SFX	; $B3
+;barney
+	dcSample	TYPE_DPCM,		Barney,	8000, FLAGS_SFX	; $B4
 	dc.w	-1	; end marker
 
 ; ---------------------------------------------------------------
@@ -107,5 +109,6 @@ SampleTable:
 	incdac  PurpleGuy,	"sound/dac/purpleguy-11025.dpcm"
 	incdac	BeavFart,	"sound/dac/beavisfart.wav"
 	incdac	BeavBurp,	"sound/dac/beavisburp.wav"
-    incdac	Sans,	"sound/dac/SansTalking.wav"
+	incdac	Sans,	"sound/dac/SansTalking.wav"
+	incdac	barney,	"sound/dac/superbarney.bin"
 	even

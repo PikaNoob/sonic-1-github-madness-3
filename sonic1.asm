@@ -4869,7 +4869,7 @@ Level_StartGame:
 		dc.b 2,$98	; sailer mercury
 		dc.b 2,$A8 ;  kiryu
 		dc.b 2,$B2	; purple guy
-		dc.b 2,$B3	; sans temporary!!!!!!!!!!!!!
+		dc.b 0,$00	; sans temporary!!!!!!!!!!!!!
 		even
 @cont:
 ; ---------------------------------------------------------------------------
@@ -26134,10 +26134,10 @@ invtime:	equ $32	; time left for invincibility
 	bset	#$1,(v_invinc).w	; make Conic invincible
 	move.w	#$E4,d0
 	jsr	(PlaySound).l	; load the Super Conic song and return
-	move.w	#$91,d0
+	move.w	#$B4,d0
 	jsr	MegaPCM_PlaySample	; load the Super Conic song and return
 locret_134C2chk:
-	tst.b	$72,$1A(A0)	; are they done aura farming
+	cmp.b	#$72,$1A(A0)	; are they done aura farming
 	bne.s	locret_134C2	; if not, branch
 ; this shit does not work help
 ; the lines below happen when $72 shows up
@@ -26810,7 +26810,7 @@ Player_Anim:
 	dc.l	SonicAniData ; mercury
 	dc.l	KiryuAniData ; Kiryu
 	dc.l	PurpleAniData ; Purple guy
-	dc.l	SonicAniData ; sans the guy
+	dc.l	SonicAniData ; Purple guy
 	; Insert more animation data for other characters here
 	
 Sonic_Animate:				; XREF: Obj01_Control; et al
