@@ -43323,7 +43323,7 @@ Music86:	incbin	sound\music86.bin; Scrap Brain Act 1
 		even
 Music87:	include	sound\music87.asm; Invincibility
 		even
-Music88:	incbin	sound\music88.bin; Extra Life
+Music88:	include	sound\music88.asm; Extra Life
 		even
 Music89:	incbin	sound\music89.bin; Special Stage
 		even
