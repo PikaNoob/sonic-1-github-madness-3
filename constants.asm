@@ -9,3 +9,4 @@ char_gomer:		equ 5
 char_mercury:	equ 6
 char_kiryu:		equ 7
 char_purple:	equ 8
+char_sans:		equ 9
