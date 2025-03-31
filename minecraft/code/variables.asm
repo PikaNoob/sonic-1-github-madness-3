@@ -44,6 +44,7 @@ vramEmptyTile	rs.b	TILE
 vramTerrain	rs.b	255*TILE
 vramBackground	rs.b	408*TILE
 vramSteve	rs.b	32*TILE
+vramCursor	rs.b	4*TILE
 
 VRAM_PLANE_A	equ	$C000
 VRAM_PLANE_W	equ	$D000

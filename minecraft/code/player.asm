@@ -8,16 +8,26 @@ yPos		rs.l	1
 xVel		rs.w	1
 yVel		rs.w	1
 
-flags		rs.b	1
+jumpTimer	rs.b	1
 frame		rs.b	1
 animTimer	rs.b	1
 state		rs.b	1
 
 ON_GROUND	equ	0
+FACING_LEFT	equ	1
+
+PLACE_MODE	equ	2
+FACING_WALLS	equ	3
+VERTICAL_BIAS	equ	4
 
 cursorXPos	rs.w	1
 cursorYPos	rs.w	1
-heldItemID	rs.w	1
+heldItemID	rs.b	1
+doubleTapTimer	rs.b	1
+punchTimer	rs.b	1
+
+HITBOX_X	equ	2
+HITBOX_Y	equ	7
 
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -31,7 +41,7 @@ MC_Player:
 		bsr.w	MC_PlayerMove
 		bsr.w	MC_PlayerCollision
 		;bsr.w	MC_PlayerAnimate
-		;bsr.w	MC_PlayerCursor
+		bsr.w	MC_PlayerCursor
 		;bsr.w	MC_PlayerDraw
 
 .updateBGPos:
@@ -45,10 +55,46 @@ MC_Player:
 		sub.w	#112,d0
 		move.w	d0,(camYposFG).w
 
-;		subq.b	#1,animTimer(a0)
-;		bpl.s	.render
-;		move.b	#10,animTimer(a0)
-;		bchg.b	#0,frame(a0)
+;		btst.b	#ON_GROUND,state(a0)
+;		bne.s	.onGround
+;
+;		bset.b	#0,frame(a0)
+;		move.b	#7,animTimer(a0)
+;		bra.s	.checkFacingWalls
+;
+;.onGround:
+		cmpi.b	#8,punchTimer(a0)
+		blt.s	.noPunchFrame
+		bset.b	#1,frame(a0)
+		bra.s	.checkWalking
+
+.noPunchFrame:
+		bclr.b	#1,frame(a0)
+
+.checkWalking:
+		tst.w	xVel(a0)
+		beq.s	.standing
+		
+		subq.b	#1,animTimer(a0)
+		bpl.s	.checkFacingWalls
+
+		move.b	#7,animTimer(a0)
+		bchg.b	#0,frame(a0)
+		bra.s	.checkFacingWalls
+
+.standing:
+		bclr.b	#0,frame(a0)
+		move.b	#7,animTimer(a0)
+
+.checkFacingWalls:
+		btst.b	#FACING_WALLS,state(a0)
+		beq.s	.notFacingWalls
+		bset.b	#2,frame(a0)
+		bra.s	.render
+
+.notFacingWalls:
+		bclr.b	#2,frame(a0)
+
 .render:
 		clr.w	d0
 		move.b	frame(a0),d0
@@ -62,15 +108,47 @@ MC_Player:
 		sub.w	(camYposFG).w,d0
 		move.w	d0,(a2)+
 		
-		move.l	(a1)+,(a2)+
-		
+		move.w	(a1)+,(a2)+
+		move.w	(a1)+,d0
+
+		btst.b	#FACING_LEFT,state(a0)
+		beq.s	.facingRight
+
+		ori.w	#1<<11,d0
+
+.facingRight:
+		move.w	d0,(a2)+
+
 		move.w	(a1)+,d0
 		add.w	#128,d0
 		add.w	xPos(a0),d0
 		sub.w	(camXposFG).w,d0
 		move.w	d0,(a2)+
 
-	; cursor logic
+	; cursor render test
+		lea	.cursorFrames(pc),a1
+		
+		move.w	cursorYPos(a0),d0
+	;	or.w	cursorXPos(a0),d0
+		bpl.s	.renderCursor
+		rts
+
+.renderCursor:
+		move.b	#1,-5(a2)
+
+		move.w	(a1)+,d0
+		add.w	#128,d0
+		add.w	cursorYPos(a0),d0
+		sub.w	(camYposFG).w,d0
+		move.w	d0,(a2)+
+
+		move.l	(a1)+,(a2)+
+		
+		move.w	(a1)+,d0
+		add.w	#128,d0
+		add.w	cursorXPos(a0),d0
+		sub.w	(camXposFG).w,d0
+		move.w	d0,(a2)+
 
 		rts
 
@@ -78,9 +156,28 @@ MC_Player:
 .playerFrames:
 	sprite_entry	SPR_2x2, -8, -8-1, (vramSteve/TILE), 0, 1, 0, 0
 	sprite_entry	SPR_2x2, -8, -9-1, (vramSteve/TILE)+4, 0, 1, 0, 0
+	sprite_entry	SPR_2x2, -8, -8-1, (vramSteve/TILE)+8, 0, 1, 0, 0
+	sprite_entry	SPR_2x2, -8, -9-1, (vramSteve/TILE)+12, 0, 1, 0, 0
+
+	sprite_entry	SPR_2x2, -8, -8-1, (vramSteve/TILE)+16, 0, 1, 0, 0
+	sprite_entry	SPR_2x2, -8, -9-1, (vramSteve/TILE)+20, 0, 1, 0, 0
+	sprite_entry	SPR_2x2, -8, -8-1, (vramSteve/TILE)+24, 0, 1, 0, 0
+	sprite_entry	SPR_2x2, -8, -9-1, (vramSteve/TILE)+28, 0, 1, 0, 0
+
+.cursorFrames:
+	sprite_entry	SPR_1x1, 0, 0, (vramCursor/TILE)+1, 3, 1, 0, 0
 
 ; ---------------------------------------------------------------------------
+
+; ===========================================================================
+; ---------------------------------------------------------------------------
+; Process Player Movement
+; ---------------------------------------------------------------------------
 MC_PlayerMove:
+		subq.b	#1,jumpTimer(a0)
+		bpl.s	.checkHorizInput
+		clr.b	jumpTimer(a0)
+
 		bclr.b	#ON_GROUND,state(a0)		; Is the Player making contact with the ground?
 		beq.s	.checkHorizInput		; If not, skip check for jump input
 
@@ -88,6 +185,7 @@ MC_PlayerMove:
 		beq.s	.checkHorizInput		; If not, branch and check for 
 
 		move.w	#-$1A0,yVel(a0)			; Set the player's Y velocity to move upwards
+		move.b	#20,jumpTimer(a0)
 	;	bclr.b	#ON_GROUND,state(a0)		; Clear the 'ON_GROUND' flag
 
 .checkHorizInput:
@@ -138,6 +236,7 @@ MC_PlayerMove:
 
 ; ===========================================================================
 .accelLeft:
+		bset.b	#FACING_LEFT,state(a0)
 		subi.w	#$10,xVel(a0)	; Accelerate to the left by $10 units
 
 		tst.w	xVel(a0)	; Is our are we traveling to the right?
@@ -154,6 +253,7 @@ MC_PlayerMove:
 
 ; ===========================================================================
 .accelRight:
+		bclr.b	#FACING_LEFT,state(a0)
 		addi.w	#$10,xVel(a0)	; Accelerate to the right by $10 units
 
 		tst.w	xVel(a0)	; Is our are we traveling to the left?
@@ -170,10 +270,250 @@ MC_PlayerMove:
 
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
-MC_PlayerCollision:
-HITBOX_X	equ	4
-HITBOX_Y	equ	7
+; Hanldle Cursor Logic
+; ---------------------------------------------------------------------------
+MC_PlayerCursor:
+		subq.b	#1,punchTimer(a0)
+		bpl.s	.decDoubleTapTimer
+		clr.b	punchTimer(a0)
 
+.decDoubleTapTimer:
+		subq.b	#1,doubleTapTimer(a0)
+		bpl.s	.checkForDoubleTap
+		clr.b	doubleTapTimer(a0)
+
+.checkForDoubleTap:
+		btst.b	#BIT_UP,(ctrlPressP1).w
+		beq.s	.upNotPressed
+
+		tst.b	doubleTapTimer(a0)
+		beq.s	.setTimer
+
+		bchg.b	#FACING_WALLS,state(a0)
+		clr.b	doubleTapTimer(a0)
+		bra.s	.upNotPressed
+
+.setTimer:
+		move.b	#15,doubleTapTimer(a0)
+
+.upNotPressed:
+		lea	(mapCollBlocks).l,a1	; Load the world map collision layer into a1
+		
+		btst.b	#BIT_UP,(ctrlHoldP1).w
+		bne.w	.cursorUp
+		btst.b	#BIT_Down,(ctrlHoldP1).w
+		bne.w	.cursorDown
+
+.checkVerticalBias:
+		move.w	#HITBOX_Y/2,d6
+		btst.b	#VERTICAL_BIAS,state(a0)
+		beq.s	.biasedDown
+		neg.w	d6
+
+.biasedDown:
+		btst.b	#FACING_LEFT,state(a0)
+		beq.s	.facingRight
+
+.facingLeft:
+		move.w	xPos(a0),d0		
+		subq.w	#HITBOX_X/2,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+		
+		move.w	yPos(a0),d1
+		add.w	d6,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		move.w	#4-1,d7
+		
+.marchLeft:
+		subq.b	#1,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.blockFoundHoriz
+		dbf	d7,.marchLeft
+
+		neg.w	d6
+		move.w	yPos(a0),d1
+		add.w	d6,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		move.w	#4-1,d7
+		
+.marchLeftAgain:
+		subq.b	#1,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.blockFoundHoriz
+		dbf	d7,.marchLeftAgain
+
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+
+; ---------------------------------------------------------------------------
+.facingRight:
+		move.w	xPos(a0),d0		
+		addq.w	#HITBOX_X/2,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+		
+		move.w	yPos(a0),d1
+		add.w	d6,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		move.w	#4-1,d7
+		
+.marchRight:
+		addq.b	#1,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.blockFoundHoriz
+		dbf	d7,.marchRight
+
+		neg.w	d6
+		move.w	yPos(a0),d1
+		add.w	d6,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		move.w	#4-1,d7
+		
+.marchRightAgain:
+		addq.b	#1,d1
+		move.b	(a1,d1.w),d2
+		bne.w	.blockFoundHoriz
+		dbf	d7,.marchRightAgain
+
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+
+; ---------------------------------------------------------------------------
+.blockFoundHoriz:
+		moveq	#0,d2
+		move.b	d1,d2
+		lsl.w	#3,d2
+		move.w	d2,cursorXPos(a0)
+
+		move.w	yPos(a0),d2
+		add.w	d6,d2
+		andi.w	#$FFF8,d2
+		move.w	d2,cursorYPos(a0)
+
+		btst.b	#BIT_A,(ctrlPressP1).w	
+		bne.s	.tryBreakHoriz
+
+		btst.b	#BIT_A,(ctrlHoldP1).w	
+		beq.s	.noBreakHoriz
+
+		tst.b	punchTimer(a0)
+		bne.s	.noBreakHoriz
+
+.tryBreakHoriz:
+		move.b	#14,punchTimer(a0)
+
+		move.b	(a1,d1.w),d0
+		cmpi.w	#$05,d0
+		beq.s	.noBreakHoriz
+
+		clr.b	(a1,d1.w)
+
+.noBreakHoriz:
+		rts
+
+; ---------------------------------------------------------------------------
+.cursorUp:
+		bset.b	#VERTICAL_BIAS,state(a0)
+
+		move.w	xPos(a0),d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		move.w	yPos(a0),d1
+		subq.w	#HITBOX_Y/2,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		move.w	#4-1,d7
+		
+.marchUp:
+		subi.w	#$100,d1
+		bmi.s	.outOfBounds
+		move.b	(a1,d1.w),d2
+		bne.s	.blockFoundVert
+		dbf	d7,.marchUp
+
+.outOfBounds:
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+
+; ---------------------------------------------------------------------------
+.cursorDown:
+		bclr.b	#VERTICAL_BIAS,state(a0)
+
+		move.w	xPos(a0),d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		move.w	yPos(a0),d1
+		addq.w	#HITBOX_Y/2,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		move.w	#4-1,d7
+		
+.marchDown:
+		addi.w	#$100,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.blockFoundVert
+		dbf	d7,.marchDown
+
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+
+; ---------------------------------------------------------------------------
+.blockFoundVert:
+		move.w	xPos(a0),d2
+		andi.w	#$FFF8,d2
+		move.w	d2,cursorXPos(a0)
+
+		move.w	d1,d2
+		andi.w	#$FF00,d2
+		lsr.w	#5,d2
+		move.w	d2,cursorYPos(a0)
+
+		btst.b	#BIT_A,(ctrlPressP1).w	
+		bne.s	.tryBreakVert
+
+		btst.b	#BIT_A,(ctrlHoldP1).w	
+		beq.s	.noBreakVert
+
+		tst.b	punchTimer(a0)
+		bne.s	.noBreakVert
+
+.tryBreakVert:
+		move.b	#14,punchTimer(a0)
+
+		move.b	(a1,d1.w),d0
+		cmpi.w	#$05,d0
+		beq.s	.noBreakVert
+
+		clr.b	(a1,d1.w)
+
+.noBreakVert:
+		rts
+
+; ---------------------------------------------------------------------------
+
+
+; ===========================================================================
+; ---------------------------------------------------------------------------
+; Process Player Collision
+; ---------------------------------------------------------------------------
+MC_PlayerCollision:
 		lea	(mapCollBlocks).l,a1	; Load the world map collision layer into a1
 
 ;.checkLeft:
