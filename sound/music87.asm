@@ -1,7 +1,7 @@
 triple_Header:
 smpsHeaderStartSong = 1
 	smpsHeaderVoice     triple_Voices
-	smpsHeaderChan      $05, $01
+	smpsHeaderChan      $06, $01
 	smpsHeaderTempo     $02, $00
 
 	smpsHeaderDAC       triple_DAC
@@ -9,6 +9,7 @@ smpsHeaderStartSong = 1
 	smpsHeaderFM        triple_FM2,	$00, $0F
 	smpsHeaderFM        triple_FM3,	$00, $0B
 	smpsHeaderFM        triple_FM4,	$00, $13
+	smpsHeaderFM        triple_FM5,	$00, $13
 	smpsHeaderPSG       triple_PSG1,	$0C, $01, $00, $00
 
 ; DAC Data
@@ -137,6 +138,19 @@ triple_Loop05:
 	dc.b	nG4, $09, nB4, $03, nRst, $21
 	smpsPan             panCenter, $00
 	smpsJump triple_FM4
+
+; FM5 Data
+triple_FM5:
+	smpsAlterNote       $03
+	smpsPan             panCenter, $00
+	smpsSetvoice        $00
+	dc.b	nRst, $7F, $7F, $7F, $4B, nG4, $02, nA4, nB4, nC5, nD5, nE5
+	dc.b	nA4, nB4, nCs5, nD5, nE5, nFs5, nB4, nCs5, nEb5, nE5, nFs5, nAb5
+	dc.b	nCs5, nEb5, nF5, nFs5, nAb5, nBb5, nRst, $7F, $7F, $7F, $33, nG4
+	dc.b	$02, nA4, nB4, nC5, nD5, nE5, nA4, nB4, nCs5, nD5, nE5, nFs5
+	dc.b	nB4, nCs5, nEb5, nE5, nFs5, nAb5, nCs5, nEb5, nF5, nFs5, nAb5, nBb5
+	dc.b	nRst, $18
+	smpsJump triple_FM5
 
 ; PSG1 Data
 triple_PSG1:
