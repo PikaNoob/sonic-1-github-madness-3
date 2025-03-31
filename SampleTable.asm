@@ -14,7 +14,7 @@ SampleTable:
 	dcSample	TYPE_DPCM, 		Timpani, 	8750				; $89
 	dcSample	TYPE_DPCM, 		Timpani, 	7150				; $8A
 	dcSample	TYPE_DPCM, 		Timpani, 	7000				; $8B
-	dcSample	TYPE_PCM,		SegaPCM,	0, FLAGS_SFX		; $8C	NOTE: sample rate is auto-detected from WAV file
+	dcSample	TYPE_DPCM,		SegaPCM,	11025, FLAGS_SFX		; $8C	NOTE: sample rate is auto-detected from WAV file
 	dcSample	TYPE_PCM,		BeeBush1,	0, FLAGS_SFX		; $8D
 	dcSample	TYPE_PCM,		BeeBush2,	0, FLAGS_LOOP		; $8E
 	dcSample	TYPE_PCM,		Vanish,		0, FLAGS_SFX		; $8F	; TODO: DPCM?
@@ -63,7 +63,7 @@ SampleTable:
 	incdac	Kick, "sound/dac/kick.dpcm"
 	incdac	Snare, "sound/dac/snare.pcm"
 	incdac	Timpani, "sound/dac/timpani.dpcm"
-	incdac	SegaPCM, "sound/dac/sega.wav"
+	incdac	SegaPCM, "sound/dac/sega.dpcm"
 	incdac	BeeBush1, "sound/dac/beebush_smp1.wav"
 	incdac	BeeBush2, "sound/dac/beebush_smp2.wav"
 	incdac	Vanish, "sound/dac/VScream_1.wav"
