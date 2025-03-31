@@ -354,7 +354,7 @@ BEEBUSH_MAIN:
         bne.s   .NoWin
         move.b  #SMNO_BEEBUSH_WIN,submode.w ; Move to next mode
         move.b  #4,(membushBees+obj.Action).w
-        move.b  #8,(membushPlayer+obj.Action).w
+        move.b  #$C,(membushPlayer+obj.Action).w
         move.b  #0,(membushPlayer+$30).w
         move.w  #60*3,genericTimer.w
         rts
