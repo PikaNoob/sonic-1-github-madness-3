@@ -1,7 +1,7 @@
 ; Minecraft: Very Legacy Console Edition
 ; Main file
 
-;	align	$20000
+	align	$20000
 	opt	l.
 	include	"minecraft\code\variables.asm"
 	include	"minecraft\code\macros.asm"
@@ -89,7 +89,7 @@ MC_RenderBlocks:
 
 		move.w	(camYPosFG).w,d1	; Get the camera's y coordinate
 		lsl.w	#5,d1			; Make into row offset
-		andi.w	#$FF00,d1		; ^
+	;	andi.w	#$FF00,d1		; ^
 		bpl.s	.renderScreen
 
 .abovePlayfield:
@@ -464,11 +464,19 @@ MC_TestMap:
 	dcb.b	256,$00	; Row 09
 	dcb.b	256,$00	; Row 0A
 	dcb.b	256,$00	; Row 0B
+
 	dcb.b	256,$00	; Row 0C
-	dcb.b	256,$00	; Row 0D
-	dcb.b	256,$00	; Row 0E
+
+;	dcb.b	255,$00	; Row 0F
+;	dc.b	$11
 	dcb.b	255,$00	; Row 0F
 	dc.b	$11
+	dcb.b	254,$00	; Row 0F
+	dc.b	$11, $11
+
+;	dcb.b	256,$00	; Row 0D
+;	dcb.b	256,$00	; Row 0E
+
 
 	dcb.b	256,$03	; Row 20
 	dcb.b	256,$02	; Row 21

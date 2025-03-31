@@ -8,16 +8,16 @@ yPos		rs.l	1
 xVel		rs.w	1
 yVel		rs.w	1
 
-state		rs.b	1
 flags		rs.b	1
 frame		rs.b	1
-heldItemID	rs.b	1
-
 animTimer	rs.b	1
-		rs.b	1
+state		rs.b	1
+
+ON_GROUND	equ	0
 
 cursorXPos	rs.w	1
 cursorYPos	rs.w	1
+heldItemID	rs.w	1
 
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -28,68 +28,14 @@ MC_Player:
 	
 	; movement and collision
 		;bsr.w	MC_PlayerControl
-		;bsr.w	MC_PlayerMove
-		;bsr.w	MC_PlayerCollision
+		bsr.w	MC_PlayerMove
+		bsr.w	MC_PlayerCollision
 		;bsr.w	MC_PlayerAnimate
 		;bsr.w	MC_PlayerCursor
 		;bsr.w	MC_PlayerDraw
 
-.checkJump:
-		btst.b	#BIT_B,(ctrlPressP1).w
-		beq.s	.checkLeft
-		move.w	#-$1C0,yVel(a0)
-
-;.checkDown:
-;		btst.b	#BIT_DOWN,(ctrlHoldP1).w
-;		beq.s	.checkLeft
-;		addq.w	#1,yPos(a0)
-
-.checkLeft:
-		btst.b	#BIT_LEFT,(ctrlHoldP1).w
-		beq.s	.checkRight
-		subi.w	#$10,xVel(a0)
-
-		tst.w	xVel(a0)
-		bmi.s	.checkCapLeft
-		subi.w	#$C,xVel(a0)
-
-.checkCapLeft:
-		cmpi.w	#-$E0,xVel(a0)
-		bgt.s	.updateBGPos
-		move.w	#-$E0,xVel(a0)
-		bra.s	.updateBGPos
-
-.checkRight:
-		btst.b	#BIT_RIGHT,(ctrlHoldP1).w
-		beq.s	.decel
-		addi.w	#$10,xVel(a0)
-		
-		tst.w	xVel(a0)
-		bpl.s	.checkCapRight
-		addi.w	#$C,xVel(a0)
-
-.checkCapRight:
-		cmpi.w	#$E0,xVel(a0)
-		ble.s	.updateBGPos
-		move.w	#$E0,xVel(a0)
-		bra.s	.updateBGPos
-
-.decel:
-		tst.w	xVel(a0)
-		beq.s	.updateBGPos
-		bpl.s	.xVelPos
-
-		addi.w	#$18,xVel(a0)
-		bmi.s	.updateBGPos
-		clr.w	xVel(a0)
-
-.xVelPos:
-		subi.w	#$18,xVel(a0)
-		bpl.s	.updateBGPos
-		clr.w	xVel(a0)
-
 .updateBGPos:
-		bsr.w	.blockCollision
+	;	bsr.w	.blockCollision
 
 		move.w	xPos(a0),d0
 		sub.w	#160,d0
@@ -130,60 +76,220 @@ MC_Player:
 
 ; ---------------------------------------------------------------------------
 .playerFrames:
-	sprite_entry	SPR_2x2, -8, -8, (vramSteve/TILE), 0, 1, 0, 0
-	sprite_entry	SPR_2x2, -8, -9, (vramSteve/TILE)+4, 0, 1, 0, 0
+	sprite_entry	SPR_2x2, -8, -8-1, (vramSteve/TILE), 0, 1, 0, 0
+	sprite_entry	SPR_2x2, -8, -9-1, (vramSteve/TILE)+4, 0, 1, 0, 0
 
 ; ---------------------------------------------------------------------------
-.applySpeedGrounded:
-		movem.w	xVel(a0),d0-d1
-		lsl.l	#8,d0
-		add.l	d0,xPos(a0)
-		lsl.l	#8,d1
-		add.l	d1,yPos(a0)
+MC_PlayerMove:
+		bclr.b	#ON_GROUND,state(a0)		; Is the Player making contact with the ground?
+		beq.s	.checkHorizInput		; If not, skip check for jump input
+
+		btst.b	#BIT_B,(ctrlHoldP1).w		; Is the player holding the jump button?
+		beq.s	.checkHorizInput		; If not, branch and check for 
+
+		move.w	#-$1A0,yVel(a0)			; Set the player's Y velocity to move upwards
+	;	bclr.b	#ON_GROUND,state(a0)		; Clear the 'ON_GROUND' flag
+
+.checkHorizInput:
+		moveq	#MASK_RIGHT+MASK_LEFT,d0	; Move a horizonal input mask into d0
+		and.b	(ctrlHoldP1).w,d0		; Logically AND it against the input for this frame
+		lsr.b	#1,d0				; Turn into a jump table index
+		jsr	.horizRoutines(pc,d0.w)		; Use the resulting index to jump to the appropriate subroutine
+
+.applyVelocity
+		movem.w	xVel(a0),d0-d1	; Move velocties to d0 and d1 with sign-extension
+		lsl.l	#8,d0		; Shift horizonal velocity up by 8 bits
+		add.l	d0,xPos(a0)	; Add it to the current x-axis position
+		lsl.l	#8,d1		; Shift vertical velocity up by 8 bits
+		add.l	d1,yPos(a0)	; Add it to the current y-axis position
+
+		addi.w	#$22,yVel(a0)	; Apply gravity to the stored vertical velocity
+		cmpi.w	#$500,yVel(a0)	; Cap downward vertical velocity
+		ble.s	.return		; ^
+		move.w	#$500,yVel(a0)	; ^
+
+.return:
 		rts
+
+; ===========================================================================
+.horizRoutines:
+		bra.s	.decelerate	; %00 - No horizontal input
+		bra.s	.accelLeft	; %01 - Left horizontal input
+		bra.s	.accelRight	; %10 - Right horizontal input
+	;	bra.s	.decelerate	; %11 - Left and right horizontal input (impossible without tools; falls-through)
+; ===========================================================================
+.decelerate:
+		tst.w	xVel(a0)	; Is horizontal velocity at zero?
+		beq.s	.decelExit	; If so, exit the subroutine
+		bpl.s	.xVelPos	; If it's positive, bracnh
+
+		addi.w	#$18,xVel(a0)	; Otherwise, add the deceleration value to the horizontal velocity
+		bmi.s	.decelExit	; If the horizontal velocity is still positive, exit
+		clr.w	xVel(a0)	; Otherwise, the signage has flipped and we need to zero it first
+		rts			; Exit
+
+.xVelPos:
+		subi.w	#$18,xVel(a0)	; Subtract the deceleration value to the horizontal velocity
+		bpl.s	.decelExit	; If the horizontal velocity is still negative, exit
+		clr.w	xVel(a0)	; Otherwise, the signage has flipped and we need to zero it first
+
+.decelExit:
+		rts			; Exit
+
+; ===========================================================================
+.accelLeft:
+		subi.w	#$10,xVel(a0)	; Accelerate to the left by $10 units
+
+		tst.w	xVel(a0)	; Is our are we traveling to the right?
+		bmi.s	.leftCapVel	; If not, branch
+		subi.w	#$C,xVel(a0)	; If so, accelerate to the left by an additional $C
+
+.leftCapVel:
+		cmpi.w	#-$E0,xVel(a0)	; Cap leftward velocity to $E0 units
+		bgt.s	.accelLeftExit	; ^
+		move.w	#-$E0,xVel(a0)	; ^
+
+.accelLeftExit:
+		rts			; Exit
+
+; ===========================================================================
+.accelRight:
+		addi.w	#$10,xVel(a0)	; Accelerate to the right by $10 units
+
+		tst.w	xVel(a0)	; Is our are we traveling to the left?
+		bpl.s	.rightCapVel	; If not, branch
+		addi.w	#$C,xVel(a0)	; If so, accelerate to the right by an additional $C
+
+.rightCapVel:
+		cmpi.w	#$E0,xVel(a0)	; Cap rightward velocity to $E0 units
+		ble.s	.accelRightExit	; ^
+		move.w	#$E0,xVel(a0)	; ^
+
+.accelRightExit:
+		rts			; Exit
+
+; ===========================================================================
 ; ---------------------------------------------------------------------------
-.applySpeedFalling:
-		movem.w	xVel(a0),d0-d1
-		lsl.l	#8,d0
-		add.l	d0,xPos(a0)
-		addi.w	#$22,yVel(a0)
-
-		cmpi.w	#$500,yVel(a0)
-		ble.s	.noCap
-		move.w	#$500,yVel(a0)
-
-.noCap:
-		lsl.l	#8,d1
-		add.l	d1,yPos(a0)
-		rts
-
-; ---------------------------------------------------------------------------
-.blockCollision:
-		bsr.s	.applySpeedFalling
+MC_PlayerCollision:
+HITBOX_X	equ	4
+HITBOX_Y	equ	7
 
 		lea	(mapCollBlocks).l,a1	; Load the world map collision layer into a1
 
-		move.w	xPos(a0),d0
+;.checkLeft:
+	; Left Wall Collision
+		move.w	xPos(a0),d0		
+		subq.w	#HITBOX_X,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0			
+		move.w	d0,d1
+
+		move.w	yPos(a0),d2
+		move.w	d2,d3
+		subq.w	#HITBOX_Y/2,d2
+		lsl.w	#5,d2			; Make into row offset
+		addq.w	#HITBOX_Y/2,d3
+		lsl.w	#5,d3			; Make into row offset
+
+		bsr.w	.checkForSolidity
+		beq.s	.checkRight
+
+		clr.w	xVel(a0)
+		addq.w	#1,xPos(a0)
+
+.checkRight:
+	; Right Wall Collision
+		move.w	xPos(a0),d0		
+		addq.w	#HITBOX_X,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0			
+		move.w	d0,d1
+
+		move.w	yPos(a0),d2
+		move.w	d2,d3
+		subq.w	#HITBOX_Y/2,d2
+		lsl.w	#5,d2			; Make into row offset
+		addq.w	#HITBOX_Y/2,d3
+		lsl.w	#5,d3			; Make into row offset
+
+		bsr.s	.checkForSolidity
+		beq.s	.checkCeiling
+
+		clr.w	xVel(a0)
+		subq.w	#1,xPos(a0)
+
+
+.checkCeiling:
+	; Ceiling Collision
+		move.w	xPos(a0),d0		; Get the player's current x-axis position
+		move.w	d0,d1			; Copy it to d1 as well
+
+		subq.w	#HITBOX_X/2,d0		; Subtract 3 to get the position of the left edge of the hitbox
 		lsr.w	#3,d0			; Divide by 8 to get the index of the tile within the row
 		andi.w	#$FF,d0			; Cap to a maximum index value of 0xFF
 
-		move.w	yPos(a0),d1
-		addq.w	#8,d1
-		asl.w	#5,d1			; Make into row offset
-		andi.w	#$FF00,d1		; ^
+		addq.w	#HITBOX_X/2,d1		; Repeat the above process for the right edge of the hitbox
+		lsr.w	#3,d1			; Divide by 8 to get the index of the tile within the row
+		andi.w	#$FF,d1			; Cap to a maximum index value of 0xFF
+
+		move.w	yPos(a0),d2
+		subq.w	#HITBOX_Y,d2
+		lsl.w	#5,d2			; Make into row offset
+	;	andi.w	#$FF00,d2		; ^
+		move.w	d2,d3
+
+		bsr.s	.checkForSolidity
+		beq.s	.checkGround
+
+		clr.w	yVel(a0)
+		addq.w	#1,yPos(a0)
+
+.checkGround:
+	; Ground Collision 
+		move.w	xPos(a0),d0		; Get the player's current x-axis position
+		move.w	d0,d1			; Copy it to d1 as well
+
+		subq.w	#HITBOX_X/2,d0		; Subtract 3 to get the position of the left edge of the hitbox
+		lsr.w	#3,d0			; Divide by 8 to get the index of the tile within the row
+		andi.w	#$FF,d0			; Cap to a maximum index value of 0xFF
+
+		addq.w	#HITBOX_X/2,d1		; Repeat the above process for the right edge of the hitbox
+		lsr.w	#3,d1			; Divide by 8 to get the index of the tile within the row
+		andi.w	#$FF,d1			; Cap to a maximum index value of 0xFF
+
+		move.w	yPos(a0),d2
+		addq.w	#HITBOX_Y,d2
+		lsl.w	#5,d2			; Make into row offset
+	;	andi.w	#$FF00,d2		; ^
+		move.w	d2,d3
 		
-		move.b	d0,d1
-		move.b	(a1,d1.w),d0
-		move.b	.blockProperties(pc,d0.w),d0
+		bsr.s	.checkForSolidity
 		beq.s	.inAir
-		
+
 		clr.w	yVel(a0)
 		andi.l	#$FFF80000,yPos(a0)
+		addq.w	#8-HITBOX_Y,yPos(a0)
+		bset.b	#ON_GROUND,state(a0)	; set the 'ON_GROUND' flag
 
 .inAir:
 		rts
 
-; ---------------------------------------------------------------------------
+; ===========================================================================
+; d0-d2/d1-d3 - x and y coordinates within level data of the blocks to be checked
+.checkForSolidity:
+		move.b	d0,d2			; Check first block along edge
+		move.b	(a1,d2.w),d0
+		move.b	.blockProperties(pc,d0.w),d0
+		bne.s	.foundSolid
+
+		move.b	d1,d3			; Check second block along edge
+		move.b	(a1,d3.w),d1
+		move.b	.blockProperties(pc,d1.w),d1
+
+.foundSolid:
+		rts
+
+; ===========================================================================
 .blockProperties:
 	dc.b	0			; 00 Air
 	dc.b	1			; 01 Stone
