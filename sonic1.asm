@@ -9590,6 +9590,7 @@ Resize_MZ3end:
 
 Resize_SLZ:				; XREF: Resize_Index
 		moveq	#0,d0
+		rts
 		move.b	($FFFFFE11).w,d0
 		add.w	d0,d0
 		move.w	Resize_SLZx(pc,d0.w),d0
