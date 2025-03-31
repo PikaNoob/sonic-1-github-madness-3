@@ -203,33 +203,37 @@ Map_ca8f_380: 	dc.b $8
 	dc.b $30, $1, $0, $46, $28
 	dc.b $30, $5, $0, $1A, $30
 Map_ca8f_3A9: 	dc.b $1F
-		dc.b $E8, 5, 0, 0, $D8		; G
-		dc.b $E8, 5, 0, 4, $E8		; A
-		dc.b $E8, 5, 0, $2E, $F8	; S
-		dc.b $E8, 5, 0, $2E, $8	; S
-		dc.b $E8, 5, 0, $2A, $18	; Y
-		dc.b $F8, 5, 0, $5C, $C8	; F
-		dc.b $F8, 5, 0, $16, $D8	; L
-		dc.b $F8, 5, 0, $26, $E8	; O
-		dc.b $F8, 5, 0, $32, $F8	; U
-		dc.b $F8, 5, 0, $1A, $8	; N
-		dc.b $F8, 5, 0, $1E, $18	; C
-		dc.b $F8, 5, 0, $2A, $28	; Y
-		dc.b $8, 5, 0, $42, $B8	; D
-		dc.b $8, 1, 0, $46, $C8	; I
-		dc.b $8, 5, 0, 4, $D0		; A
-		dc.b $8, 5, 0, $22, $E0	; R
-		dc.b $8, 5, 0, $22, $F0	; R
-		dc.b $8, 5, 0, $3A, $0	; H
-		dc.b $8, 5, 0, $0E, $10	; E
-		dc.b $8, 5, 0, 4, $20		; A
-		dc.b $18, 5, 0, $5C, $C8	; F
-		dc.b $18, 5, 0, $26, $D8	; O
-		dc.b $18, 5, 0, $22, $E8	; R
-		dc.b $18, 5, 0, $0E, $F8	; E
-		dc.b $18, 5, 0, $48, $8	; B
-		dc.b $18, 5, 0, $0E, $18	; E
-		dc.b $18, 5, 0, $22, $28	; R
+ spritePiece -$66, -$20, 2, 2, $16, 0, 0, 0, 0
+ spritePiece -$56, -$20, 1, 2, $46, 0, 0, 0, 0
+ spritePiece -$4D, -$20, 2, 2, $3E, 0, 0, 0, 0
+ spritePiece -$3C, -$20, 2, 2, $E, 0, 0, 0, 0
+ spritePiece -$2B, -$20, 2, 2, $22, 0, 0, 0, 0
+ spritePiece -$1A, -$20, 2, 2, 4, 0, 0, 0, 0
+ spritePiece -9, -$20, 2, 2, $16, 0, 0, 0, 0
+ spritePiece 7, -$20, 2, 2, $16, 0, 0, 0, 0
+ spritePiece $15, -$20, 2, 2, $2A, 0, 0, 0, 0
+ spritePiece $29, -$20, 2, 2, $3E, 0, 0, 0, 0
+ spritePiece $3A, -$20, 2, 2, $3A, 0, 0, 0, 0
+ spritePiece $4B, -$20, 2, 2, $E, 0, 0, 0, 0
+ spritePiece -$4B, -$D, 2, 2, $48, 0, 0, 0, 0
+ spritePiece -$3A, -$D, 2, 2, $E, 0, 0, 0, 0
+ spritePiece -$2A, -$D, 2, 2, $2E, 0, 0, 0, 0
+ spritePiece -$1B, -$D, 2, 2, $3E, 0, 0, 0, 0
+ spritePiece -5, -$D, 2, 2, $2E, 0, 0, 0, 0
+ spritePiece $A, -$D, 2, 2, $3A, 0, 0, 0, 0
+ spritePiece $1B, -$D, 1, 2, $46, 0, 0, 0, 0
+ spritePiece $24, -$D, 2, 2, $3E, 0, 0, 0, 0
+ spritePiece 0, $1C, 1, 2, $500, 1, 0, 0, 0
+ spritePiece $1A, $24, 1, 1, $500, 0, 0, 0, 0
+ spritePiece $26, -$55, 1, 1, $500, 0, 0, 0, 0
+ spritePiece $3E, -$46, 1, 1, $500, 0, 0, 0, 0
+ spritePiece $2A, -$36, 1, 2, $500, 0, 0, 0, 0
+ spritePiece $E, -$E, 1, 2, $500, 0, 0, 0, 0
+ spritePiece $2E, $14, 1, 2, $500, 0, 0, 0, 0
+ spritePiece $38, 4, 1, 2, $500, 0, 0, 0, 0
+ spritePiece $E, -$1F, 2, 4, $500, 0, 0, 0, 0
+ spritePiece $1A, -$56, 2, 4, $500, 0, 0, 0, 0
+ spritePiece $3E, -$46, 2, 4, $500, 0, 0, 0, 0
 
 Map_ca8f_tmss:	dc.b 28
  spritePiece $24, -$3F, 4, 2, 0, 0, 0, 0, 0
