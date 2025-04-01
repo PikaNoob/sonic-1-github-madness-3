@@ -4,25 +4,25 @@
 # Sonic Heroes
 
 # Sonic
-
+Sonic got a tan and gained brainrot since his last outting. The rest is history
 
 # Ogorki
-
+Ogorki plans to defame the the white guys candy brand to advertise his pickles
 
 # Anakama
-
+idfk
 
 # Limited Sonic (from the rom hack Limited Sonic)
 It Is Limited
 
 # Neru
-
+Idfk
 
 # Gomer Gimpson
 Gomer.
 
 # Sailor Mercury
-
+Ask Conic I don't have time I DON'T HAVE TIME
 
 # Kiryu
 Awoken by the cacophony from Sonics intro cutscene, Kiryu must now fuck shit up in order to go back asleep
@@ -97,5 +97,8 @@ False God
 # Malachi
 Gruesome demon from hell, but not this hell. The hell that we reside in is a few layers deeper.
 
-# Toy Freddy (TODO: make this the eighth listed thing in misc)
+# Dad
+He humbly requests that you wash his balls
+
+# Toy Freddy
 He kinda, uhh, well, fat
