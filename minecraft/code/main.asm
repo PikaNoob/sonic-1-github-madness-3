@@ -27,9 +27,9 @@ MC_Init:
 		clrRAM	mcRAM					; clear all the RAM used by Minecraft
 		bsr.w	MC_ClearScreen				; clear VRAM, CRAM, and VSRAM
 
-.waitVBlank:	
-		move.w	(a6),ccr				; is v-blank active?
-		bpl.s	.waitVBlank				; if not, wait for it to start
+;.waitVBlank:	
+;		move.w	(a6),ccr				; is v-blank active?
+;		bpl.s	.waitVBlank				; if not, wait for it to start
 
 	dma68k	MC_Palette,$0000,$40*2,CRAM				; load in the palette
 	dma68k	MC_Terrain,vramTerrain,MC_Terrain_End-MC_Terrain,VRAM	; load in the block art
