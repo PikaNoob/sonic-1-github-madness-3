@@ -17,7 +17,9 @@ It Is Limited
 
 # Neru
 
+
 # Gomer Gimpson
+
 
 # Sailor Mercury
 
@@ -40,11 +42,23 @@ SANS UNDERTALE?!?!?!!?!??!?!!??!?!?!?!?
 Rightful prisoner of the special stage, Reimu is laced with a special microplastic blend that is contagious, known as "cooties" because it only spreads on men, despite being designed to spread to everything.
 This allows Reimu to steal the Special Emerals from Fatman, passing it from Reimu to Sailor Mercury
 
+# Steve
+I am Steve
+
+# Oily fella
+He appears when hedgehogs need him most, aside for Limited Sonic, fuck Limited Sonic
+
 -----------------------------------------------------------
 # Sonic Villains
 
 # White Guy
 Free Candy (idfk who this guy is)
+
+# Teto
+Fatass
+
+# Sailor Jupiter
+Slightly less of a fatass
 
 # Fatman
 Only formally appearing in the credits, he can be made angy with you having the emerals
@@ -56,8 +70,20 @@ Peter plans to punch Quagmire as you reach the bees nest
 # Bees
 Attached to Quagmires penis, they swarm him unless Quagmire can reach a bees nest
 
+# Idiot
+You. Are an idiot. Hahaha ha ha ha ha haha ha haha ha~
+
 -----------------------------------------------------------
 # Sonic Misc
 
 # Toni
 The one before Sonic, Toni was shafted in favour of the blue (now orange) rodent we know now. Nobody really gives a shit about him though
+
+# Otis.exe
+He hates cheaters and also Gavin Graham
+
+# Miku
+"Aww yeah I'm fucking mikuing it"
+
+# Toy Freddy (TODO: make this the eighth listed thing in misc)
+He kinda, uhh, well, fat
