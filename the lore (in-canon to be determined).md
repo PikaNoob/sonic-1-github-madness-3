@@ -89,5 +89,8 @@ The only thing our god hates roaming his perfect garden, is cheaters, hex editor
 # Miku
 If for whatever reason you so choose to deny his will, mikuing it is the key to escape the wrath of our god
 
+# Andrew Dobson
+False God
+
 # Toy Freddy (TODO: make this the eighth listed thing in misc)
 He kinda, uhh, well, fat
