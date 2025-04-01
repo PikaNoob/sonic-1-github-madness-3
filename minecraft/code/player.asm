@@ -1805,21 +1805,21 @@ MC_InventoryScreen:
 	dc.b	$15	; 15 Sand
 	dc.b	$07	; 07 Gravel
 	dc.b	$03	; 03 Grass
-	dc.b	$21	; 25 Crimson Wool
-	dc.b	$24	; 26 Peach Wool
-	dc.b	$1F	; 27 Bronze Wool
-	dc.b	$23	; 28 Goldenrod Wool
-	dc.b	$1E	; 29 Lime Wool
-	dc.b	$22	; 2A Green Wool
-	dc.b	$23	; 2B Turquoise Wool
-	dc.b	$1E	; 2C Indigo Wool
-	dc.b	$1E	; 2D Violet Wool
-	dc.b	$20	; 2E Cacao Wool
-	dc.b	$24	; 20 White Wool
-	dc.b	$24	; 21 Silver Wool
-	dc.b	$1D	; 22 Gray Wool
+	dc.b	$25	; 25 Crimson Wool
+	dc.b	$26	; 26 Peach Wool
+	dc.b	$27	; 27 Bronze Wool
+	dc.b	$28	; 28 Goldenrod Wool
+	dc.b	$29	; 29 Lime Wool
+	dc.b	$2A	; 2A Green Wool
+	dc.b	$2B	; 2B Turquoise Wool
+	dc.b	$2C	; 2C Indigo Wool
+	dc.b	$2D	; 2D Violet Wool
+	dc.b	$2E	; 2E Cacao Wool
+	dc.b	$20	; 20 White Wool
+	dc.b	$21	; 21 Silver Wool
+	dc.b	$22	; 22 Gray Wool
 	dc.b	$23	; 23 Charcoal Wool
-	dc.b	$21	; 24 Black Wool
+	dc.b	$24	; 24 Black Wool
 	dc.b	$10	; 10 Iron Block
 	dc.b	$11	; 11 Gold Block
 	dc.b	$12	; 12 Diamond Block
