@@ -6536,7 +6536,7 @@ EndingSequence:				; XREF: GameModeArray
 		move.b	(v_character).w,d0
 		lsl.w	#2,d0
 		jmp	@lut(pc,d0.w)
-@lut:	bra.w 	@null		; sonic
+@lut:	bra.w 	@sonic		; sonic
 	bra.w	@null
 	bra.w	@null
 	bra.w	@null		; limited
@@ -6547,13 +6547,19 @@ EndingSequence:				; XREF: GameModeArray
 	bra.w	@purpleguy	; purple guy
 @kiryu:
 		pea	End_GotoCredits
-		lea	EndingCutscene,a6
+		lea	EndingSleeper,a6
 		jmp	GM_CustomSplashScreensIG
 @purpleguy:
+		pea	End_GotoCredits
+		lea	EndingAlways,a6
+		jmp	GM_CustomSplashScreensIG
+@sonic:
 		pea	End_GotoCredits
 		lea	EndingCutscene,a6
 		jmp	GM_CustomSplashScreensIG
 @null:
+		jmp	End_GotoCredits
+
 		move.b	#$E4,d0
 		bsr.w	PlaySound_Special ; stop music
 		bsr.w	Pal_FadeFrom
@@ -9962,8 +9968,7 @@ locret_7322:
 ; ===========================================================================
 
 Resize_FZend2:
-		lea	EndingCutscene,a6
-		jmp	GM_CustomSplashScreensIG
+		bra.s	loc_72C2
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Ending sequence dynamic screen resizing (empty)
@@ -36217,9 +36222,6 @@ Obj86_Ball_Speed:
 @notoverflown:
 		bra.w	loc_1AA1E
 @oof:
-		move.w	#$94,d0			; play Vanish sample
-		jsr	MegaPCM_PlaySample
-		illegal
 		bra.w	loc_1AA34
 ; ===========================================================================
 

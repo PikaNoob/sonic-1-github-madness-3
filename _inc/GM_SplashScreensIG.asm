@@ -120,6 +120,7 @@ GM_CustomSplashScreensIG:
 	dc.w 10*60,10*50	; intro 5
 	dc.w 11*60,11*50	; intro 6
 	dc.w 4*60,4*50		; I ALWA
+	dc.w 15*60,15*50	; ending 8
 
 GM_SplashScreensListIG:
 	dc.l $89<<24|@nem_pillow,$00<<24|@enifg_pillow,$94<<24|@enibg_pillow,$00<<24|@pal_pillow,0
@@ -129,7 +130,7 @@ GM_SplashScreensListIG:
 	dc.l $81<<24|@nem_mal,$00<<24|@enifg_mal,$00<<24|@enibg_mal,$97<<24|@pal_mal,0
 	dc.l $81<<24|@nem_sh,$00<<24|@enifg_sh,$00<<24|@enibg_sh,$9F<<24|@pal_sh,0
 	dc.l $81<<24|@nem_sowwy,$00<<24|@enifg_sowwy,$00<<24|@enibg_sowwy,$01<<24|@pal_sowwy,0
-	dc.l $81<<24|@nem_fat,$00<<24|@enifg_fat,$A5<<24|@enibg_fat,$00<<24|@pal_fat,0		; MUST BE NUMBER 8 OR ELSE I NUKE THE WHOLE PROJECT YOUR IMMORAL, uhhh, fuckers, I'm gonna miku you I'm mikuing
+	dc.l $81<<24|Nem_ToyFreddy,$00<<24|Eni_ToyFreddy,$A5<<24|Eni_ToyFreddy,$00<<24|Pal_ToyFreddy,0	; MUST BE NUMBER 8 OR ELSE I NUKE THE WHOLE PROJECT YOUR IMMORAL, uhhh, fuckers, I'm gonna miku you I'm mikuing
 	dc.l $81<<24|@nem_playnow,$00<<24|@enifg_playnow,$00<<24|@enibg_playnow,$07<<24|@pal_playnow,0
 	dc.l $81<<24|@nem_actualpoop,$00<<24|@enifg_actualpoop,$00<<24|@enibg_actualpoop,$09<<24|@pal_actualpoop,0	; GMZ
 	dc.l $81<<24|@nem_urfat,$01<<24|@enifg_urfat,$82<<24|@enibg_urfat,$00<<24|@pal_urfat,0
@@ -202,14 +203,6 @@ GM_SplashScreensListIG:
 @enibg_sowwy:	incbin mapeni\splash_sowwy.bin
 	even
 @pal_sowwy:	incbin pallet\monochrome.bin
-	even
-
-@nem_fat:	incbin artnem\splash_fat.bin
-	even
-@enifg_fat:
-@enibg_fat:	incbin mapeni\splash_fat.bin
-	even
-@pal_fat:	incbin pallet\splash_fat.bin
 	even
 
 @nem_playnow:	incbin artnem\splash_playnow.bin
@@ -352,4 +345,29 @@ EndingCutscene:		; no one fucking modify this or i swear to fucking god, except 
 	
 	
 @pal_monochrome:	incbin pallet\monochrome.bin
+	even
+
+
+EndingSleeper:
+	dc.l $81<<24|@nem,$00<<24|@enifg,$B1<<24|@enibg,$00<<24|@pal,0
+	dc.l 0	; terminator 2
+
+@nem:	incbin artnem\ending_kiryu.bin
+	even
+@enifg:
+@enibg:	incbin mapeni\ending_kiryu.bin
+	even
+@pal:	incbin pallet\ending_kiryu.bin
+	even
+
+EndingAlways:
+	dc.l $81<<24|Nem_ToyFreddy,$08<<24|Eni_ToyFreddyEnjoyer,$AD<<24|Eni_ToyFreddy,$99<<24|Pal_ToyFreddy,0
+	dc.l 0	; terminator 2
+
+Nem_ToyFreddy:	incbin artnem\splash_fat.bin
+	even
+Eni_ToyFreddyEnjoyer:	incbin mapeni\splash_fat_fg.bin
+Eni_ToyFreddy:	incbin mapeni\splash_fat.bin
+	even
+Pal_ToyFreddy:	incbin pallet\splash_fat.bin
 	even
