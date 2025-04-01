@@ -108,7 +108,7 @@ BBUSH_OBJNO_PETER       = 8
         dc.l BbushObj_QuagmireMouth
         dc.l BbushObj_Bees
         dc.l BbushObj_Hive
-        dc.l BbushObj_Hive
+        dc.l BbushObj_Peter
 .Null:
         rts 
 

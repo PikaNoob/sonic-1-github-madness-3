@@ -281,6 +281,7 @@ BEEBUSH_STATIC:
 ; Initialize main sequence
 ; ---------------------------------------------------------------------------
 
+membushPeter  = objSlot03
 membushPlayer = objSlot02
 membushBees   = objSlot01
 membushHive   = objSlot00
@@ -300,6 +301,11 @@ BEEBUSH_INITMAIN:
 .ClearObjects:                         
         move.l  d0,(a1)+
         dbf     d1,.ClearObjects
+        moveq   #0,d0
+        move.l  d0,cameraAPosX.w
+        move.l  d0,cameraBPosX.w
+        move.l  d0,cameraCPosX.w
+        move.l  d0,cameraZPosX.w
         move.b  #BBUSH_OBJNO_PLAYER,objSlot02.w
         move.b  #BBUSH_OBJNO_BEES,objSlot01.w
         move.b  #BBUSH_OBJNO_HIVE,objSlot00.w
@@ -498,11 +504,11 @@ _beebushScroll:
         moveq   #0,d2
         moveq   #0,d3              
         lea     hscroll.w,a1
-        andi.w  #$1FF,cameraAPosX
-        andi.w  #$1FF,cameraCPosX
+        andi.w  #$1FF,cameraAPosX.w
+        andi.w  #$FF,cameraCPosX.w
         move.w  cameraAPosX.w,d1
         asr.w   #1,d1
-        move.w  d1,cameraBPosX
+        move.w  d1,cameraBPosX.w
 
         move.w  cameraCPosX.w,d1
         add.w   d1,d1
