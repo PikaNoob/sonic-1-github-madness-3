@@ -9932,11 +9932,11 @@ Resize_SBZ2boss:
 		cmpi.w	#$1EB0,($FFFFF700).w
 		bcs.s	locret_7298
 		;bsr.w	SingleObjLoad
-		bne.s	locret_7298
-		move.b	#$83,(a1)	; load collapsing block	object
+		;bne.s	locret_7298
+		;move.b	#$83,(a1)	; load collapsing block	object
 		addq.b	#2,($FFFFF742).w
-		moveq	#$1E,d0
-		bra.w	LoadPLC		; load SBZ2 Eggman patterns
+		;moveq	#$1E,d0
+		;bra.w	LoadPLC		; load SBZ2 Eggman patterns
 ; ===========================================================================
 
 locret_7298:

@@ -317,8 +317,8 @@ MC_ClearScreen:
 MC_LoadBackground:
 	dma68k	MC_BGArt,vramBackground,MC_BGArt_End-MC_BGArt,VRAM	; load in the background art
 
-	vdpCmd	move.l, VRAM_PLANE_B, VRAM, WRITE, (a6)		; Set up VDP to write data to the plane B nametable location
 		lea	MC_BGMap,a0
+		lea	mcRAM,a1
 		move.w	#(32*64)-1,d7				; Set loop count to plane size - 1
 
 .loop:
@@ -328,8 +328,11 @@ MC_LoadBackground:
 		ori.w	#(3<<13),d0
 
 .empty:
-		move.w	d0,-4(a6)
+		move.w	d0,(a1)+
 		dbf	d7,.loop
+
+	dma68k	mcRAM,VRAM_PLANE_B,32*64*2,VRAM
+	
 		rts						; return
 ; ---------------------------------------------------------------------------
 
@@ -399,7 +402,7 @@ MC_VInt:
 ; ---------------------------------------------------------------------------
 MC_ReadJoypad:
 		lea	(ctrlHoldP1).w,a0 ; address where joypad states are written
-		lea	($A10002).l,a1	; first	joypad port
+		lea	($A10002+1).l,a1	; first	joypad port
 		bsr.s	.read		; do the first joypad
 		addq.w	#2,a1		; do the second	joypad
 
