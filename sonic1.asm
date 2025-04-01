@@ -7684,6 +7684,7 @@ BgScroll_SBZ:				; XREF: BgScroll_Index
 		asl.l	#4,d0
 		asl.l	#1,d0
 		asr.l	#8,d0
+		subi.w	#$80,d0
 		move.w	d0,($FFFFF70C).w
 		rts	
 ; ===========================================================================
@@ -8162,15 +8163,6 @@ loc_653C:
 
 
 Deform_SBZ:				; XREF: Deform_Index
-		move.w	($FFFFF73A).w,d4
-		ext.l	d4
-		asl.l	#6,d4
-		move.w	($FFFFF73C).w,d5
-		ext.l	d5
-		asl.l	#4,d5
-		asl.l	#1,d5
-		bsr.w	ScrollBlock1
-		move.w	($FFFFF70C).w,($FFFFF618).w
 		lea	($FFFFCC00).w,a1
 		move.w	#240-1,d1	; V30
 		move.w	($FFFFF700).w,d0
