@@ -350,7 +350,7 @@ MC_PlayerCursor:
 
 .facingWalls:
 		btst.b	#PLACE_MODE,state(a0)
-	;	bne.s	MC_CursorPlaceFG
+		bne.w	MC_CursorPlaceBG
 		bra.w	MC_CursorDestroyBG
 
 ; ===========================================================================
@@ -620,29 +620,26 @@ MC_CursorPlaceFG:
 .checkBlockToRight:
 		move.w	d3,d1
 		addq.b	#1,d1
-		move.b	(a1,d1.w),d1
-		or.b	d1,d2
+		move.b	(a1,d1.w),d2
 
 .checkBlockToLeft:
 		move.w	d3,d1
 		subq.b	#1,d1
-		move.b	(a1,d1.w),d1
-		or.b	d1,d2
+		or.b	(a1,d1.w),d2
 
 .checkBlockBelow:
 		move.w	d3,d1
 		addi.w	#$100,d1
 		bmi.s	.checkBlockAbove
-		move.b	(a1,d1.w),d1
-		or.b	d1,d2
+		or.b	(a1,d1.w),d2
 
 .checkBlockAbove:
 		move.w	d3,d1
 		subi.w	#$100,d1
-		bmi.s	.checkBlockAbove
-		move.b	(a1,d1.w),d1
-		or.b	d1,d2
+		bmi.s	.testPlacement
+		or.b	(a1,d1.w),d2
 
+.testPlacement:
 		tst.b	d2
 		bne.s	.validPlacement
 		move.w	#$8000,cursorXPos(a0)
@@ -965,6 +962,302 @@ MC_CursorDestroyFG:
 		clr.b	(a1,d1.w)
 
 .noBreakVert:
+		rts
+
+; ---------------------------------------------------------------------------
+; ===========================================================================
+; ---------------------------------------------------------------------------
+MC_CursorPlaceBG:
+		lea	(mapCollBlocks).l,a1	; Load the world map collision layer into a1
+		lea	(mapWallBlocks).l,a2	; Load the world map wall layer into a2
+		
+		btst.b	#BIT_UP,(ctrlHoldP1).w
+		bne.w	.cursorUp
+		btst.b	#BIT_Down,(ctrlHoldP1).w
+		bne.w	.cursorDown
+
+.checkVerticalBias:
+		move.w	#HITBOX_Y/2,d6
+		btst.b	#VERTICAL_BIAS,state(a0)
+		beq.s	.biasedDown
+		neg.w	d6
+
+.biasedDown:
+		btst.b	#FACING_LEFT,state(a0)
+		beq.w	.facingRight
+
+.facingLeft:
+		move.w	xPos(a0),d0		
+;		subq.w	#HITBOX_X,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		move.w	yPos(a0),d1
+		add.w	d6,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		move.w	#4-1,d7
+		moveq	#0,d3
+		
+.marchLeft:
+		subq.b	#1,d1
+		move.b	(a1,d1.w),d2
+		or.b	(a2,d1.w),d2
+		bne.s	.hitWallLeft
+		move.w	d1,d3
+		dbf	d7,.marchLeft
+
+.hitWallLeft:
+		tst.w	d3
+		bne.w	.airFound
+
+		neg.w	d6
+		move.w	yPos(a0),d1
+		add.w	d6,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		move.w	#4-1,d7
+		moveq	#0,d3
+		
+.marchLeftAgain:
+		subq.b	#1,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.hitWallLeftAgain
+		move.w	d1,d3
+		dbf	d7,.marchLeftAgain
+
+.hitWallLeftAgain:
+		tst.w	d3
+		bne.w	.airFound
+
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+; ---------------------------------------------------------------------------
+.facingRight:
+		move.w	xPos(a0),d0		
+;		addq.w	#HITBOX_X,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		move.w	yPos(a0),d1
+		add.w	d6,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		move.w	#4-1,d7
+		moveq	#0,d3
+		
+.marchRight:
+		addq.b	#1,d1
+		move.b	(a1,d1.w),d2
+		or.b	(a2,d1.w),d2
+		bne.s	.hitWallRight
+		move.w	d1,d3
+		dbf	d7,.marchRight
+
+.hitWallRight:
+		tst.w	d3
+		bne.w	.airFound
+
+		neg.w	d6
+		move.w	yPos(a0),d1
+		add.w	d6,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		move.w	#4-1,d7
+		moveq	#0,d3
+		
+.marchRightAgain:
+		addq.b	#1,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.hitWallRightAgain
+		move.w	d1,d3
+		dbf	d7,.marchRightAgain
+
+.hitWallRightAgain:
+		tst.w	d3
+		bne.w	.airFound
+
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+; ---------------------------------------------------------------------------
+.cursorUp:
+		bset.b	#VERTICAL_BIAS,state(a0)
+
+		move.w	#HITBOX_X,d6
+		btst.b	#FACING_LEFT,state(a0)
+		beq.s	.rightBiasUp
+		neg.w	d6
+
+.rightBiasUp:
+		move.w	xPos(a0),d0
+		sub.w	d6,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		swap	d0
+		move.w	xPos(a0),d0
+		add.w	d6,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		move.w	yPos(a0),d1
+;		subq.w	#HITBOX_Y,d1
+		lsl.w	#5,d1			; Make into row offset
+
+		move.w	#4-1,d7
+		moveq	#0,d3
+		
+.marchUp:
+		subi.w	#$100,d1
+		bmi.s	.hitCeiling
+
+		swap	d0
+		move.b	d0,d1
+		move.b	(a1,d1.w),d2
+		or.b	(a2,d1.w),d2
+		bne.s	.hitCeiling
+		move.w	d1,d3
+
+		swap	d0
+		move.b	d0,d1
+		move.b	(a1,d1.w),d2
+		or.b	(a2,d1.w),d2
+		bne.s	.hitCeiling
+		move.w	d1,d3
+	
+		dbf	d7,.marchUp
+
+.hitCeiling:
+		tst.w	d3
+		bne.s	.airFound
+
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+
+; ---------------------------------------------------------------------------
+.cursorDown:
+		bclr.b	#VERTICAL_BIAS,state(a0)
+
+		move.w	#HITBOX_X,d6
+		btst.b	#FACING_LEFT,state(a0)
+		beq.s	.rightBiasDown
+		neg.w	d6
+
+.rightBiasDown:
+		move.w	xPos(a0),d0
+		sub.w	d6,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		swap	d0
+		move.w	xPos(a0),d0
+		add.w	d6,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		move.w	yPos(a0),d1
+;		addq.w	#HITBOX_Y,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		move.w	#4-1,d7
+		moveq	#0,d3
+		
+.marchDown:
+		addi.w	#$100,d1
+		bmi.s	.hitFloor
+
+		swap	d0
+		move.b	d0,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.hitFloor
+		move.w	d1,d3
+
+		swap	d0
+		move.b	d0,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.hitFloor
+		move.w	d1,d3
+	
+		dbf	d7,.marchDown
+
+.hitFloor:
+		tst.w	d3
+		bne.s	.airFound
+
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+
+; ---------------------------------------------------------------------------
+.airFound:
+		moveq	#0,d2
+
+.checkBlockToRight:
+		move.w	d3,d1
+		addq.b	#1,d1
+		move.b	(a1,d1.w),d2
+		or.b	(a2,d1.w),d2
+
+.checkBlockToLeft:
+		move.w	d3,d1
+		subq.b	#1,d1
+		or.b	(a1,d1.w),d2
+		or.b	(a2,d1.w),d2
+
+.checkBlockBelow:
+		move.w	d3,d1
+		addi.w	#$100,d1
+		bmi.s	.checkBlockAbove
+		or.b	(a1,d1.w),d2
+		or.b	(a2,d1.w),d2
+
+.checkBlockAbove:
+		move.w	d3,d1
+		subi.w	#$100,d1
+		bmi.s	.testPlacement
+		or.b	(a1,d1.w),d2
+		or.b	(a2,d1.w),d2
+
+.testPlacement:
+		tst.b	d2
+		bne.s	.validPlacement
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+
+.validPlacement:
+		moveq	#0,d2
+		move.b	d3,d2
+		lsl.w	#3,d2
+		move.w	d2,cursorXPos(a0)
+
+		move.w	d3,d2
+		andi.w	#$FF00,d2
+		lsr.w	#5,d2
+		move.w	d2,cursorYPos(a0)
+
+		btst.b	#BIT_C,(ctrlPressP1).w	
+		bne.s	.tryPlace
+
+		btst.b	#BIT_C,(ctrlHoldP1).w	
+		beq.s	.noPlace
+
+		tst.b	punchTimer(a0)
+		bne.s	.noPlace
+
+.tryPlace:
+		move.b	#14,punchTimer(a0)
+		move.b	heldItemID(a0),(a2,d3.w)
+
+.noPlace:
 		rts
 
 ; ---------------------------------------------------------------------------
