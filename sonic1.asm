@@ -3509,9 +3509,11 @@ Title_ClrObjRam2:
 		move.b	#$F,($FFFFD100).w
 		move.b	#2,($FFFFD11A).w
 		moveq	#0,d0
+		move.w	d0,($FFFFFFE4).w
+		move.w	d0,($FFFFFFE6).w
+		move.w	d0,($FFFFFF82).w 	; clear current level select selection
+	;	moveq	#0,d0
 		bsr.w	LoadPLC2
-		move.w	#0,($FFFFFFE4).w
-		move.w	#0,($FFFFFFE6).w
 		move.w	($FFFFF60C).w,d0
 		ori.b	#$40,d0
 		move.w	d0,($C00004).l
