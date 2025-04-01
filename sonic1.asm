@@ -28,8 +28,8 @@ v_tetoxstart		rs.w	1
 v_tetoystart		rs.w	1
 v_levelrandtracker	rs.l	1
 
-randLevelCount		= 15	; 31 max (32 is reserved for linear path flag)
-randLevelCountLimited	= 11
+randLevelCount		= 16	; 31 max (32 is reserved for linear path flag)
+randLevelCountLimited	= 12
 ;level select constants (to not give the foward reference warning this was moved here)
 f_checksum	= $FFFFFFF9
 lsscrpos 	= $60860003 ; level select screen position
@@ -4635,15 +4635,15 @@ GetLevelRandom:
 	dc.w 7<<8|1	; Makoto
 	dc.w 7<<8|2	; Makoto
 	dc.w 1<<8|1	; LZ
+	dc.w 3<<8|0	; SLZ
 ; beatable as everyone else
 	dc.w 0<<8|1	; GHZ ; starting jump too big
 	dc.w 0<<8|2	; GHZ ; ditto
 	dc.w 1<<8|0	; LZ ; one of the jumps is too big, probably doable with badnik bouncing
 	dc.w 1<<8|2	; LZ ; gravity too dense
 ; unbeatable
-	dc.w 3<<8|0	; SLZ ; dutch
-	dc.w 3<<8|1
-	dc.w 3<<8|2
+	dc.w 3<<8|1	; SLZ ; dutch
+	dc.w 3<<8|2	; SLZ ; dutch
 	even
 ; ===========================================================================
 
