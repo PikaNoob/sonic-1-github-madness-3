@@ -4589,12 +4589,12 @@ GetLevelRandom:
 	dc.w 7<<8|0	; Makoto
 	dc.w 7<<8|1	; Makoto
 	dc.w 7<<8|2	; Makoto
-; beatable as everyone else
-	dc.w 0<<8|1	; GHZ
-	dc.w 0<<8|2	; GHZ
-	dc.w 1<<8|0	; LZ
 	dc.w 1<<8|1	; LZ
-	dc.w 1<<8|2	; LZ
+; beatable as everyone else
+	dc.w 0<<8|1	; GHZ ; starting jump too big
+	dc.w 0<<8|2	; GHZ
+	dc.w 1<<8|0	; LZ ; one of the jumps is too big, probably doable with badnik bouncing
+	dc.w 1<<8|2	; LZ ; gravity too dense
 ; unbeatable
 	dc.w 3<<8|0	; SLZ ; dutch
 	dc.w 3<<8|1
