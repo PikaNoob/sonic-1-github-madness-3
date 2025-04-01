@@ -323,7 +323,7 @@ PLC_BHZ:	dc.w $A
 		dc.w $8F60
 		dc.l Nem_Newtron	; newtron enemy
 		dc.w $9360
-		dc.l Nem_Motobug	; motobug enemy
+		dc.l Nem_splats	; motobug enemy
 		dc.w $9E00
 		dc.l Nem_Spikes		; spikes
 		dc.w $A360
