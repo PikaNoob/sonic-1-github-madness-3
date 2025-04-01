@@ -22,7 +22,7 @@ Idfk
 Gomer.
 
 # Sailor Mercury
-Ask Conic I don't have time I DON'T HAVE TIME
+Sailor Mercury is helping to smuggle the Chaos Emgles from Fatman, because she's bored. She also hates white guy because she saw the allegations
 
 # Kiryu
 Awoken by the cacophony from Sonics intro cutscene, Kiryu must now fuck shit up in order to go back asleep
@@ -46,7 +46,8 @@ This allows Reimu to steal the Special Emerals from Fatman, by passing it from R
 I am Steve
 
 # Oily fella
-He appears when hedgehogs need him most, aside for Limited Sonic, fuck Limited Sonic
+From origins unknown (believed to originate from the Oily dimension), the life of the Oily fella sucks major ass 
+In spite of a pained existence, Oily fella appears when hedgehogs need him most, aside for Limited Sonic, fuck Limited Sonic
 
 -----------------------------------------------------------
 # Sonic Villains
