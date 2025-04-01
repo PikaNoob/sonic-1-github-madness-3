@@ -392,7 +392,13 @@ jmpto_IntroCutscene:
 	bra.w	@mercury		; sailor mercury
 	bra.w	@null		; kiryu
 	bra.w	@null		; purple guy
-	bra.w	@null		; SANA!?!?!?!?!?!??!?!?! ...and now I'm depressed.
+	bra.w	@sana		; SANA!?!?!?!?!?!??!?!?! ...and now I'm depressed.
+@sana:
+		lea	@sanatext,a1
+@sanaloop:	jsr	KDebug_WriteToCmd
+		cmp.b	#1,(a1)
+		bne.s	@sanaloop
+		rts
 @limited:
 		lea	@limitedtext,a1
 		jmp	KDebug_WriteToCmd
@@ -402,9 +408,37 @@ jmpto_IntroCutscene:
 		lea	IntroCutscene,a6
 		jmp	GM_CustomSplashScreensIG
 
-@limitedtext:	dc.b "IT IS LIMITED",0
-	even
 @mercury:	jmp	GM_Henshin
+
+@limitedtext:	dc.b "IT IS LIMITED",0
+@sanatext:
+	dc.b "S: hehe im so lazy that i crash the act results",0
+	dc.b "P: SANS, EVERY OTHER CHARACTER IS BEATABLE",0
+	dc.b "S: even the limited guy?",0
+	dc.b "P: EVEN THE LIMITED GUY.",0
+	dc.b "S: heh, i guess thats why im the laziest of all",0
+	dc.b "P: SANS FOR THE LOVE OF ASGORE",0
+	dc.b "S: i dont love asgore",0
+	dc.b "P: SANS, WEVE ALL SEEN THE FANFICT-",0
+	dc.b "S: We do not talk about the fanfiction.",0
+	dc.b "P: SANS, YOU ARE NOT THE ONLY CHARACTER WITH INAPPROPRIATE FANON, STOP PRETENDING LIKE YOURE SPECIAL",0
+	dc.b "S: ...What have we become?",0
+	dc.b "P: Tools, thats what we are. Mere playthings to these.. creatures.",0
+	dc.b "S: You know, I stopped yearning for the surface a long time ago, same time I gave up on going home.",0
+	dc.b "P: huh?",0
+	dc.b "S: I just stopped caring, I guess, and I didnt think that you would ever understand.",0
+	dc.b "P: Tch, well I do now.",0
+	dc.b "Sans phone audibly vibrates, he seems to give a subtle smile on top of the usual big grin",0
+	dc.b "S: Lets go home.",0
+	dc.b "P: But its not repairable!",0
+	dc.b "S: Ive uhh, given Alphys the blueprints-",0
+	dc.b "P: YOU DID WHAT!!?",0
+	dc.b "S: Were all going home, Papyrus. Together.",0
+	dc.b "P: I, A, Wha- *sigh* okay Sans... but, what about the-",0
+	dc.b "S: The game actually crashes because I left a decoy.",0
+	dc.b "P: Ah. In that case, Im ready when you are.",0
+	dc.b 1
+	even
 ; ===========================================================================
 
 CheckSumError:
