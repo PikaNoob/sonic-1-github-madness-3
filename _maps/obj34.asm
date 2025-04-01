@@ -1,17 +1,18 @@
-Map_c5df:
-Map_c5df_0: 	dc.w Map_c5df_18-Map_c5df
-Map_c5df_2: 	dc.w Map_c5df_55-Map_c5df
-Map_c5df_4: 	dc.w Map_c5df_C4-Map_c5df
-Map_c5df_6: 	dc.w Map_c5df_DE-Map_c5df
-Map_c5df_8: 	dc.w Map_c5df_134-Map_c5df
-Map_c5df_A: 	dc.w Map_c5df_19E-Map_c5df
-Map_c5df_C: 	dc.w Map_c5df_1C2-Map_c5df
-Map_c5df_E: 	dc.w Map_c5df_1D7-Map_c5df
-Map_c5df_10: 	dc.w Map_c5df_1E2-Map_c5df
-Map_c5df_12: 	dc.w Map_c5df_1ED-Map_c5df
-Map_c5df_14: 	dc.w Map_c5df_1F8-Map_c5df
-Map_c5df_16: 	dc.w Map_c5df_23A-Map_c5df
-Map_c5df_18: 	dc.b $C
+Map_a6fb:
+Map_a6fb_0: 	dc.w Map_a6fb_1A-Map_a6fb
+Map_a6fb_2: 	dc.w Map_a6fb_57-Map_a6fb
+Map_a6fb_4: 	dc.w Map_a6fb_C6-Map_a6fb
+Map_a6fb_6: 	dc.w Map_a6fb_E0-Map_a6fb
+Map_a6fb_8: 	dc.w Map_a6fb_136-Map_a6fb
+Map_a6fb_A: 	dc.w Map_a6fb_1A0-Map_a6fb
+Map_a6fb_C: 	dc.w Map_a6fb_1C4-Map_a6fb
+Map_a6fb_E: 	dc.w Map_a6fb_1D9-Map_a6fb
+Map_a6fb_10: 	dc.w Map_a6fb_1E4-Map_a6fb
+Map_a6fb_12: 	dc.w Map_a6fb_1EF-Map_a6fb
+Map_a6fb_14: 	dc.w Map_a6fb_1FA-Map_a6fb
+Map_a6fb_16: 	dc.w Map_a6fb_23C-Map_a6fb
+Map_a6fb_18: 	dc.w Map_a6fb_256-Map_a6fb
+Map_a6fb_1A: 	dc.b $C
 	dc.b $F8, $5, $0, $8, $80
 	dc.b $F8, $5, $0, $3A, $90
 	dc.b $F8, $5, $0, $46, $A0
@@ -24,7 +25,7 @@ Map_c5df_18: 	dc.b $C
 	dc.b $F8, $5, $0, $32, $10
 	dc.b $F8, $5, $0, $26, $20
 	dc.b $F8, $5, $0, $26, $30
-Map_c5df_55: 	dc.b $16
+Map_a6fb_57: 	dc.b $16
 	dc.b $F8, $1, $0, $20, $80
 	dc.b $F8, $0, $0, $56, $88
 	dc.b $F8, $5, $0, $26, $98
@@ -47,13 +48,13 @@ Map_c5df_55: 	dc.b $16
 	dc.b $F8, $5, $0, $3A, $98
 	dc.b $F8, $5, $0, $10, $A8
 	dc.b $F8, $5, $0, $3A, $B8
-Map_c5df_C4: 	dc.b $5
+Map_a6fb_C6: 	dc.b $5
 	dc.b $F8, $5, $0, $2A, $80
 	dc.b $F8, $5, $0, $0, $90
 	dc.b $F8, $5, $0, $3A, $A0
 	dc.b $F8, $5, $0, $4, $B0
 	dc.b $F8, $5, $0, $26, $C0
-Map_c5df_DE: 	dc.b $11
+Map_a6fb_E0: 	dc.b $11
 	dc.b $F8, $5, $0, $C, $80
 	dc.b $F8, $5, $0, $32, $90
 	dc.b $F8, $5, $0, $2E, $A0
@@ -71,7 +72,7 @@ Map_c5df_DE: 	dc.b $11
 	dc.b $F8, $5, $0, $1C, $58
 	dc.b $F8, $1, $0, $20, $68
 	dc.b $F8, $5, $0, $3E, $70
-Map_c5df_134: 	dc.b $15
+Map_a6fb_136: 	dc.b $15
 	dc.b $F8, $5, $0, $42, $80
 	dc.b $F8, $5, $0, $1C, $90
 	dc.b $F8, $5, $0, $10, $A0
@@ -93,7 +94,7 @@ Map_c5df_134: 	dc.b $15
 	dc.b $F8, $5, $0, $0, $98
 	dc.b $F8, $5, $0, $3A, $A8
 	dc.b $F8, $5, $0, $C, $B8
-Map_c5df_19E: 	dc.b $7
+Map_a6fb_1A0: 	dc.b $7
 	dc.b $F8, $5, $0, $4E, $80
 	dc.b $F8, $0, $0, $56, $90
 	dc.b $F8, $5, $0, $4E, $A0
@@ -101,21 +102,21 @@ Map_c5df_19E: 	dc.b $7
 	dc.b $F8, $5, $0, $4E, $C0
 	dc.b $F8, $0, $0, $56, $D0
 	dc.b $F8, $5, $0, $4E, $E0
-Map_c5df_1C2: 	dc.b $4
+Map_a6fb_1C4: 	dc.b $4
 	dc.b $F8, $5, $0, $4E, $E0
 	dc.b $F8, $5, $0, $32, $F0
 	dc.b $F8, $5, $0, $2E, $0
 	dc.b $F8, $5, $0, $10, $10
-Map_c5df_1D7: 	dc.b $2
+Map_a6fb_1D9: 	dc.b $2
 	dc.b $4, $C, $0, $53, $EC
 	dc.b $F4, $2, $0, $57, $C
-Map_c5df_1E2: 	dc.b $2
+Map_a6fb_1E4: 	dc.b $2
 	dc.b $4, $C, $0, $53, $EC
 	dc.b $F4, $6, $0, $5A, $8
-Map_c5df_1ED: 	dc.b $2
+Map_a6fb_1EF: 	dc.b $2
 	dc.b $4, $C, $0, $53, $EC
 	dc.b $F4, $6, $0, $60, $8
-Map_c5df_1F8: 	dc.b $D
+Map_a6fb_1FA: 	dc.b $D
 	dc.b $E4, $C, $0, $70, $F4
 	dc.b $E4, $2, $0, $74, $14
 	dc.b $EC, $4, $0, $77, $EC
@@ -129,10 +130,17 @@ Map_c5df_1F8: 	dc.b $D
 	dc.b $FC, $8, $0, $7C, $F4
 	dc.b $4, $C, $0, $7C, $EC
 	dc.b $C, $8, $0, $7C, $EC
-Map_c5df_23A: 	dc.b $5
+Map_a6fb_23C: 	dc.b $5
 	dc.b $F8, $5, $0, $14, $DC
 	dc.b $F8, $1, $0, $20, $EC
 	dc.b $F8, $5, $0, $2E, $F4
 	dc.b $F8, $5, $0, $0, $4
 	dc.b $F8, $5, $0, $26, $14
+Map_a6fb_256: 	dc.b $6
+	dc.b $F8, $5, $0, $2A, $D0
+	dc.b $F8, $5, $0, $0, $E0
+	dc.b $F8, $5, $0, $22, $F0
+	dc.b $F8, $5, $0, $32, $0
+	dc.b $F8, $5, $0, $42, $10
+	dc.b $F8, $5, $0, $32, $20
 	even

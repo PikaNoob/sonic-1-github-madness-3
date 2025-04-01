@@ -314,9 +314,9 @@ PLC_BHZ:	dc.w $A
 		dc.w $6B00
 		dc.l Nem_PplRock	; purple rock
 		dc.w $7A00
-		dc.l Nem_Crabmeat	; crabmeat enemy
+		dc.l Nem_bhzCrabmeat	; crabmeat enemy
 		dc.w $8000
-		dc.l Nem_Buzz		; buzz bomber enemy
+		dc.l Nem_bhzBuzz		; buzz bomber enemy
 		dc.w $8880
 		dc.l Nem_BHZChopper	; chopper enemy
 		dc.w $8F60

@@ -16358,9 +16358,13 @@ Obj34_CheckSBZ3:			; XREF: Obj34_Index
 Obj34_CheckFZ:
 		move.w	d0,d2
 		cmpi.w	#$502,($FFFFFE10).w ; check if level is	FZ
-		bne.s	Obj34_LoadConfig
+		bne.s	Obj34_LoadMako
 		moveq	#6,d0		; load title card number 6 (FZ)
 		moveq	#$B,d2		; use "FINAL" mappings
+Obj34_LoadMako
+		cmpi.b	#$7,($FFFFFE10).w ; check if level is	MKZ
+		bne.s	Obj34_LoadConfig
+		moveq	#$C,d2
 
 Obj34_LoadConfig:
 		lea	(Obj34_ConData).l,a3
@@ -40237,7 +40241,11 @@ Nem_BallHog:	incbin	artnem\ballhog.bin	; ball hog
 		even
 Nem_Crabmeat:	incbin	artnem\crabmeat.bin	; crabmeat
 		even
+Nem_bhzCrabmeat:incbin	artnem\bhzcrabmeat.bin	; crabmeat
+		even
 Nem_Buzz:	incbin	artnem\buzzbomb.bin	; buzz bomber
+		even
+Nem_bhzBuzz:	incbin	artnem\bhzbuzzbomb.bin	; buzz bomber
 		even
 Nem_UnkExplode:	incbin	artnem\xxxexplo.bin	; unused explosion
 		even
