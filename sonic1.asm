@@ -40785,7 +40785,10 @@ MusicIndex:	; $01-$7F
 		dc.l Music17 ; Gadget Mountain Zone (Silvagunnerized an infamous tune)
 		dc.l Music18 ; Bubble Music
 		dc.l Music19 ; Wormy (Not SpongeBob! Figure it out!)
+		dc.l Music1B ; Rendition of 1UP theme
 		dc.l Music1A ; Ronic Setro splash screen
+		dc.l Music1C ; Something
+		dc.l Music1D ; Mountain King S3M 'cause why not
 
 		dc.l Music92 ; test
 
@@ -43256,7 +43259,7 @@ Music03:	include	sound\tg2000tracks\drcoffinman.asm
 		even
 Music04:	include	sound\tg2000tracks\eggmancutscene.asm
 		even
-Music05:	include	sound\tg2000tracks\music05.asm
+Music05:	include	sound\tg2000tracks\tgsend.asm
 		even
 Music06:	include	sound\tg2000tracks\gogogadget.asm
 		even
@@ -43300,7 +43303,13 @@ Music18:	incbin	sound\tg2000tracks\bubble.bin
 		even
 Music19:	incbin	sound\tg2000tracks\wormy.bin
 		even
+Music1B:	incbin	sound\tg2000tracks\son1up.bin
+		even
 Music1A:	include	sound\ronicsetro.asm
+		even
+Music1C:	include	sound\tg2000tracks\MGSFX.asm
+		even
+Music1D:	include	sound\tg2000tracks\hallmountainkings3.asm
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
@@ -43316,7 +43325,7 @@ Music86:	incbin	sound\music86.bin; Scrap Brain Act 1
 		even
 Music87:	include	sound\music87.asm; Invincibility
 		even
-Music88:	incbin	sound\music88.bin; Extra Life
+Music88:	include	sound\music88.asm; Extra Life
 		even
 Music89:	incbin	sound\music89.bin; Special Stage
 		even
