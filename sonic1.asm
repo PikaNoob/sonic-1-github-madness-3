@@ -3513,12 +3513,6 @@ Title_LoadText:
 		bsr.w	LevelLayoutLoad
 		move	#$2700,sr
 		bsr.w	ClearScreen
-		lea	($C00004).l,a5
-		lea	($C00000).l,a6
-		lea	($FFFFF708).w,a3
-		lea	($FFFFA440).w,a4
-		move.w	#$6000,d2
-		bsr.w	LoadTilesFromStart2
 		lea	($FF0000).l,a1
 		lea	(Eni_Title).l,a0 	; load	title screen mappings
 		move.w	#0,d0
@@ -7831,7 +7825,7 @@ GetDeformRoutine:	; GMZ
 ; ---------------------------------------------------------------------------
 ; Offset index for background layer deformation	code
 ; ---------------------------------------------------------------------------
-Deform_Index:	dc.w Deform_GHZ-Deform_Index, Deform_LZ-Deform_Index
+Deform_Index:	dc.w Deform_SBZ-Deform_Index, Deform_LZ-Deform_Index
 		dc.w Deform_MZ-Deform_Index, Deform_SLZ-Deform_Index
 		dc.w Deform_SYZ-Deform_Index, Deform_SBZ-Deform_Index
 		dc.w Deform_GHZ-Deform_Index, Deform_BHZ-Deform_Index ; MAKOTO
