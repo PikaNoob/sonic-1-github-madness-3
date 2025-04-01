@@ -7825,7 +7825,7 @@ GetDeformRoutine:	; GMZ
 ; ---------------------------------------------------------------------------
 ; Offset index for background layer deformation	code
 ; ---------------------------------------------------------------------------
-Deform_Index:	dc.w Deform_GHZ-Deform_Index, Deform_LZ-Deform_Index
+Deform_Index:	dc.w Deform_SBZ-Deform_Index, Deform_LZ-Deform_Index
 		dc.w Deform_MZ-Deform_Index, Deform_SLZ-Deform_Index
 		dc.w Deform_SYZ-Deform_Index, Deform_SBZ-Deform_Index
 		dc.w Deform_GHZ-Deform_Index, Deform_BHZ-Deform_Index ; MAKOTO
