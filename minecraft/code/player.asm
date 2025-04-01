@@ -46,6 +46,7 @@ MC_Player:
 
 .updateBGPos:
 	;	bsr.w	.blockCollision
+		move.b	#$13,heldItemID(a0)
 
 		move.w	xPos(a0),d0
 		sub.w	#160,d0
@@ -124,16 +125,33 @@ MC_Player:
 		add.w	xPos(a0),d0
 		sub.w	(camXposFG).w,d0
 		move.w	d0,(a2)+
-
-	; cursor render test
-		lea	.cursorFrames(pc),a1
 		
 		move.w	cursorYPos(a0),d0
 	;	or.w	cursorXPos(a0),d0
 		bpl.s	.renderCursor
 		rts
 
+; ---------------------------------------------------------------------------
+.playerFrames:
+	sprite_entry	SPR_2x2, -8, -8-1, (vramSteve/TILE), 0, 1, 0, 0
+	sprite_entry	SPR_2x2, -8, -9-1, (vramSteve/TILE)+4, 0, 1, 0, 0
+	sprite_entry	SPR_2x2, -8, -8-1, (vramSteve/TILE)+8, 0, 1, 0, 0
+	sprite_entry	SPR_2x2, -8, -9-1, (vramSteve/TILE)+12, 0, 1, 0, 0
+
+	sprite_entry	SPR_2x2, -8, -8-1, (vramSteve/TILE)+16, 0, 1, 0, 0
+	sprite_entry	SPR_2x2, -8, -9-1, (vramSteve/TILE)+20, 0, 1, 0, 0
+	sprite_entry	SPR_2x2, -8, -8-1, (vramSteve/TILE)+24, 0, 1, 0, 0
+	sprite_entry	SPR_2x2, -8, -9-1, (vramSteve/TILE)+28, 0, 1, 0, 0
+; ---------------------------------------------------------------------------
 .renderCursor:
+		btst.b	#PLACE_MODE,state(a0)
+		bne.s	.renderBlockToPlace
+
+.renderCursor2:
+		btst.b	#0,(vblankCount+3).w
+		beq.s	.exit
+
+		lea	.cursorFrames(pc),a1
 		move.b	#1,-5(a2)
 
 		move.w	(a1)+,d0
@@ -149,24 +167,45 @@ MC_Player:
 		add.w	cursorXPos(a0),d0
 		sub.w	(camXposFG).w,d0
 		move.w	d0,(a2)+
+		rts
 
+.renderBlockToPlace:
+		btst.b	#0,(vblankCount+3).w
+		beq.s	.exit
+
+		lea	.blockFrames(pc),a1
+		move.b	#1,-5(a2)
+
+		move.w	(a1)+,d0
+		add.w	#128,d0
+		add.w	cursorYPos(a0),d0
+		sub.w	(camYposFG).w,d0
+		move.w	d0,(a2)+
+
+		move.w	(a1)+,(a2)+
+
+		lea	MC_BlockRenderProperties(pc),a3
+		moveq	#0,d0
+		move.b	heldItemID(a0),d0
+		add.w	d0,d0
+		move.w	(a3,d0.w),d0
+		move.w	d0,(a2)+
+		
+		move.w	(a1)+,d0
+		add.w	#128,d0
+		add.w	cursorXPos(a0),d0
+		sub.w	(camXposFG).w,d0
+		move.w	d0,(a2)+
+
+.exit:		
 		rts
 
 ; ---------------------------------------------------------------------------
-.playerFrames:
-	sprite_entry	SPR_2x2, -8, -8-1, (vramSteve/TILE), 0, 1, 0, 0
-	sprite_entry	SPR_2x2, -8, -9-1, (vramSteve/TILE)+4, 0, 1, 0, 0
-	sprite_entry	SPR_2x2, -8, -8-1, (vramSteve/TILE)+8, 0, 1, 0, 0
-	sprite_entry	SPR_2x2, -8, -9-1, (vramSteve/TILE)+12, 0, 1, 0, 0
-
-	sprite_entry	SPR_2x2, -8, -8-1, (vramSteve/TILE)+16, 0, 1, 0, 0
-	sprite_entry	SPR_2x2, -8, -9-1, (vramSteve/TILE)+20, 0, 1, 0, 0
-	sprite_entry	SPR_2x2, -8, -8-1, (vramSteve/TILE)+24, 0, 1, 0, 0
-	sprite_entry	SPR_2x2, -8, -9-1, (vramSteve/TILE)+28, 0, 1, 0, 0
-
 .cursorFrames:
 	sprite_entry	SPR_1x1, 0, 0, (vramCursor/TILE)+1, 3, 1, 0, 0
 
+.blockFrames:
+	sprite_entry	SPR_1x1, 0, 0, (vramEmptyTile/TILE), 0, 1, 0, 0
 ; ---------------------------------------------------------------------------
 
 ; ===========================================================================
@@ -297,6 +336,26 @@ MC_PlayerCursor:
 		move.b	#15,doubleTapTimer(a0)
 
 .upNotPressed:
+		btst.b	#BIT_A,(ctrlPressP1).w
+		beq.s	.noModeSwitch
+		bchg.b	#PLACE_MODE,state(a0)
+
+.noModeSwitch:
+		btst.b	#FACING_WALLS,state(a0)
+		bne.s	.facingWalls
+
+		btst.b	#PLACE_MODE,state(a0)
+		bne.s	MC_CursorPlaceFG
+		bra.w	MC_CursorDestroyFG
+
+.facingWalls:
+		btst.b	#PLACE_MODE,state(a0)
+		bne.w	MC_CursorPlaceBG
+		bra.w	MC_CursorDestroyBG
+
+; ===========================================================================
+; ---------------------------------------------------------------------------
+MC_CursorPlaceFG:
 		lea	(mapCollBlocks).l,a1	; Load the world map collision layer into a1
 		
 		btst.b	#BIT_UP,(ctrlHoldP1).w
@@ -312,6 +371,328 @@ MC_PlayerCursor:
 
 .biasedDown:
 		btst.b	#FACING_LEFT,state(a0)
+		beq.w	.facingRight
+
+.facingLeft:
+		move.w	xPos(a0),d0		
+		subq.w	#HITBOX_X,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		btst.b	#ON_GROUND,state(a0)
+		beq.s	.inAirLeft
+
+		move.w	yPos(a0),d3
+		addq.w	#8,d3
+		lsl.w	#5,d3			; Make into row offset
+		move.b	d0,d3
+		
+		move.w	#4-1,d7
+
+.marchLeftLedge:
+		subq.b	#1,d3
+		move.b	(a1,d3.w),d2
+		beq.w	.airFound
+		dbf	d7,.marchLeftLedge
+
+.inAirLeft:
+		move.w	yPos(a0),d1
+		add.w	d6,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		move.w	#4-1,d7
+		moveq	#0,d3
+		
+.marchLeft:
+		subq.b	#1,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.hitWallLeft
+		move.w	d1,d3
+		dbf	d7,.marchLeft
+
+.hitWallLeft:
+		tst.w	d3
+		bne.w	.airFound
+
+		neg.w	d6
+		move.w	yPos(a0),d1
+		add.w	d6,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		move.w	#4-1,d7
+		moveq	#0,d3
+		
+.marchLeftAgain:
+		subq.b	#1,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.hitWallLeftAgain
+		move.w	d1,d3
+		dbf	d7,.marchLeftAgain
+
+.hitWallLeftAgain:
+		tst.w	d3
+		bne.w	.airFound
+
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+; ---------------------------------------------------------------------------
+.facingRight:
+		move.w	xPos(a0),d0		
+		addq.w	#HITBOX_X,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		btst.b	#ON_GROUND,state(a0)
+		beq.s	.inAirRight
+
+		move.w	yPos(a0),d3
+		addq.w	#8,d3
+		lsl.w	#5,d3			; Make into row offset
+		move.b	d0,d3
+		
+		move.w	#4-1,d7
+
+.marchRightLedge:
+		addq.b	#1,d3
+		move.b	(a1,d3.w),d2
+		beq.w	.airFound
+		dbf	d7,.marchRightLedge
+
+.inAirRight:
+		move.w	yPos(a0),d1
+		add.w	d6,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		move.w	#4-1,d7
+		moveq	#0,d3
+		
+.marchRight:
+		addq.b	#1,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.hitWallRight
+		move.w	d1,d3
+		dbf	d7,.marchRight
+
+.hitWallRight:
+		tst.w	d3
+		bne.w	.airFound
+
+		neg.w	d6
+		move.w	yPos(a0),d1
+		add.w	d6,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		move.w	#4-1,d7
+		moveq	#0,d3
+		
+.marchRightAgain:
+		addq.b	#1,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.hitWallRightAgain
+		move.w	d1,d3
+		dbf	d7,.marchRightAgain
+
+.hitWallRightAgain:
+		tst.w	d3
+		bne.w	.airFound
+
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+; ---------------------------------------------------------------------------
+.cursorUp:
+		bset.b	#VERTICAL_BIAS,state(a0)
+
+		move.w	#HITBOX_X,d6
+		btst.b	#FACING_LEFT,state(a0)
+		beq.s	.rightBiasUp
+		neg.w	d6
+
+.rightBiasUp:
+		move.w	xPos(a0),d0
+		sub.w	d6,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		swap	d0
+		move.w	xPos(a0),d0
+		add.w	d6,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		move.w	yPos(a0),d1
+		subq.w	#HITBOX_Y,d1
+		lsl.w	#5,d1			; Make into row offset
+
+		move.w	#4-1,d7
+		moveq	#0,d3
+		
+.marchUp:
+		subi.w	#$100,d1
+		bmi.s	.hitCeiling
+
+		swap	d0
+		move.b	d0,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.hitCeiling
+		move.w	d1,d3
+
+		swap	d0
+		move.b	d0,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.hitCeiling
+		move.w	d1,d3
+	
+		dbf	d7,.marchUp
+
+.hitCeiling:
+		tst.w	d3
+		bne.s	.airFound
+
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+
+; ---------------------------------------------------------------------------
+.cursorDown:
+		bclr.b	#VERTICAL_BIAS,state(a0)
+
+		move.w	#HITBOX_X,d6
+		btst.b	#FACING_LEFT,state(a0)
+		beq.s	.rightBiasDown
+		neg.w	d6
+
+.rightBiasDown:
+		move.w	xPos(a0),d0
+		sub.w	d6,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		swap	d0
+		move.w	xPos(a0),d0
+		add.w	d6,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		move.w	yPos(a0),d1
+		addq.w	#HITBOX_Y,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		move.w	#4-1,d7
+		moveq	#0,d3
+		
+.marchDown:
+		addi.w	#$100,d1
+		bmi.s	.hitFloor
+
+		swap	d0
+		move.b	d0,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.hitFloor
+		move.w	d1,d3
+
+		swap	d0
+		move.b	d0,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.hitFloor
+		move.w	d1,d3
+	
+		dbf	d7,.marchDown
+
+.hitFloor:
+		tst.w	d3
+		bne.s	.airFound
+
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+
+; ---------------------------------------------------------------------------
+.airFound:
+		moveq	#0,d2
+
+.checkBlockToRight:
+		move.w	d3,d1
+		addq.b	#1,d1
+		move.b	(a1,d1.w),d2
+
+.checkBlockToLeft:
+		move.w	d3,d1
+		subq.b	#1,d1
+		or.b	(a1,d1.w),d2
+
+.checkBlockBelow:
+		move.w	d3,d1
+		addi.w	#$100,d1
+		bmi.s	.checkBlockAbove
+		or.b	(a1,d1.w),d2
+
+.checkBlockAbove:
+		move.w	d3,d1
+		subi.w	#$100,d1
+		bmi.s	.testPlacement
+		or.b	(a1,d1.w),d2
+
+.testPlacement:
+		tst.b	d2
+		bne.s	.validPlacement
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+
+.validPlacement:
+		moveq	#0,d2
+		move.b	d3,d2
+		lsl.w	#3,d2
+		move.w	d2,cursorXPos(a0)
+
+		move.w	d3,d2
+		andi.w	#$FF00,d2
+		lsr.w	#5,d2
+		move.w	d2,cursorYPos(a0)
+
+		btst.b	#BIT_C,(ctrlPressP1).w	
+		bne.s	.tryPlace
+
+		btst.b	#BIT_C,(ctrlHoldP1).w	
+		beq.s	.noPlace
+
+		tst.b	punchTimer(a0)
+		bne.s	.noPlace
+
+.tryPlace:
+		move.b	#14,punchTimer(a0)
+		move.b	heldItemID(a0),(a1,d3.w)
+
+.noPlace:
+		rts
+
+; ---------------------------------------------------------------------------
+
+; ===========================================================================
+; ---------------------------------------------------------------------------
+MC_CursorDestroyFG:
+		lea	(mapCollBlocks).l,a1	; Load the world map collision layer into a1
+		
+		btst.b	#BIT_UP,(ctrlHoldP1).w
+		bne.w	.cursorUp
+		btst.b	#BIT_Down,(ctrlHoldP1).w
+		bne.w	.cursorDown
+
+;.checkVerticalBias:
+;		move.w	#HITBOX_Y/2,d6
+;		btst.b	#VERTICAL_BIAS,state(a0)
+;		beq.s	.biasedDown
+;		neg.w	d6
+
+;.biasedDown:
+		btst.b	#FACING_LEFT,state(a0)
 		beq.s	.facingRight
 
 .facingLeft:
@@ -321,31 +702,45 @@ MC_PlayerCursor:
 		andi.w	#$FF,d0
 		
 		move.w	yPos(a0),d1
-		add.w	d6,d1
+;		add.w	d6,d1
+		subq.w	#HITBOX_Y/2,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		swap	d1
+		move.w	yPos(a0),d1
+		addq.w	#HITBOX_Y/2,d1
 		lsl.w	#5,d1			; Make into row offset
 		move.b	d0,d1
 
 		move.w	#4-1,d7
 		
 .marchLeft:
+		swap	d1
 		subq.b	#1,d1
 		move.b	(a1,d1.w),d2
 		bne.s	.blockFoundHoriz
+
+		swap	d1
+		subq.b	#1,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.blockFoundHoriz
+
 		dbf	d7,.marchLeft
 
-		neg.w	d6
-		move.w	yPos(a0),d1
-		add.w	d6,d1
-		lsl.w	#5,d1			; Make into row offset
-		move.b	d0,d1
-
-		move.w	#4-1,d7
-		
-.marchLeftAgain:
-		subq.b	#1,d1
-		move.b	(a1,d1.w),d2
-		bne.s	.blockFoundHoriz
-		dbf	d7,.marchLeftAgain
+;		neg.w	d6
+;		move.w	yPos(a0),d1
+;		add.w	d6,d1
+;		lsl.w	#5,d1			; Make into row offset
+;		move.b	d0,d1
+;
+;		move.w	#4-1,d7
+;		
+;.marchLeftAgain:
+;		subq.b	#1,d1
+;		move.b	(a1,d1.w),d2
+;		bne.s	.blockFoundHoriz
+;		dbf	d7,.marchLeftAgain
 
 		move.w	#$8000,cursorXPos(a0)
 		move.w	#$8000,cursorYPos(a0)
@@ -359,31 +754,45 @@ MC_PlayerCursor:
 		andi.w	#$FF,d0
 		
 		move.w	yPos(a0),d1
-		add.w	d6,d1
+;		add.w	d6,d1
+		subq.w	#HITBOX_Y/2,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		swap	d1
+		move.w	yPos(a0),d1
+		addq.w	#HITBOX_Y/2,d1
 		lsl.w	#5,d1			; Make into row offset
 		move.b	d0,d1
 
 		move.w	#4-1,d7
 		
 .marchRight:
+		swap	d1
 		addq.b	#1,d1
 		move.b	(a1,d1.w),d2
 		bne.s	.blockFoundHoriz
-		dbf	d7,.marchRight
 
-		neg.w	d6
-		move.w	yPos(a0),d1
-		add.w	d6,d1
-		lsl.w	#5,d1			; Make into row offset
-		move.b	d0,d1
-
-		move.w	#4-1,d7
-		
-.marchRightAgain:
+		swap	d1
 		addq.b	#1,d1
 		move.b	(a1,d1.w),d2
-		bne.w	.blockFoundHoriz
-		dbf	d7,.marchRightAgain
+		bne.s	.blockFoundHoriz
+
+		dbf	d7,.marchRight
+
+;		neg.w	d6
+;		move.w	yPos(a0),d1
+;		add.w	d6,d1
+;		lsl.w	#5,d1			; Make into row offset
+;		move.b	d0,d1
+
+;		move.w	#4-1,d7
+		
+;.marchRightAgain:
+;		addq.b	#1,d1
+;		move.b	(a1,d1.w),d2
+;		bne.w	.blockFoundHoriz
+;		dbf	d7,.marchRightAgain
 
 		move.w	#$8000,cursorXPos(a0)
 		move.w	#$8000,cursorYPos(a0)
@@ -396,15 +805,20 @@ MC_PlayerCursor:
 		lsl.w	#3,d2
 		move.w	d2,cursorXPos(a0)
 
-		move.w	yPos(a0),d2
-		add.w	d6,d2
-		andi.w	#$FFF8,d2
+;		move.w	yPos(a0),d2
+;		add.w	d6,d2
+;		andi.w	#$FFF8,d2
+;		move.w	d2,cursorYPos(a0)
+
+		move.w	d1,d2
+		andi.w	#$FF00,d2
+		lsr.w	#5,d2
 		move.w	d2,cursorYPos(a0)
 
-		btst.b	#BIT_A,(ctrlPressP1).w	
+		btst.b	#BIT_C,(ctrlPressP1).w	
 		bne.s	.tryBreakHoriz
 
-		btst.b	#BIT_A,(ctrlHoldP1).w	
+		btst.b	#BIT_C,(ctrlHoldP1).w	
 		beq.s	.noBreakHoriz
 
 		tst.b	punchTimer(a0)
@@ -426,22 +840,43 @@ MC_PlayerCursor:
 .cursorUp:
 		bset.b	#VERTICAL_BIAS,state(a0)
 
+		move.w	#HITBOX_X,d6
+		btst.b	#FACING_LEFT,state(a0)
+		beq.s	.rightBiasUp
+		neg.w	d6
+
+.rightBiasUp:
 		move.w	xPos(a0),d0
+		add.w	d6,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		swap	d0
+		move.w	xPos(a0),d0
+		sub.w	d6,d0
 		lsr.w	#3,d0
 		andi.w	#$FF,d0
 
 		move.w	yPos(a0),d1
 		subq.w	#HITBOX_Y/2,d1
 		lsl.w	#5,d1			; Make into row offset
-		move.b	d0,d1
 
 		move.w	#4-1,d7
 		
 .marchUp:
 		subi.w	#$100,d1
 		bmi.s	.outOfBounds
+
+		swap	d0
+		move.b	d0,d1
 		move.b	(a1,d1.w),d2
 		bne.s	.blockFoundVert
+
+		swap	d0
+		move.b	d0,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.blockFoundVert
+	
 		dbf	d7,.marchUp
 
 .outOfBounds:
@@ -453,7 +888,20 @@ MC_PlayerCursor:
 .cursorDown:
 		bclr.b	#VERTICAL_BIAS,state(a0)
 
+		move.w	#HITBOX_X,d6
+		btst.b	#FACING_LEFT,state(a0)
+		beq.s	.rightBiasDown
+		neg.w	d6
+
+.rightBiasDown:
 		move.w	xPos(a0),d0
+		add.w	d6,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		swap	d0
+		move.w	xPos(a0),d0
+		sub.w	d6,d0
 		lsr.w	#3,d0
 		andi.w	#$FF,d0
 
@@ -466,8 +914,17 @@ MC_PlayerCursor:
 		
 .marchDown:
 		addi.w	#$100,d1
+
+		swap	d0
+		move.b	d0,d1
 		move.b	(a1,d1.w),d2
 		bne.s	.blockFoundVert
+
+		swap	d0
+		move.b	d0,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.blockFoundVert
+
 		dbf	d7,.marchDown
 
 		move.w	#$8000,cursorXPos(a0)
@@ -476,8 +933,9 @@ MC_PlayerCursor:
 
 ; ---------------------------------------------------------------------------
 .blockFoundVert:
-		move.w	xPos(a0),d2
-		andi.w	#$FFF8,d2
+		moveq	#0,d2
+		move.b	d1,d2
+		lsl.w	#3,d2
 		move.w	d2,cursorXPos(a0)
 
 		move.w	d1,d2
@@ -485,10 +943,10 @@ MC_PlayerCursor:
 		lsr.w	#5,d2
 		move.w	d2,cursorYPos(a0)
 
-		btst.b	#BIT_A,(ctrlPressP1).w	
+		btst.b	#BIT_C,(ctrlPressP1).w	
 		bne.s	.tryBreakVert
 
-		btst.b	#BIT_A,(ctrlHoldP1).w	
+		btst.b	#BIT_C,(ctrlHoldP1).w	
 		beq.s	.noBreakVert
 
 		tst.b	punchTimer(a0)
@@ -507,7 +965,569 @@ MC_PlayerCursor:
 		rts
 
 ; ---------------------------------------------------------------------------
+; ===========================================================================
+; ---------------------------------------------------------------------------
+MC_CursorPlaceBG:
+		lea	(mapCollBlocks).l,a1	; Load the world map collision layer into a1
+		lea	(mapWallBlocks).l,a2	; Load the world map wall layer into a2
+		
+		btst.b	#BIT_UP,(ctrlHoldP1).w
+		bne.w	.cursorUp
+		btst.b	#BIT_Down,(ctrlHoldP1).w
+		bne.w	.cursorDown
 
+.checkVerticalBias:
+		move.w	#HITBOX_Y/2,d6
+		btst.b	#VERTICAL_BIAS,state(a0)
+		beq.s	.biasedDown
+		neg.w	d6
+
+.biasedDown:
+		btst.b	#FACING_LEFT,state(a0)
+		beq.w	.facingRight
+
+.facingLeft:
+		move.w	xPos(a0),d0		
+;		subq.w	#HITBOX_X,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		move.w	yPos(a0),d1
+		add.w	d6,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		move.w	#4-1,d7
+		moveq	#0,d3
+		
+.marchLeft:
+		subq.b	#1,d1
+		move.b	(a1,d1.w),d2
+		or.b	(a2,d1.w),d2
+		bne.s	.hitWallLeft
+		move.w	d1,d3
+		dbf	d7,.marchLeft
+
+.hitWallLeft:
+		tst.w	d3
+		bne.w	.airFound
+
+		neg.w	d6
+		move.w	yPos(a0),d1
+		add.w	d6,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		move.w	#4-1,d7
+		moveq	#0,d3
+		
+.marchLeftAgain:
+		subq.b	#1,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.hitWallLeftAgain
+		move.w	d1,d3
+		dbf	d7,.marchLeftAgain
+
+.hitWallLeftAgain:
+		tst.w	d3
+		bne.w	.airFound
+
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+; ---------------------------------------------------------------------------
+.facingRight:
+		move.w	xPos(a0),d0		
+;		addq.w	#HITBOX_X,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		move.w	yPos(a0),d1
+		add.w	d6,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		move.w	#4-1,d7
+		moveq	#0,d3
+		
+.marchRight:
+		addq.b	#1,d1
+		move.b	(a1,d1.w),d2
+		or.b	(a2,d1.w),d2
+		bne.s	.hitWallRight
+		move.w	d1,d3
+		dbf	d7,.marchRight
+
+.hitWallRight:
+		tst.w	d3
+		bne.w	.airFound
+
+		neg.w	d6
+		move.w	yPos(a0),d1
+		add.w	d6,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		move.w	#4-1,d7
+		moveq	#0,d3
+		
+.marchRightAgain:
+		addq.b	#1,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.hitWallRightAgain
+		move.w	d1,d3
+		dbf	d7,.marchRightAgain
+
+.hitWallRightAgain:
+		tst.w	d3
+		bne.w	.airFound
+
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+; ---------------------------------------------------------------------------
+.cursorUp:
+		bset.b	#VERTICAL_BIAS,state(a0)
+
+		move.w	#HITBOX_X,d6
+		btst.b	#FACING_LEFT,state(a0)
+		beq.s	.rightBiasUp
+		neg.w	d6
+
+.rightBiasUp:
+		move.w	xPos(a0),d0
+		sub.w	d6,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		swap	d0
+		move.w	xPos(a0),d0
+		add.w	d6,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		move.w	yPos(a0),d1
+;		subq.w	#HITBOX_Y,d1
+		lsl.w	#5,d1			; Make into row offset
+
+		move.w	#4-1,d7
+		moveq	#0,d3
+		
+.marchUp:
+		subi.w	#$100,d1
+		bmi.s	.hitCeiling
+
+		swap	d0
+		move.b	d0,d1
+		move.b	(a1,d1.w),d2
+		or.b	(a2,d1.w),d2
+		bne.s	.hitCeiling
+		move.w	d1,d3
+
+		swap	d0
+		move.b	d0,d1
+		move.b	(a1,d1.w),d2
+		or.b	(a2,d1.w),d2
+		bne.s	.hitCeiling
+		move.w	d1,d3
+	
+		dbf	d7,.marchUp
+
+.hitCeiling:
+		tst.w	d3
+		bne.s	.airFound
+
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+
+; ---------------------------------------------------------------------------
+.cursorDown:
+		bclr.b	#VERTICAL_BIAS,state(a0)
+
+		move.w	#HITBOX_X,d6
+		btst.b	#FACING_LEFT,state(a0)
+		beq.s	.rightBiasDown
+		neg.w	d6
+
+.rightBiasDown:
+		move.w	xPos(a0),d0
+		sub.w	d6,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		swap	d0
+		move.w	xPos(a0),d0
+		add.w	d6,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		move.w	yPos(a0),d1
+;		addq.w	#HITBOX_Y,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		move.w	#4-1,d7
+		moveq	#0,d3
+		
+.marchDown:
+		addi.w	#$100,d1
+		bmi.s	.hitFloor
+
+		swap	d0
+		move.b	d0,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.hitFloor
+		move.w	d1,d3
+
+		swap	d0
+		move.b	d0,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.hitFloor
+		move.w	d1,d3
+	
+		dbf	d7,.marchDown
+
+.hitFloor:
+		tst.w	d3
+		bne.s	.airFound
+
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+
+; ---------------------------------------------------------------------------
+.airFound:
+		moveq	#0,d2
+
+.checkBlockToRight:
+		move.w	d3,d1
+		addq.b	#1,d1
+		move.b	(a1,d1.w),d2
+		or.b	(a2,d1.w),d2
+
+.checkBlockToLeft:
+		move.w	d3,d1
+		subq.b	#1,d1
+		or.b	(a1,d1.w),d2
+		or.b	(a2,d1.w),d2
+
+.checkBlockBelow:
+		move.w	d3,d1
+		addi.w	#$100,d1
+		bmi.s	.checkBlockAbove
+		or.b	(a1,d1.w),d2
+		or.b	(a2,d1.w),d2
+
+.checkBlockAbove:
+		move.w	d3,d1
+		subi.w	#$100,d1
+		bmi.s	.testPlacement
+		or.b	(a1,d1.w),d2
+		or.b	(a2,d1.w),d2
+
+.testPlacement:
+		tst.b	d2
+		bne.s	.validPlacement
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+
+.validPlacement:
+		moveq	#0,d2
+		move.b	d3,d2
+		lsl.w	#3,d2
+		move.w	d2,cursorXPos(a0)
+
+		move.w	d3,d2
+		andi.w	#$FF00,d2
+		lsr.w	#5,d2
+		move.w	d2,cursorYPos(a0)
+
+		btst.b	#BIT_C,(ctrlPressP1).w	
+		bne.s	.tryPlace
+
+		btst.b	#BIT_C,(ctrlHoldP1).w	
+		beq.s	.noPlace
+
+		tst.b	punchTimer(a0)
+		bne.s	.noPlace
+
+.tryPlace:
+		move.b	#14,punchTimer(a0)
+		move.b	heldItemID(a0),(a2,d3.w)
+
+.noPlace:
+		rts
+
+; ---------------------------------------------------------------------------
+
+; ===========================================================================
+; ---------------------------------------------------------------------------
+MC_CursorDestroyBG:
+		lea	(mapWallBlocks).l,a1	; Load the world map wall layer into a1
+		
+		btst.b	#BIT_UP,(ctrlHoldP1).w
+		bne.w	.cursorUp
+		btst.b	#BIT_Down,(ctrlHoldP1).w
+		bne.w	.cursorDown
+
+		btst.b	#FACING_LEFT,state(a0)
+		beq.s	.facingRight
+
+.facingLeft:
+		move.w	xPos(a0),d0		
+	;	subq.w	#HITBOX_X/2,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+		
+		move.w	yPos(a0),d1
+		subq.w	#HITBOX_Y/2,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		swap	d1
+		move.w	yPos(a0),d1
+		addq.w	#HITBOX_Y/2,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		move.w	#4-1,d7
+		
+.marchLeft:
+		swap	d1
+		subq.b	#1,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.blockFoundHoriz
+
+		swap	d1
+		subq.b	#1,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.blockFoundHoriz
+
+		dbf	d7,.marchLeft
+
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+
+; ---------------------------------------------------------------------------
+.facingRight:
+		move.w	xPos(a0),d0		
+	;	addq.w	#HITBOX_X/2,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+		
+		move.w	yPos(a0),d1
+		subq.w	#HITBOX_Y/2,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		swap	d1
+		move.w	yPos(a0),d1
+		addq.w	#HITBOX_Y/2,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		move.w	#4-1,d7
+		
+.marchRight:
+		swap	d1
+		addq.b	#1,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.blockFoundHoriz
+
+		swap	d1
+		addq.b	#1,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.blockFoundHoriz
+
+		dbf	d7,.marchRight
+
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+
+; ---------------------------------------------------------------------------
+.blockFoundHoriz:
+		lea	(mapCollBlocks).l,a2	; Load the world map collision layer into a1
+		move.b	(a2,d1.w),d2
+		beq.s	.validSelectHoriz
+
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+
+.validSelectHoriz:
+		moveq	#0,d2
+		move.b	d1,d2
+		lsl.w	#3,d2
+		move.w	d2,cursorXPos(a0)
+
+		move.w	d1,d2
+		andi.w	#$FF00,d2
+		lsr.w	#5,d2
+		move.w	d2,cursorYPos(a0)
+
+		btst.b	#BIT_C,(ctrlPressP1).w	
+		bne.s	.tryBreakHoriz
+
+		btst.b	#BIT_C,(ctrlHoldP1).w	
+		beq.s	.noBreakHoriz
+
+		tst.b	punchTimer(a0)
+		bne.s	.noBreakHoriz
+
+.tryBreakHoriz:
+		move.b	#14,punchTimer(a0)
+
+		move.b	(a1,d1.w),d0
+		cmpi.w	#$05,d0
+		beq.s	.noBreakHoriz
+
+		clr.b	(a1,d1.w)
+
+.noBreakHoriz:
+		rts
+
+; ---------------------------------------------------------------------------
+.cursorUp:
+		bset.b	#VERTICAL_BIAS,state(a0)
+
+		move.w	#HITBOX_X,d6
+		btst.b	#FACING_LEFT,state(a0)
+		beq.s	.rightBiasUp
+		neg.w	d6
+
+.rightBiasUp:
+		move.w	xPos(a0),d0
+		add.w	d6,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		swap	d0
+		move.w	xPos(a0),d0
+		sub.w	d6,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		move.w	yPos(a0),d1
+	;	subq.w	#HITBOX_Y/2,d1
+		lsl.w	#5,d1			; Make into row offset
+
+		move.w	#4-1,d7
+		
+.marchUp:
+		subi.w	#$100,d1
+		bmi.s	.outOfBounds
+
+		swap	d0
+		move.b	d0,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.blockFoundVert
+
+		swap	d0
+		move.b	d0,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.blockFoundVert
+	
+		dbf	d7,.marchUp
+
+.outOfBounds:
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+
+; ---------------------------------------------------------------------------
+.cursorDown:
+		bclr.b	#VERTICAL_BIAS,state(a0)
+
+		move.w	#HITBOX_X,d6
+		btst.b	#FACING_LEFT,state(a0)
+		beq.s	.rightBiasDown
+		neg.w	d6
+
+.rightBiasDown:
+		move.w	xPos(a0),d0
+		add.w	d6,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		swap	d0
+		move.w	xPos(a0),d0
+		sub.w	d6,d0
+		lsr.w	#3,d0
+		andi.w	#$FF,d0
+
+		move.w	yPos(a0),d1
+	;	addq.w	#HITBOX_Y/2,d1
+		lsl.w	#5,d1			; Make into row offset
+		move.b	d0,d1
+
+		move.w	#4-1,d7
+		
+.marchDown:
+		addi.w	#$100,d1
+
+		swap	d0
+		move.b	d0,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.blockFoundVert
+
+		swap	d0
+		move.b	d0,d1
+		move.b	(a1,d1.w),d2
+		bne.s	.blockFoundVert
+
+		dbf	d7,.marchDown
+
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+
+; ---------------------------------------------------------------------------
+.blockFoundVert:
+		lea	(mapCollBlocks).l,a2	; Load the world map collision layer into a1
+		move.b	(a2,d1.w),d2
+		beq.s	.validSelectVert
+
+		move.w	#$8000,cursorXPos(a0)
+		move.w	#$8000,cursorYPos(a0)
+		rts
+
+.validSelectVert:
+		moveq	#0,d2
+		move.b	d1,d2
+		lsl.w	#3,d2
+		move.w	d2,cursorXPos(a0)
+
+		move.w	d1,d2
+		andi.w	#$FF00,d2
+		lsr.w	#5,d2
+		move.w	d2,cursorYPos(a0)
+
+		btst.b	#BIT_C,(ctrlPressP1).w	
+		bne.s	.tryBreakVert
+
+		btst.b	#BIT_C,(ctrlHoldP1).w	
+		beq.s	.noBreakVert
+
+		tst.b	punchTimer(a0)
+		bne.s	.noBreakVert
+
+.tryBreakVert:
+		move.b	#14,punchTimer(a0)
+
+		move.b	(a1,d1.w),d0
+		cmpi.w	#$05,d0
+		beq.s	.noBreakVert
+
+		clr.b	(a1,d1.w)
+
+.noBreakVert:
+		rts
+
+; ---------------------------------------------------------------------------
 
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
