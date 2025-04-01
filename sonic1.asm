@@ -7746,11 +7746,8 @@ BgScroll_SYZ:				; XREF: BgScroll_Index
 ; ===========================================================================
 
 BgScroll_SBZ:				; XREF: BgScroll_Index
-		asl.l	#4,d0
-		asl.l	#1,d0
-		asr.l	#8,d0
-		subi.w	#$80,d0
-		move.w	d0,($FFFFF70C).w
+
+		move.l	#0,($FFFFF70C).w
 		rts	
 ; ===========================================================================
 
@@ -10256,6 +10253,7 @@ Obj11_Solid:				; XREF: Obj11_Action
 		cmp.w	d2,d0
 		bcc.w	locret_751E
 		bra.s	Platform2
+
 ; End of function Obj11_Solid
 
 ; ---------------------------------------------------------------------------
@@ -31297,12 +31295,9 @@ loc_16C64:
 		beq.s	loc_16C7C
 		cmpi.b	#$A,$24(a1)
 		bne.s	loc_16C82
-		; Delete the parent.
-		jsr	(DeleteObject2).l ; Don't mind this misnomer.
 
 loc_16C7C:
 		move.b	#$A,$24(a0)
-		rts
 
 loc_16C82:
 		jmp	DisplaySprite
