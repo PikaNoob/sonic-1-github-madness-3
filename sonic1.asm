@@ -6547,11 +6547,11 @@ EndingSequence:				; XREF: GameModeArray
 	bra.w	@purpleguy	; purple guy
 @kiryu:
 		pea	End_GotoCredits
-		lea	EndingSleeper,a6
+		lea	EndingCutscene,a6
 		jmp	GM_CustomSplashScreensIG
 @purpleguy:
 		pea	End_GotoCredits
-		lea	EndingAlwaysCum,a6
+		lea	EndingCutscene,a6
 		jmp	GM_CustomSplashScreensIG
 @null:
 		move.b	#$E4,d0
@@ -9970,7 +9970,8 @@ locret_7322:
 ; ===========================================================================
 
 Resize_FZend2:
-		bra.s	loc_72C2
+		lea	EndingCutscene,a6
+		jmp	GM_CustomSplashScreensIG
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Ending sequence dynamic screen resizing (empty)
