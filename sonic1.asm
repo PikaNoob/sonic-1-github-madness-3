@@ -32527,15 +32527,13 @@ Fatassruns:
 		move.w	(v_tetoxstart).w,d0
 		sub.w	#$A0,d0
 		cmp.w	$30(a0),d0 ; is she back here
-		bne.s	processstuff ; is not go here
+		bne.s	@processstuff ; is not go here
 		move.w	#0,$10(a0)	; stop'
 		move.b	#2,$1C(a0)	; stareeeee
 		subq.b	#4,$25(a0) ; make the boss loop
 		move.w	#$77,$3C(a0) ; timeerr
-		move.b	#$F,$20(a0) ; now you can hit her
-		
-		
-processstuff:
+		move.b	#$F,$20(a0) ; now you can hit her		
+@processstuff:
 		bra.w	loc2_177E6
 ; ===========================================================================
 

@@ -100,10 +100,10 @@ Limit_Duck:
         btst    #1,($FFFFF602).w ; is down being pressed?
         beq.s    Limit_ResetScr    ; if not, branch
         move.b    #8,$1C(a0)    ; use "ducking"    animation
-        addq.b    #1,($FFFFC903).w
-        cmpi.b    #$78,($FFFFC903).w
+        addq.w    #1,($FFFFF73E).w
+        cmpi.w    #$78,($FFFFF73E).w
         bcs.s    Limit_ResetScr_Part2
-        move.b    #$78,($FFFFC903).w
+        move.w    #$78,($FFFFF73E).w
         cmpi.w    #8,($FFFFF73E).w
         beq.s    limit_loc_12FC2
         subq.w    #2,($FFFFF73E).w
@@ -111,7 +111,7 @@ Limit_Duck:
 ; ===========================================================================
 
 Limit_ResetScr:
-        move.b    #0,($FFFFC903).w
+        move.w    #0,($FFFFF73E).w
         
 Limit_ResetScr_Part2:
         cmpi.w    #$60,($FFFFF73E).w ; is    screen in its default position?
