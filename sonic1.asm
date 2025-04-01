@@ -40785,7 +40785,10 @@ MusicIndex:	; $01-$7F
 		dc.l Music1A ; Ronic Setro splash screen
 		dc.l Music1C ; Something
 		dc.l Music1D ; Mountain King S3M 'cause why not
-
+		dc.l Music1E ; Thriller thing I made some time ago - Vertz1515
+		dc.l Music1F ; THINK THINK THINK
+		dc.l Music20 ; there is a house
+; wait i don't have time to implement these oops
 		dc.l Music92 ; test
 
 MusicIndex80:	; $81-$9F
@@ -43306,6 +43309,12 @@ Music1A:	include	sound\ronicsetro.asm
 Music1C:	include	sound\tg2000tracks\MGSFX.asm
 		even
 Music1D:	include	sound\tg2000tracks\hallmountainkings3.asm
+		even
+Music1E:	incbin	sound\thr2.bin
+		even
+Music1F:	incbin	sound\thinkthinkthink.bin
+		even
+Music20:	incbin	sound\SDUNST.bin
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
