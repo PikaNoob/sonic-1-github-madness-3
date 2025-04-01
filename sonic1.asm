@@ -1260,6 +1260,7 @@ SoundDriverLoad:			; XREF: GameClrRAM; TitleScreen
 		beq.s	@mpcmsucc
 		jmp	Sound_E5
 @mpcmsucc:
+		lea	($FFF000).l,a6
 		jmp	Sound_E4	; Silence (see, a sound initiation, was it that hard SMPS devs?)
 ; End of function SoundDriverLoad
 
@@ -3866,21 +3867,18 @@ LevelSelect:
 ; ===========================================================================
 
 LevSel_SEGA:				; XREF: LevelSelect
-		move.b	#$0,($FFFFF600).w ; set screen	mode to	$0 SEGA
+		move.b	($FFFFF604).w,d0	; ctrl1held
+		moveq	#%01010000,d1		; A and B buttons
+		and.w	d1,d0
+		cmp.w	d1,d0			; is both A and B being held?
+		beq.s	LevSel_Ending		; if so, go to the characters ending
+		move.b	#$0,($FFFFF600).w	; set screen e to $0 SEGA
 		rts	
 ; ===========================================================================
 
 LevSel_Ending:				; XREF: LevelSelect
 		move.b	#$18,($FFFFF600).w ; set screen	mode to	$18 (Ending)
 		move.w	#$600,($FFFFFE10).w ; set level	to 0600	(Ending)
-		rts	
-; ===========================================================================
-
-LevSel_Credits:				; XREF: LevelSelect
-		move.b	#$1C,($FFFFF600).w ; set screen	mode to	$1C (Credits)
-		move.b	#$91,d0
-		bsr.w	PlaySound_Special ; play credits music
-		move.w	#0,($FFFFFFF4).w
 		rts	
 ; ===========================================================================
 
