@@ -10,6 +10,9 @@ smpsHeaderStartSong = 1
 	smpsHeaderFM        DrCoffinmanFinal_FM3,	$00, $09
 	smpsHeaderFM        DrCoffinmanFinal_FM4,	$00, $00
 	smpsHeaderFM        DrCoffinmanFinal_FM5,	$00, $00
+	smpsHeaderPSG       Coffman_PSG1,		$D0, $00, $00, $00
+	smpsHeaderPSG       Coffman_PSG2,		$D0, $00, $00, $00
+	smpsHeaderPSG       Coffman_PSG3,		$00, $00, $00, $00
 
 ; PSG3 Data
 Coffman_PSG3:

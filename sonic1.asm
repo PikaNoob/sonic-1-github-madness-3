@@ -40879,7 +40879,6 @@ MusicIndex:	; $01-$7F
 		dc.l Music21 ; sailor moon transformaion for mercury (BISHOUJO SENSHI SAILOR MOON, 1994)
 		dc.l Music22 ; sailor moon ending for mercury (BISHOUJO SENSHI SAILOR MOON, 1994)
 ; wait i don't have time to implement these oops
-		dc.l Music92 ; test
 
 MusicIndex80:	; $81-$9F
 		dc.l Music81, Music82

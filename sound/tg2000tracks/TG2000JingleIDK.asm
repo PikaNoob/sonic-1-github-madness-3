@@ -5,6 +5,7 @@ smpsHeaderStartSong = 1
 	smpsHeaderTempo     $01, $26
 
 
+	smpsHeaderDAC       TheGamer2000Jingle_DAC
 	smpsHeaderFM        TheGamer2000Jingle_FM1,	$00, $0B
 	smpsHeaderFM        TheGamer2000Jingle_FM2,	$00, $0D
 	smpsHeaderFM        TheGamer2000Jingle_FM3,	$00, $09
@@ -13,6 +14,8 @@ smpsHeaderStartSong = 1
 	smpsHeaderPSG       TheGamer2000Jingle_PSG1,	$D0, $00, $00, $00
 	smpsHeaderPSG       TheGamer2000Jingle_PSG2,	$D0, $00, $00, $00
 	smpsHeaderPSG       TheGamer2000Jingle_PSG3,	$00, $00, $00, $00
+
+TheGamer2000Jingle_DAC:
 
 ; FM2 Data
 TheGamer2000Jingle_FM2:
