@@ -1,48 +1,44 @@
-; ---------------------------------------------------------------------------
-; Sprite mappings - walking bomb enemy (SLZ, SBZ)
-; ---------------------------------------------------------------------------
-		dc.w byte_11C40-Map_obj5F, byte_11C50-Map_obj5F
-		dc.w byte_11C60-Map_obj5F, byte_11C70-Map_obj5F
-		dc.w byte_11C80-Map_obj5F, byte_11C90-Map_obj5F
-		dc.w byte_11CA0-Map_obj5F, byte_11CAB-Map_obj5F
-		dc.w byte_11CB6-Map_obj5F, byte_11CBC-Map_obj5F
-		dc.w byte_11CC2-Map_obj5F, byte_11CC8-Map_obj5F
-byte_11C40:	dc.b 3
-		dc.b $F1, $A, 0, 0, $F4
-		dc.b 9,	8, 0, $12, $F4
-		dc.b $E7, 1, 0,	$21, $FC
-byte_11C50:	dc.b 3
-		dc.b $F1, $A, 0, 9, $F4
-		dc.b 9,	8, 0, $12, $F4
-		dc.b $E7, 1, 0,	$21, $FC
-byte_11C60:	dc.b 3
-		dc.b $F0, $A, 0, 0, $F4
-		dc.b 8,	8, 0, $15, $F4
-		dc.b $E6, 1, 0,	$21, $FC
-byte_11C70:	dc.b 3
-		dc.b $F1, $A, 0, 9, $F4
-		dc.b 9,	8, 0, $18, $F4
-		dc.b $E7, 1, 0,	$21, $FC
-byte_11C80:	dc.b 3
-		dc.b $F0, $A, 0, 0, $F4
-		dc.b 8,	8, 0, $1B, $F4
-		dc.b $E6, 1, 0,	$21, $FC
-byte_11C90:	dc.b 3
-		dc.b $F1, $A, 0, 9, $F4
-		dc.b 9,	8, 0, $1E, $F4
-		dc.b $E7, 1, 0,	$21, $FC
-byte_11CA0:	dc.b 2
-		dc.b $F1, $A, 0, 0, $F4
-		dc.b 9,	8, 0, $12, $F4
-byte_11CAB:	dc.b 2
-		dc.b $F1, $A, 0, 9, $F4
-		dc.b 9,	8, 0, $12, $F4
-byte_11CB6:	dc.b 1			; fuse	(just before it	explodes)
-		dc.b $E7, 1, 0,	$23, $FC
-byte_11CBC:	dc.b 1			; fuse
-		dc.b $E7, 1, 0,	$25, $FC
-byte_11CC2:	dc.b 1			; fireball (after it exploded)
-		dc.b $FC, 0, 0,	$27, $FC
-byte_11CC8:	dc.b 1			; fireball
-		dc.b $FC, 0, 0,	$28, $FC
+; --------------------------------------------------------------------------------
+; Sprite mappings - output from SonMapEd - Sonic 1 format
+; --------------------------------------------------------------------------------
+
+SME_WsgB2:	
+		dc.w SME_WsgB2_14-SME_WsgB2, SME_WsgB2_29-SME_WsgB2	
+		dc.w SME_WsgB2_39-SME_WsgB2, SME_WsgB2_49-SME_WsgB2	
+		dc.w SME_WsgB2_59-SME_WsgB2, SME_WsgB2_69-SME_WsgB2	
+		dc.w SME_WsgB2_6F-SME_WsgB2, SME_WsgB2_75-SME_WsgB2	
+		dc.w SME_WsgB2_7B-SME_WsgB2, SME_WsgB2_81-SME_WsgB2	
+SME_WsgB2_14:	dc.b 4	
+		dc.b $D1, $B, 0, 9, $F4	
+		dc.b $F1, $B, 0, $15, $F4	
+		dc.b 9, 0, 0, $21, $C	
+		dc.b $C1, 1, 0, 1, $FF	
+SME_WsgB2_29:	dc.b 3	
+		dc.b $D1, $B, 0, 9, $F5	
+		dc.b $F1, $F, 0, $22, $F5	
+		dc.b $C1, 1, 0, 1, 0	
+SME_WsgB2_39:	dc.b 3	
+		dc.b $D1, $B, 0, 9, $F6	
+		dc.b $F1, $B, 0, $32, $F6	
+		dc.b $C1, 1, 0, 1, 1	
+SME_WsgB2_49:	dc.b 3	
+		dc.b $F1, $B, 0, $15, $F4	
+		dc.b 9, 0, 0, $21, $C	
+		dc.b $D1, $B, 0, $3E, $F4	
+SME_WsgB2_59:	dc.b 3	
+		dc.b $F1, $B, 0, $15, $F4	
+		dc.b 9, 0, 0, $21, $C	
+		dc.b $D2, $B, 0, $3E, $F4	
+SME_WsgB2_69:	dc.b 1	
+		dc.b $C7, 1, 0, 3, $FC	
+SME_WsgB2_6F:	dc.b 1	
+		dc.b $C7, 1, 0, 5, $FC	
+SME_WsgB2_75:	dc.b 1	
+		dc.b $FC, 0, 0, 7, $FC	
+SME_WsgB2_7B:	dc.b 1	
+		dc.b $FC, 0, 0, 8, $FC	
+SME_WsgB2_81:	dc.b 3	
+		dc.b $FC, $F, 0, $4A, $FC	
+		dc.b $1C, 3, 0, $5A, $FC	
+		dc.b $3C, 2, 0, $5E, $FC	
 		even
