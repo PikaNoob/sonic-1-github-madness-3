@@ -313,11 +313,11 @@ GameClrRAM:
 		tst.b	(f_checksum).w		; Is checksum correct?
 		beq.s   @validcheck		; if yes, branch
 		jsr	GM_Otis ; if incorrect, start otis.exe creepypasta
-		kdebugtext "bro is really mikuing it"
+	;	kdebugtext "bro is really mikuing it"
 		bsr.w	VDPSetupGame
 		bra.w	@invalidcheck
 @validcheck:
-		kdebugtext "umm excuse me what the actual fuck are you doing in my house?"
+	;	kdebugtext "umm excuse me what the actual fuck are you doing in my house?"
 @invalidcheck:
 		move.b	#0,($FFFFF600).w ; set Game Mode to Sega Screen
 		cmpi.l	#'init',($FFFFFFFC).w	; has checksum routine already run?
@@ -326,13 +326,13 @@ GameClrRAM:
 
 		move.b	($A10001).l,d0
 		and.w	#$F,d0
-		beq.s	@notmss
-		jsr	GM_AntiTMSS
+	;	beq.s	@notmss
+	;	jsr	GM_AntiTMSS
 @notmss:
-		jsr	GM_SplashScreensIG
-		kdebugtext "you can soft reset to skip all those splash screens btw"
+	;	jsr	GM_SplashScreensIG
+	;	kdebugtext "you can soft reset to skip all those splash screens btw"
 @nosplashscreens:
-	;	move.b	#$20,($FFFFF600).w ; set Game Mode to Minecraft
+		move.b	#$20,($FFFFF600).w ; set Game Mode to Minecraft
 	;	move.b	#$24,($FFFFF600).w ; set Game Mode to Bee Bush
 MainGameLoop:
 		moveq	#$7E,d0
@@ -38430,13 +38430,6 @@ Obj09_NoGlass:
 		rts	
 ; End of function Obj09_ChkItems2
 
-; ===========================================================================
-; ---------------------------------------------------------------------------
-; Object 10 - blank
-; ---------------------------------------------------------------------------
-
-Obj10:					; XREF: Obj_Index
-		rts	
 ; ---------------------------------------------------------------------------
 ; Subroutine to	animate	level graphics
 ; ---------------------------------------------------------------------------
@@ -40794,6 +40787,8 @@ MusicIndex:	; $01-$7F
 		dc.l Music19 ; Wormy (Not SpongeBob! Figure it out!)
 		dc.l Music1B ; Rendition of 1UP theme
 		dc.l Music1A ; Ronic Setro splash screen
+		dc.l Music1C ; Something
+		dc.l Music1D ; Mountain King S3M 'cause why not
 
 		dc.l Music92 ; test
 
@@ -43312,6 +43307,10 @@ Music1B:	incbin	sound\tg2000tracks\son1up.bin
 		even
 Music1A:	include	sound\ronicsetro.asm
 		even
+Music1C:	include	sound\tg2000tracks\MGSFX.asm
+		even
+Music1D:	include	sound\tg2000tracks\hallmountainkings3.asm
+		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
 Music82:	incbin	sound\music82.bin ; Labyrinth Act 1
@@ -43513,9 +43512,42 @@ Minecraft:	include	minecraft\code\main.asm
 		
 		include beebush\_BEEBUSH.68k
 
-		include otisexe\GM_Otis.asm
+; ===========================================================================
+; ---------------------------------------------------------------------------
+; Object 10 - Delicous Gooey Suprise
+; ---------------------------------------------------------------------------
 
-; end of 'ROM'
+Obj10:	
+
+Obj_Heinous1:   
+
+GOOEETILE = $2CC
+
+        moveq   #0,d0
+        move.b  obj.Action(a0),d0
+        move.w  .Index(pc,d0.w),d1
+        jmp     .Index(pc,d1.w)
+
+; ---------------------------------------------------------------------------
+.Index:                                
+        dc.w Heinous1_Init-.Index
+        dc.w Heinous1_Display-.Index
+; ---------------------------------------------------------------------------
+
+Heinous1_Init:                         
+        addq.b  #2,obj.Action(a0)
+        move.l  #SprPat_Quagmire,obj.Map(a0)
+        move.w  #GOOEETILE,obj.Tile(a0)
+        move.b  #%00000100,obj.Render(a0)
+        move.b  #7,obj.Priority(a0)
+        move.b  #3,obj.Frame(a0)
+      
+Heinous1_Display:                           
+        jsr     _objectDraw  
+        rts
+
+		include otisexe\GM_Otis.asm
+; ---------------------------------------------------------------------------
 EndOfRom:
 
 

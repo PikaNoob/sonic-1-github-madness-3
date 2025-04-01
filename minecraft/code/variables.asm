@@ -22,6 +22,7 @@ camYposFG	rs.w	1			; camera foreground layout y position
 camXPosBG	rs.w	1			; camera background layout x position
 camYposBG	rs.w	1			; camera background layout y position
 
+vblankCount	rs.l	1
 vblankWait	rs.w	1
 cloudFrameCnt	rs.w	1
 cloudSkew	rs.l	36
