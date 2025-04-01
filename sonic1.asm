@@ -29,7 +29,7 @@ v_tetoystart		rs.w	1
 v_levelrandtracker	rs.l	1
 
 randLevelCount		= 16	; 31 max (32 is reserved for linear path flag)
-randLevelCountLimited	= 12
+randLevelCountLimited	= 11
 ;level select constants (to not give the foward reference warning this was moved here)
 f_checksum	= $FFFFFFF9
 lsscrpos 	= $60860003 ; level select screen position
@@ -4635,12 +4635,12 @@ GetLevelRandom:
 	dc.w 7<<8|1	; Makoto
 	dc.w 7<<8|2	; Makoto
 	dc.w 1<<8|1	; LZ
-	dc.w 3<<8|0	; SLZ
 ; beatable as everyone else
 	dc.w 0<<8|1	; GHZ ; starting jump too big
 	dc.w 0<<8|2	; GHZ ; ditto
 	dc.w 1<<8|0	; LZ ; one of the jumps is too big, probably doable with badnik bouncing
 	dc.w 1<<8|2	; LZ ; gravity too dense
+	dc.w 3<<8|0	; SLZ ; red spring too low
 ; unbeatable
 	dc.w 3<<8|1	; SLZ ; dutch
 	dc.w 3<<8|2	; SLZ ; dutch
@@ -7545,7 +7545,7 @@ LevelSizeArray:        ; GHZ
         dc.w $0004, $0000, $1800, $0000, $0720, $0060 ; Act 3
         dc.w $0004, $0000, $16BF, $0000, $0720, $0060 ; Act 4 (Unused)
         ; SLZ
-        dc.w $0004, $0000, $1FBF, $0000, $0640, $0060 ; Act 1
+        dc.w $0004, $0000, $1040, $0000, $0640, $0060 ; Act 1
         dc.w $0004, $0000, $1FBF, $0000, $0640, $0060 ; Act 2
         dc.w $0004, $0000, $2000, $0000, $06C0, $0060 ; Act 3
         dc.w $0004, $0000, $3EC0, $0000, $0720, $0060 ; Act 4 (Unused)
