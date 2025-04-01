@@ -37093,11 +37093,11 @@ Kill_Sound:
 		moveq	#-1,d0
 		rts	
 @sndlut:
-		dc.b 0,$00	; sonic
-		dc.b 0,$00
-		dc.b 0,$00
+		dc.b 2,$92	; sonic
+		dc.b 2,$92	
+		dc.b 2,$92	
 		dc.b 0,$00	; limited
-		dc.b 0,$00
+		dc.b 2,$92	
 		dc.b 2,$90	; gomer
 		dc.b 2,$9C	; sailer mercury
 		dc.b 2,$A9
