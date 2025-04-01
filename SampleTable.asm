@@ -72,6 +72,8 @@ SampleTable:
 	dcSample	TYPE_PCM,		EndLine6,	11025, FLAGS_SFX	; $BA	
 	dcSample	TYPE_PCM,		EndLine7,	11025, FLAGS_SFX	; $BB	
 	dcSample	TYPE_PCM,		EndLine8,	11025, FLAGS_SFX	; $BC
+	dcSample	TYPE_DPCM,		Bombpear,	8000, FLAGS_SFX	; $BD
+	dcSample	TYPE_DPCM,		Bombconic,	8000, FLAGS_SFX	; $BE
 	dc.w	-1	; end marker
 
 ; ---------------------------------------------------------------
@@ -120,7 +122,8 @@ SampleTable:
 	incdac	BeavBurp,	"sound/dac/beavisburp.wav"
 	incdac	Sans,	"sound/dac/SansTalking.wav"
 	incdac	barney,	"sound/dac/superbarney.bin"
-	
+	incdac	bombpear, "sound/dac/pearto.bin"	
+	incdac	bombconic, "sound/dac/bombconic.bin"	
 	incdac	EndLine1, "sound/dac/Ending Line 1.wav"
 	incdac	EndLine2, "sound/dac/Ending Line 2.wav"
 	incdac	EndLine3, "sound/dac/Ending Line 3.wav"

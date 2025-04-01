@@ -11436,6 +11436,12 @@ loc_70A6:
 		add.w	d1,$C(a0)
 
 loc_70C2:
+                moveq   #$FFFFFFBD,d0 ;i am a pear (pearto)
+		cmp.b	#7,($FFFFFE10).w	; Are we in BHZ?
+		bne.s	@notmako	; GMZ: If not, branch
+                moveq   #$FFFFFFBE,d0 ;happy birthday! (conic) (this was done a week before my birthday)
+@notmako:
+                jsr     MegaPCM_PlaySample
 		move.b	#$27,0(a0); change object to explosion (why was this even here with the 3F branch)
 		move.b	#0,$24(a0)
 ; ---------------------------------------------------------------------------
