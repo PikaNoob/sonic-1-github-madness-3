@@ -100,10 +100,10 @@ Limit_Duck:
         btst    #1,($FFFFF602).w ; is down being pressed?
         beq.s    Limit_ResetScr    ; if not, branch
         move.b    #8,$1C(a0)    ; use "ducking"    animation
-        addq.w    #1,($FFFFF73E).w
-        cmpi.w    #$78,($FFFFF73E).w
-        bcs.s    Limit_ResetScr_Part2
-        move.w    #$78,($FFFFF73E).w
+;        addq.w    #1,($FFFFF73E).w
+;        cmpi.w    #$78,($FFFFF73E).w
+;        bcs.s    Limit_ResetScr_Part2
+;        move.w    #$78,($FFFFF73E).w
         cmpi.w    #8,($FFFFF73E).w
         beq.s    limit_loc_12FC2
         subq.w    #2,($FFFFF73E).w
