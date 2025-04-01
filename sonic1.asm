@@ -14319,7 +14319,7 @@ Obj0F_Index:	dc.w Obj0F_Main-Obj0F_Index
 
 Obj0F_Main:				; XREF: Obj0F_Index
 		addq.b	#2,$24(a0)
-		move.w	#$D0,8(a0)
+		move.w	#$D7,8(a0)
 		move.w	#$130,$A(a0)
 		move.l	#Map_obj0F,4(a0)
 		move.w	#$200,2(a0)
