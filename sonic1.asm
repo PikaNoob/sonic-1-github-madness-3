@@ -4559,7 +4559,7 @@ GetLevelRandom:
 	btst	d0,d2
 	bne.s	@notplayedyet
 	addq.b	#1,d0			; damnit we got a repeat
-	cmp.b	#randLevelCount,d0
+	cmp.b	d1,d0
 	blo.s	@repeat
 	clr.b	d0
 	bra.s	@repeat
