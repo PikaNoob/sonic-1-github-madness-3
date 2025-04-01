@@ -63,6 +63,15 @@ SampleTable:
 	dcSample	TYPE_PCM,		Sans,	8000, FLAGS_SFX	; $B3
 ;barney
 	dcSample	TYPE_DPCM,		Barney,	8000, FLAGS_SFX	; $B4
+	
+	dcSample	TYPE_PCM,		EndLine1,	11025, FLAGS_SFX	; $B5
+	dcSample	TYPE_PCM,		EndLine2,	11025, FLAGS_SFX	; $B6
+	dcSample	TYPE_PCM,		EndLine3,	11025, FLAGS_SFX	; $B7
+	dcSample	TYPE_PCM,		EndLine4,	11025, FLAGS_SFX	; $B8
+	dcSample	TYPE_PCM,		EndLine5,	11025, FLAGS_SFX	; $B9	
+	dcSample	TYPE_PCM,		EndLine6,	11025, FLAGS_SFX	; $BA	
+	dcSample	TYPE_PCM,		EndLine7,	11025, FLAGS_SFX	; $BB	
+	dcSample	TYPE_PCM,		EndLine8,	11025, FLAGS_SFX	; $BC
 	dc.w	-1	; end marker
 
 ; ---------------------------------------------------------------
@@ -111,4 +120,14 @@ SampleTable:
 	incdac	BeavBurp,	"sound/dac/beavisburp.wav"
 	incdac	Sans,	"sound/dac/SansTalking.wav"
 	incdac	barney,	"sound/dac/superbarney.bin"
+	
+	incdac	EndLine1, "sound/dac/Ending Line 1.wav"
+	incdac	EndLine2, "sound/dac/Ending Line 2.wav"
+	incdac	EndLine3, "sound/dac/Ending Line 3.wav"
+	incdac	EndLine4, "sound/dac/Ending Line 4.wav"
+	incdac	EndLine5, "sound/dac/Ending Line 5.wav"
+	incdac	EndLine6, "sound/dac/Ending Line 6.wav"	
+	incdac	EndLine7, "sound/dac/Ending Line 7.wav"	
+	incdac	EndLine8, "sound/dac/Ending Line 8.wav"	
+	
 	even

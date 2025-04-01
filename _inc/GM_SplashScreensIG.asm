@@ -306,27 +306,50 @@ IntroCutscene:		; no one fucking modify this or i swear to fucking god, except m
 @enibg_Picture6:	incbin mapeni\Picture6.bin
 	even
 
-
-EndingSleeper:
-	dc.l $81<<24|@nem,$00<<24|@enifg,$B1<<24|@enibg,$00<<24|@pal,0
+EndingCutscene:		; no one fucking modify this or i swear to fucking god, except malachi :3
+	dc.l $81<<24|@nem_EndPicBatch,$03<<24|@enifg_EndPicture1,$B5<<24|@enibg_EndPicture1,$99<<24|@pal_monochrome,1
+	dc.l $81<<24|@nem_EndPicBatch,$06<<24|@enifg_EndPicture2,$B6<<24|@enibg_EndPicture2,$00<<24|@pal_monochrome,0	
+	dc.l $81<<24|@nem_EndPicBatch,$04<<24|@enifg_EndPicture3,$B7<<24|@enibg_EndPicture3,$00<<24|@pal_monochrome,0
+	dc.l $81<<24|@nem_EndPicBatch2,$04<<24|@enifg_EndPicture8,$B8<<24|@enibg_EndPicture8,$00<<24|@pal_monochrome,0
+	dc.l $81<<24|@nem_EndPicBatch2,$06<<24|@enifg_EndPicture4,$B9<<24|@enibg_EndPicture4,$84<<24|@pal_monochrome,0
+	dc.l $81<<24|@nem_EndPicBatch2,$06<<24|@enifg_EndPicture5,$BA<<24|@enibg_EndPicture5,$00<<24|@pal_monochrome,0
+	dc.l $81<<24|@nem_EndPicBatch2,$07<<24|@enifg_EndPicture6,$BB<<24|@enibg_EndPicture6,$8A<<24|@pal_monochrome,0
+	dc.l $81<<24|@nem_EndPicBatch2,$09<<24|@enifg_EndPicture7,$BC<<24|@enibg_EndPicture7,$8B<<24|@pal_monochrome,0
 	dc.l 0	; terminator 2
+	even
+	
+	
+@nem_EndPicBatch:	incbin artnem\EndBatch1.bin
+	even
+@nem_EndPicBatch2:	incbin artnem\EndBatch2.bin
+	even
+	
+@enifg_EndPicture1:
+@enibg_EndPicture1:	incbin mapeni\EndPic1.bin
+	even
+@enifg_EndPicture2:
+@enibg_EndPicture2:	incbin mapeni\EndPic2.bin
+	even
+@enifg_EndPicture3:
+@enibg_EndPicture3:	incbin mapeni\EndPic3.bin
+	even
+@enifg_EndPicture4:
+@enibg_EndPicture4:	incbin mapeni\EndPic4.bin
+	even
+@enifg_EndPicture5:
+@enibg_EndPicture5:	incbin mapeni\EndPic5.bin
+	even
+@enifg_EndPicture6:
+@enibg_EndPicture6:	incbin mapeni\EndPic6.bin
+	even
+@enifg_EndPicture7:
+@enibg_EndPicture7:	incbin mapeni\EndPic7.bin
+	even
 
-@nem:	incbin artnem\ending_kiryu.bin
+@enifg_EndPicture8:
+@enibg_EndPicture8:	incbin mapeni\EndPic8.bin
 	even
-@enifg:
-@enibg:	incbin mapeni\ending_kiryu.bin
-	even
-@pal:	incbin pallet\ending_kiryu.bin
-	even
-
-EndingAlwaysCum:
-	dc.l $81<<24|@nem,$08<<24|@enifg,$AD<<24|@enibg,$99<<24|@pal,0
-	dc.l 0	; terminator 2
-
-@nem:	incbin artnem\splash_fat.bin
-	even
-@enifg:	incbin mapeni\splash_fat_fg.bin
-@enibg:	incbin mapeni\splash_fat.bin
-	even
-@pal:	incbin pallet\splash_fat.bin
+	
+	
+@pal_monochrome:	incbin pallet\monochrome.bin
 	even
