@@ -148,6 +148,9 @@ MC_Player:
 		bne.s	.renderBlockToPlace
 
 .renderCursor2:
+		btst.b	#0,(vblankCount+3).w
+		beq.s	.exit
+
 		lea	.cursorFrames(pc),a1
 		move.b	#1,-5(a2)
 
