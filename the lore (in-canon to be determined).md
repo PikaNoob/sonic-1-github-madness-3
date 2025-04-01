@@ -16,7 +16,7 @@ idfk
 It Is Limited
 
 # Neru
-Idfk
+she goofy and maybe even bald
 
 # Gomer Gimpson
 Gomer.
