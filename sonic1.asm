@@ -26,10 +26,10 @@ v_dmaqueue:		rs.b	18*14
 ; free space until $FFD000!
 v_tetoxstart		rs.w	1
 v_tetoystart		rs.w	1
+v_levelrandtracker	rs.l	1
 
 randLevelCount		= 15	; 31 max (32 is reserved for linear path flag)
 randLevelCountLimited	= 11
-v_levelrandtracker	= $FFFFF5FC	; longword
 ;level select constants (to not give the foward reference warning this was moved here)
 f_checksum	= $FFFFFFF9
 lsscrpos 	= $60860003 ; level select screen position
