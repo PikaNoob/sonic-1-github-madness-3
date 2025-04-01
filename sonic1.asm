@@ -18488,7 +18488,6 @@ Obj41:					; XREF: Obj_Index
 		move.b	$24(a0),d0
 		move.w	Obj41_Index(pc,d0.w),d1
 		jsr	Obj41_Index(pc,d1.w)
-		bsr.w	DisplaySprite
 		move.w	8(a0),d0
 		andi.w	#$FF80,d0
 		move.w	($FFFFF700).w,d1
@@ -18497,7 +18496,7 @@ Obj41:					; XREF: Obj_Index
 		sub.w	d1,d0
 		cmpi.w	#$280,d0
 		bhi.w	DeleteObject
-		rts	
+		bra.w	DisplaySprite
 ; ===========================================================================
 Obj41_Index:	dc.w Obj41_Main-Obj41_Index
 		dc.w Obj41_Up-Obj41_Index
@@ -26390,9 +26389,8 @@ locret_13544:
 
 
 Sonic_SlopeRepel:			; XREF: Obj01_MdNormal; Obj01_MdRoll
-		nop	
 		cmpi.b	#char_limited,(v_character)
-		beq.s	locret_13580
+		beq.s	Limited_SlopeRepel
 		tst.b	$38(a0)
 		bne.s	locret_13580
 		tst.w	$3E(a0)
@@ -26413,12 +26411,16 @@ loc_1356A:
 		move.w	#$1E,$3E(a0)
 
 locret_13580:
-		rts	
+		rts
 ; ===========================================================================
 
 loc_13582:
 		subq.w	#1,$3E(a0)
-		rts	
+		rts
+; ===========================================================================
+Limited_SlopeRepel:
+		clr.w	$3E(a0)
+		rts
 ; End of function Sonic_SlopeRepel
 
 ; ---------------------------------------------------------------------------
