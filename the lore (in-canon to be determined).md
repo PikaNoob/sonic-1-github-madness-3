@@ -27,7 +27,7 @@ Gomer.
 # Kiryu
 Awoken by the cacophony from Sonics intro cutscene, Kiryu must now fuck shit up in order to go back asleep
 
-# Purple Guy
+# Purple Guy, aka Vincent, The Man Behind The Shots
 Once proud lover of Toy Freddy, there relationship gets tense when Toy Chica (allegedly accidentally) beaks Purple Guys crotch.
 Now struggling to cum, it's now up to Purple Guy to regain his former glory and win back his lovers affection, by beating up a white guy
 
@@ -35,7 +35,7 @@ Now struggling to cum, it's now up to Purple Guy to regain his former glory and 
 SANS UNDERTALE?!?!?!!?!??!?!!??!?!?!?!?
 
 # Quagmire
-As fortold in the epic tale called "Bee Bush", Glen Quagmire has covered his entire private area in (blue) honey and fearfully awaits the bees.
+As fortold in the epic tale called "Bee Bush", Glen Quagmire has covered his entire private area in honey, fearfully awaiting the bees.
 Quagmire must now return the bees to the hive, lest his std(h) infested sex come to a screeching halt
 
 # Microplastics Reimu
@@ -51,8 +51,10 @@ He appears when hedgehogs need him most, aside for Limited Sonic, fuck Limited S
 -----------------------------------------------------------
 # Sonic Villains
 
-# White Guy
-Free Candy (idfk who this guy is)
+# Matthew Littlemore, alias. White Guy
+White guy is plotting an evil plan to give Free CandyTM to all the land, laced with fetish-obtaining toxic gel that gives you fetishes, or overwrites your pre-existing fetishes with new ones; we're talking about sonic fans.
+Many characters fight white guy to end his evil plans, other happen to be on a war path and run into him
+Matthew could beat Goku easily let alone any of the others, but chooses to hold back his true power and walk in there shoes, for that is his fetish.
 
 # Teto
 Fatass
@@ -91,6 +93,9 @@ If for whatever reason you so choose to deny his will, mikuing it is the key to 
 
 # Andrew Dobson
 False God
+
+# Malachi
+Gruesome demon from hell, but not this hell. The hell that we reside in is a few layers deeper.
 
 # Toy Freddy (TODO: make this the eighth listed thing in misc)
 He kinda, uhh, well, fat
