@@ -36312,7 +36312,7 @@ Obj86_Ball_Static:
 		move.b	$28(a0),d0
 		move.b	$29(a0),d1
 		add.w	d1,d0
-		cmp.b	#$1C,d0			; prevent particularly bad movement speeds
+		cmp.b	#$30,d0			; prevent particularly bad movement speeds
 		blo.s	Obj86_Ball_Vanish	; still keeps the hilariously bad ones though
 		move.w	d0,$12(a0)
 		bra.w	loc_1AA1E
