@@ -312,11 +312,11 @@ GameClrRAM:
 		tst.b	(f_checksum).w		; Is checksum correct?
 		beq.s   @validcheck		; if yes, branch
 		jsr	GM_Otis ; if incorrect, start otis.exe creepypasta
-		kdebugtext "bro is really mikuing it"
+	;	kdebugtext "bro is really mikuing it"
 		bsr.w	VDPSetupGame
 		bra.w	@invalidcheck
 @validcheck:
-		kdebugtext "umm excuse me what the actual fuck are you doing in my house?"
+	;	kdebugtext "umm excuse me what the actual fuck are you doing in my house?"
 @invalidcheck:
 		move.b	#0,($FFFFF600).w ; set Game Mode to Sega Screen
 		cmpi.l	#'init',($FFFFFFFC).w	; has checksum routine already run?
@@ -325,13 +325,13 @@ GameClrRAM:
 
 		move.b	($A10001).l,d0
 		and.w	#$F,d0
-		beq.s	@notmss
-		jsr	GM_AntiTMSS
+	;	beq.s	@notmss
+	;	jsr	GM_AntiTMSS
 @notmss:
-		jsr	GM_SplashScreensIG
-		kdebugtext "you can soft reset to skip all those splash screens btw"
+	;	jsr	GM_SplashScreensIG
+	;	kdebugtext "you can soft reset to skip all those splash screens btw"
 @nosplashscreens:
-	;	move.b	#$20,($FFFFF600).w ; set Game Mode to Minecraft
+		move.b	#$20,($FFFFF600).w ; set Game Mode to Minecraft
 	;	move.b	#$24,($FFFFF600).w ; set Game Mode to Bee Bush
 MainGameLoop:
 		moveq	#$7E,d0
