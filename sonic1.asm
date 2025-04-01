@@ -38430,13 +38430,6 @@ Obj09_NoGlass:
 		rts	
 ; End of function Obj09_ChkItems2
 
-; ===========================================================================
-; ---------------------------------------------------------------------------
-; Object 10 - blank
-; ---------------------------------------------------------------------------
-
-Obj10:					; XREF: Obj_Index
-		rts	
 ; ---------------------------------------------------------------------------
 ; Subroutine to	animate	level graphics
 ; ---------------------------------------------------------------------------
@@ -43510,9 +43503,42 @@ Minecraft:	include	minecraft\code\main.asm
 		
 		include beebush\_BEEBUSH.68k
 
-		include otisexe\GM_Otis.asm
+; ===========================================================================
+; ---------------------------------------------------------------------------
+; Object 10 - Delicous Gooey Suprise
+; ---------------------------------------------------------------------------
 
-; end of 'ROM'
+Obj10:	
+
+Obj_Heinous1:   
+
+GOOEETILE = $2CC
+
+        moveq   #0,d0
+        move.b  obj.Action(a0),d0
+        move.w  .Index(pc,d0.w),d1
+        jmp     .Index(pc,d1.w)
+
+; ---------------------------------------------------------------------------
+.Index:                                
+        dc.w Heinous1_Init-.Index
+        dc.w Heinous1_Display-.Index
+; ---------------------------------------------------------------------------
+
+Heinous1_Init:                         
+        addq.b  #2,obj.Action(a0)
+        move.l  #SprPat_Quagmire,obj.Map(a0)
+        move.w  #GOOEETILE,obj.Tile(a0)
+        move.b  #%00000100,obj.Render(a0)
+        move.b  #7,obj.Priority(a0)
+        move.b  #3,obj.Frame(a0)
+      
+Heinous1_Display:                           
+        jsr     _objectDraw  
+        rts
+
+		include otisexe\GM_Otis.asm
+; ---------------------------------------------------------------------------
 EndOfRom:
 
 
