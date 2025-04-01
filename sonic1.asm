@@ -26419,7 +26419,10 @@ loc_13582:
 		rts
 ; ===========================================================================
 Limited_SlopeRepel:
+		subq.w	#1,$3E(a0)
+		bcc.s	@notoverflown
 		clr.w	$3E(a0)
+@notoverflown:
 		rts
 ; End of function Sonic_SlopeRepel
 
