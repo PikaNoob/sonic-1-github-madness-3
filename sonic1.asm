@@ -392,7 +392,7 @@ jmpto_IntroCutscene:
 	bra.w	@null		; sailor mercury
 	bra.w	@null		; kiryu
 	bra.w	@null		; purple guy
-	bra.w	@null		; purple guy
+	bra.w	@null		; SANA!?!?!?!?!?!??!?!?! ...and now I'm depressed.
 @limited:
 		lea	@limitedtext,a1
 		jmp	KDebug_WriteToCmd
@@ -403,6 +403,7 @@ jmpto_IntroCutscene:
 		jmp	GM_CustomSplashScreensIG
 
 @limitedtext:	dc.b "IT IS LIMITED",0
+	even
 ; ===========================================================================
 
 CheckSumError:
