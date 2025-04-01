@@ -28,8 +28,8 @@ v_tetoxstart		rs.w	1
 v_tetoystart		rs.w	1
 v_levelrandtracker	rs.l	1
 
-randLevelCount		= 17	; 31 max (32 is reserved for linear path flag)
-randLevelCountLimited	= 11
+randLevelCount		= 19	; 31 max (32 is reserved for linear path flag)
+randLevelCountLimited	= 13
 ;level select constants (to not give the foward reference warning this was moved here)
 f_checksum	= $FFFFFFF9
 lsscrpos 	= $60860003 ; level select screen position
@@ -4630,6 +4630,8 @@ GetLevelRandom:
 	dc.w 7<<8|1	; Makoto
 	dc.w 7<<8|2	; Makoto
 	dc.w 1<<8|1	; LZ
+	dc.w 1<<8|3	; SBZ3 ; insufficient code
+	dc.w 3<<8|2	; SLZ
 ; beatable as everyone else
 	dc.w 0<<8|1	; GHZ ; starting jump too big
 	dc.w 0<<8|2	; GHZ ; ditto
@@ -4637,8 +4639,6 @@ GetLevelRandom:
 	dc.w 1<<8|2	; LZ ; gravity too dense
 	dc.w 3<<8|0	; SLZ ; red spring too low
 	dc.w 3<<8|1	; SLZ ; yellow spring too low
-; unbeatable
-	dc.w 3<<8|2	; SLZ ; dutch
 	even
 ; ===========================================================================
 
@@ -7545,7 +7545,7 @@ LevelSizeArray:        ; GHZ
         ; SLZ
         dc.w $0004, $0000, $1040, $0000, $0640, $0060 ; Act 1
         dc.w $0004, $0000, $1FBF, $0000, $0640, $0060 ; Act 2
-        dc.w $0004, $0000, $2000, $0000, $06C0, $0060 ; Act 3
+        dc.w $0004, $0000, $0240, $0000, $06C0, $0060 ; Act 3
         dc.w $0004, $0000, $3EC0, $0000, $0720, $0060 ; Act 4 (Unused)
         ; SYZ
         dc.w $0004, $0000, $22C0, $0000, $0420, $0060 ; Act 1
@@ -9568,8 +9568,8 @@ Resize_SBZ3:
 		bcc.s	locret_6F8C	; if not, branch
 		clr.b	($FFFFFE30).w
 		move.w	#1,($FFFFFE02).w ; restart level
-		move.w	#$502,($FFFFFE10).w ; set level	number to 0502 (FZ)
 		move.b	#1,($FFFFF7C8).w ; freeze Sonic
+		jmp	GetLevelRandom
 
 locret_6F8C:
 		rts	
@@ -26069,8 +26069,7 @@ Boundary_Bottom:
 		bcs.w	CallKillSonic	; GMZ
 		clr.b	($FFFFFE30).w	; clear	lamppost counter
 		move.w	#1,($FFFFFE02).w ; restart the level
-		move.w	#$103,($FFFFFE10).w ; set level	to SBZ3	(LZ4)
-		rts	
+		jmp	GetLevelRandom
 
 CallKillSonic:
 ; this is a reference to the mario games made by BMB, in which falling into a pit
