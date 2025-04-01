@@ -3709,8 +3709,8 @@ loc_3230:
 		beq.w	TITLE_MAIN	; if not, branch
 
 Title_ChkLevSel:
-		btst	#6,($FFFFF604).w ; check if A is pressed
-		beq.w	PlayIntro	; if not, play level
+		;btst	#6,($FFFFF604).w ; check if A is pressed
+		;beq.w	PlayIntro	; if not, play level
 
 		move.b	#$01,d0		; play level select music (DAX: Using New Bark Town as placeholder)
 		bsr.w	PlaySound_Special
@@ -4347,6 +4347,7 @@ Controls_SND:
 OptionMenuText:	
 		dc.b    "PLAY THE GAME!!!"
         dc.b    "CHARACTER:      "
+        dc.b    "PLAY MINECRAFT  "
 OMTEnd:
 	even
 Player_Names:
@@ -4435,6 +4436,14 @@ OptionsMenu:
 		bne.s	OptionsMenu
 		andi.b	#$F0,($FFFFF605).w ; is	A, B, C, or Start pressed?
 		beq.s	OptionsMenu	; if not, branch
+		cmpi.w	#2,d6		; have you selected item $17 (minecraft)
+		bne.s	OptionsMC		; if not, no minecraft 
+		move.w	($FFFFFF82).w,d0
+		tst.w	d0
+		JSR 	MINECRAFT
+		bra.s	OptionsMenu
+
+optionsMC:
 		move.w	($FFFFFF82).w,d0
 		tst.w	d0
 		beq.w	PlayIntro
@@ -4824,6 +4833,7 @@ loc_39E8:
 		move.w	d0,($FFFFFE02).w
 		move.w	d0,($FFFFFE04).w
 		move.b	d0,($FFFFFFF9).w	; GMZ: Clear truth nuke flag
+		move.b	d0,($FFFFFE2F).w	; Clear reverse controls (i had to)
 		bsr.w	OscillateNumInit
 		move.b	#1,($FFFFFE1F).w ; update score	counter
 		move.b	#1,($FFFFFE1D).w ; update rings	counter
