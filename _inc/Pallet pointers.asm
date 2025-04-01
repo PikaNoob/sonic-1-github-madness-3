@@ -100,3 +100,9 @@
 	dc.l Pal_Sans
 	dc.w $FB00
 	dc.w 7
+	dc.l Pal_Hen1
+	dc.w $FB00
+	dc.w $1F
+	dc.l Pal_Hen2
+	dc.w $FB00
+	dc.w $1F

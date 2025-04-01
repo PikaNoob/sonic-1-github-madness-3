@@ -45,7 +45,8 @@
 @Float2:	dc.b 7,	$3C, $3D, $53, $3E, $54, $FF, 0
 @Spring:	dc.b $2F, $01, $FD, 0
 @LZHang:	dc.b 1, $41, $42, $FF
-@Leap1:		dc.b $F, $43, $43, $43,	$FE, 1
+@Leap1:	dc.b $A, $60, $61, $62, $63, $64, $65, $66, $67, $68, $69
+	dc.b $6A, $6B, $6C, $6D, $6E, $6F, $70, $71, $72, $FE, 1
 @Leap2:		dc.b $F, $43, $44, $FE,	1, 0
 @Surf:		dc.b $3F, $49, $FF, 0
 @Bubble:	dc.b $B, $56, $56, $A, $B, $FD,	0, 0

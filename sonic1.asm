@@ -351,7 +351,7 @@ GameModeArray:
 ; ===========================================================================
 		bra.w	Level		; Demo Mode ($08)
 ; ===========================================================================
-		bra.w	Level		; Normal Level ($0C)
+		bra.w	Level	; Normal Level ($0C)
 ; ===========================================================================
 		bra.w	SpecialStage	; Special Stage	($10)
 ; ===========================================================================
@@ -389,7 +389,7 @@ jmpto_IntroCutscene:
 	bra.w	@limited	; limited
 	bra.w	@null		; neru
 	bra.w	@null		; gomer
-	bra.w	@null		; sailor mercury
+	bra.w	@mercury		; sailor mercury
 	bra.w	@null		; kiryu
 	bra.w	@null		; purple guy
 	bra.w	@null		; purple guy
@@ -403,6 +403,7 @@ jmpto_IntroCutscene:
 		jmp	GM_CustomSplashScreensIG
 
 @limitedtext:	dc.b "IT IS LIMITED",0
+@mercury:	jmp	GM_Henshin
 ; ===========================================================================
 
 CheckSumError:
@@ -3084,6 +3085,9 @@ Pal_mercury:incbin	pallet\mercury.bin	; mercury power make up!
 Pal_Kiryu:incbin	pallet\kiryu.bin	; I AM THE YAKUZA KIWAMI
 Pal_Purple:incbin	pallet\purple.bin	; I ALWAYS CUM
 Pal_Sans:	incbin	pallet\sans.bin
+Pal_hen1:	incbin	pallet\henshin1.bin
+Pal_hen2:	incbin	pallet\henshin2.bin
+Pal_hencyc:	incbin	pallet\henshincyc.bin
 ; ---------------------------------------------------------------------------
 ; Subroutine to	delay the program by ($FFFFF62A) frames
 ; ---------------------------------------------------------------------------
@@ -3285,6 +3289,9 @@ SegaScreen:				; XREF: GameModeArray
 		moveq	#$27,d1
 		moveq	#$1B,d2
 		bsr.w	ShowVDPGraphics
+
+		move.b  #0,($FFFFF601).w ;bugfix
+
 		moveq	#0,d0
 		bsr.w	PalLoad2	; load Sega logo pallet
 		move.w	#-$A,($FFFFF632).w
@@ -26017,21 +26024,20 @@ Boundary_Bottom:
 		rts	
 
 CallKillSonic:
-; this is gonna be removed unfortunately
 ; this is a reference to the mario games made by BMB, in which falling into a pit
 ; plays a long scream pcm, said pcm also has the sound driver freeze
-; 1. there used to be a line that intentionally froze it by setting the pause value to 2
-;		move.b	#02,($FFFFF003).w ; pause music (this is for pit fall)
-; this would be replaced by -
-;		move.b	#$E4,d0		; stop music
-;		jsr	PlaySound
-; broke the classic fasion it had though
-; 2. this below was commented out after streamlining character specific sounds
-; this will remain commented until otherwise reimplemented
-; -Coninight, MARCH 30 SAT
-;;;;;;;		move.b  #$93, d0	; scream in hell
-;;;;;;;		jsr	MegaPCM_PlaySample
-		jmp	KillSonic	; GMZ
+; please dont remove this its good husgfyuv
+		jsr	KillSonic	; GMZ
+; test so suicide barney cant scream (immortal)
+ 		tst.b	(f_superconic).w
+		bne.s	nodeathpitscream
+; intentionally freeze it by setting the pause value to 2
+		move.b	#02,($FFFFF003).w ; pause music (this is for pit fall)
+; in classic fashion
+		move.b  #$93, d0	; scream in hell
+		jsr	MegaPCM_PlaySample
+nodeathpitscream:
+		rts
 ; ===========================================================================
 
 Boundary_Sides:
@@ -27586,8 +27592,6 @@ Obj38_DoStars:
 
 Obj38_Shield:				; XREF: Obj38_Index
 		tst.b	($FFFFFE2D).w	; does Sonic have invincibility?
-	tst.b	(f_superconic).w	; Ignore all this code if not Super Conic
-	bne.s	Obj38_RmvShield
 		bne.s	Obj38_RmvShield	; if yes, branch
 		tst.b	($FFFFFE2C).w	; does Sonic have shield?
 		beq.s	Obj38_Delete	; if not, branch
@@ -27610,6 +27614,8 @@ Obj38_Delete:
 Obj38_Stars:				; XREF: Obj38_Index
 		tst.b	($FFFFFE2D).w	; does Sonic have invincibility?
 		beq.s	Obj38_Delete2	; if not, branch
+		tst.b	(f_superconic).w
+		bne.s	Obj38_Delete2
 		move.w	($FFFFF7A8).w,d0
 		move.b	$1C(a0),d1
 		subq.b	#1,d1
@@ -40808,6 +40814,7 @@ MusicIndex:	; $01-$7F
 		dc.l Music1E ; Thriller thing I made some time ago - Vertz1515
 		dc.l Music1F ; THINK THINK THINK
 		dc.l Music20 ; there is a house
+		dc.l Music21 ; sailor moon transformaion for mercury (BISHOUJO SENSHI SAILOR MOON, 1994)
 ; wait i don't have time to implement these oops
 		dc.l Music92 ; test
 
@@ -43336,6 +43343,8 @@ Music1F:	incbin	sound\thinkthinkthink.bin
 		even
 Music20:	incbin	sound\SDUNST.bin
 		even
+Music21:	incbin	sound\sailormoon.bin
+		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
 Music82:	incbin	sound\music82.bin ; Labyrinth Act 1
@@ -43597,6 +43606,7 @@ Heinous1_Display:
         jmp     _objectDraw  
 
 	include otisexe\GM_Otis.asm
+	include mercuryhenshin\GM_Henshin.asm
 ; ---------------------------------------------------------------------------
 EndOfRom:
 
