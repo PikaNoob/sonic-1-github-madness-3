@@ -279,13 +279,11 @@ PLC_SBZ:	dc.w $B
 		dc.w $7EA0
 		dc.l Nem_SbzBlock	; vanishing block
 		dc.w $9860
-PLC_SBZ2:	dc.w $C
+PLC_SBZ2:	dc.w $B
 		dc.l Nem_Cater		; caterkiller enemy
 		dc.w $5600
 		dc.l Nem_Bomb		; bomb enemy
 		dc.w $8000
-		dc.l Nem_Orbinaut	; orbinaut enemy
-		dc.w $8520
 		dc.l Nem_SlideFloor	; floor	that slides away
 		dc.w $8C00
 		dc.l Nem_SbzDoor2	; horizontal door

@@ -35,10 +35,13 @@ MC_Init:
 	dma68k	MC_Terrain,vramTerrain,MC_Terrain_End-MC_Terrain,VRAM	; load in the block art
 	dma68k	MC_Steve,vramSteve,MC_Steve_End-MC_Steve,VRAM		; load player art
 	dma68k	MC_Cursor,vramCursor,MC_Cursor_End-MC_Cursor,VRAM	; load cursor art
+	dma68k	MC_InventoryMap,VRAM_PLANE_W,MC_InventoryMap_End-MC_InventoryMap,VRAM	; load inventory plane map
 	
 		bsr.w	MC_LoadBackground
 		bsr.w	MC_LoadWorld
 
+		move.w	#$9100,(a6)
+		move.w	#$9200,(a6)
 		move.w	#$8C89,(a6)				; set screen size and enable shadow/highlight mode
 		move.w	#$8174,(a6)				; enable display
 		intsOn						; enable CPU interrupts
@@ -372,6 +375,18 @@ MC_VInt:
 
 		bsr.s	MC_ReadJoypad
 
+		tst.b	(playerObjVars+state).w
+		bpl.s	.notInInventory
+
+		move.w	#$911F,(a6)
+		move.w	#$921F,(a6)
+		bra.s	.exit
+
+.notInInventory:
+		move.w	#$9100,(a6)
+		move.w	#$9200,(a6)
+
+.exit:
 		addq.l	#1,(vblankCount).w
 		sf.b	(vblankWait).w
 		movem.l	(sp)+,d0-a5
@@ -423,10 +438,7 @@ MC_Steve_End:
 	even
 ; ---------------------------------------------------------------------------
 MC_Cursor:
-	dcb.b	32,$0E	; 50% Highlight
-	dcb.b	32,$EE	; 100% Highlight
-	dcb.b	32,$0F	; 50% Shadow
-	dcb.b	32,$FF	; 100% Shadow
+	dcb.b	4*TILE,$EE	; 100% Highlight
 MC_Cursor_End:
 	even
 ; ---------------------------------------------------------------------------
@@ -444,6 +456,141 @@ MC_BGMap:
 	incbin	"minecraft\assets\bin\bgMap.bin"
 MC_BGMap_End:
 	even
+; ---------------------------------------------------------------------------
+inventory_item	macro	tileID, palLine
+	rept 2
+	dc.w	(palLine<<13)|tileID
+	endr
+	dc.w	0
+	endm
+
+MC_InventoryMap:
+	rept	3		; Row 00, 01, and 02
+	dcb.w	64,$8000	
+	endr
+
+	rept	3		; Row 03, 04, and 05
+	dcb.w	5,$8000
+	dcb.w	30,0
+	dcb.w	29,$8000
+	endr
+
+	rept	2		; Row 06 and 07
+	dcb.w	5,$8000
+	dc.w	0,0
+	inventory_item	$01,1	; 01 Stone
+	inventory_item	$04,1	; 04 Cobblestone
+	inventory_item	$13,2	; 13 Bricks
+	inventory_item	$02,1	; 02 Dirt
+	inventory_item	$0B,1	; 0B Wooden Planks
+	inventory_item	$0A,1	; 0A Wood
+	inventory_item	$09,1	; 09 Leaves
+	inventory_item	$16,0	; 16 Glass
+	inventory_item	$06,1	; 06 Smooth Stone Slab
+	dc.w	0
+	dcb.w	29,$8000
+	endr
+
+	dcb.w	5,$8000		; Row 08
+	dcb.w	30,0
+	dcb.w	29,$8000
+	
+	dcb.w	5,$8000		; Row 09
+	dc.w	0,0
+	inventory_item	$08,1	; 08 Mossy Cobblestone
+	inventory_item	$18,1	; 18 Sapling
+	inventory_item	$1B,2	; 1B Dandelion
+	inventory_item	$1C,2	; 1C Rose
+	inventory_item	$19,1	; 19 Brown Mushroom
+	inventory_item	$1A,2	; 1A Red Mushroom
+	inventory_item	$15,2	; 15 Sand
+	inventory_item	$07,1	; 07 Gravel
+	inventory_item	$03,1	; 03 Grass
+	dc.w	0
+	dcb.w	29,$8000
+
+	dcb.w	5,$8000		; Row 0A
+	dc.w	0,0
+	inventory_item	$08,1	; 08 Mossy Cobblestone
+	inventory_item	$03,1	; 03 Grass
+	inventory_item	$03,1	; 03 Grass
+	inventory_item	$03,1	; 03 Grass
+	inventory_item	$03,1	; 03 Grass
+	inventory_item	$03,1	; 03 Grass
+	inventory_item	$15,2	; 15 Sand
+	inventory_item	$07,1	; 07 Gravel
+	inventory_item	$02,1	; 02 Dirt
+	dc.w	0
+	dcb.w	29,$8000
+
+	dcb.w	5,$8000		; Row 0B
+	dcb.w	30,0
+	dcb.w	29,$8000
+
+	rept	2		; Row 0C and 0D
+	dcb.w	5,$8000
+	dc.w	0,0
+	inventory_item	$21,2	; 25 Crimson Wool
+	inventory_item	$24,0	; 26 Peach Wool
+	inventory_item	$1F,1	; 27 Bronze Wool
+	inventory_item	$23,2	; 28 Goldenrod Wool
+	inventory_item	$1E,1	; 29 Lime Wool
+	inventory_item	$22,1	; 2A Green Wool
+	inventory_item	$23,0	; 2B Turquoise Wool
+	inventory_item	$1E,0	; 2C Indigo Wool
+	inventory_item	$1E,2	; 2D Violet Wool
+	dc.w	0
+	dcb.w	29,$8000
+	endr
+
+	dcb.w	5,$8000		; Row 0E
+	dcb.w	30,0
+	dcb.w	29,$8000
+
+	rept	2		; Row 0F and 10
+	dcb.w	5,$8000
+	dc.w	0,0
+	inventory_item	$20,1			; 2E Cacao Wool
+	inventory_item	$24,2			; 20 White Wool
+	inventory_item	$24,1			; 21 Silver Wool
+	inventory_item	$1D,1			; 22 Gray Wool
+	inventory_item	$23,1			; 23 Charcoal Wool
+	inventory_item	$21,0			; 24 Black Wool
+	inventory_item	$10,2			; 10 Iron Block
+	inventory_item	$11,2			; 11 Gold Block
+	inventory_item	$12,0			; 12 Diamond Block
+	dc.w	0
+	dcb.w	29,$8000
+	endr
+
+	dcb.w	5,$8000		; Row 11
+	dcb.w	30,0
+	dcb.w	29,$8000
+
+	rept	2		; Row 12 and 13
+	dcb.w	5,$8000
+	dc.w	0,0
+	inventory_item	$0C,1			; 0C Coal Ore
+	inventory_item	$0D,1			; 0D Iron Ore
+	inventory_item	$0E,2			; 0E Gold Ore
+	inventory_item	$0F,2			; 0F Diamond Ore
+	inventory_item	$14,2			; 14 TNT
+	inventory_item	$17,0			; 17 Obsidian
+	dcb.w	10,0
+	dcb.w	29,$8000
+	endr
+
+	rept	2
+	dcb.w	5,$8000		; Row 08
+	dcb.w	30,0
+	dcb.w	29,$8000
+	endr
+
+	rept	6
+	dcb.w	64,$8000	
+	endr
+
+MC_InventoryMap_End:
 ; ---------------------------------------------------------------------------
 MC_TestMap:
 	dcb.b	256,$00	; Row 00

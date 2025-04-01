@@ -15,16 +15,18 @@ state		rs.b	1
 
 ON_GROUND	equ	0
 FACING_LEFT	equ	1
-
 PLACE_MODE	equ	2
 FACING_WALLS	equ	3
 VERTICAL_BIAS	equ	4
+
+IN_INVENTORY	equ	7
 
 cursorXPos	rs.w	1
 cursorYPos	rs.w	1
 heldItemID	rs.b	1
 doubleTapTimer	rs.b	1
 punchTimer	rs.b	1
+inventoryIndex	rs.b	1
 
 HITBOX_X	equ	2
 HITBOX_Y	equ	7
@@ -35,18 +37,25 @@ HITBOX_Y	equ	7
 ; ---------------------------------------------------------------------------
 MC_Player:
 		lea	(playerObjVars).w,a0
-	
-	; movement and collision
-		;bsr.w	MC_PlayerControl
+
+		btst.b	#BIT_START,(ctrlPressP1).w
+		beq.s	.checkInventory
+		bchg.b	#IN_INVENTORY,state(a0)
+
+.checkInventory:
+		tst.b	state(a0)
+		bpl.s	.playerRoutines
+		bra.w	MC_InventoryScreen
+
+.playerRoutines:
 		bsr.w	MC_PlayerMove
 		bsr.w	MC_PlayerCollision
-		;bsr.w	MC_PlayerAnimate
 		bsr.w	MC_PlayerCursor
+		;bsr.w	MC_PlayerAnimate
 		;bsr.w	MC_PlayerDraw
 
 .updateBGPos:
 	;	bsr.w	.blockCollision
-		move.b	#$13,heldItemID(a0)
 
 		move.w	xPos(a0),d0
 		sub.w	#160,d0
@@ -202,7 +211,7 @@ MC_Player:
 
 ; ---------------------------------------------------------------------------
 .cursorFrames:
-	sprite_entry	SPR_1x1, 0, 0, (vramCursor/TILE)+1, 3, 1, 0, 0
+	sprite_entry	SPR_1x1, 0, 0, (vramCursor/TILE), 3, 1, 0, 0
 
 .blockFrames:
 	sprite_entry	SPR_1x1, 0, 0, (vramEmptyTile/TILE), 0, 1, 0, 0
@@ -1701,3 +1710,119 @@ MC_PlayerCollision:
 	dc.b	1			; 2E Cacao Wool
 	even
 ; ---------------------------------------------------------------------------
+
+MC_InventoryScreen:
+		move.b	#MASK_A+MASK_B+MASK_C,d0
+		and.b	(ctrlPressP1).w,d0
+		beq.s	.checkLeft
+		bclr.b	#IN_INVENTORY,state(a0)
+
+.checkLeft:
+		btst.b	#BIT_LEFT,(ctrlPressP1).w
+		beq.s	.checkRight
+		subq.b	#1,inventoryIndex(a0)
+
+.checkRight:
+		btst.b	#BIT_RIGHT,(ctrlPressP1).w
+		beq.s	.checkUp
+		addq.b	#1,inventoryIndex(a0)
+
+.checkUp:
+		btst.b	#BIT_UP,(ctrlPressP1).w
+		beq.s	.checkDown
+		subi.b	#9,inventoryIndex(a0)
+
+.checkDown:
+		btst.b	#BIT_DOWN,(ctrlPressP1).w
+		beq.s	.checkBounds
+		addi.b	#9,inventoryIndex(a0)
+
+.checkBounds:
+		tst.b	inventoryIndex(a0)
+		bpl.s	.checkMax
+		clr.b	inventoryIndex(a0)
+
+.checkMax:
+		cmpi.b	#41,inventoryIndex(a0)
+		ble.s	.inBounds
+		move.b	#41,inventoryIndex(a0)
+
+.inBounds:
+		moveq	#0,d0
+		move.b	inventoryIndex(a0),d0
+		move.b	.inventoryItemIDs(pc,d0.w),heldItemID(a0)
+
+	; drawing
+		divu.w	#9,d0
+
+		move.w	d0,d2	; Y pos
+		mulu.w	#24,d2
+
+		swap	d0	; X pos
+		move.w	d0,d1
+		mulu.w	#24,d1
+
+		lea	.cursorFrame(pc),a1
+		lea	(spriteList).w,a2
+
+		move.w	(a1)+,d0
+		add.w	#128+48,d0
+		add.w	d2,d0
+		move.w	d0,(a2)+
+		
+		move.l	(a1)+,(a2)+
+
+		move.w	(a1)+,d0
+		add.w	#128+56,d0
+		add.w	d1,d0
+		move.w	d0,(a2)+
+		rts
+; ---------------------------------------------------------------------------
+.cursorFrame:
+	sprite_entry	SPR_2x2, 0, 0, (vramCursor/TILE), 3, 1, 0, 0
+
+; ---------------------------------------------------------------------------
+.inventoryItemIDs:
+	dc.b	$01	; 01 Stone
+	dc.b	$04	; 04 Cobblestone
+	dc.b	$13	; 13 Bricks
+	dc.b	$02	; 02 Dirt
+	dc.b	$0B	; 0B Wooden Planks
+	dc.b	$0A	; 0A Wood
+	dc.b	$09	; 09 Leaves
+	dc.b	$16	; 16 Glass
+	dc.b	$06	; 06 Smooth Stone Slab
+	dc.b	$08	; 08 Mossy Cobblestone
+	dc.b	$18	; 18 Sapling
+	dc.b	$1B	; 1B Dandelion
+	dc.b	$1C	; 1C Rose
+	dc.b	$19	; 19 Brown Mushroom
+	dc.b	$1A	; 1A Red Mushroom
+	dc.b	$15	; 15 Sand
+	dc.b	$07	; 07 Gravel
+	dc.b	$03	; 03 Grass
+	dc.b	$21	; 25 Crimson Wool
+	dc.b	$24	; 26 Peach Wool
+	dc.b	$1F	; 27 Bronze Wool
+	dc.b	$23	; 28 Goldenrod Wool
+	dc.b	$1E	; 29 Lime Wool
+	dc.b	$22	; 2A Green Wool
+	dc.b	$23	; 2B Turquoise Wool
+	dc.b	$1E	; 2C Indigo Wool
+	dc.b	$1E	; 2D Violet Wool
+	dc.b	$20	; 2E Cacao Wool
+	dc.b	$24	; 20 White Wool
+	dc.b	$24	; 21 Silver Wool
+	dc.b	$1D	; 22 Gray Wool
+	dc.b	$23	; 23 Charcoal Wool
+	dc.b	$21	; 24 Black Wool
+	dc.b	$10	; 10 Iron Block
+	dc.b	$11	; 11 Gold Block
+	dc.b	$12	; 12 Diamond Block
+	dc.b	$0C	; 0C Coal Ore
+	dc.b	$0D	; 0D Iron Ore
+	dc.b	$0E	; 0E Gold Ore
+	dc.b	$0F	; 0F Diamond Ore
+	dc.b	$14	; 14 TNT
+	dc.b	$17	; 17 Obsidian
+	even
