@@ -48,8 +48,9 @@ MC_Init:
 
 		clr.w	(cloudFrameCnt).w
 
-		move.w	#128,(playerObjVars+xPos).w
-		move.w	#240,(playerObjVars+yPos).w
+		move.w	#2048,(playerObjVars+xPos).w
+		move.w	#176,(playerObjVars+yPos).w
+		move.b	#1,(playerObjVars+heldItemID).w
 
 .gameLoop:
 		st.b	(vblankWait).w
@@ -95,7 +96,7 @@ MC_RenderBlocks:
 		move.w	(camYPosFG).w,d1	; Get the camera's y coordinate
 		lsl.w	#5,d1			; Make into row offset
 		andi.w	#$FF00,d1		; ^
-		bra.s	.renderScreen
+		bpl.s	.renderScreen
 
 .abovePlayfield:
 		moveq	#40,d7			; Load the number of blocks in each row as the inner loop counter
@@ -111,7 +112,6 @@ MC_RenderBlocks:
 		dbf	d6,.abovePlayfield	; Loop until the entire screen is rendered
 		rts
 ; ---------------------------------------------------------------------------
-
 .renderScreen:
 		moveq	#40,d7			; Load the number of blocks in each row as the inner loop counter
 		move.w	d1,d2			; Load the offset into the current row into d2
@@ -338,17 +338,17 @@ MC_LoadBackground:
 ; Load the World
 ; ---------------------------------------------------------------------------
 MC_LoadWorld:
-		lea	MC_TestMap,a0
-		lea	mapWallBlocks,a1
-		move.w	#((MC_TestMap_End-MC_TestMap)>>2)-1,d7
+		lea	MC_WorldWallMap,a0
+		lea	(mapWallBlocks).l,a1
+		move.w	#((MC_WorldWallMap_End-MC_WorldWallMap)>>2)-1,d7
 
 .loadWalls:
 		move.l	(a0)+,(a1)+
 		dbf	d7,.loadWalls
 
-		lea	MC_TestMap,a0
-		lea	mapCollBlocks,a1
-		move.w	#((MC_TestMap_End-MC_TestMap)>>2)-1,d7
+		lea	MC_WorldCollMap,a0
+		lea	(mapCollBlocks).l,a1
+		move.w	#((MC_WorldCollMap_End-MC_WorldCollMap)>>2)-1,d7
 
 .loadBlocks:
 		move.l	(a0)+,(a1)+
@@ -455,6 +455,16 @@ MC_BGArt_End:
 MC_BGMap:
 	incbin	"minecraft\assets\bin\bgMap.bin"
 MC_BGMap_End:
+	even
+
+MC_WorldCollMap:
+	incbin	"minecraft\assets\bin\worldColl.bin"
+MC_WorldCollMap_End:
+	even
+
+MC_WorldWallMap:
+	incbin	"minecraft\assets\bin\worldWall.bin"
+MC_WorldWallMap_End:
 	even
 ; ---------------------------------------------------------------------------
 inventory_item	macro	tileID, palLine
@@ -593,71 +603,71 @@ MC_InventoryMap:
 MC_InventoryMap_End:
 ; ---------------------------------------------------------------------------
 MC_TestMap:
-	dcb.b	256,$00	; Row 00
-	dcb.b	256,$00	; Row 01
-	dcb.b	256,$00	; Row 02
-	dcb.b	256,$00	; Row 03
-	dcb.b	256,$00	; Row 04
-	dcb.b	256,$00	; Row 05
-	dcb.b	256,$00	; Row 06
-	dcb.b	256,$00	; Row 07
-	dcb.b	256,$00	; Row 08
-	dcb.b	256,$00	; Row 09
-	dcb.b	256,$00	; Row 0A
-	dcb.b	256,$00	; Row 0B
-	dcb.b	256,$00	; Row 0C
-	dcb.b	256,$00	; Row 0D
-	dcb.b	256,$00	; Row 0E
-	dcb.b	256,$00	; Row 0F
+;	dcb.b	256,$00	; Row 00
+;	dcb.b	256,$00	; Row 01
+;	dcb.b	256,$00	; Row 02
+;	dcb.b	256,$00	; Row 03
+;	dcb.b	256,$00	; Row 04
+;	dcb.b	256,$00	; Row 05
+;	dcb.b	256,$00	; Row 06
+;	dcb.b	256,$00	; Row 07
+;	dcb.b	256,$00	; Row 08
+;	dcb.b	256,$00	; Row 09
+;	dcb.b	256,$00	; Row 0A
+;	dcb.b	256,$00	; Row 0B
+;	dcb.b	256,$00	; Row 0C
+;	dcb.b	256,$00	; Row 0D
+;	dcb.b	256,$00	; Row 0E
+;	dcb.b	256,$00	; Row 0F
 
-	dcb.b	256,$00	; Row 00
-	dcb.b	256,$00	; Row 01
-	dcb.b	256,$00	; Row 02
-	dcb.b	256,$00	; Row 03
-	dcb.b	256,$00	; Row 04
-	dcb.b	256,$00	; Row 05
-	dcb.b	256,$00	; Row 06
-	dcb.b	256,$00	; Row 07
-	dcb.b	256,$00	; Row 08
-	dcb.b	256,$01	; Row 09
-	dcb.b	256,$00	; Row 0A
-	dcb.b	256,$00	; Row 0B
-	dcb.b	256,$00	; Row 0C
-	dcb.b	256,$00	; Row 0D
-	dcb.b	256,$00	; Row 0E
-	dcb.b	256,$00	; Row 0F
+;	dcb.b	256,$00	; Row 00
+;	dcb.b	256,$00	; Row 01
+;	dcb.b	256,$00	; Row 02
+;	dcb.b	256,$00	; Row 03
+;	dcb.b	256,$00	; Row 04
+;	dcb.b	256,$00	; Row 05
+;	dcb.b	256,$00	; Row 06
+;	dcb.b	256,$00	; Row 07
+;	dcb.b	256,$00	; Row 08
+;	dcb.b	256,$00 ; Row 09
+;	dcb.b	256,$00	; Row 0A
+;	dcb.b	256,$00	; Row 0B
+;	dcb.b	256,$00	; Row 0C
+;	dcb.b	256,$00	; Row 0D
+;	dcb.b	256,$00	; Row 0E
+;	dcb.b	256,$00	; Row 0F
 
-	dcb.b	256,$03	; Row 20
-	dcb.b	256,$02	; Row 21
-	dcb.b	256,$02	; Row 22
-	dcb.b	256,$02	; Row 23
-	dcb.b	256,$01	; Row 24
-	dcb.b	256,$01	; Row 25
-	dcb.b	256,$01	; Row 26
-	dcb.b	256,$01	; Row 27
-	dcb.b	256,$01	; Row 28
-	dcb.b	256,$01	; Row 29
-	dcb.b	256,$01	; Row 2A
-	dcb.b	256,$01	; Row 2B
-	dcb.b	256,$01	; Row 2C
-	dcb.b	256,$01	; Row 2D
-	dcb.b	256,$01	; Row 2E
-	dcb.b	256,$01	; Row 2F
+;	dcb.b	256,$03	; Row 20
+;	dcb.b	256,$02	; Row 21
+;	dcb.b	256,$02	; Row 22
+;	dcb.b	256,$02	; Row 23
+;	dcb.b	256,$01	; Row 24
+;	dcb.b	256,$01	; Row 25
+;	dcb.b	256,$01	; Row 26
+;	dcb.b	256,$01	; Row 27
+;	dcb.b	256,$01	; Row 28
+;	dcb.b	256,$01	; Row 29
+;	dcb.b	256,$01	; Row 2A
+;	dcb.b	256,$01	; Row 2B
+;	dcb.b	256,$01	; Row 2C
+;	dcb.b	256,$01	; Row 2D
+;	dcb.b	256,$01	; Row 2E
+;	dcb.b	256,$01	; Row 2F
 
-	dcb.b	256,$01	; Row 30
-	dcb.b	256,$01	; Row 31
-	dcb.b	256,$01	; Row 32
-	dcb.b	256,$01	; Row 33
-	dcb.b	256,$01	; Row 34
-	dcb.b	256,$01	; Row 35
-	dcb.b	256,$01	; Row 36
-	dcb.b	256,$01	; Row 37
-	dcb.b	256,$01	; Row 38
-	dcb.b	256,$01	; Row 39
-	dcb.b	256,$01	; Row 3A
-	dcb.b	256,$01	; Row 3B
-	dcb.b	256,$01	; Row 3C
-	dcb.b	256,$01	; Row 3D
-	dcb.b	256,$01	; Row 3E
-	dcb.b	256,$05	; Row 3F
+;	dcb.b	256,$01	; Row 30
+;	dcb.b	256,$01	; Row 31
+;	dcb.b	256,$01	; Row 32
+;	dcb.b	256,$01	; Row 33
+;	dcb.b	256,$01	; Row 34
+;	dcb.b	256,$01	; Row 35
+;	dcb.b	256,$01	; Row 36
+;	dcb.b	256,$01	; Row 37
+;	dcb.b	256,$01	; Row 38
+;	dcb.b	256,$01	; Row 39
+;	dcb.b	256,$01	; Row 3A
+;	dcb.b	256,$01	; Row 3B
+;	dcb.b	256,$01	; Row 3C
+;	dcb.b	256,$01	; Row 3D
+;	dcb.b	256,$01	; Row 3E
+;	dcb.b	256,$05	; Row 3F
 MC_TestMap_End:
