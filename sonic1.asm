@@ -29,7 +29,7 @@ v_tetoystart		rs.w	1
 v_levelrandtracker	rs.l	1
 
 randLevelCount		= 16	; 31 max (32 is reserved for linear path flag)
-randLevelCountLimited	= 12
+randLevelCountLimited	= 11
 ;level select constants (to not give the foward reference warning this was moved here)
 f_checksum	= $FFFFFFF9
 lsscrpos 	= $60860003 ; level select screen position
@@ -3123,6 +3123,7 @@ Pal_Sans:	incbin	pallet\sans.bin
 Pal_hen1:	incbin	pallet\henshin1.bin
 Pal_hen2:	incbin	pallet\henshin2.bin
 Pal_hencyc:	incbin	pallet\henshincyc.bin
+Pal_mercend:	incbin	pallet\mercend.bin	; ending sequence pallets
 ; ---------------------------------------------------------------------------
 ; Subroutine to	delay the program by ($FFFFF62A) frames
 ; ---------------------------------------------------------------------------
@@ -4635,12 +4636,12 @@ GetLevelRandom:
 	dc.w 7<<8|1	; Makoto
 	dc.w 7<<8|2	; Makoto
 	dc.w 1<<8|1	; LZ
-	dc.w 3<<8|0	; SLZ
 ; beatable as everyone else
 	dc.w 0<<8|1	; GHZ ; starting jump too big
 	dc.w 0<<8|2	; GHZ ; ditto
 	dc.w 1<<8|0	; LZ ; one of the jumps is too big, probably doable with badnik bouncing
 	dc.w 1<<8|2	; LZ ; gravity too dense
+	dc.w 3<<8|0	; SLZ ; red spring too low
 ; unbeatable
 	dc.w 3<<8|1	; SLZ ; dutch
 	dc.w 3<<8|2	; SLZ ; dutch
@@ -6596,7 +6597,7 @@ EndingSequence:				; XREF: GameModeArray
 	bra.w	@null		; limited
 	bra.w	@null		; neru
 	bra.w	@null		; gomer
-	bra.w	@null		; sailor mercury
+	bra.w	@mercury	; sailor mercury
 	bra.w	@kiryu		; kiryu
 	bra.w	@purpleguy	; purple guy
 	bra.w	@null		; sans
@@ -6612,6 +6613,9 @@ EndingSequence:				; XREF: GameModeArray
 		pea	End_GotoCredits
 		lea	EndingCutscene,a6
 		jmp	GM_CustomSplashScreensIG
+@mercury:
+		pea	End_GotoCredits
+		jmp	GM_MercEnd
 @null:
 		jmp	End_GotoCredits
 
@@ -7545,7 +7549,7 @@ LevelSizeArray:        ; GHZ
         dc.w $0004, $0000, $1800, $0000, $0720, $0060 ; Act 3
         dc.w $0004, $0000, $16BF, $0000, $0720, $0060 ; Act 4 (Unused)
         ; SLZ
-        dc.w $0004, $0000, $1FBF, $0000, $0640, $0060 ; Act 1
+        dc.w $0004, $0000, $1040, $0000, $0640, $0060 ; Act 1
         dc.w $0004, $0000, $1FBF, $0000, $0640, $0060 ; Act 2
         dc.w $0004, $0000, $2000, $0000, $06C0, $0060 ; Act 3
         dc.w $0004, $0000, $3EC0, $0000, $0720, $0060 ; Act 4 (Unused)
@@ -26082,6 +26086,8 @@ CallKillSonic:
 ; please dont remove this its good husgfyuv
 		jsr	KillSonic	; GMZ
 ; test so suicide barney cant scream (immortal)
+ 		tst.w	($FFFFFFF0).w
+		bne.s	nodeathpitscream
  		tst.b	(f_superconic).w
 		bne.s	nodeathpitscream
 ; intentionally freeze it by setting the pause value to 2
@@ -36312,7 +36318,7 @@ Obj86_Ball_Static:
 		move.b	$28(a0),d0
 		move.b	$29(a0),d1
 		add.w	d1,d0
-		cmp.b	#$1C,d0			; prevent particularly bad movement speeds
+		cmp.b	#$30,d0			; prevent particularly bad movement speeds
 		blo.s	Obj86_Ball_Vanish	; still keeps the hilariously bad ones though
 		move.w	d0,$12(a0)
 		bra.w	loc_1AA1E
@@ -40871,6 +40877,7 @@ MusicIndex:	; $01-$7F
 		dc.l Music1F ; THINK THINK THINK
 		dc.l Music20 ; there is a house
 		dc.l Music21 ; sailor moon transformaion for mercury (BISHOUJO SENSHI SAILOR MOON, 1994)
+		dc.l Music22 ; sailor moon ending for mercury (BISHOUJO SENSHI SAILOR MOON, 1994)
 ; wait i don't have time to implement these oops
 		dc.l Music92 ; test
 
@@ -43401,6 +43408,8 @@ Music20:	incbin	sound\SDUNST.bin
 		even
 Music21:	incbin	sound\sailormoon.bin
 		even
+Music22:	incbin	sound\sailormoonend.bin
+		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
 Music82:	incbin	sound\music82.bin ; Labyrinth Act 1
@@ -43663,6 +43672,7 @@ Heinous1_Display:
 
 	include otisexe\GM_Otis.asm
 	include mercuryhenshin\GM_Henshin.asm
+	include mercuryend\GM_MercEnd.asm
 ; ---------------------------------------------------------------------------
 EndOfRom:
 

@@ -106,3 +106,6 @@
 	dc.l Pal_Hen2
 	dc.w $FB00
 	dc.w $1F
+	dc.l Pal_mercend
+	dc.w $FB00
+	dc.w $1F
