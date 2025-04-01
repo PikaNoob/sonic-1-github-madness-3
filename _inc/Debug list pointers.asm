@@ -8,4 +8,4 @@
 	dc.w Debug_SYZ-DebugList
 	dc.w Debug_SBZ-DebugList
 	dc.w Debug_Ending-DebugList
-	dc.w Debug_GHZ-DebugList
+	dc.w Debug_BHZ-DebugList
