@@ -21,6 +21,7 @@
 	dc.w PLC_BHZ-ArtLoadCues, PLC_BHZ2-ArtLoadCues		; $20
 	dc.w Plc_TetoBoss-ArtLoadCues
 	dc.w PLC_TruthNuke-ArtLoadCues	; GMZ
+	dc.w Plc_MakoBoss-ArtLoadCues
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - standard block 1
 ; ---------------------------------------------------------------------------
@@ -569,3 +570,14 @@ PLC_TruthNuke:	dc.w 0
 		dc.l Nem_TruthNuke	; GMZ
 		dc.w 0
 		even
+; ---------------------------------------------------------------------------
+; Pattern load cues - Teto boss
+; ---------------------------------------------------------------------------
+PLC_MakoBoss:	dc.w 2
+		dc.l Nem_makoboss		; Eggman main patterns
+		dc.w $8000
+		dc.l Nem_Prison		; prison capsule
+		dc.w $93A0
+		dc.l Nem_makobomb		; bomb enemy (gets overwritten)
+		dc.w $9000
+		; even

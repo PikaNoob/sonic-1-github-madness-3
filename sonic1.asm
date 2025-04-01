@@ -10082,7 +10082,7 @@ loc_6ED0B:
 		bsr.w	PlaySound	; play boss music
 		move.b	#1,($FFFFF7AA).w ; lock	screen
 		addq.b	#2,($FFFFF742).w
-		moveq	#$22,d0
+		moveq	#$24,d0
 		bra.w	LoadPLC		; load boss patterns
 ; ===========================================================================
 
@@ -20459,7 +20459,7 @@ off_D202:	dc.w loc_D20A-off_D202, loc_D246-off_D202, loc_D274-off_D202, loc_D2C8
 loc_D20A:
 		addq.b	#2,$24(a0)
 		move.l	#Map_Splats,4(a0)
-		move.w	#$24E4,2(a0)
+		move.w	#$4F0,2(a0)
 		move.b	#4,1(a0)
 		move.b	#4,$18(a0)
 		move.b	#$C,$19(a0)
@@ -32307,6 +32307,10 @@ obj77_LoadBoss:				; XREF: obj77_Main
 		move.w	8(a0),8(a1)
 		move.w	$C(a0),$C(a1)
 		move.l	#Map_TetoBoss,4(a1)
+		cmp.b	#7,($FFFFFE10).w	; Are we in BHZ?
+		bne.s	@notmako	; GMZ: If not, branch
+		move.l	#Map_MakoBoss,4(a1)
+@notmako:
 		move.w	#$400,2(a1)
 		move.b	#4,1(a1)
 		move.b	#$20,$19(a1)
@@ -32612,6 +32616,8 @@ obj77_Display:				; XREF: obj77_FaceDisp; obj77_FlameDisp
 ; ---------------------------------------------------------------------------
 Map_TetoBoss:
 	include "_maps\tetoboss.asm"
+Map_MakoBoss:
+	include "_maps\makoboss.asm"
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Object 73 - Eggman (MZ)
@@ -40377,6 +40383,10 @@ Nem_Eggman:	incbin	artnem\bossmain.bin	; boss main patterns
 Nem_Tetoboss:	incbin	artnem\TetoBoss.bin	; boss main patterns
 		even
 Nem_Peartobomb:	incbin	artnem\peartobomb.bin	; boss main patterns
+		even
+Nem_makoboss:	incbin	artnem\makoBoss.bin	; boss main patterns
+		even
+Nem_makobomb:	incbin	artnem\makobomb.bin	; boss main patterns
 		even
 Nem_Weapons:	incbin	artnem\bossxtra.bin	; boss add-ons and weapons
 		even
