@@ -300,14 +300,7 @@ GameClrRAM:
 		move.l	#loc_B10,(vBlankAdress).w		; Set the V-INT pointer to the standard V-INT routine
 
 		bsr.w	VDPSetupGame
-	;	bsr.w	SoundDriverLoad
-                jsr     MegaPCM_LoadDriver
-                lea     SampleTable, a0
-                jsr     MegaPCM_LoadSampleTable
-		tst.w	d0
-		beq.s	@mpcmsucc
-		jmp	Sound_E5
-@mpcmsucc:
+		bsr.w	SoundDriverLoad
 		bsr.w	JoypadInit
 
 		tst.b	(f_checksum).w		; Is checksum correct?
@@ -1260,19 +1253,14 @@ loc_134A:
 ; ---------------------------------------------------------------------------
 
 SoundDriverLoad:			; XREF: GameClrRAM; TitleScreen
-		move.w	#$100,($A11100).l ; stop the Z80
-		move.w	#$100,($A11200).l ; reset the Z80
-		lea	(Kos_Z80).l,a0	; load sound driver
-		lea	($A00000).l,a1
-		bsr.w	KosDec		; decompress
-		move.w	#0,($A11200).l
-		nop	
-		nop	
-		nop	
-		nop	
-		move.w	#$100,($A11200).l ; reset the Z80
-		move.w	#0,($A11100).l	; start	the Z80
-		rts	
+                jsr     MegaPCM_LoadDriver
+                lea     SampleTable, a0
+                jsr     MegaPCM_LoadSampleTable
+		tst.w	d0
+		beq.s	@mpcmsucc
+		jmp	Sound_E5
+@mpcmsucc:
+		jmp	Sound_E4	; Silence (see, a sound initiation, was it that hard SMPS devs?)
 ; End of function SoundDriverLoad
 
 ; ---------------------------------------------------------------------------
@@ -43335,12 +43323,6 @@ loc_72E64:				; XREF: loc_72A64
 		move.b	#$F,d1
 		bra.w	sub_7272E
 ; ===========================================================================
-Kos_Z80:	incbin	sound\z80_1.bin
-		dc.w ((SegaPCM&$FF)<<8)+((SegaPCM&$FF00)>>8)
-		dc.b $21
-		dc.w (((EndOfRom-SegaPCM)&$FF)<<8)+(((EndOfRom-SegaPCM)&$FF00)>>8)
-		incbin	sound\z80_2.bin
-		even
 Music01:	include	sound\LimitedInvincibility.asm
 		even
 Music03:	include	sound\tg2000tracks\drcoffinman.asm
