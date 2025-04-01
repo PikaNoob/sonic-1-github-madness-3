@@ -26228,16 +26228,6 @@ invtime:	equ $32	; time left for invincibility
 	jsr	(PlaySound).l	; load the Super Conic song and return
 	move.w	#$B4,d0
 	jsr	MegaPCM_PlaySample	; load the Super Conic song and return
-; test frame
-;$72
-	cmp.b	#$72,$1A(A0)	; are they done aura farming
-	bne.s	locret_134C2	; if not, branch
-; this does not work help
-; the lines below happen when $72 shows up
-
-	move.b	#$00,(f_playerctrl).w	; unlock controls
-	move.w	#$15,d0
-	jsr	(PlaySound).l	; load the Super Conic song and return
 locret_134C2:
 		rts	
 ; ===========================================================================
@@ -26260,11 +26250,19 @@ f_ringcount:		equ $FFFFFE1D	; ring counter update flag
 ; loc_1ABA6:
 Conic_Super:
 	tst.b	(f_superconic).w	; Ignore all this code if not Super Conic
-	beq.w	@return
+	beq.w	returnSS
 	tst.b	(f_timecount).w
 	beq.s	Conic_RevertToNormal
+; test frame
+;$72
+	cmp.b	#$72,$1A(A0)	; are they done aura farming
+	bne.s	notaurafarming	; if not, branch
+	move.b	#$00,(f_playerctrl).w	; unlock controls
+	move.w	#$15,d0
+	jsr	(PlaySound).l	; load the Super Conic song and return
+notaurafarming:
 	subq.w	#1,(v_supertime).w
-	bhi.w	@return
+	bhi.w	returnSS
 
 	move.w	#60,(v_supertime).w	; Reset frame counter to 60
 	tst.w	(v_rings).w
@@ -26281,7 +26279,7 @@ Conic_Super:
 @subtractring:
 	subq.w	#1,(v_rings).w
 	beq.s	Conic_RevertToNormal
-@return:
+returnSS:
 		rts
 ; loc_1ABF2:
 Conic_RevertToNormal:
