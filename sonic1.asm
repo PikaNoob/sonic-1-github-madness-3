@@ -6536,7 +6536,7 @@ EndingSequence:				; XREF: GameModeArray
 		move.b	(v_character).w,d0
 		lsl.w	#2,d0
 		jmp	@lut(pc,d0.w)
-@lut:	bra.w 	@null		; sonic
+@lut:	bra.w 	@sonic		; sonic
 	bra.w	@null
 	bra.w	@null
 	bra.w	@null		; limited
@@ -6547,13 +6547,19 @@ EndingSequence:				; XREF: GameModeArray
 	bra.w	@purpleguy	; purple guy
 @kiryu:
 		pea	End_GotoCredits
-		lea	EndingCutscene,a6
+		lea	EndingSleeper,a6
 		jmp	GM_CustomSplashScreensIG
 @purpleguy:
+		pea	End_GotoCredits
+		lea	EndingAlways,a6
+		jmp	GM_CustomSplashScreensIG
+@sonic:
 		pea	End_GotoCredits
 		lea	EndingCutscene,a6
 		jmp	GM_CustomSplashScreensIG
 @null:
+		jmp	End_GotoCredits
+
 		move.b	#$E4,d0
 		bsr.w	PlaySound_Special ; stop music
 		bsr.w	Pal_FadeFrom
@@ -7684,6 +7690,7 @@ BgScroll_SBZ:				; XREF: BgScroll_Index
 		asl.l	#4,d0
 		asl.l	#1,d0
 		asr.l	#8,d0
+		subi.w	#$80,d0
 		move.w	d0,($FFFFF70C).w
 		rts	
 ; ===========================================================================
@@ -7757,7 +7764,7 @@ loc_628E:
 		jmp	Deform_LZ	; GMZ
 
 GetDeformRoutine:	; GMZ
-		pea	Deform_Ripple
+		;pea	Deform_Ripple		; fuck off
 		move.b	($FFFFFE10).w,d0
 		add.w	d0,d0
 		move.w	Deform_Index(pc,d0.w),d0
@@ -8162,15 +8169,6 @@ loc_653C:
 
 
 Deform_SBZ:				; XREF: Deform_Index
-		move.w	($FFFFF73A).w,d4
-		ext.l	d4
-		asl.l	#6,d4
-		move.w	($FFFFF73C).w,d5
-		ext.l	d5
-		asl.l	#4,d5
-		asl.l	#1,d5
-		bsr.w	ScrollBlock1
-		move.w	($FFFFF70C).w,($FFFFF618).w
 		lea	($FFFFCC00).w,a1
 		move.w	#240-1,d1	; V30
 		move.w	($FFFFF700).w,d0
@@ -9970,8 +9968,7 @@ locret_7322:
 ; ===========================================================================
 
 Resize_FZend2:
-		lea	EndingCutscene,a6
-		jmp	GM_CustomSplashScreensIG
+		bra.s	loc_72C2
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Ending sequence dynamic screen resizing (empty)
@@ -36231,9 +36228,6 @@ Obj86_Ball_Speed:
 @notoverflown:
 		bra.w	loc_1AA1E
 @oof:
-		move.w	#$94,d0			; play Vanish sample
-		jsr	MegaPCM_PlaySample
-		illegal
 		bra.w	loc_1AA34
 ; ===========================================================================
 
@@ -40801,7 +40795,10 @@ MusicIndex:	; $01-$7F
 		dc.l Music1A ; Ronic Setro splash screen
 		dc.l Music1C ; Something
 		dc.l Music1D ; Mountain King S3M 'cause why not
-
+		dc.l Music1E ; Thriller thing I made some time ago - Vertz1515
+		dc.l Music1F ; THINK THINK THINK
+		dc.l Music20 ; there is a house
+; wait i don't have time to implement these oops
 		dc.l Music92 ; test
 
 MusicIndex80:	; $81-$9F
@@ -43323,6 +43320,12 @@ Music1C:	include	sound\tg2000tracks\MGSFX.asm
 		even
 Music1D:	include	sound\tg2000tracks\hallmountainkings3.asm
 		even
+Music1E:	incbin	sound\thr2.bin
+		even
+Music1F:	incbin	sound\thinkthinkthink.bin
+		even
+Music20:	incbin	sound\SDUNST.bin
+		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
 Music82:	incbin	sound\music82.bin ; Labyrinth Act 1
@@ -43533,12 +43536,17 @@ Obj10:
 
 Obj_Heinous1:   
 
+memPlayer = $FFFFD000 
+
 GOOEETILE = $22C0
+
 gurgle.Time = $32
+
         moveq   #0,d0
         move.b  obj.Action(a0),d0
         move.w  .Index(pc,d0.w),d1
-        jmp     .Index(pc,d1.w)
+        jsr     .Index(pc,d1.w)
+	jmp     MarkObjGone
 
 ; ---------------------------------------------------------------------------
 .Index:                                
@@ -43551,25 +43559,31 @@ Heinous1_Init:
         move.l  #SprPat_Gurgly,obj.Map(a0)
         move.w  #GOOEETILE,obj.Tile(a0)
         move.b  #%00000100,obj.Render(a0)
+        move.b	#5,obj.Collision(a0)
         move.b  #7,obj.Priority(a0)
         move.b  #5,obj.Frame(a0)
-        move.w  #-$800,obj.YSpeed(a0)
 Heinous1_Display:   
 	jsr     _objectFall
 	jsr	ObjHitFloor
 	tst.w	d1     
 	bpl.s   .NoJump
-        move.w  #-$800,obj.YSpeed(a0)
+        move.w  #-$600,obj.YSpeed(a0)
         move.b  #6,gurgle.Time(a0)
 	move.w	#$AE,d0
 	jsr	MegaPCM_PlaySample
         move.b  #6,obj.Frame(a0)
         bra.s   .WaitGurgle
-.NoJump:    
+.NoJump:   
+	moveq   #0,d0 
+
 	sub.b   #1,gurgle.Time(a0)  
 	bne.s   .WaitGurgle
         move.b  #5,obj.Frame(a0)	
-.WaitGurgle:           
+.WaitGurgle:        
+	move.w  memPlayer+obj.Momentum,d0
+	asr.w   #2,d0
+	neg     d0
+	move.w  d0,obj.XSpeed(a0)   
         jmp     _objectDraw  
 
 	include otisexe\GM_Otis.asm
