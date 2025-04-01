@@ -28,7 +28,7 @@ v_tetoxstart		rs.w	1
 v_tetoystart		rs.w	1
 v_levelrandtracker	rs.l	1
 
-randLevelCount		= 16	; 31 max (32 is reserved for linear path flag)
+randLevelCount		= 17	; 31 max (32 is reserved for linear path flag)
 randLevelCountLimited	= 11
 ;level select constants (to not give the foward reference warning this was moved here)
 f_checksum	= $FFFFFFF9
@@ -4642,8 +4642,8 @@ GetLevelRandom:
 	dc.w 1<<8|0	; LZ ; one of the jumps is too big, probably doable with badnik bouncing
 	dc.w 1<<8|2	; LZ ; gravity too dense
 	dc.w 3<<8|0	; SLZ ; red spring too low
+	dc.w 3<<8|1	; SLZ ; yellow spring too low
 ; unbeatable
-	dc.w 3<<8|1	; SLZ ; dutch
 	dc.w 3<<8|2	; SLZ ; dutch
 	even
 ; ===========================================================================
