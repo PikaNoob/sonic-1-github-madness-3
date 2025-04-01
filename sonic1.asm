@@ -31295,9 +31295,12 @@ loc_16C64:
 		beq.s	loc_16C7C
 		cmpi.b	#$A,$24(a1)
 		bne.s	loc_16C82
+		; Delete the parent.
+		jsr	(DeleteObject2).l ; Don't mind this misnomer.
 
 loc_16C7C:
 		move.b	#$A,$24(a0)
+		rts
 
 loc_16C82:
 		jmp	DisplaySprite
