@@ -403,9 +403,8 @@ jmpto_IntroCutscene:
 		jmp	GM_CustomSplashScreensIG
 
 @limitedtext:	dc.b "IT IS LIMITED",0
-
-@mercury:	jmp	GM_Henshin
 	even
+@mercury:	jmp	GM_Henshin
 ; ===========================================================================
 
 CheckSumError:
@@ -6554,6 +6553,7 @@ EndingSequence:				; XREF: GameModeArray
 	bra.w	@null		; sailor mercury
 	bra.w	@kiryu		; kiryu
 	bra.w	@purpleguy	; purple guy
+	bra.w	@null		; sans
 @kiryu:
 		pea	End_GotoCredits
 		lea	EndingSleeper,a6
@@ -16698,6 +16698,7 @@ loc_C61A:				; XREF: Obj3A_ChkPos
 		dc.b 0,$00
 		dc.b 2,$90	; gomer
 		dc.b 2,$9E	; sailer mercury
+		dc.b 0,$00	; kiryu
 		dc.b 2,$AD	; purple guy
 		dc.b 0,$00	; sans maybe temporary????
 		even
@@ -19666,9 +19667,6 @@ Obj0D:					; XREF: Obj_Index
 		move.b	$24(a0),d0
 		move.w	Obj0D_Index(pc,d0.w),d1
 		jsr	Obj0D_Index(pc,d1.w)
-		lea	(Ani_obj0D).l,a1
-		bsr.w	AnimateSprite
-		bsr.w	DisplaySprite
 		move.w	8(a0),d0
 		andi.w	#$FF80,d0
 		move.w	($FFFFF700).w,d1
@@ -19677,7 +19675,9 @@ Obj0D:					; XREF: Obj_Index
 		sub.w	d1,d0
 		cmpi.w	#$280,d0
 		bhi.w	DeleteObject
-		rts	
+		lea	(Ani_obj0D).l,a1
+		bsr.w	AnimateSprite
+		bra.w	DisplaySprite
 ; ===========================================================================
 Obj0D_Index:	dc.w Obj0D_Main-Obj0D_Index
 		dc.w Obj0D_Touch-Obj0D_Index
@@ -19764,14 +19764,14 @@ Obj0D_SonicRun:				; XREF: Obj0D_Index
 		bne.w	locret_ECEE	; if yes, branch
 		btst	#1,($FFFFD022).w
 		bne.s	loc_EC70
-		move.b	#1,($FFFFF7CC).w ; lock	controls
+		move.b	#1,($FFFFF7CC).w	; lock controls
 		btst	#0,($FFFFFE2F).w	; GMZ: Have we got a reverse control power up?
-		beq.s	Obj0D_MoveLeft	; GMZ: If not, branch
-		move.w	#$400,($FFFFF602).w ; make Sonic run to	the right
+		beq.s	Obj0D_MoveLeft		; GMZ: If not, branch
+		move.w	#$400,($FFFFF602).w	; make Sonic run to the right
 		bra.s	loc_EC70
 
 Obj0D_MoveLeft:
-		move.w	#$800,($FFFFF602).w ; make Sonic run to	the right
+		move.w	#$800,($FFFFF602).w	; make Sonic run to the right
 
 loc_EC70:
 		tst.b	($FFFFD000).w
@@ -25850,9 +25850,9 @@ Sonic_AirUnroll:
 		dc.b 1,$A5
 		dc.b 2,$90	; gomer
 		dc.b 2,$9A	; sailer mercury
-		dc.b 2,$AC
-		dc.b 1,$A5
-		dc.b 1,$CD
+		dc.b 2,$AC	; kiryu
+		dc.b 1,$A5	; purple
+		dc.b 1,$CD	; sans
 		even
 @contgame:
 		move.l	$10(a0),d0
@@ -26101,11 +26101,10 @@ locret_133E8:
 		dc.b 1,$BE
 		dc.b 1,$BE	; limited
 		dc.b 1,$BE
-;placeholder, remove soon
 		dc.b 2,$90	; gomer
 		dc.b 2,$9A	; sailer mercury
 		dc.b 1,$BE
-		dc.b 1,$BE
+		dc.b 1,$BE	; purple
 		dc.b 1,$A8
 		even
 ; End of function Sonic_Roll
@@ -26172,8 +26171,8 @@ loc_1341C:
 		dc.b 1,$A0
 		dc.b 2,$90	; gomer
 		dc.b 2,$99	; sailer mercury
-		dc.b 2,$AA
-		dc.b 1,$A0
+		dc.b 2,$AA	; kiryu
+		dc.b 1,$A0	; purple
 		dc.b 1,$CD
 		even
 ; ===========================================================================
@@ -31783,8 +31782,8 @@ CHAR_BOSSHIT_SND:
 		dc.b 0,$00
 		dc.b 2,$90	; gomer
 		dc.b 2,$9D	; sailer mercury
-		dc.b 0,$00
-		dc.b 2,$AD
+		dc.b 0,$00	; kiryu
+		dc.b 2,$AD	; purple
 		dc.b 0,$00
 		even
 
@@ -36988,7 +36987,7 @@ Hurt_Sound:
 		dc.b 2,$90	; gomer
 		dc.b 2,$9B	; sailer mercury
 		dc.b 2,$AB
-		dc.b 0,$00
+		dc.b 0,$00	; purple
 		dc.b 0,$00
 		even
 ; ===========================================================================
@@ -37046,7 +37045,7 @@ Kill_Sound:
 		dc.b 2,$90	; gomer
 		dc.b 2,$9C	; sailer mercury
 		dc.b 2,$A9
-		dc.b 2,$B0
+		dc.b 2,$B0	; the man behind the shots
 		dc.b 0,$C5	; sans mf
 		even
 SUPERdeath:
