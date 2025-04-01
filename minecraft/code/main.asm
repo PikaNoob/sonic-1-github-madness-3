@@ -402,7 +402,7 @@ MC_VInt:
 ; ---------------------------------------------------------------------------
 MC_ReadJoypad:
 		lea	(ctrlHoldP1).w,a0 ; address where joypad states are written
-		lea	($A10002).l,a1	; first	joypad port
+		lea	($A10002+1).l,a1	; first	joypad port
 		bsr.s	.read		; do the first joypad
 		addq.w	#2,a1		; do the second	joypad
 
