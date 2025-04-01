@@ -43516,13 +43516,18 @@ Minecraft:	include	minecraft\code\main.asm
 Obj10:	
 
 Obj_Heinous1:   
+
 memPlayer = $FFFFD000 
+
 GOOEETILE = $22C0
+
 gurgle.Time = $32
+
         moveq   #0,d0
         move.b  obj.Action(a0),d0
         move.w  .Index(pc,d0.w),d1
-        jmp     .Index(pc,d1.w)
+        jsr     .Index(pc,d1.w)
+	jmp     MarkObjGone
 
 ; ---------------------------------------------------------------------------
 .Index:                                
@@ -43535,9 +43540,9 @@ Heinous1_Init:
         move.l  #SprPat_Gurgly,obj.Map(a0)
         move.w  #GOOEETILE,obj.Tile(a0)
         move.b  #%00000100,obj.Render(a0)
+        move.b	#5,obj.Collision(a0)
         move.b  #7,obj.Priority(a0)
         move.b  #5,obj.Frame(a0)
-        move.w  #-$800,obj.YSpeed(a0)
 Heinous1_Display:   
 	jsr     _objectFall
 	jsr	ObjHitFloor
@@ -43551,14 +43556,15 @@ Heinous1_Display:
         bra.s   .WaitGurgle
 .NoJump:   
 	moveq   #0,d0 
-	move.w  memPlayer+obj.Momentum,d0
-	asr.w   #2,d0
-	neg     d0
-	move.w  d0,obj.XSpeed(a0)
+
 	sub.b   #1,gurgle.Time(a0)  
 	bne.s   .WaitGurgle
         move.b  #5,obj.Frame(a0)	
-.WaitGurgle:           
+.WaitGurgle:        
+	move.w  memPlayer+obj.Momentum,d0
+	asr.w   #2,d0
+	neg     d0
+	move.w  d0,obj.XSpeed(a0)   
         jmp     _objectDraw  
 
 	include otisexe\GM_Otis.asm
