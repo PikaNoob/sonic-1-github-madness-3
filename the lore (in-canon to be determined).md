@@ -4,25 +4,25 @@
 # Sonic Heroes
 
 # Sonic
-
+Sonic got a tan and gained brainrot since his last outting. The rest is history
 
 # Ogorki
-
+Ogorki plans to defame the the white guys candy brand to advertise his pickles
 
 # Anakama
-
+idfk
 
 # Limited Sonic (from the rom hack Limited Sonic)
 It Is Limited
 
 # Neru
-
+she goofy and maybe even bald
 
 # Gomer Gimpson
 Gomer.
 
 # Sailor Mercury
-
+Sailor Mercury is helping to smuggle the Chaos Emgles from Fatman, because she's bored. She also hates white guy because she saw the allegations
 
 # Kiryu
 Awoken by the cacophony from Sonics intro cutscene, Kiryu must now fuck shit up in order to go back asleep
@@ -46,7 +46,8 @@ This allows Reimu to steal the Special Emerals from Fatman, by passing it from R
 I am Steve
 
 # Oily fella
-He appears when hedgehogs need him most, aside for Limited Sonic, fuck Limited Sonic
+From origins unknown (believed to originate from the Oily dimension), the life of the Oily fella sucks major ass 
+In spite of a pained existence, Oily fella appears when hedgehogs need him most, aside for Limited Sonic, fuck Limited Sonic
 
 -----------------------------------------------------------
 # Sonic Villains
@@ -97,5 +98,8 @@ False God
 # Malachi
 Gruesome demon from hell, but not this hell. The hell that we reside in is a few layers deeper.
 
-# Toy Freddy (TODO: make this the eighth listed thing in misc)
+# Dad
+He humbly requests that you wash his balls
+
+# Toy Freddy
 He kinda, uhh, well, fat

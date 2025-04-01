@@ -1,7 +1,7 @@
 {
     "Flex": 2,
     "name": "",
-    "node": "faecf5fe-f4d1-4859-8cdb-d65bae759721",
+    "node": "07566fbf-46a0-496a-9374-8fd79bebf175",
     "objects": [
         {
             "name": "animals",
@@ -183,7 +183,7 @@
                 }
             ],
             "isDirectory": true,
-            "expanded": true,
+            "expanded": false,
             "uuid": "00bd42b3-caa7-443b-af0b-bd66a9856b53"
         },
         {
@@ -376,13 +376,18 @@
                 }
             ],
             "isDirectory": true,
-            "expanded": true,
+            "expanded": false,
             "uuid": "b2e21f93-0756-4fbf-86a0-596a53748fd7"
         },
         {
             "format": "Sonic 1.js",
             "name": "psb",
-            "palettes": [],
+            "palettes": [
+                {
+                    "path": "pallet/title.bin",
+                    "length": 4
+                }
+            ],
             "art": {
                 "path": "artnem/titlefor.bin",
                 "compression": "Nemesis",

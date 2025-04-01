@@ -26,10 +26,10 @@ v_dmaqueue:		rs.b	18*14
 ; free space until $FFD000!
 v_tetoxstart		rs.w	1
 v_tetoystart		rs.w	1
+v_levelrandtracker	rs.l	1
 
-randLevelCount		= 15	; 31 max (32 is reserved for linear path flag)
+randLevelCount		= 16	; 31 max (32 is reserved for linear path flag)
 randLevelCountLimited	= 11
-v_levelrandtracker	= $FFFFF5FC	; longword
 ;level select constants (to not give the foward reference warning this was moved here)
 f_checksum	= $FFFFFFF9
 lsscrpos 	= $60860003 ; level select screen position
@@ -4641,10 +4641,10 @@ GetLevelRandom:
 	dc.w 0<<8|2	; GHZ ; ditto
 	dc.w 1<<8|0	; LZ ; one of the jumps is too big, probably doable with badnik bouncing
 	dc.w 1<<8|2	; LZ ; gravity too dense
+	dc.w 3<<8|0	; SLZ ; red spring too low
 ; unbeatable
-	dc.w 3<<8|0	; SLZ ; dutch
-	dc.w 3<<8|1
-	dc.w 3<<8|2
+	dc.w 3<<8|1	; SLZ ; dutch
+	dc.w 3<<8|2	; SLZ ; dutch
 	even
 ; ===========================================================================
 
@@ -7549,7 +7549,7 @@ LevelSizeArray:        ; GHZ
         dc.w $0004, $0000, $1800, $0000, $0720, $0060 ; Act 3
         dc.w $0004, $0000, $16BF, $0000, $0720, $0060 ; Act 4 (Unused)
         ; SLZ
-        dc.w $0004, $0000, $1FBF, $0000, $0640, $0060 ; Act 1
+        dc.w $0004, $0000, $1040, $0000, $0640, $0060 ; Act 1
         dc.w $0004, $0000, $1FBF, $0000, $0640, $0060 ; Act 2
         dc.w $0004, $0000, $2000, $0000, $06C0, $0060 ; Act 3
         dc.w $0004, $0000, $3EC0, $0000, $0720, $0060 ; Act 4 (Unused)
@@ -14323,7 +14323,7 @@ Obj0F_Index:	dc.w Obj0F_Main-Obj0F_Index
 
 Obj0F_Main:				; XREF: Obj0F_Index
 		addq.b	#2,$24(a0)
-		move.w	#$D0,8(a0)
+		move.w	#$D7,8(a0)
 		move.w	#$130,$A(a0)
 		move.l	#Map_obj0F,4(a0)
 		move.w	#$200,2(a0)
@@ -36318,7 +36318,7 @@ Obj86_Ball_Static:
 		move.b	$28(a0),d0
 		move.b	$29(a0),d1
 		add.w	d1,d0
-		cmp.b	#$1C,d0			; prevent particularly bad movement speeds
+		cmp.b	#$30,d0			; prevent particularly bad movement speeds
 		blo.s	Obj86_Ball_Vanish	; still keeps the hilariously bad ones though
 		move.w	d0,$12(a0)
 		bra.w	loc_1AA1E
