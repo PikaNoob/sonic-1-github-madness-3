@@ -111,7 +111,7 @@ Limit_Duck:
 ; ===========================================================================
 
 Limit_ResetScr:
-        move.w    #0,($FFFFF73E).w
+;	move.w    #0,($FFFFF73E).w
         
 Limit_ResetScr_Part2:
         cmpi.w    #$60,($FFFFF73E).w ; is    screen in its default position?
