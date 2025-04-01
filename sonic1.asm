@@ -30195,6 +30195,7 @@ loc_15F5E:
 ; ---------------------------------------------------------------------------
 ; Sprite mappings - stomper and	platforms (SBZ)
 ; ---------------------------------------------------------------------------
+SprPat_Gurgly:
 Map_obj6B:
 	include "_maps\obj6B.asm"
 
@@ -43521,8 +43522,8 @@ Obj10:
 
 Obj_Heinous1:   
 
-GOOEETILE = $2CC
-
+GOOEETILE = $22C0
+gurgle.Time = $32
         moveq   #0,d0
         move.b  obj.Action(a0),d0
         move.w  .Index(pc,d0.w),d1
@@ -43536,17 +43537,31 @@ GOOEETILE = $2CC
 
 Heinous1_Init:                         
         addq.b  #2,obj.Action(a0)
-        move.l  #SprPat_Quagmire,obj.Map(a0)
+        move.l  #SprPat_Gurgly,obj.Map(a0)
         move.w  #GOOEETILE,obj.Tile(a0)
         move.b  #%00000100,obj.Render(a0)
         move.b  #7,obj.Priority(a0)
-        move.b  #3,obj.Frame(a0)
-      
-Heinous1_Display:                           
-        jsr     _objectDraw  
-        rts
+        move.b  #5,obj.Frame(a0)
+        move.w  #-$800,obj.YSpeed(a0)
+Heinous1_Display:   
+	jsr     _objectFall
+	jsr	ObjHitFloor
+	tst.w	d1     
+	bpl.s   .NoJump
+        move.w  #-$800,obj.YSpeed(a0)
+        move.b  #6,gurgle.Time(a0)
+	move.w	#$AE,d0
+	jsr	MegaPCM_PlaySample
+        move.b  #6,obj.Frame(a0)
+        bra.s   .WaitGurgle
+.NoJump:    
+	sub.b   #1,gurgle.Time(a0)  
+	bne.s   .WaitGurgle
+        move.b  #5,obj.Frame(a0)	
+.WaitGurgle:           
+        jmp     _objectDraw  
 
-		include otisexe\GM_Otis.asm
+	include otisexe\GM_Otis.asm
 ; ---------------------------------------------------------------------------
 EndOfRom:
 
