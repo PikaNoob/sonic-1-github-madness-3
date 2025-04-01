@@ -351,7 +351,7 @@ GameModeArray:
 ; ===========================================================================
 		bra.w	Level		; Demo Mode ($08)
 ; ===========================================================================
-		bra.w	Level	; Normal Level ($0C)
+		bra.w	Level		; Normal Level ($0C)
 ; ===========================================================================
 		bra.w	SpecialStage	; Special Stage	($10)
 ; ===========================================================================
@@ -9866,10 +9866,10 @@ off_7252:	dc.w Resize_SBZ2main-off_7252
 ; ===========================================================================
 
 Resize_SBZ2main:
-		move.w	#$800,($FFFFF726).w
+		;move.w	#$800,($FFFFF726).w
 		cmpi.w	#$1800,($FFFFF700).w
 		bcs.s	locret_727A
-		move.w	#$510,($FFFFF726).w
+		;move.w	#$510,($FFFFF726).w
 		cmpi.w	#$1E00,($FFFFF700).w
 		bcs.s	locret_727A
 		addq.b	#2,($FFFFF742).w
@@ -9881,7 +9881,7 @@ locret_727A:
 Resize_SBZ2boss:
 		cmpi.w	#$1EB0,($FFFFF700).w
 		bcs.s	locret_7298
-		bsr.w	SingleObjLoad
+		;bsr.w	SingleObjLoad
 		bne.s	locret_7298
 		move.b	#$83,(a1)	; load collapsing block	object
 		addq.b	#2,($FFFFF742).w
@@ -9894,6 +9894,10 @@ locret_7298:
 ; ===========================================================================
 
 Resize_SBZ2boss2:
+		move.w  #$502,$FFFFFE10.w ; honestly 
+		move.w  #1,$FFFFFE02.w
+		rts
+
 		cmpi.w	#$1F60,($FFFFF700).w
 		bcs.s	loc_72B6
 		bsr.w	SingleObjLoad
