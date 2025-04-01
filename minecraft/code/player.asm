@@ -50,6 +50,10 @@ MC_Player:
 .playerRoutines:
 		bsr.w	MC_PlayerMove
 		bsr.w	MC_PlayerCollision
+
+		move.w	yPos(a0),d0
+		subq.w	#HITBOX_Y,d0
+		bmi.s	.updateBGPos
 		bsr.w	MC_PlayerCursor
 		;bsr.w	MC_PlayerAnimate
 		;bsr.w	MC_PlayerDraw
@@ -662,7 +666,7 @@ MC_CursorPlaceFG:
 		move.w	d2,cursorXPos(a0)
 
 		move.w	d3,d2
-		andi.w	#$FF00,d2
+		andi.w	#$3F00,d2
 		lsr.w	#5,d2
 		move.w	d2,cursorYPos(a0)
 
@@ -820,7 +824,7 @@ MC_CursorDestroyFG:
 ;		move.w	d2,cursorYPos(a0)
 
 		move.w	d1,d2
-		andi.w	#$FF00,d2
+		andi.w	#$3F00,d2
 		lsr.w	#5,d2
 		move.w	d2,cursorYPos(a0)
 
@@ -948,7 +952,7 @@ MC_CursorDestroyFG:
 		move.w	d2,cursorXPos(a0)
 
 		move.w	d1,d2
-		andi.w	#$FF00,d2
+		andi.w	#$3F00,d2
 		lsr.w	#5,d2
 		move.w	d2,cursorYPos(a0)
 
@@ -1249,7 +1253,7 @@ MC_CursorPlaceBG:
 		move.w	d2,cursorXPos(a0)
 
 		move.w	d3,d2
-		andi.w	#$FF00,d2
+		andi.w	#$3F00,d2
 		lsr.w	#5,d2
 		move.w	d2,cursorYPos(a0)
 
@@ -1374,7 +1378,7 @@ MC_CursorDestroyBG:
 		move.w	d2,cursorXPos(a0)
 
 		move.w	d1,d2
-		andi.w	#$FF00,d2
+		andi.w	#$3F00,d2
 		lsr.w	#5,d2
 		move.w	d2,cursorYPos(a0)
 
@@ -1511,7 +1515,7 @@ MC_CursorDestroyBG:
 		move.w	d2,cursorXPos(a0)
 
 		move.w	d1,d2
-		andi.w	#$FF00,d2
+		andi.w	#$3F00,d2
 		lsr.w	#5,d2
 		move.w	d2,cursorYPos(a0)
 
@@ -1604,7 +1608,7 @@ MC_PlayerCollision:
 		move.w	yPos(a0),d2
 		subq.w	#HITBOX_Y,d2
 		lsl.w	#5,d2			; Make into row offset
-	;	andi.w	#$FF00,d2		; ^
+		andi.w	#$3F00,d2		; ^
 		move.w	d2,d3
 
 		bsr.s	.checkForSolidity
@@ -1629,7 +1633,7 @@ MC_PlayerCollision:
 		move.w	yPos(a0),d2
 		addq.w	#HITBOX_Y,d2
 		lsl.w	#5,d2			; Make into row offset
-	;	andi.w	#$FF00,d2		; ^
+	;	andi.w	#$3F00,d2		; ^
 		move.w	d2,d3
 		
 		bsr.s	.checkForSolidity

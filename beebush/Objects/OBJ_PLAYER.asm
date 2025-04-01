@@ -75,19 +75,26 @@ BbushPlayer_Die:
         move.w  obj.YScr(a0),obj.Y(a0)  
         jsr     _objectFallSlow   
         move.w  obj.Y(a0),obj.YScr(a0)
+        move.w  obj.X(a0),(membushBees+obj.X).w
+        move.w  obj.YScr(a0),(membushBees+obj.YScr).w
+        subi.w  #3,(membushBees+obj.X).w
+        add.w   #13,(membushBees+obj.YScr).w
         moveq   #0,d0
         move.w  #100+128+16,d0
         cmp.w   obj.YScr(a0),d0
         blo.s   .Finish
         jmp     _objectDraw   
 .Finish:
+        move.b  #$C4,d0
+        jsr     PlaySound_Special 
         addq.b  #2,obj.Action(a0)  
 
 BbushPlayer_Dead:
         jmp     _objectDraw  
 
 BbushPlayer_Show:
-        jmp     _objectDraw   
+        jmp     _objectDraw  
+
 ; ---------------------------------------------------------------------------
 ; Player control subroutine
 ; ---------------------------------------------------------------------------
@@ -95,16 +102,17 @@ BbushPlayer_Show:
 _bbplayNormalCtrl:                                                 
         btst    #2,d4
         beq.s   .NoLeft
-        move.b  #7,bbplay.MvFlag(a0)
+        move.b  #1,bbplay.MvFlag(a0)
         addi.w  #1,cameraAPosX
         addi.w  #1,cameraCPosX
         subi.l  #1,distance
         lea     AniSpr_QuagmirePlayer,a1
         jmp    _objectAnimate
 .NoLeft:  
+        move.b  #BBUSH_OBJNO_PETER,membushPeter.w
         addq.b  #2,obj.Action(a0)    
         move.w  #-$200,obj.YSpeed(a0)
-        move.w  #$20,bbplay.Timer(a0)
+        move.w  #9,bbplay.Timer(a0)
         rts
 
 AniSpr_QuagmirePlayer:
@@ -187,7 +195,7 @@ SprPat_BBushPlayer:
 ; ---------------------------------------------------------------------------
 ; The Hive which spawns based on distance (or should, i guess)
 ; ---------------------------------------------------------------------------
-
+bbhive.Timer = $32
 BbushObj_Hive:                          
         moveq   #0,d0
         move.b  obj.Action(a0),d0
@@ -198,6 +206,7 @@ BbushObj_Hive:
         dc.w BbushHive_InitMain-.Index
         dc.w BbushHive_Wait-.Index
         dc.w BbushHive_Show-.Index
+        dc.w BbushHive_Fast-.Index
 ; ---------------------------------------------------------------------------
 
 BbushHive_InitMain:                         
@@ -223,7 +232,69 @@ BbushHive_Wait:
 BbushHive_Show:            
 	tst.b   (membushPlayer+$30).w  
 	beq.s   .NoMv  
+        bmi.s   .MvFast
 	add.w   #1,obj.X(a0)       
 .NoMv:
         jmp     _objectDraw   
         rts
+
+.MvFast:
+        addq.b  #2,obj.Action(a0)
+        move.b  #10,bbhive.Timer(a0)
+        jmp     _objectDraw   
+
+BbushHive_Fast:
+        sub.b   #1,bbhive.Timer(a0)
+        beq.s   .Del
+        add.w   #29,obj.X(a0)     
+        jmp     _objectDraw     
+.Del:
+        jmp     _objectDelete 
+; ---------------------------------------------------------------------------
+; Peter griffin sprite lfmao ihave no energy left please help
+; ---------------------------------------------------------------------------
+bbPeter.Timer = $30
+
+
+BbushObj_Peter:                          
+        moveq   #0,d0
+        move.b  obj.Action(a0),d0
+        move.w  .Index(pc,d0.w),d1
+        jmp     .Index(pc,d1.w)
+; ---------------------------------------------------------------------------
+.Index:                                
+        dc.w BbushPeter_Init-.Index
+        dc.w BbushPeter_MoveIn-.Index
+        dc.w BbushPeter_MoveOut-.Index
+; ---------------------------------------------------------------------------
+
+BbushPeter_Init:                         
+        addq.b  #2,obj.Action(a0)
+        move.b  #18,obj.YRad(a0)
+        move.b  #9,obj.XRad(a0)
+        move.w  #128+160+180,obj.X(a0)
+        move.w  #100+128,obj.YScr(a0)
+        move.l  #SprPat_BBushPlayer,obj.Map(a0)
+        move.w  #QUAGTILE,obj.Tile(a0)
+        move.b  #$0,obj.Render(a0)
+        move.b  #1,obj.Priority(a0)
+        move.b  #$F,obj.Frame(a0)
+        move.b  #9,bbPeter.Timer(a0)
+; ---------------------------------------------------------------------------
+BbushPeter_Movein:
+        sub.b   #1,bbPeter.Timer(a0)
+        beq.s   .MoveOut
+        sub.w   #16,obj.X(a0)
+        jmp     _objectDraw
+.MoveOut:
+        addq.b  #2,obj.Action(a0)
+        move.b  #3,bbPeter.Timer(a0)  
+
+BbushPeter_MoveOut:
+        sub.b   #1,bbPeter.Timer(a0)
+        beq.s   .End
+        add.w   #30,obj.X(a0)
+        jmp     _objectDraw
+
+.End
+        jmp     _objectDelete
