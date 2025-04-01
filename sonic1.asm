@@ -17,6 +17,7 @@ align macro
 		include	"sound/smps2asm_inc.asm"
 		include "MapMacros.asm"
 		include "beebush/Mega Drive.inc"
+		include "constants.asm"
 
 	rsset $FFFFC800 
 v_dmaqueueslot:		rs.w	1
@@ -2165,6 +2166,7 @@ PalCycle_Load:				; XREF: Demo; Level_MainLoop; End_MainLoop
 		moveq	#0,d0
 		tst.b	($FFFFFFF9).w	; GMZ: Is truth nuke flag set?
 		bne.s	PalCycle_Stop	; GMZ: If yes, branch
+		jsr	PalCycle_BakaSonic
 		move.b	($FFFFFE10).w,d0 ; get level number
 		add.w	d0,d0		; multiply by 2
 		move.w	PalCycle(pc,d0.w),d0 ; load animated pallets offset index into d0
@@ -2398,6 +2400,60 @@ loc_1B52:
 locret_1B64:
 		rts	
 ; End of function PalCycle_SBZ
+; ---------------------------------------------------------------------------
+; Palette cycling routine loading subroutine for invincible baka
+; ---------------------------------------------------------------------------
+
+; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
+
+v_superpal:		equ $FFFFFF49
+v_superpaltime:		equ $FFFFFF4C
+v_superpalframe:	equ $FFFFFF4E
+; cut down super sonic cycle
+PalCycle_BakaSonic:
+	cmp.b	#3,(v_character).w	; is character limited
+	beq.s	PCycSVZ_Skip	; if not, do not cycle
+		tst.b	(v_superpal).w
+		beq.s	PCycSVZ_Skip			; return, if Conic isn't super
+
+		; run frame timer
+		subq.b	#1,(v_superpaltime).w
+		bpl.s	PCycSVZ_Skip
+		move.b	#7,(v_superpaltime).w
+
+		; increment palette frame and update Conic's palette
+		lea	(Pal_Ibaka).l,a0
+		move.w	(v_superpalframe).w,d0
+		addq.w	#8,(v_superpalframe).w		; next frame
+		cmpi.w	#$18,(v_superpalframe).w	; is it the last frame?
+		bls.s	@br1111				; if not, branch
+		move.w	#$00,(v_superpalframe).w	; reset frame counter
+
+@br1111:
+		lea	($FFFFFB00+4).w,a1
+		move.l	(a0,d0.w),(a1)+
+		move.l	4(a0,d0.w),(a1)
+
+		; underwater palettes
+		cmpi.b	#1,($FFFFFE10).w			; are we in Glacier Tides Zone?
+		bne.s	PCycSVZ_Skip				; if not, branch
+		lea	($FFFFFA80+4).w,a1
+		move.l	(a0,d0.w),(a1)+
+		move.l	4(a0,d0.w),(a1)
+
+PCycSVZ_Skip:
+		CMP.b	#2,(v_superpal).w
+		beq.s	IBreturn	; return, if Conic isn't super
+		rts	
+
+IBreturn:
+		jsr	Obj01_setplayerpalette
+		cmpi.b	#1,($FFFFFE10).w ; is level LZ?
+		bne.s	IBreturne	; if not, branch
+		jsr	Obj01_setplayerpaletteUD
+IBreturne:
+		rts
+; End of function PalCycle_BakaConic
 
 ; ===========================================================================
 Pal_TitleCyc:	incbin	pallet\c_title.bin
@@ -2426,6 +2482,7 @@ Pal_SBZCyc7:	incbin	pallet\c_sbz_7.bin
 Pal_SBZCyc8:	incbin	pallet\c_sbz_8.bin
 Pal_SBZCyc9:	incbin	pallet\c_sbz_9.bin
 Pal_SBZCyc10:	incbin	pallet\c_sbz_10.bin
+Pal_IBaka:	incbin	pallet\invinciblebaka.bin
 ; ---------------------------------------------------------------------------
 ; Subroutine to	fade out and fade in
 ; ---------------------------------------------------------------------------
@@ -4222,7 +4279,7 @@ LMTSecondRow:
         dc.b    "THE PIG FROM   1"
         dc.b    " BARNYARD      2"
         dc.b    "               3"
-        dc.b    "Z Z Z Z        1"
+        dc.b    "HEINOUS ANUS   1"
         dc.b    "               2"
         dc.b    "               3"
         dc.b    "FINAL ZONE      "
@@ -4456,7 +4513,7 @@ MusicList4:	incbin	misc\muslist4.bin
 ;v_levelrandtracker	= $FFFF8000
 InitGetLevelRandom:
 	moveq	#randLevelCount,d1
-	cmp.b	#3,(v_character).w
+	cmp.b	#char_limited,(v_character).w
 	bne.s	@notlimited
 	moveq	#randLevelCountLimited,d1
 @notlimited:
@@ -4475,7 +4532,7 @@ GetLevelRandom:
 	clr.w	d0
 	swap	d0
 	moveq	#randLevelCount,d1
-	cmp.b	#3,(v_character).w
+	cmp.b	#char_limited,(v_character).w
 	bne.s	@notlimited
 	moveq	#randLevelCountLimited,d1
 @notlimited:
@@ -4633,41 +4690,16 @@ Level_ClrVars3:
 		clr.b	($FFFFF64D).w	; clear	water routine counter
 		clr.b	($FFFFF64E).w	; clear	water movement
 		move.b	#1,($FFFFF64C).w ; enable water
-		bra.w	Level_LoadPal
-Player_Palette:
-		; normal, lz, sbz, blank
-		dc.w	3,$F,$10,0 ; Sonic 
-		dc.w	23,24,25,0 ; Pal_Gronic 
-		dc.w	26,24,25,0 ; Pal_Anakama 
-		dc.w	28,28,28,0 ; LimitedSonic 
-		dc.w	27,27,$27,0 ; neru
-		dc.w	3,$F,$10,0 ; Gomer Gomer!
-		dc.w	29,29,29,0 ; MERCURY
-		dc.w	30,30,30,0 ; bragon of bojima 
-		dc.w	31,31,31,0 ; I am the purple guy come and see my suit tonight 
-		dc.w	32,32,32,0 ; SANS
-		; add more player palettes
+
 Level_LoadPal:
 		move.w	#$1E,($FFFFFE14).w
 		move	#$2300,sr
-
-		moveq	#0,d1		; >charcount
-		move.b	(v_character),d1
-		add.w	d1,d1
-		add.w	d1,d1
-		add.w	d1,d1
-		move.w	Player_Palette(pc,d1.w),d0	; load palette
-		
-		bsr.w	PalLoad2	; load Sonic's pallet line
+; just like maps and how its handled on debug mode
+; palettes are now a subroutine for the invincibility cycle
+		jsr	Obj01_setplayerpalette
 		cmpi.b	#1,($FFFFFE10).w ; is level LZ?
 		bne.s	Level_GetBgm	; if not, branch
-		move.w	Player_Palette+2(pc,d1.w),d0	; load palette
-		cmpi.b	#3,($FFFFFE11).w ; is act number 3?
-		bne.s	Level_WaterPal	; if not, branch
-		move.w	Player_Palette+4(pc,d1.w),d0	; load palette
-
-Level_WaterPal:
-		bsr.w	PalLoad3_Water	; load underwater pallet (see d0)
+		jsr	Obj01_setplayerpaletteUD
 		tst.b	($FFFFFE30).w
 		beq.s	Level_GetBgm
 		move.b	($FFFFFE53).w,($FFFFF64E).w
@@ -4949,6 +4981,41 @@ loc_3BC8:
 		tst.w	($FFFFF614).w
 		bne.s	loc_3B98
 		rts	
+
+; ===========================================================================
+; ---------------------------------------------------------------------------
+; Subroutine to	set player palette
+; ---------------------------------------------------------------------------
+Obj01_setplayerpalette:
+		moveq	#0,d1		; >charcount
+		move.b	(v_character),d1
+		add.w	d1,d1
+		add.w	d1,d1
+		add.w	d1,d1
+		move.w	Player_Palette(pc,d1.w),d0	; load palette
+		bsr.w	PalLoad2	; load Sonic's pallet line
+		rts	
+Obj01_setplayerpaletteUD:
+		move.w	Player_Palette+2(pc,d1.w),d0	; load palette
+		cmpi.b	#3,($FFFFFE11).w ; is act number 3?
+		bne.s	Level_WaterPal	; if not, branch
+		move.w	Player_Palette+4(pc,d1.w),d0	; load palette
+Level_WaterPal:
+		bsr.w	PalLoad3_Water	; load underwater pallet (see d0)
+		rts	
+Player_Palette:
+		; normal, lz, sbz, blank
+		dc.w	3,$F,$10,0 ; Sonic 
+		dc.w	23,24,25,0 ; Pal_Gronic 
+		dc.w	26,24,25,0 ; Pal_Anakama 
+		dc.w	28,28,28,0 ; LimitedSonic 
+		dc.w	27,27,$27,0 ; neru
+		dc.w	3,$F,$10,0 ; Gomer Gomer!
+		dc.w	29,29,29,0 ; MERCURY
+		dc.w	30,30,30,0 ; bragon of bojima 
+		dc.w	31,31,31,0 ; I am the purple guy come and see my suit tonight 
+		dc.w	32,32,32,0 ; SANS
+		; add more player palettes
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Subroutine to	do special water effects in Labyrinth Zone
@@ -6581,6 +6648,7 @@ End_LoadSonic:
 		move.b	d0,($FFFFFE1B).w
 		move.b	d0,($FFFFFE2C).w
 		move.b	d0,($FFFFFE2D).w
+
 		move.b	d0,($FFFFFE2E).w
 		move.b	d0,($FFFFFE2F).w
 		move.w	d0,($FFFFFE08).w
@@ -13689,6 +13757,7 @@ Obj7C_Collect:				; XREF: Obj7C_ChkDel
 		move.b	#$1C,($FFFFD01C).w ; make Sonic	invisible
 		move.b	#1,($FFFFF7CD).w ; stop	Sonic getting bonuses
 		clr.b	($FFFFFE2D).w	; remove invincibility
+	move.b	#2,(v_superpal).w
 		clr.b	($FFFFFE2C).w	; remove shield
 
 locret_9F76:
@@ -13973,6 +14042,8 @@ ExtraLife:
 Obj2E_ChkShoes:
 		cmpi.b	#3,d0		; does monitor contain speed shoes?
 		bne.s	Obj2E_ChkShield
+	tst.b	(f_superconic).w	; Ignore all this code if not Super Conic
+	bne.w	Obj2E_NoMusic
 		move.b	#1,($FFFFFE2E).w ; speed up the	BG music
 		move.w	#$4B0,($FFFFD034).w ; time limit for the power-up
 		move.w	#$C00,($FFFFF760).w ; change Sonic's top speed
@@ -13994,6 +14065,8 @@ Obj2E_ChkShield:
 Obj2E_ChkInvinc:
 		cmpi.b	#5,d0		; does monitor contain invincibility?
 		bne.s	Obj2E_ChkRings
+	tst.b	(f_superconic).w	; Ignore all this code if not Super Conic
+	bne.s	Obj2E_NoMusic
 		move.b	#1,($FFFFFE2D).w ; make	Sonic invincible
 		move.w	#$4B0,($FFFFD032).w ; time limit for the power-up
 		move.b	#$38,($FFFFD200).w ; load stars	object ($3801)
@@ -14004,9 +14077,10 @@ Obj2E_ChkInvinc:
 		move.b	#3,($FFFFD29C).w
 		move.b	#$38,($FFFFD2C0).w ; load stars	object ($3804)
 		move.b	#4,($FFFFD2DC).w
+	move.b	#1,(v_superpal).w
 		tst.b	($FFFFF7AA).w	; is boss mode on?
 		bne.s	Obj2E_NoMusic	; if yes, branch
-		cmpi.b 	#3,(v_character)
+		cmpi.b 	#char_limited,(v_character)
 		beq.s	Obj2E_NewBarkTown
 		move.w	#$87,d0
 		jmp	(PlaySound).l	; play invincibility music
@@ -14042,6 +14116,8 @@ Obj2E_RingSound:
 Obj2E_ChkS:
 		cmpi.b	#7,d0		; does monitor contain 'S'
 		bne.s	Obj2E_ChkEnd
+	tst.b	(f_superconic).w	; Ignore all this code if not Super Conic
+	bne.s	Obj2E_ChkEnd
 		; nop	
 		move.w #$A7,d0 ;play futuristic
 		jsr MegaPCM_PlaySample ;aaaa
@@ -18452,7 +18528,7 @@ loc_DB66:
 
 loc_DB72:
 		andi.w	#$F,d0
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.s	UseLimitedSpringPower
 		move.w	Obj41_Powers(pc,d0.w),$30(a0)
 		rts	
@@ -19259,8 +19335,8 @@ Obj6D_Action:				; XREF: Obj6D_Index
 		bchg	#0,$1C(a0)
 		beq.s	loc_E57A
 		move.w	$32(a0),$30(a0)	; begin	flaming	time
-		move.w	#$B3,d0
-		jsr	(PlaySound_Special).l ;	play flame sound
+		move.w	#$AE,d0
+		jsr	MegaPCM_PlaySample
 
 loc_E57A:
 		lea	(Ani_obj6D).l,a1
@@ -19706,6 +19782,7 @@ GotThroughAct:				; XREF: Obj3E_EndAct
 		bne.s	locret_ECEE
 		move.w	($FFFFF72A).w,($FFFFF728).w
 		clr.b	($FFFFFE2D).w	; disable invincibility
+	move.b	#2,(v_superpal).w
 		clr.b	($FFFFFE1E).w	; stop time counter
 		move.b	#$3A,($FFFFD5C0).w
 		moveq	#$10,d0
@@ -25056,8 +25133,9 @@ Obj01_Display:
 		jsr	DisplaySprite
 
 ; Second part of the NineKode. Play different music on different acts - after invincibility wears off
- 
 Obj01_ChkInvin:
+ 	tst.b	(f_superconic).w	; Ignore all this code if not Super Conic
+	bne.w	Obj01_ExitChk
 		tst.b	($FFFFFE2D).w	; does Sonic have invincibility?
 		beq.w	Obj01_ChkShoes	; if not, branch	; change to beq.w
 		tst.w	$32(a0)		; check	time remaining for invinciblity
@@ -25101,6 +25179,7 @@ Obj01_PlayMusic:
 
 Obj01_RmvInvin:
 		move.b	#0,($FFFFFE2D).w ; cancel invincibility
+	move.b	#2,(v_superpal).w
 
 Obj01_ChkShoes:
 		tst.b	($FFFFFE2E).w	; does Sonic have speed	shoes?
@@ -25113,7 +25192,6 @@ Obj01_ChkShoes:
 ;		move.w	#$C,($FFFFF762).w ; restore Sonic's acceleration
 ;		move.w	#$80,($FFFFF764).w ; restore Sonic's deceleration
 ; no normal sonic
-
 		move.w	#$FFF,($FFFFF760).w ; Sonic's top speed
 		move.w	#$F,($FFFFF762).w ; Sonic's acceleration
 		move.w	#$AAA,($FFFFF764).w ; Sonic's deceleration
@@ -25229,7 +25307,7 @@ Obj01_MdJump:				; XREF: Obj01_Modes
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_ChgJumpDir
 		bsr.w	Sonic_LevelBound
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		bne.s	NormalPhysics
 		jsr JumpFallSonic
 		bra.s	LimitedFall
@@ -25263,7 +25341,7 @@ Obj01_MdJump2:				; XREF: Obj01_Modes
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_ChgJumpDir
 		bsr.w	Sonic_LevelBound
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		bne.s	NormalPhysics2
 		jsr JumpFallSonic
 		bra.s	LimitedFall2
@@ -25289,7 +25367,7 @@ loc_12EA6:
 
 
 Sonic_Move:				; XREF: Obj01_MdNormal
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.w	Limit_Move
 		move.w	($FFFFF760).w,d6
 		move.w	($FFFFF762).w,d5
@@ -25604,7 +25682,7 @@ loc_13120:
 
 
 Sonic_RollSpeed:			; XREF: Obj01_MdRoll
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.w	Limit_RollSpeed
 		move.w	($FFFFF760).w,d6
 		asl.w	#1,d6
@@ -25780,7 +25858,7 @@ Sonic_AirUnroll:
 
 
 Sonic_ChgJumpDir:			; XREF: Obj01_MdJump; Obj01_MdJump2
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.w	Limit_JumpDirection
 		move.w	($FFFFF760).w,d6
 		move.w	($FFFFF762).w,d5
@@ -26104,7 +26182,7 @@ Sonic_JumpHeight:			; XREF: Obj01_MdJump; Obj01_MdJump2
 		move.w	#-$200,d1
 
 loc_134AE:
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.w	locret_134C2
 		cmp.w	$12(a0),d1
 		ble.w	locret_134C2
@@ -26145,18 +26223,20 @@ invtime:	equ $32	; time left for invincibility
 	move.w	#$1500,(v_conspeedmax).w
 	move.w	#$15,(v_conspeedacc).w
 	move.w	#$150,(v_conspeeddec).w
-
-
+	clr.b	($FFFFFE2F).w	; no reverse controls sorrgy
 	bset	#$1,(v_invinc).w	; make Conic invincible
+	move.b	#2,(v_superpal).w ; remove cycle
 	move.w	#$E4,d0
 	jsr	(PlaySound).l	; load the Super Conic song and return
 	move.w	#$B4,d0
 	jsr	MegaPCM_PlaySample	; load the Super Conic song and return
-locret_134C2chk:
+; test frame
+;$72
 	cmp.b	#$72,$1A(A0)	; are they done aura farming
 	bne.s	locret_134C2	; if not, branch
-; this shit does not work help
+; this does not work help
 ; the lines below happen when $72 shows up
+
 	move.b	#$00,(f_playerctrl).w	; unlock controls
 	move.w	#$15,d0
 	jsr	(PlaySound).l	; load the Super Conic song and return
@@ -26300,7 +26380,7 @@ locret_13544:
 
 Sonic_SlopeRepel:			; XREF: Obj01_MdNormal; Obj01_MdRoll
 		nop	
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.s	locret_13580
 		tst.b	$38(a0)
 		bne.s	locret_13580
@@ -26591,7 +26671,7 @@ loc_137AE:
 		bclr	#2,$22(a0)
 		move.b	#$13,$16(a0)
 		move.b	#9,$17(a0)
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.s	LimitedFloor
 		move.b	#0,$1C(a0)	; use running/walking animation
 		bra.s	NormalFloor
@@ -26664,7 +26744,7 @@ Sonic_HurtStop:				; XREF: Obj01_Hurt
 
 Obj01_Death:				; XREF: Obj01_Index
 		bsr.w	GameOver
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		bne.s	NormalPhysics3
 		jsr JumpFallSonic
 		bra.s	LimitedFall3
@@ -26840,7 +26920,7 @@ Sonic_Animate:				; XREF: Obj01_Control; et al
 		
 		movea.l	(a1,d0.w),a1	; load Sonic dplc
 
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.w	Limit_Animate
 	
 		moveq	#0,d0
@@ -26912,7 +26992,7 @@ SAnim_WalkRun:				; XREF: SAnim_Do
 		bne.w	SAnim_RollJump	; if not, branch
 		moveq	#0,d1
 		moveq	#0,d0
-		cmpi.b	#8,(v_character)
+		cmpi.b	#char_purple,(v_character)
 		beq.s	@iamthepurpleguy
 		move.b	$26(a0),d0	; get Sonic's angle
 @iamthepurpleguy:
@@ -27502,6 +27582,8 @@ Obj38_DoStars:
 
 Obj38_Shield:				; XREF: Obj38_Index
 		tst.b	($FFFFFE2D).w	; does Sonic have invincibility?
+	tst.b	(f_superconic).w	; Ignore all this code if not Super Conic
+	bne.s	Obj38_RmvShield
 		bne.s	Obj38_RmvShield	; if yes, branch
 		tst.b	($FFFFFE2C).w	; does Sonic have shield?
 		beq.s	Obj38_Delete	; if not, branch
@@ -30262,8 +30344,8 @@ Obj6E_Shock:				; XREF: Obj6E_Index
 		move.b	#1,$1C(a0)	; run "shocking" animation
 		tst.b	1(a0)
 		bpl.s	Obj6E_Animate
-		move.w	#$B1,d0
-		jsr	(PlaySound_Special).l ;	play electricity sound
+		move.w	#$AF,d0
+		jsr	MegaPCM_PlaySample
 
 Obj6E_Animate:
 		lea	(Ani_obj6E).l,a1
@@ -30669,12 +30751,12 @@ loc_1670E:
 		move.w	8(a0),8(a1)
 		move.w	$C(a0),$C(a1)
 		clr.b	$32(a0)
-;		cmp.b	#5,(v_character).w ; is this gomer?
+;		cmp.b	#char_gomer,(v_character).w ; is this gomer?
 ;		bne.s	SMCsoundCHK6
 ;		move.b  #$90,d0
 ;		jmp	MegaPCM_PlaySample
 ;SMCsoundCHK6:
-;		cmp.b	#6,(v_character).w ; is this sailor mercury?
+;		cmp.b	#char_mercury,(v_character).w ; is this sailor mercury?
 ;		bne.s	NormalsoundCHK6
 ;		move.b  #$9A,d0
 ;		jmp	MegaPCM_PlaySample
@@ -36719,7 +36801,7 @@ KiryuTouchEnemy:
 		bne.w	Touch_ChkHurt	; if not, branch
 		
 Touch_Enemy:				; XREF: Touch_ChkValue
-		cmpi.b	#7,(v_character)
+		cmpi.b	#char_kiryu,(v_character)
 		beq.s	KiryuTouchEnemy
 		tst.b	($FFFFFE2D).w	; is Sonic invincible?
 		bne.s	loc_1AF40	; if yes, branch
@@ -36831,7 +36913,7 @@ Touch_Hurt:				; XREF: Touch_ChkHurt
 
 
 HurtSonic:
-		cmpi.b	#3,(v_character)
+		cmpi.b	#char_limited,(v_character)
 		beq.w	KillLimitedSonic
 		tst.b	($FFFFFE2C).w	; does Sonic have a shield?
 		bne.s	Hurt_Shield	; if yes, branch
@@ -36913,7 +36995,8 @@ Hurt_NoRings:
 KillSonic:
 		tst.w	($FFFFFE08).w	; is debug mode	active?
 		bne.s	Kill_NoDeath	; if yes, branch
-
+ 		tst.b	(f_superconic).w
+		bne.w	SUPERdeath; bounce off the floor if Super Conic
 KillLimitedSonic:
 		move.b	#0,($FFFFFE2D).w ; remove invincibility
 		move.b	#6,$24(a0)
@@ -36950,6 +37033,11 @@ Kill_Sound:
 		dc.b 2,$B0
 		dc.b 0,$C5	; sans mf
 		even
+SUPERdeath:
+		move.w	#-$700,$12(a0)
+		move.w	#$AE,d0 ; play WAP sound
+		jsr	(PlaySound_Special).l
+		rts	
 ; End of function KillSonic
 
 
@@ -38342,13 +38430,6 @@ Obj09_NoGlass:
 		rts	
 ; End of function Obj09_ChkItems2
 
-; ===========================================================================
-; ---------------------------------------------------------------------------
-; Object 10 - blank
-; ---------------------------------------------------------------------------
-
-Obj10:					; XREF: Obj_Index
-		rts	
 ; ---------------------------------------------------------------------------
 ; Subroutine to	animate	level graphics
 ; ---------------------------------------------------------------------------
@@ -40704,6 +40785,10 @@ MusicIndex:	; $01-$7F
 		dc.l Music17 ; Gadget Mountain Zone (Silvagunnerized an infamous tune)
 		dc.l Music18 ; Bubble Music
 		dc.l Music19 ; Wormy (Not SpongeBob! Figure it out!)
+		dc.l Music1B ; Rendition of 1UP theme
+		dc.l Music1A ; Ronic Setro splash screen
+		dc.l Music1C ; Something
+		dc.l Music1D ; Mountain King S3M 'cause why not
 
 		dc.l Music92 ; test
 
@@ -43174,7 +43259,7 @@ Music03:	include	sound\tg2000tracks\drcoffinman.asm
 		even
 Music04:	include	sound\tg2000tracks\eggmancutscene.asm
 		even
-Music05:	include	sound\tg2000tracks\music05.asm
+Music05:	include	sound\tg2000tracks\tgsend.asm
 		even
 Music06:	include	sound\tg2000tracks\gogogadget.asm
 		even
@@ -43218,6 +43303,14 @@ Music18:	incbin	sound\tg2000tracks\bubble.bin
 		even
 Music19:	incbin	sound\tg2000tracks\wormy.bin
 		even
+Music1B:	incbin	sound\tg2000tracks\son1up.bin
+		even
+Music1A:	include	sound\ronicsetro.asm
+		even
+Music1C:	include	sound\tg2000tracks\MGSFX.asm
+		even
+Music1D:	include	sound\tg2000tracks\hallmountainkings3.asm
+		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
 Music82:	incbin	sound\music82.bin ; Labyrinth Act 1
@@ -43232,7 +43325,7 @@ Music86:	incbin	sound\music86.bin; Scrap Brain Act 1
 		even
 Music87:	include	sound\music87.asm; Invincibility
 		even
-Music88:	incbin	sound\music88.bin; Extra Life
+Music88:	include	sound\music88.asm; Extra Life
 		even
 Music89:	incbin	sound\music89.bin; Special Stage
 		even
@@ -43419,9 +43512,42 @@ Minecraft:	include	minecraft\code\main.asm
 		
 		include beebush\_BEEBUSH.68k
 
-		include otisexe\GM_Otis.asm
+; ===========================================================================
+; ---------------------------------------------------------------------------
+; Object 10 - Delicous Gooey Suprise
+; ---------------------------------------------------------------------------
 
-; end of 'ROM'
+Obj10:	
+
+Obj_Heinous1:   
+
+GOOEETILE = $2CC
+
+        moveq   #0,d0
+        move.b  obj.Action(a0),d0
+        move.w  .Index(pc,d0.w),d1
+        jmp     .Index(pc,d1.w)
+
+; ---------------------------------------------------------------------------
+.Index:                                
+        dc.w Heinous1_Init-.Index
+        dc.w Heinous1_Display-.Index
+; ---------------------------------------------------------------------------
+
+Heinous1_Init:                         
+        addq.b  #2,obj.Action(a0)
+        move.l  #SprPat_Quagmire,obj.Map(a0)
+        move.w  #GOOEETILE,obj.Tile(a0)
+        move.b  #%00000100,obj.Render(a0)
+        move.b  #7,obj.Priority(a0)
+        move.b  #3,obj.Frame(a0)
+      
+Heinous1_Display:                           
+        jsr     _objectDraw  
+        rts
+
+		include otisexe\GM_Otis.asm
+; ---------------------------------------------------------------------------
 EndOfRom:
 
 

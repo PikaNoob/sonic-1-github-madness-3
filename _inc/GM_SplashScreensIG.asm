@@ -132,8 +132,11 @@ GM_SplashScreensListIG:
 	dc.l $81<<24|@nem_fat,$00<<24|@enifg_fat,$A5<<24|@enibg_fat,$00<<24|@pal_fat,0		; MUST BE NUMBER 8 OR ELSE I NUKE THE WHOLE PROJECT YOUR IMMORAL, uhhh, fuckers, I'm gonna miku you I'm mikuing
 	dc.l $81<<24|@nem_playnow,$00<<24|@enifg_playnow,$00<<24|@enibg_playnow,$07<<24|@pal_playnow,0
 	dc.l $81<<24|@nem_actualpoop,$00<<24|@enifg_actualpoop,$00<<24|@enibg_actualpoop,$09<<24|@pal_actualpoop,0	; GMZ
+	dc.l $81<<24|@nem_urfat,$01<<24|@enifg_urfat,$82<<24|@enibg_urfat,$00<<24|@pal_urfat,0
 	dc.l $81<<24|@nem_BILLglider,$00<<24|@enifg_BILLglider,$00<<24|@enibg_BILLglider,$0B<<24|@pal_BILLglider,0	; homemade aircraft very safe
 	dc.l $81<<24|@nem_stop,$00<<24|@enifg_stop,$00<<24|@enibg_stop,$13<<24|@pal_stop,0
+	dc.l $81<<24|@nem_ronicsetro,$00<<24|@enifg_ronicsetro,$00<<24|@enibg_ronicsetro,$1B<<24|@pal_ronicsetro,0
+	dc.l $81<<24|@nem_newbark,$00<<24|@enifg_newbark,$00<<24|@enibg_newbark,$01<<24|@pal_newbark,0				;	Literally just New Bark Town
 	dc.l $81<<24|@nem_thx,$03<<24|@enifg_thx,$00<<24|@enibg_thx,$08<<24|@pal_thx,0
 	dc.l 0	; terminator 2
 ; -----------------------------------------------------------------------------
@@ -143,6 +146,14 @@ GM_SplashScreensListIG:
 @enibg_pillow:	incbin mapeni\splash_pillow.bin
 	even
 @pal_pillow:	incbin pallet\splash_pillow.bin
+	even
+
+@nem_newbark:	incbin artnem\splash_newbark.bin
+	even
+@enifg_newbark:
+@enibg_newbark:	incbin mapeni\splash_newbark.bin
+	even
+@pal_newbark:	incbin pallet\splash_newbark.bin
 	even
 
 @nem_fnaf:	incbin artnem\splash_fnaf.bin
@@ -216,6 +227,14 @@ GM_SplashScreensListIG:
 	even	; GMZ
 @pal_actualpoop:	incbin pallet\actualpoop.bin	; GMZ
 	even	; GMZ
+
+@nem_urfat:	incbin artnem\urfat.bin
+	even
+@enifg_urfat:
+@enibg_urfat:	incbin mapeni\urfat.bin
+	even
+@pal_urfat:	incbin pallet\urfat.bin
+	even
 	
 @nem_BILLglider:	incbin artnem\GLIDER11.bin	; THE GLIDER MF
 	even	; GMZ
@@ -239,6 +258,13 @@ GM_SplashScreensListIG:
 @enibg_thx:	incbin mapeni\splash_thx.bin
 	even
 @pal_thx:	incbin pallet\splash_thx.bin
+	even
+@nem_ronicsetro: incbin artnem\splash_ronicsetro.bin
+	even
+@enifg_ronicsetro:
+@enibg_ronicsetro: incbin mapeni\splash_ronicsetro.bin
+	even
+@pal_ronicsetro: incbin pallet\ronicsetro.bin
 	even
 	
 IntroCutscene:		; no one fucking modify this or i swear to fucking god, except malachi :3
