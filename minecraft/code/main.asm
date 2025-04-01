@@ -120,7 +120,7 @@ MC_RenderBlocks:
 
 		move.w	#$8000,d4			; Set the priority bit
 		add.w	d3,d3				; Turn tile ID into index
-		or.w	.renderProperties(pc,d3.w),d4	; Combine with the tile render properties
+		or.w	MC_BlockRenderProperties(pc,d3.w),d4	; Combine with the tile render properties
 		move.w	d4,(a2)+			; Load the corresponding tile to the plane A buffer
 		
 		addq.b	#1,d2			; Increment the index with wrap-around within the current row
@@ -130,7 +130,7 @@ MC_RenderBlocks:
 .renderWall:
 		move.b	(a1,d2.w),d3				; Get the block ID at the current wall layout coordinates
 		add.w	d3,d3					; Turn tile ID into index
-		move.w	.renderProperties(pc,d3.w),(a2)+	; Load the corresponding tile to the plane A buffer
+		move.w	MC_BlockRenderProperties(pc,d3.w),(a2)+	; Load the corresponding tile to the plane A buffer
 
 		addq.b	#1,d2			; Increment the index with wrap-around within the current row
 		dbf	d7,.renderRow		; Loop until the entire visible row is rendered
@@ -155,7 +155,7 @@ block_entry	macro	tileID, palLine, priority
 	endif
 		endm
 
-.renderProperties:
+MC_BlockRenderProperties:
 	block_entry	$00,0,1			; 00 Air
 	block_entry	$01,1			; 01 Stone
 	block_entry	$02,1			; 02 Dirt
@@ -372,6 +372,7 @@ MC_VInt:
 
 		bsr.s	MC_ReadJoypad
 
+		addq.l	#1,(vblankCount).w
 		sf.b	(vblankWait).w
 		movem.l	(sp)+,d0-a5
 		rte						; return
