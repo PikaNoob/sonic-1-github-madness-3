@@ -7764,7 +7764,7 @@ loc_628E:
 		jmp	Deform_LZ	; GMZ
 
 GetDeformRoutine:	; GMZ
-		pea	Deform_Ripple
+		;pea	Deform_Ripple		; fuck off
 		move.b	($FFFFFE10).w,d0
 		add.w	d0,d0
 		move.w	Deform_Index(pc,d0.w),d0
@@ -43516,7 +43516,7 @@ Minecraft:	include	minecraft\code\main.asm
 Obj10:	
 
 Obj_Heinous1:   
-
+memPlayer = $FFFFD000 
 GOOEETILE = $22C0
 gurgle.Time = $32
         moveq   #0,d0
@@ -43543,13 +43543,18 @@ Heinous1_Display:
 	jsr	ObjHitFloor
 	tst.w	d1     
 	bpl.s   .NoJump
-        move.w  #-$800,obj.YSpeed(a0)
+        move.w  #-$600,obj.YSpeed(a0)
         move.b  #6,gurgle.Time(a0)
 	move.w	#$AE,d0
 	jsr	MegaPCM_PlaySample
         move.b  #6,obj.Frame(a0)
         bra.s   .WaitGurgle
-.NoJump:    
+.NoJump:   
+	moveq   #0,d0 
+	move.w  memPlayer+obj.Momentum,d0
+	asr.w   #2,d0
+	neg     d0
+	move.w  d0,obj.XSpeed(a0)
 	sub.b   #1,gurgle.Time(a0)  
 	bne.s   .WaitGurgle
         move.b  #5,obj.Frame(a0)	
