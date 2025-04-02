@@ -1,8 +1,9 @@
 ; ---------------------------------------------------------------------------
 ; Sprite mappings - GHZ	collapsing ledge
 ; ---------------------------------------------------------------------------
-		dc.w byte_85A8-Map_obj1A, byte_85F9-Map_obj1A
-		dc.w byte_864A-Map_obj1A, byte_86C8-Map_obj1A
+KILLYOURSELF:
+		dc.w byte_85A8-KILLYOURSELF, byte_85F9-KILLYOURSELF
+		dc.w byte_864A-KILLYOURSELF, byte_86C8-KILLYOURSELF
 byte_85A8:	dc.b $10
 		dc.b $C8, $E, 0, $57, $10 ; ledge facing left
 		dc.b $D0, $D, 0, $63, $F0
