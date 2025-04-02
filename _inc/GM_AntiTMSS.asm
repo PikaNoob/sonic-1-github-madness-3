@@ -28,7 +28,7 @@
 		move.l	(a0)+,(a1)+
 		dbf	d0,@palset
 
-		move.w	#$8C8B,($C00004).l	; S/H mode, single res interlace
+		move.w	#$8C89,($C00004).l	; S/H mode
 		move.b	($FFFFF600).w,d7	; save game mode
 		move.b	#0,($FFFFF600).w	; make sure it's not using title screen code
 		move.w	#$B,($FFFFFFF4).w	; set frame
