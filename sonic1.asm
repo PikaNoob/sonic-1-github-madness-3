@@ -6337,7 +6337,8 @@ Cont_ClrObjRam:
 		ori.b	#$40,d0
 		move.w	d0,($C00004).l
 		bsr.w	Pal_FadeTo
-
+		jsr	Obj01_setplayerpalette
+		move.w	#$880,($FFFFFB00).w ; 1st pallet, 1st entry = cyan
 ; ---------------------------------------------------------------------------
 ; Continue screen main loop
 ; ---------------------------------------------------------------------------
@@ -6501,7 +6502,8 @@ Obj81_Main:				; XREF: Obj81_Index
 		addq.b	#2,$24(a0)
 		move.w	#$A0,8(a0)
 		move.w	#$C0,$C(a0)
-		move.l	#Map_Sonic,4(a0)
+		jsr	Obj01_setplayermap
+
 		move.w	#$780,2(a0)
 		move.b	#4,1(a0)
 		move.b	#2,$18(a0)
@@ -6534,7 +6536,7 @@ Obj81_Animate:				; XREF: Obj81_Index
 
 Obj81_GetUp:				; XREF: Obj81_Animate
 		addq.b	#2,$24(a0)
-		move.l	#Map_Sonic,4(a0)
+		jsr	Obj01_setplayermap
 		move.w	#$780,2(a0)
 		move.b	#$1E,$1C(a0)	; use "getting up" animation
 		clr.w	$14(a0)

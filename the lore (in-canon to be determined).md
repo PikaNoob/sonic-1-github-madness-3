@@ -103,3 +103,9 @@ He humbly requests that you wash his balls
 
 # Toy Freddy
 He kinda, uhh, well, fat
+
+# Mark the Hedgehog
+He didn't make it while finding the income for sonic
+
+# Conic the Cat
+"HAPPY BIRHTDAY!" as they fall to an exploding death
