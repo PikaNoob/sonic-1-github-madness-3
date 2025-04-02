@@ -411,31 +411,18 @@ jmpto_IntroCutscene:
 
 @limitedtext:	dc.b "IT IS LIMITED",0
 @sanatext:
-	dc.b "S: hehe im so lazy that i crash the act results",0
-	dc.b "P: SANS, EVERY OTHER CHARACTER IS BEATABLE",0
-	dc.b "S: even the limited guy?",0
-	dc.b "P: EVEN THE LIMITED GUY.",0
-	dc.b "S: heh, i guess thats why im the laziest of all",0
-	dc.b "P: SANS FOR THE LOVE OF ASGORE",0
-	dc.b "S: i dont love asgore",0
-	dc.b "P: SANS, WEVE ALL SEEN THE FANFICT-",0
-	dc.b "S: We do not talk about the fanfiction.",0
-	dc.b "P: SANS, YOU ARE NOT THE ONLY CHARACTER WITH INAPPROPRIATE FANON, STOP PRETENDING LIKE YOURE SPECIAL",0
-	dc.b "S: ...What have we become?",0
-	dc.b "P: Tools, thats what we are. Mere playthings to these.. creatures.",0
-	dc.b "S: You know, I stopped yearning for the surface a long time ago, same time I gave up on going home.",0
-	dc.b "P: huh?",0
-	dc.b "S: I just stopped caring, I guess, and I didnt think that you would ever understand.",0
-	dc.b "P: Tch, well I do now.",0
-	dc.b "Sans phone audibly vibrates, he seems to give a subtle smile on top of the usual big grin",0
-	dc.b "S: Lets go home.",0
-	dc.b "P: But its not repairable!",0
-	dc.b "S: Ive uhh, given Alphys the blueprints-",0
-	dc.b "P: YOU DID WHAT!!?",0
-	dc.b "S: Were all going home, Papyrus. Together.",0
-	dc.b "P: I, A, Wha- *sigh* okay Sans... but, what about the-",0
-	dc.b "S: The game actually crashes because I left a decoy.",0
-	dc.b "P: Ah. In that case, Im ready when you are.",0
+	dc.b "Theres a handful of sticky notes left stuck on the debugger",0
+	dc.b "SANS! PLEASE FIX YOUR PALETTE!",0
+	dc.b "ok.",0
+	dc.b "DONT LEAVE THEM LIKE THAT! MOVE THEM!",0
+	dc.b "ok.",0
+	dc.b "YOU JUST ADJUSTED THE COLOURS, YOU NEED TO REARRANGE THEM!",0
+	dc.b "ok.",0
+	dc.b "AND DONT PUT THEM BACK TO WHERE THEY ARE NOW!",0
+	dc.b "ok.",0
+	dc.b "ITS STILL BROKEN!",0
+	dc.b "didnt you say not to put them back?",0
+	dc.b "FORGET IT!",0
 	dc.b 1
 	even
 ; ===========================================================================
