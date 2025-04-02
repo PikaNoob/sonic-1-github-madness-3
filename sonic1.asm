@@ -3812,7 +3812,7 @@ LevelSelect:
 		cmpi.w	#lsjackass,d0		; have you selected item $16 (jackass/beebush)
 		bne.s	@waitbees		; if not, we're just waiting for the bees. 
 		move.b  #$0,titlemode.w
-		move.b	#$24,($FFFFF600).w 	; set screen	mode to	$24 BEEBUSH
+		move.b	#$24,($FFFFF600).w 	; set screen mode to $24 BEEBUSH
 		rts	
 
 
@@ -16655,7 +16655,7 @@ Obj3A_Index:	dc.w Obj3A_ChkPLC-Obj3A_Index
 		dc.w Obj3A_TimeBonus-Obj3A_Index
 		dc.w Obj3A_Wait-Obj3A_Index
 		dc.w Obj3A_NextLevel-Obj3A_Index
-		dc.w Obj3A_Wait-Obj3A_Index
+		dc.w Obj3A_Wait-Obj3A_Index		; SBZ2
 		dc.w Obj3A_ChkPos2-Obj3A_Index
 		dc.w loc_C766-Obj3A_Index
 ; ===========================================================================
@@ -16668,8 +16668,8 @@ Obj3A_ChkPLC:				; XREF: Obj3A_Index
 
 Obj3A_Main:
 		movea.l	a0,a1
-		lea	(Obj3A_Config).l,a2
-		moveq	#6,d1
+		lea	Obj3A_Config(pc),a2
+		moveq	#7-1,d1
 
 Obj3A_Loop:
 		move.b	#$3A,0(a1)
@@ -16720,7 +16720,7 @@ loc_C610:				; XREF: loc_C61A
 ; ===========================================================================
 
 loc_C61A:				; XREF: Obj3A_ChkPos
-		cmpi.b	#$E,($FFFFD724).w
+		cmpi.b	#$E,($FFFFD724).w	; disgusting hard-coded check
 		beq.s	loc_C610
 		cmpi.b	#4,$1A(a0)
 		bne.s	loc_C5FE
@@ -16755,7 +16755,6 @@ Obj3A_Display:
 ; ===========================================================================
 
 Obj3A_TimeBonus:			; XREF: Obj3A_Index
-		bsr.w	DisplaySprite
 		move.b	#1,($FFFFF7D6).w ; set time/ring bonus update flag
 		moveq	#0,d0
 		tst.w	($FFFFF7D2).w	; is time bonus	= zero?
@@ -16777,15 +16776,15 @@ Obj3A_ChkBonus:
 		move.w	#$C5,d0
 		jsr	(PlaySound_Special).l ;	play "ker-ching" sound
 		addq.b	#2,$24(a0)
-		cmpi.w	#$501,($FFFFFE10).w
-		bne.s	Obj3A_SetDelay
-		addq.b	#4,$24(a0)
+	;	cmpi.w	#$501,($FFFFFE10).w	; SBZ2?
+	;	bne.s	Obj3A_SetDelay		; if not, continue
+	;	addq.b	#4,$24(a0)
 
 Obj3A_SetDelay:
 		move.w	#180,$1E(a0)	; set time delay to 3 seconds
 
 locret_C692:
-		rts	
+		bra.w	DisplaySprite
 ; ===========================================================================
 
 Obj3A_AddBonus:				; XREF: Obj3A_ChkBonus
@@ -16794,7 +16793,8 @@ Obj3A_AddBonus:				; XREF: Obj3A_ChkBonus
 		andi.b	#3,d0
 		bne.s	locret_C692
 		move.w	#$CD,d0
-		jmp	(PlaySound_Special).l ;	play "blip" sound
+		jsr	PlaySound_Special	; play "blip" sound
+		bra.s	locret_C692
 ; ===========================================================================
 
 Obj3A_NextLevel:			; XREF: Obj3A_Index
@@ -16811,7 +16811,8 @@ Obj3A_ChkSS:				; XREF: Obj3A_NextLevel
 		clr.b	($FFFFFE30).w	; clear	lamppost counter
 		tst.b	($FFFFF7CD).w	; has Sonic jumped into	a giant	ring?
 		beq.s	loc_C6EA	; if not, branch
-		move.b	#$24,($FFFFF600).w ; set game mode to Special Stage (10)
+		move.b  #$0,titlemode.w
+		move.b	#$24,($FFFFF600).w 	; set screen mode to $24 BEEBUSH
 		bra.s	Obj3A_Display2
 ; ===========================================================================
 
@@ -18354,14 +18355,13 @@ locret_DA8A:
 
 
 SingleObjLoad:
-		lea	($FFFFD800).w,a1 ; start address for object RAM
+		lea	($FFFFD800-$40).w,a1 ; start address for object RAM
 		move.w	#$5F,d0
 
 loc_DA94:
-		tst.b	(a1)		; is object RAM	slot empty?
-		beq.s	locret_DAA0	; if yes, branch
 		lea	$40(a1),a1	; goto next object RAM slot
-		dbf	d0,loc_DA94	; repeat $5F times
+		tst.b	(a1)		; is object RAM	slot empty?
+		dbeq	d0,loc_DA94	; if yes, exit. if not, repeat $5F times
 
 locret_DAA0:
 		rts	
@@ -18373,18 +18373,17 @@ locret_DAA0:
 
 SingleObjLoad2:
 		movea.l	a0,a1
-		move.w	#-$1000,d0
+		move.w	#$F000,d0
 		sub.w	a0,d0
 		lsr.w	#6,d0
 		subq.w	#1,d0
-		bcs.s	locret_DABC
-
-loc_DAB0:
-		tst.b	(a1)
-		beq.s	locret_DABC
+		bcc.s	@start
+		rts
+@loop:	; loc_DAB0:
 		lea	$40(a1),a1
-		dbf	d0,loc_DAB0
-
+@start:
+		tst.b	(a1)
+		dbeq	d0,@loop
 locret_DABC:
 		rts	
 ; End of function SingleObjLoad2
@@ -26830,7 +26829,7 @@ Player_Anim:
 	dc.l	SonicAniData
 	dc.l	SonicAniData ; gronic
 	dc.l	SonicAniData ; anakama
-	dc.l	LimitedSonicAniData ; LimitedSonic
+	dc.l	LimitAniData ; LimitedSonic
 	dc.l	SonicAniData ; neru
 	dc.l	SonicAniData ; gomer gomer!
 	dc.l	SonicAniData ; mercury
@@ -36778,16 +36777,17 @@ loc_1AF9C:
 		moveq	#0,d2	; GMZ
 		moveq	#5,d1	; GMZ: Amount of explosion objects
 		move.l	a1,a2	; GMZ: Save a1 address on a2
+		bra.s	TouchKE_NextExplosion
 
 TouchKE_Explode:
+		jsr	SingleObjLoad
+		bne.s	TouchKE_NoExplosion
+		addq.b	#4,d2
+
+TouchKE_NextExplosion:
 		move.b	#$27,0(a1)	; change object	to points
 		move.b	#2,$24(a1)	; default to no animal spawn
 		move.b	d2,$28(a1)	; GMZ: Set subtype
-
-TouchKE_NextExplosion:
-		addq.b	#4,d2
-		jsr	SingleObjLoad
-		bne.s	TouchKE_NoExplosion
 		move.w	8(a2),8(a1)
 		move.w	$C(a2),$C(a1)
 		dbf	d1,TouchKE_Explode
@@ -39900,59 +39900,34 @@ Nem_TruthNuke:	incbin	artnem\truthnuke.bin	; GMZ: TRVTH NVKE
 ; ---------------------------------------------------------------------------
 ; Sprite mappings - players
 ; ---------------------------------------------------------------------------
-Map_Sonic:
-	include "_maps\Sonic.asm"
-Map_Limit:
-	include "_maps\LimitedSonic.asm"
-map_neru:
-	include "_maps\neru.asm"
-map_gomer:
-	include "_maps\gomer.asm"
-map_mercury:
-	include "_maps\mercury.asm"
-Map_Kiryu:
-	include "_maps\Kiryu.asm"
-Map_Purple:
-	include "_maps\Purple.asm"
-Map_Sans:
-	include "_maps\Sans.asm"
-Map_barney:
-	include "_maps\barney.asm"
+Map_Sonic:	include "_maps\Sonic.asm"
+Map_Limit:	include "_maps\LimitedSonic.asm"
+map_neru:	include "_maps\neru.asm"
+map_gomer:	include "_maps\gomer.asm"
+map_mercury:	include "_maps\mercury.asm"
+Map_Kiryu:	include "_maps\Kiryu.asm"
+Map_Purple:	include "_maps\Purple.asm"
+Map_Sans:	include "_maps\Sans.asm"
+Map_barney:	include "_maps\barney.asm"
 ; ---------------------------------------------------------------------------
 ; Animation data array for the players
 ; ---------------------------------------------------------------------------
-SonicAniData:
-	include "_anim\Sonic.asm"
-
-LimitedSonicAniData:
-	include "_anim\LimitedSonic.asm"
-	
-KiryuAniData:
-	include "_anim\kiryu.asm"
-
-PurpleAniData:
-	include "_anim\Purple.asm"
+SonicAniData:	include "_anim\Sonic.asm"
+LimitAniData:	include "_anim\LimitedSonic.asm"	; LimitedSonicAniData
+KiryuAniData:	include "_anim\kiryu.asm"
+PurpleAniData:	include "_anim\Purple.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	loading	array for the players
 ; ---------------------------------------------------------------------------
-SonicDynPLC:
-	include "_inc\Sonic dynamic pattern load cues.asm"
-LimitDynPLC:
-	include "_inc\limitedsonic dynamic pattern load cues.asm"
-NeruDynPLC:
-	include "_inc\NeruDPLC.asm"
-gomerDynPLC:
-	include "_inc\gomerDPLC.asm"
-mercuryDynPLC:
-	include "_inc\mercuryDPLC.asm"
-KiryuDynPLC:
-	include "_inc\Kiryu dynamic pattern load cues.asm"
-PurpleDynPLC:
-	include "_inc\Purple dynamic pattern load cues.asm"
-SansDynPLC:
-	include "_inc\Sans dynamic pattern load cues.asm"	
-barneyDynPLC:
-	include "_inc\barneyDPLC.asm"	
+SonicDynPLC:	include "_inc\Sonic dynamic pattern load cues.asm"
+LimitDynPLC:	include "_inc\limitedsonic dynamic pattern load cues.asm"
+NeruDynPLC:	include "_inc\NeruDPLC.asm"
+gomerDynPLC:	include "_inc\gomerDPLC.asm"
+mercuryDynPLC:	include "_inc\mercuryDPLC.asm"
+KiryuDynPLC:	include "_inc\Kiryu dynamic pattern load cues.asm"
+PurpleDynPLC:	include "_inc\Purple dynamic pattern load cues.asm"
+SansDynPLC:	include "_inc\Sans dynamic pattern load cues.asm"
+barneyDynPLC:	include "_inc\barneyDPLC.asm"	
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	- players
 ; ---------------------------------------------------------------------------
