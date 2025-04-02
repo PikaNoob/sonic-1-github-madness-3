@@ -25104,7 +25104,6 @@ Obj01_Main:				; XREF: Obj01_Index
 		move.b	#9,$17(a0)
 ;map setting is a routine so it can be done by debug mode!
 		jsr	Obj01_setplayermap
-
 		move.w	#$780,2(a0)
 		move.b	#2,$18(a0)
 		move.b	#$18,$19(a0)
@@ -39892,6 +39891,10 @@ Obj01_setplayermap:
 		lsl.w	#2,d0
 		lea 	Player_Maps(pc),a1
 		move.l	(a1,d0.w),4(a0)	; load Map patterns
+	tst.b	(f_superconic).w	; is Conic already Super?
+	beq.s	@notsupermap	; if yes, branch
+	move.l	#Map_Barney,4(a0)
+@notsupermap
 		rts	
 Player_Maps:
 	dc.l	Map_Sonic
