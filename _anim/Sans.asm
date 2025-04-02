@@ -55,7 +55,7 @@ SonAni_Float1e:	dc.b 7,	$3C, $3F, $FF
 SonAni_Float2e:	dc.b 7,	$3C, $3D, $53, $3E, $54, $FF, 0
 SonAni_Springe:	dc.b $2F, $40, $FD, 0
 SonAni_LZHange:	dc.b 4,	$41, $42, $FF
-SonAni_Leap1e:	dc.b $A, $60, $61, $62, $63, $64, $65, $66, $67, $68, $69
+SonAni_Leap1e:	dc.b $F, $60, $61, $62, $63, $64, $65, $66, $67, $68, $69
 	dc.b $6A, $6B, $6C, $6D, $6E, $6F, $70, $71, $72, $FE, 1
 SonAni_Leap2e:	dc.b $F, $43, $44, $FE,	1, 0
 SonAni_Surfe:	dc.b $3F, $49, $FF, 0

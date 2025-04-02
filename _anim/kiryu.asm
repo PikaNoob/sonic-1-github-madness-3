@@ -69,7 +69,7 @@ KiryuAni_Spring:	dc.b $2F, 7, $FD, 0
 		even
 KiryuAni_Hang:	dc.b 4,	1, $FF
 		even
-KiryuAni_Leap1:	dc.b $A, $60, $61, $62, $63, $64, $65, $66, $67, $68, $69
+KiryuAni_Leap1:	dc.b $F, $60, $61, $62, $63, $64, $65, $66, $67, $68, $69
 	dc.b $6A, $6B, $6C, $6D, $6E, $6F, $70, $71, $72, $FE, 1
 		even
 KiryuAni_Leap2:	dc.b $F, 7, $FF
