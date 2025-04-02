@@ -1,7 +1,7 @@
 {
     "Flex": 2,
     "name": "",
-    "node": "07566fbf-46a0-496a-9374-8fd79bebf175",
+    "node": "3d860095-97a9-49b2-a7d4-b8cb3af5edda",
     "objects": [
         {
             "name": "animals",
@@ -420,6 +420,31 @@
             },
             "mappings": {
                 "path": "_maps\\obj1E.asm",
+                "label": ""
+            },
+            "dplcs": {
+                "enabled": false,
+                "path": "",
+                "label": ""
+            },
+            "uuid": "7da76b24-e815-49ac-ac59-fb15d8894411"
+        },
+        {
+            "format": "Sonic 1.js",
+            "name": "ballhog",
+            "palettes": [
+                {
+                    "path": "pallet\\limitedsonic.bin",
+                    "length": 1
+                }
+            ],
+            "art": {
+                "path": "artnem\\bomb.bin",
+                "compression": "Nemesis",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "_maps\\obj5F.asm",
                 "label": ""
             },
             "dplcs": {

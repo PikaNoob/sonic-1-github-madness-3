@@ -28,8 +28,8 @@ v_tetoxstart		rs.w	1
 v_tetoystart		rs.w	1
 v_levelrandtracker	rs.l	1
 
-randLevelCount		= 17	; 31 max (32 is reserved for linear path flag)
-randLevelCountLimited	= 11
+randLevelCount		= 19	; 31 max (32 is reserved for linear path flag)
+randLevelCountLimited	= 13
 ;level select constants (to not give the foward reference warning this was moved here)
 f_checksum	= $FFFFFFF9
 lsscrpos 	= $60860003 ; level select screen position
@@ -300,14 +300,7 @@ GameClrRAM:
 		move.l	#loc_B10,(vBlankAdress).w		; Set the V-INT pointer to the standard V-INT routine
 
 		bsr.w	VDPSetupGame
-	;	bsr.w	SoundDriverLoad
-                jsr     MegaPCM_LoadDriver
-                lea     SampleTable, a0
-                jsr     MegaPCM_LoadSampleTable
-		tst.w	d0
-		beq.s	@mpcmsucc
-		jmp	Sound_E5
-@mpcmsucc:
+		bsr.w	SoundDriverLoad
 		bsr.w	JoypadInit
 
 		tst.b	(f_checksum).w		; Is checksum correct?
@@ -1260,19 +1253,15 @@ loc_134A:
 ; ---------------------------------------------------------------------------
 
 SoundDriverLoad:			; XREF: GameClrRAM; TitleScreen
-		move.w	#$100,($A11100).l ; stop the Z80
-		move.w	#$100,($A11200).l ; reset the Z80
-		lea	(Kos_Z80).l,a0	; load sound driver
-		lea	($A00000).l,a1
-		bsr.w	KosDec		; decompress
-		move.w	#0,($A11200).l
-		nop	
-		nop	
-		nop	
-		nop	
-		move.w	#$100,($A11200).l ; reset the Z80
-		move.w	#0,($A11100).l	; start	the Z80
-		rts	
+                jsr     MegaPCM_LoadDriver
+                lea     SampleTable, a0
+                jsr     MegaPCM_LoadSampleTable
+		tst.w	d0
+		beq.s	@mpcmsucc
+		jmp	Sound_E5
+@mpcmsucc:
+		lea	($FFF000).l,a6
+		jmp	Sound_E4	; Silence (see, a sound initiation, was it that hard SMPS devs?)
 ; End of function SoundDriverLoad
 
 ; ---------------------------------------------------------------------------
@@ -3878,21 +3867,18 @@ LevelSelect:
 ; ===========================================================================
 
 LevSel_SEGA:				; XREF: LevelSelect
-		move.b	#$0,($FFFFF600).w ; set screen	mode to	$0 SEGA
+		move.b	($FFFFF604).w,d0	; ctrl1held
+		moveq	#%01010000,d1		; A and B buttons
+		and.w	d1,d0
+		cmp.w	d1,d0			; is both A and B being held?
+		beq.s	LevSel_Ending		; if so, go to the characters ending
+		move.b	#$0,($FFFFF600).w	; set screen e to $0 SEGA
 		rts	
 ; ===========================================================================
 
 LevSel_Ending:				; XREF: LevelSelect
 		move.b	#$18,($FFFFF600).w ; set screen	mode to	$18 (Ending)
 		move.w	#$600,($FFFFFE10).w ; set level	to 0600	(Ending)
-		rts	
-; ===========================================================================
-
-LevSel_Credits:				; XREF: LevelSelect
-		move.b	#$1C,($FFFFF600).w ; set screen	mode to	$1C (Credits)
-		move.b	#$91,d0
-		bsr.w	PlaySound_Special ; play credits music
-		move.w	#0,($FFFFFFF4).w
 		rts	
 ; ===========================================================================
 
@@ -4630,6 +4616,8 @@ GetLevelRandom:
 	dc.w 7<<8|1	; Makoto
 	dc.w 7<<8|2	; Makoto
 	dc.w 1<<8|1	; LZ
+	dc.w 1<<8|3	; SBZ3 ; insufficient code
+	dc.w 3<<8|2	; SLZ
 ; beatable as everyone else
 	dc.w 0<<8|1	; GHZ ; starting jump too big
 	dc.w 0<<8|2	; GHZ ; ditto
@@ -4637,8 +4625,6 @@ GetLevelRandom:
 	dc.w 1<<8|2	; LZ ; gravity too dense
 	dc.w 3<<8|0	; SLZ ; red spring too low
 	dc.w 3<<8|1	; SLZ ; yellow spring too low
-; unbeatable
-	dc.w 3<<8|2	; SLZ ; dutch
 	even
 ; ===========================================================================
 
@@ -7545,7 +7531,7 @@ LevelSizeArray:        ; GHZ
         ; SLZ
         dc.w $0004, $0000, $1040, $0000, $0640, $0060 ; Act 1
         dc.w $0004, $0000, $1FBF, $0000, $0640, $0060 ; Act 2
-        dc.w $0004, $0000, $2000, $0000, $06C0, $0060 ; Act 3
+        dc.w $0004, $0000, $0240, $0000, $06C0, $0060 ; Act 3
         dc.w $0004, $0000, $3EC0, $0000, $0720, $0060 ; Act 4 (Unused)
         ; SYZ
         dc.w $0004, $0000, $22C0, $0000, $0420, $0060 ; Act 1
@@ -9568,8 +9554,8 @@ Resize_SBZ3:
 		bcc.s	locret_6F8C	; if not, branch
 		clr.b	($FFFFFE30).w
 		move.w	#1,($FFFFFE02).w ; restart level
-		move.w	#$502,($FFFFFE10).w ; set level	number to 0502 (FZ)
 		move.b	#1,($FFFFF7C8).w ; freeze Sonic
+		jmp	GetLevelRandom
 
 locret_6F8C:
 		rts	
@@ -9932,11 +9918,11 @@ Resize_SBZ2boss:
 		cmpi.w	#$1EB0,($FFFFF700).w
 		bcs.s	locret_7298
 		;bsr.w	SingleObjLoad
-		bne.s	locret_7298
-		move.b	#$83,(a1)	; load collapsing block	object
+		;bne.s	locret_7298
+		;move.b	#$83,(a1)	; load collapsing block	object
 		addq.b	#2,($FFFFF742).w
-		moveq	#$1E,d0
-		bra.w	LoadPLC		; load SBZ2 Eggman patterns
+		;moveq	#$1E,d0
+		;bra.w	LoadPLC		; load SBZ2 Eggman patterns
 ; ===========================================================================
 
 locret_7298:
@@ -16833,7 +16819,7 @@ Obj3A_Display2:				; XREF: Obj3A_NextLevel, Obj3A_ChkSS
 ; ---------------------------------------------------------------------------
 LevelOrder:	;incbin	misc\lvl_ord.bin
 	dc.w $001,$002,$200,$000	; GHZ
-	dc.w $101,$102,$300,$502	; LZ
+	dc.w $101,$102,$103,$300	; LZ
 	dc.w $201,$202,$400,$000	; MZ
 	dc.w $301,$302,$500,$000	; SLZ
 	dc.w $401,$402,$700,$000	; SYZ
@@ -26069,8 +26055,7 @@ Boundary_Bottom:
 		bcs.w	CallKillSonic	; GMZ
 		clr.b	($FFFFFE30).w	; clear	lamppost counter
 		move.w	#1,($FFFFFE02).w ; restart the level
-		move.w	#$103,($FFFFFE10).w ; set level	to SBZ3	(LZ4)
-		rts	
+		jmp	GetLevelRandom
 
 CallKillSonic:
 ; this is a reference to the mario games made by BMB, in which falling into a pit
@@ -37093,11 +37078,11 @@ Kill_Sound:
 		moveq	#-1,d0
 		rts	
 @sndlut:
-		dc.b 0,$00	; sonic
-		dc.b 0,$00
-		dc.b 0,$00
+		dc.b 2,$92	; sonic
+		dc.b 2,$92	
+		dc.b 2,$92	
 		dc.b 0,$00	; limited
-		dc.b 0,$00
+		dc.b 2,$92	
 		dc.b 2,$90	; gomer
 		dc.b 2,$9C	; sailer mercury
 		dc.b 2,$A9
@@ -40880,7 +40865,6 @@ MusicIndex:	; $01-$7F
 		dc.l Music21 ; sailor moon transformaion for mercury (BISHOUJO SENSHI SAILOR MOON, 1994)
 		dc.l Music22 ; sailor moon ending for mercury (BISHOUJO SENSHI SAILOR MOON, 1994)
 ; wait i don't have time to implement these oops
-		dc.l Music92 ; test
 
 MusicIndex80:	; $81-$9F
 		dc.l Music81, Music82
@@ -43337,12 +43321,6 @@ loc_72E64:				; XREF: loc_72A64
 		move.b	#$F,d1
 		bra.w	sub_7272E
 ; ===========================================================================
-Kos_Z80:	incbin	sound\z80_1.bin
-		dc.w ((SegaPCM&$FF)<<8)+((SegaPCM&$FF00)>>8)
-		dc.b $21
-		dc.w (((EndOfRom-SegaPCM)&$FF)<<8)+(((EndOfRom-SegaPCM)&$FF00)>>8)
-		incbin	sound\z80_2.bin
-		even
 Music01:	include	sound\LimitedInvincibility.asm
 		even
 Music03:	include	sound\tg2000tracks\drcoffinman.asm
@@ -43365,6 +43343,7 @@ Music0A:	include	sound\tg2000tracks\TG2000JingleIDK.asm
 		even
 Music0B:	incbin	sound\professionalhcrsong.bin
 		even
+Music9B:	; Star Light 3
 Music0C:	include	sound\BTH.asm
 		even
 Music13:	incbin	sound\tg2000tracks\drowningofpuyopuyo.bin
@@ -43463,7 +43442,7 @@ Music99:	incbin	sound\music99.bin ; Marble Act 3
 		even
 Music9A:	incbin	sound\music9A.bin ; Star Light Act 2
 		even
-Music9B:	incbin	sound\music9B.bin ; Star Light Act 3
+;Music9B:	incbin	sound\music9B.bin ; Star Light Act 3
 		even
 Music9C:	incbin	sound\music9C.bin ; Spring Yard Act 2
 		even
