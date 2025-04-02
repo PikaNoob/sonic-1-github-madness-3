@@ -364,12 +364,18 @@ GameModeArray:
 ; ===========================================================================
 
 jmpto_Minecraft:
+		move.w  #$100,Z80BUS
+.mcWaitZ80:                              
+        	btst    #0,Z80BUS
+       		bne.s   .mcWaitZ80
 		jmp     Minecraft
 
 jmpto_BeeBush:
 		jmp     GM_BEEBUSH
+
 jmpto_Otis:
 		jmp     GM_Otis
+
 jmpto_IntroCutscene:
 		pea	PlayLevel
 		moveq	#0,d0			; >charcount
@@ -4457,9 +4463,8 @@ OptionsMenu:
 		bne.s	OptionsMC		; if not, no minecraft 
 		move.w	($FFFFFF82).w,d0
 		tst.w	d0
-		JSR 	MINECRAFT
-		bra.s	OptionsMenu
-
+		move.b	#$20,($FFFFF600).w 	; set screen	mode to	$20 free minecraft!!
+		jmp     jmpto_Minecraft	
 optionsMC:
 		move.w	($FFFFFF82).w,d0
 		tst.w	d0
