@@ -10,7 +10,7 @@ Sonic got a tan and gained brainrot since his last outting. The rest is history
 Ogorki plans to defame the the white guys candy brand to advertise his pickles
 
 # Anakama
-idfk
+A batch file fetishist Green Hedgehog who just happens to look-alike to our Sonic. Got teleported to the dimension during one of their deviant experiments with batch scripts.
 
 # Limited Sonic (from the rom hack Limited Sonic)
 It Is Limited
