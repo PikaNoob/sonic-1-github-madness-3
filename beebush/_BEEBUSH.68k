@@ -96,10 +96,10 @@ OBJECTRAME:
 ; Start of main "beebush" program
 ; ---------------------------------------------------------------------------
 
-GM_BEEBUSH:  
-      	move.b  submode.w,d0
-        jsr     .Index(pc,d0.w)
-        rts
+GM_BEEBUSH:
+        moveq   #0,d0
+        move.b  submode.w,d0
+        jmp     .Index(pc,d0.w)
 
 ; ---------------------------------------------------------------------------
 
