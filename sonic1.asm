@@ -16819,7 +16819,7 @@ Obj3A_Display2:				; XREF: Obj3A_NextLevel, Obj3A_ChkSS
 ; ---------------------------------------------------------------------------
 LevelOrder:	;incbin	misc\lvl_ord.bin
 	dc.w $001,$002,$200,$000	; GHZ
-	dc.w $101,$102,$300,$502	; LZ
+	dc.w $101,$102,$103,$300	; LZ
 	dc.w $201,$202,$400,$000	; MZ
 	dc.w $301,$302,$500,$000	; SLZ
 	dc.w $401,$402,$700,$000	; SYZ
@@ -43343,6 +43343,7 @@ Music0A:	include	sound\tg2000tracks\TG2000JingleIDK.asm
 		even
 Music0B:	incbin	sound\professionalhcrsong.bin
 		even
+Music9B:	; Star Light 3
 Music0C:	include	sound\BTH.asm
 		even
 Music13:	incbin	sound\tg2000tracks\drowningofpuyopuyo.bin
@@ -43441,7 +43442,7 @@ Music99:	incbin	sound\music99.bin ; Marble Act 3
 		even
 Music9A:	incbin	sound\music9A.bin ; Star Light Act 2
 		even
-Music9B:	incbin	sound\music9B.bin ; Star Light Act 3
+;Music9B:	incbin	sound\music9B.bin ; Star Light Act 3
 		even
 Music9C:	incbin	sound\music9C.bin ; Spring Yard Act 2
 		even
