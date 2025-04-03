@@ -583,7 +583,7 @@ PLC_MakoBoss:	dc.w 2
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - toothpasteconic
 ; ---------------------------------------------------------------------------
-PLC_ConicBoss:	dc.w 5
+PLC_ConicBoss:	dc.w 4
 		dc.l Nem_Conic		; Eggman main patterns
 		dc.w $8000
 		dc.l Nem_Weapons	; Eggman's weapons

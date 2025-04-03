@@ -7543,7 +7543,7 @@ LevelSizeArray:        ; GHZ
         ; SLZ
         dc.w $0004, $0000, $1040, $0000, $0640, $0060 ; Act 1
         dc.w $0004, $0000, $1FBF, $0000, $0640, $0060 ; Act 2
-        dc.w $0004, $0000, $2000, $0000, $06C0, $0060 ; Act 3
+        dc.w $0004, $0000, $2000, $0000, $0210, $0060 ; Act 3
         dc.w $0004, $0000, $3EC0, $0000, $0720, $0060 ; Act 4 (Unused)
         ; SYZ
         dc.w $0004, $0000, $22C0, $0000, $0420, $0060 ; Act 1
@@ -9726,22 +9726,18 @@ Resize_MZ3end:
 
 Resize_SLZ:				; XREF: Resize_Index
 		moveq	#0,d0
-		rts
+;		rts ; why - coni
 		move.b	($FFFFFE11).w,d0
 		add.w	d0,d0
 		move.w	Resize_SLZx(pc,d0.w),d0
 		jmp	Resize_SLZx(pc,d0.w)
 ; ===========================================================================
-Resize_SLZx:	dc.w Resize_SLZ1-Resize_SLZx
-		dc.w Resize_SLZ2-Resize_SLZx
+Resize_SLZx:	dc.w Resize_SLZ12-Resize_SLZx
+		dc.w Resize_SLZ12-Resize_SLZx
 		dc.w Resize_SLZ3-Resize_SLZx
 ; ===========================================================================
 
-Resize_SLZ1:
-		move.w	#$100,($FFFFF726).w ; set lower	y-boundary
-		rts	
-
-Resize_SLZ2:
+Resize_SLZ12:
 		rts	
 ; ===========================================================================
 
@@ -9751,19 +9747,19 @@ Resize_SLZ3:
 		move.w	off_7118(pc,d0.w),d0
 		jmp	off_7118(pc,d0.w)
 ; ===========================================================================
-off_7118:	dc.w Resize_SLZ3main-off_7118
+off_7118:;	dc.w Resize_SLZ3main-off_7118; removed
 		dc.w Resize_SLZ3boss-off_7118
 		dc.w Resize_SLZ3end-off_7118
 ; ===========================================================================
-
-Resize_SLZ3main:
-		cmpi.w	#$1E70,($FFFFF700).w
-		bcs.s	locret_7130
-		move.w	#$210,($FFFFF726).w
-		addq.b	#2,($FFFFF742).w
-
-locret_7130:
-		rts	
+;
+;Resize_SLZ3main:
+;		cmpi.w	#$1E70,($FFFFF700).w
+;		bcs.s	locret_7130
+;		move.w	#$210,($FFFFF726).w
+;		addq.b	#2,($FFFFF742).w
+;
+;locret_7130:
+;		rts	
 ; ===========================================================================
 
 Resize_SLZ3boss:
