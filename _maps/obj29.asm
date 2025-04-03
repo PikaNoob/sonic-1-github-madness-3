@@ -1,24 +1,27 @@
-; ---------------------------------------------------------------------------
-; Sprite mappings - points that	appear when you	destroy	something
-; ---------------------------------------------------------------------------
-		dc.w byte_94BC-Map_obj29, byte_94C2-Map_obj29
-		dc.w byte_94C8-Map_obj29, byte_94CE-Map_obj29
-		dc.w byte_94D4-Map_obj29, byte_94DA-Map_obj29
-		dc.w byte_94E5-Map_obj29
-byte_94BC:	dc.b 1
-		dc.b $FC, 4, 0,	0, $F8	; 100 points
-byte_94C2:	dc.b 1
-		dc.b $FC, 4, 0,	2, $F8	; 200 points
-byte_94C8:	dc.b 1
-		dc.b $FC, 4, 0,	4, $F8	; 500 points
-byte_94CE:	dc.b 1
-		dc.b $FC, 8, 0,	6, $F8	; 1000 points
-byte_94D4:	dc.b 1
-		dc.b $FC, 0, 0,	6, $FC	; 10 points
-byte_94DA:	dc.b 2
-		dc.b $FC, 8, 0,	6, $F4	; 10,000 points
-		dc.b $FC, 4, 0,	7, 1
-byte_94E5:	dc.b 2
-		dc.b $FC, 8, 0,	6, $F4	; 100,000 points
-		dc.b $FC, 4, 0,	7, 6
-		even
+Map_6b24:
+Map_6b24_0: 	dc.w Map_6b24_E-Map_6b24
+Map_6b24_2: 	dc.w Map_6b24_19-Map_6b24
+Map_6b24_4: 	dc.w Map_6b24_1F-Map_6b24
+Map_6b24_6: 	dc.w Map_6b24_2A-Map_6b24
+Map_6b24_8: 	dc.w Map_6b24_30-Map_6b24
+Map_6b24_A: 	dc.w Map_6b24_36-Map_6b24
+Map_6b24_C: 	dc.w Map_6b24_41-Map_6b24
+Map_6b24_E: 	dc.b $2
+	dc.b $FC, $0, $0, $3, $FA
+	dc.b $FC, $0, $0, $1, $0
+Map_6b24_19: 	dc.b $1
+	dc.b $FC, $4, $0, $0, $F8
+Map_6b24_1F: 	dc.b $2
+	dc.b $FC, $0, $0, $2, $F8
+	dc.b $FC, $0, $0, $1, $0
+Map_6b24_2A: 	dc.b $1
+	dc.b $FC, $8, $0, $3, $F8
+Map_6b24_30: 	dc.b $1
+	dc.b $FC, $0, $0, $3, $FC
+Map_6b24_36: 	dc.b $2
+	dc.b $FC, $8, $0, $3, $F4
+	dc.b $FC, $4, $0, $4, $1
+Map_6b24_41: 	dc.b $2
+	dc.b $FC, $8, $0, $3, $F4
+	dc.b $FC, $4, $0, $4, $6
+	even

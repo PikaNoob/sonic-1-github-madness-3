@@ -6105,7 +6105,7 @@ loc_4992:
 		move.w	d0,($FFFFF7A0).w
 		lea	(byte_4ABC).l,a1
 		lea	(a1,d0.w),a1
-		move.w	#-$7E00,d0
+		move.w	#$8200,d0
 		move.b	(a1)+,d0
 		move.w	d0,(a6)
 		move.b	(a1),($FFFFF616).w
@@ -12903,8 +12903,7 @@ Obj29:					; XREF: Obj_Index
 		moveq	#0,d0
 		move.b	$24(a0),d0
 		move.w	Obj29_Index(pc,d0.w),d1
-		jsr	Obj29_Index(pc,d1.w)
-		bra.w	DisplaySprite
+		jmp	Obj29_Index(pc,d1.w)
 ; ===========================================================================
 Obj29_Index:	dc.w Obj29_Main-Obj29_Index
 		dc.w Obj29_Slower-Obj29_Index
@@ -12913,7 +12912,7 @@ Obj29_Index:	dc.w Obj29_Main-Obj29_Index
 Obj29_Main:				; XREF: Obj29_Index
 		addq.b	#2,$24(a0)
 		move.l	#Map_obj29,4(a0)
-		move.w	#$2797,2(a0)
+		move.w	#$27A2,2(a0)
 		move.b	#4,1(a0)
 		move.b	#1,$18(a0)
 		move.b	#8,$19(a0)
@@ -12921,10 +12920,12 @@ Obj29_Main:				; XREF: Obj29_Index
 
 Obj29_Slower:				; XREF: Obj29_Index
 		tst.w	$12(a0)		; is object moving?
-		bpl.w	DeleteObject	; if not, branch
+		bpl.s	@delete		; if not, branch
 		bsr.w	SpeedToPos
 		addi.w	#$18,$12(a0)	; reduce object	speed
-		rts	
+		bra.w	DisplaySprite
+@delete:
+		bra.w	DeleteObject
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Sprite mappings - animals
@@ -31223,7 +31224,7 @@ Obj79_Index:	dc.w Obj79_Main-Obj79_Index
 Obj79_Main:				; XREF: Obj79_Index
 		addq.b	#2,$24(a0)
 		move.l	#Map_obj79,4(a0)
-		move.w	#$7A0,2(a0)
+		move.w	#$7A8,2(a0)
 		move.b	#4,1(a0)
 		move.b	#8,$19(a0)
 		move.b	#5,$18(a0)
@@ -31289,7 +31290,7 @@ Obj79_HitLamp:
 		move.w	$C(a0),$32(a1)
 		subi.w	#$18,$32(a1)
 		move.l	#Map_obj79,4(a1)
-		move.w	#$7A0,2(a1)
+		move.w	#$7A8,2(a1)
 		move.b	#4,1(a1)
 		move.b	#8,$19(a1)
 		move.b	#4,$18(a1)

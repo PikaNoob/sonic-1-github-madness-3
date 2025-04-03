@@ -28,7 +28,7 @@
 ; ---------------------------------------------------------------------------
 PLC_Main:	dc.w 4
 		dc.l Nem_Lamp		; lamppost
-		dc.w $F400
+		dc.w $7A8<<5
 		dc.l Nem_Hud		; HUD
 		dc.w $D940
 		dc.l Nem_Lives		; lives	counter
@@ -36,7 +36,7 @@ PLC_Main:	dc.w 4
 		dc.l Nem_Ring		; rings
 		dc.w $F640
 		dc.l Nem_Points		; points from enemy
-		dc.w $F2E0
+		dc.w $7A2<<5
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - standard block 2
 ; ---------------------------------------------------------------------------

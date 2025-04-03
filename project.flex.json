@@ -1,7 +1,7 @@
 {
     "Flex": 2,
     "name": "",
-    "node": "3d860095-97a9-49b2-a7d4-b8cb3af5edda",
+    "node": "1c0e1eff-a75d-4561-9981-6a08d53ca655",
     "objects": [
         {
             "name": "animals",
@@ -372,12 +372,62 @@
                         "path": "_inc/neruDPLC.asm",
                         "label": ""
                     },
+                    "uuid": "24e81589-acac-49fb-95d8-894411620a5c"
+                },
+                {
+                    "format": "Sonic 1.js",
+                    "name": "sailor mercury",
+                    "palettes": [
+                        {
+                            "path": "pallet\\mercury.bin",
+                            "length": 1
+                        }
+                    ],
+                    "art": {
+                        "path": "artunc/mercury.bin",
+                        "compression": "Uncompressed",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "_maps/mercury.asm",
+                        "label": ""
+                    },
+                    "dplcs": {
+                        "enabled": true,
+                        "path": "_inc/mercuryDPLC.asm",
+                        "label": ""
+                    },
                     "uuid": "1c0e1eff-a75d-4561-9981-6a08d53ca655"
                 }
             ],
             "isDirectory": true,
-            "expanded": false,
+            "expanded": true,
             "uuid": "b2e21f93-0756-4fbf-86a0-596a53748fd7"
+        },
+        {
+            "format": "Sonic 1.js",
+            "name": "enemy points",
+            "palettes": [
+                {
+                    "path": "pallet/limitedsonic.bin",
+                    "length": 1
+                }
+            ],
+            "art": {
+                "path": "artnem/points.bin",
+                "compression": "Nemesis",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "_maps/obj29.asm",
+                "label": ""
+            },
+            "dplcs": {
+                "enabled": false,
+                "path": "",
+                "label": ""
+            },
+            "uuid": "a76b24e8-1589-4cac-99fb-15d889441162"
         },
         {
             "format": "Sonic 1.js",
