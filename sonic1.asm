@@ -4931,6 +4931,24 @@ Level_StartGame:
 		dc.b 2,$B3	; sans temporary!!!!!!!!!!!!!
 		even
 @cont:
+		cmpi.b	#6,($FFFFFE57).w ; do you have all emeralds?
+		bne.s	NofreesuiBarney	; if not, branch
+
+; cant test as a word so
+; i did this janky thingy here
+		cmp.b	#1,($FFFFFE10).w  ; are you in ILFE?
+		bne.s	supernoteggsplorer	; if yes, branch
+		tst.b	($FFFFFE11).w  ; are you in act 1?
+		beq.s	supereggsplorer	; if not, branch
+supernoteggsplorer:
+		cmp.b	#5,($FFFFFE10).w  ; are you in FZ?
+		bne.s	NofreesuiBarney	; if not, branch
+		cmp.b	#2,($FFFFFE11).w  ; are you in act 3?
+		bne.s	NofreesuiBarney	; if not, branch
+supereggsplorer:
+		move.w	#50,($FFFFFE20).w ; update rings for player, good luck!
+		move.b	#1,($FFFFFE1D).w ; update rings	counter
+NofreesuiBarney:
 ; ---------------------------------------------------------------------------
 ; Main level loop (when	all title card and loading sequences are finished)
 ; ---------------------------------------------------------------------------
