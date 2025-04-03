@@ -40723,6 +40723,8 @@ MusicIndex:	; $01-$7F
 		dc.l Music20 ; there is a house
 		dc.l Music21 ; sailor moon transformaion for mercury (BISHOUJO SENSHI SAILOR MOON, 1994)
 		dc.l Music22 ; sailor moon ending for mercury (BISHOUJO SENSHI SAILOR MOON, 1994)
+		dc.l Music23 ; Transcription of a Silvagunner rip
+		dc.l Music24 ; AT&T Silly Ringtone
 ; wait i don't have time to implement these oops
 
 MusicIndex80:	; $81-$9F
@@ -43248,6 +43250,10 @@ Music20:	incbin	sound\SDUNST.bin
 Music21:	incbin	sound\sailormoon.bin
 		even
 Music22:	incbin	sound\sailormoonend.bin
+		even
+Music23:	include	sound\tg2000tracks\PaintBlack.asm
+		even
+Music24:	include	sound\tg2000tracks\Ringtone.asm
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
