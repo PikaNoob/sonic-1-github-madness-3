@@ -9726,7 +9726,6 @@ Resize_MZ3end:
 
 Resize_SLZ:				; XREF: Resize_Index
 		moveq	#0,d0
-		rts
 		move.b	($FFFFFE11).w,d0
 		add.w	d0,d0
 		move.w	Resize_SLZx(pc,d0.w),d0
@@ -9738,8 +9737,7 @@ Resize_SLZx:	dc.w Resize_SLZ1-Resize_SLZx
 ; ===========================================================================
 
 Resize_SLZ1:
-		move.w	#$100,($FFFFF726).w ; set lower	y-boundary
-		rts	
+;		move.w	#$100,($FFFFF726).w ; set lower	y-boundary
 
 Resize_SLZ2:
 		rts	
@@ -9758,23 +9756,22 @@ off_7118:	dc.w Resize_SLZ3main-off_7118
 
 Resize_SLZ3main:
 		cmpi.w	#$1E70,($FFFFF700).w
-		bcs.s	locret_7130
+		blo.s	locret_7130
 		move.w	#$210,($FFFFF726).w
 		addq.b	#2,($FFFFF742).w
 
 locret_7130:
+locret_715C:
 		rts	
 ; ===========================================================================
 
 Resize_SLZ3boss:
 		cmpi.w	#$2000,($FFFFF700).w
-		bcs.s	locret_715C
+		blo.s	locret_715C
 		bsr.w	SingleObjLoad
-		bne.s	loc_7144
+		bne.s	locret_715C
 ;toothpaste conic time
 		move.b	#$7A,(a1)	; load SLZ boss	object
-
-loc_7144:
 		move.w	#$8C,d0
 		bsr.w	PlaySound	; play boss music
 		move.b	#1,($FFFFF7AA).w ; lock	screen
@@ -9783,13 +9780,8 @@ loc_7144:
 		bra.w	LoadPLC		; load boss patterns
 ; ===========================================================================
 
-locret_715C:
-		rts	
-; ===========================================================================
-
 Resize_SLZ3end:
 		move.w	($FFFFF700).w,($FFFFF728).w
-		rts
 		rts
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
