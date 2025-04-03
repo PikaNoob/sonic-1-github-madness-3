@@ -63,6 +63,9 @@ Fatass
 # Sailor Jupiter
 Slightly less of a fatass
 
+# Toothpaste Conic
+Gum Disease
+
 # Fatman
 Only formally appearing in the credits, he can be made angy with you having the emerals. He won't be angy unless your have all of the emald
 The Fatman in the Final zone is an imposter, white guy was being sussy baka
