@@ -732,7 +732,7 @@ locret_C42:
 
 loc_C44:				; XREF: off_B6E
 		bsr.w	sub_106E
-		bsr.w	sub_6886
+;		bsr.w	sub_6886	; level draw background only
 		bsr.w	sub_1642
 		tst.w	($FFFFF614).w
 		beq.w	locret_C5C
@@ -3558,7 +3558,7 @@ TITLE_SCR:
 .Exit:
 
 	lea	($FF0000).l,a1
-	lea	(Eni_TitleBG).l,a0 ; load	title screen mappings
+	lea	(Eni_TitleBG).l,a0 ; load title screen mappings
 	move.w	#0,d0
 	bsr.w	EniDec
 	move.l	#$60000003,d0
