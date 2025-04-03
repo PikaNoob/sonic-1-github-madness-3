@@ -39196,7 +39196,7 @@ HudDb_XY:				; XREF: HudDebug
 
 HudDb_XY2:
 		moveq	#7,d6
-		lea	(Art_Text).l,a1
+		lea	(Art_ErrText).l,a1
 
 HudDb_XYLoop:
 		rol.w	#4,d1
