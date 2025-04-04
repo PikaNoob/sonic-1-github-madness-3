@@ -14275,6 +14275,10 @@ Obj0E_Index:	dc.w Obj0E_Main-Obj0E_Index
 		dc.w Obj0E_Show-Obj0E_Index
 		dc.w Obj0E_Show-Obj0E_Index
 		dc.w Obj0E_Show-Obj0E_Index
+		dc.w CTC1-Obj0E_Index
+		dc.w CTC2-Obj0E_Index
+		dc.w CTC3-Obj0E_Index
+		dc.w CTC4-Obj0E_Index
 ; ===========================================================================
 
 Obj0E_Main:				; XREF: Obj0E_Index
@@ -14288,7 +14292,53 @@ Obj0E_Main:				; XREF: Obj0E_Index
 		addq.b	#2,$24(a0)	; go to	next routine
 Obj0E_Show:				; XREF: Obj0E_Index
 		bra.w	DisplaySprite
+; ===========================================================================
+; big conic
+CTC1:	; Routine 0
+		addq.b	#2,obRoutine(a0)
+		move.l	#Map_BCon,obMap(a0)
+		move.w	#$100,obGfx(a0)
+		move.b	#1,obPriority(a0)
+		move.w	#$C0,obX(a0)
+		move.w	#$F4,obScreenY(a0) ; position is fixed to the middle of the screen
+; ===========================================================================
 
+CTC2:	; Routine 4
+		cmpi.w	#$180,obX(a0) ; has Conic reached final position? (right edge)
+		beq.s	@BCon_Animate	; if not, branch
+		addq.w	#8,obX(a0) ; move Conic right
+		addq.w	#4,obX(a0) ; this is done twice to make him faster
+
+@BCon_Animate:
+		lea	(Ani_BCon).l,a1
+		cmpi.w	#$180,obX(a0) ; has Conic reached final position? (right edge)
+		beq.s	@BCon_Animatea	; if not, branch
+		jsr	(AnimateSprite).l
+@BCon_Animatea:
+		jmp	(DisplaySprite).l
+
+; ===========================================================================
+
+CTC3:	; Routine 4
+		cmpi.w	#$40,obX(a0) ; has Conic reached final position? (right edge)
+		beq.s	@BCon_Animate	; if not, branch
+		subq.w	#8,obX(a0) ; move Conic right
+		subq.w	#4,obX(a0) ; this is done twice to make him faster
+
+@BCon_Animate:
+		lea	(Ani_BCon).l,a1
+		cmpi.w	#$40,obX(a0) ; has Conic reached final position? (right edge)
+		beq.s	@BCon_Animatea	; if not, branch
+		jsr	(AnimateSprite).l
+@BCon_Animatea:
+		jmp	(DisplaySprite).l	
+; ===========================================================================
+
+CTC4:	; Routine 4
+		add.w	#$C0,obX(a0) ; move Conic right
+		jsr	(AnimateSprite).l
+		jmp	(DisplaySprite).l	
+; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Object 0F - "PRESS START BUTTON" and "TM" from title screen
 ; ---------------------------------------------------------------------------
@@ -14334,6 +14384,12 @@ Ani_obj0E:
 Ani_obj0F:
 	include "_anim\obj0F.asm"
 
+
+map_bcon:
+	include "_maps\Big Conic.asm"
+
+
+	include "_anim\Big Conic.asm"
 ; ---------------------------------------------------------------------------
 ; Subroutine to	animate	a sprite using an animation script
 ; ---------------------------------------------------------------------------
