@@ -18,6 +18,7 @@ align macro
 		include "MapMacros.asm"
 		include "beebush/Mega Drive.inc"
 		include "constants.asm"
+		
 	rsset $FFFFC800 
 v_dmaqueueslot:		rs.w	1
 v_dmaqueuecount:	rs.w	1
@@ -321,11 +322,7 @@ GameClrRAM:
 		beq.s	@notmss
 		jsr	GM_AntiTMSS
 @notmss:
-
 		jsr	GM_SplashScreensIG
-		jsr	GM_CN
-		lea	thxsplash(pc),a6
-		jsr	GM_CustomSplashScreensIG
 		kdebugtext "you can soft reset to skip all those splash screens btw"
 @nosplashscreens:
 	;	move.b	#$20,($FFFFF600).w ; set Game Mode to Minecraft
@@ -335,9 +332,6 @@ MainGameLoop:
 		and.b	($FFFFF600).w,d0 ; load	Game Mode
 		jsr	GameModeArray(pc,d0.w) ; jump to apt location in ROM
 		bra.s	MainGameLoop
-thxsplash:
-	dc.l $81<<24|nem_thx,$03<<24|enifg_thx,$00<<24|enibg_thx,$08<<24|pal_thx,0
-	dc.l 0	; terminator 3
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Main game mode array
@@ -3112,7 +3106,6 @@ Pal_hen1:	incbin	pallet\henshin1.bin
 Pal_hen2:	incbin	pallet\henshin2.bin
 Pal_hencyc:	incbin	pallet\henshincyc.bin
 Pal_mercend:	incbin	pallet\mercend.bin	; ending sequence pallets
-Pal_BART:	incbin	pallet\BART.bin	; ending sequence pallets
 ; ---------------------------------------------------------------------------
 ; Subroutine to	delay the program by ($FFFFF62A) frames
 ; ---------------------------------------------------------------------------
@@ -3273,33 +3266,6 @@ Sine_Data:	incbin	misc\sinewave.bin	; values for a 360º sine wave
 
 	include "_inc\DMA Queue.asm"
 
-; map & art macros
-; ===========================================================================
-; ---------------------------------------------------------------------------
-; Set a VRAM address via the VDP control port.
-; input: 16-bit VRAM address, control port (default is ($C00004).l)
-; ---------------------------------------------------------------------------
-
-locVRAM:	macro loc,controlport
-		if (narg=1)
-		move.l	#($40000000+((loc&$3FFF)<<16)+((loc&$C000)>>14)),(vdp_control_port).l
-		else
-		move.l	#($40000000+((loc&$3FFF)<<16)+((loc&$C000)>>14)),\controlport
-		endc
-		endm
-
-; ---------------------------------------------------------------------------
-; Copy a tilemap from 68K (ROM/RAM) to the VRAM without using DMA
-; input: source, destination, width [cells], height [cells]
-; ---------------------------------------------------------------------------
-
-copyTilemap:	macro source,destination,width,height
-		lea	(source).l,a1
-		locVRAM	\destination,d0
-		moveq	#width,d1
-		moveq	#height,d2
-		jsr	ShowVDPGraphics
-		endm
 ; ===========================================================================
 
 ; ---------------------------------------------------------------------------
@@ -3331,12 +3297,16 @@ SegaScreen:				; XREF: GameModeArray
 		lea	(Eni_SegaLogo).l,a0 ; load Sega	logo mappings
 		move.w	#0,d0
 		bsr.w	EniDec
-; sega block
-		copyTilemap	$FF0000,$E510,$17,7
-; this draws the logo cover
-		copyTilemap	$FF0180,$C000,$27,$1B
-;this covers the bottom area to not reveal a mess
-                copyTilemap	$FF0240,$CB00,$27,$6 ; Fix garbled graphics after demo - this is from an old hack
+		lea	($FF0000).l,a1
+		move.l	#$65100003,d0
+		moveq	#$17,d1
+		moveq	#7,d2
+		bsr.w	ShowVDPGraphics
+		lea	($FF0180).l,a1
+		move.l	#$40000003,d0
+		moveq	#$27,d1
+		moveq	#$1B,d2
+		bsr.w	ShowVDPGraphics
 
 		move.b  #0,($FFFFF601).w ;bugfix
 
@@ -14327,24 +14297,21 @@ Obj0E_Show:				; XREF: Obj0E_Index
 CTC1:	; Routine 0
 		addq.b	#2,obRoutine(a0)
 		move.l	#Map_BCon,obMap(a0)
-		tst.b	(f_bart).w
-		beq.s	nobartm
-		move.l	#Map_Bart,obMap(a0)
-nobartm:
-		move.w	#0,obGfx(a0)
+		move.w	#$100,obGfx(a0)
 		move.b	#1,obPriority(a0)
-		move.w	#$C8,obX(a0)
+		move.w	#$C0,obX(a0)
 		move.w	#$F4,obScreenY(a0) ; position is fixed to the middle of the screen
 ; ===========================================================================
 
 CTC2:	; Routine 4
-		cmpi.w	#$188,obX(a0) ; has Conic reached final position? (right edge)
+		cmpi.w	#$180,obX(a0) ; has Conic reached final position? (right edge)
 		beq.s	@BCon_Animate	; if not, branch
-		add.w	#8,obX(a0) ; move Conic right
+		addq.w	#8,obX(a0) ; move Conic right
+		addq.w	#4,obX(a0) ; this is done twice to make him faster
 
 @BCon_Animate:
 		lea	(Ani_BCon).l,a1
-		cmpi.w	#$188,obX(a0) ; has Conic reached final position? (right edge)
+		cmpi.w	#$180,obX(a0) ; has Conic reached final position? (right edge)
 		beq.s	@BCon_Animatea	; if not, branch
 		jsr	(AnimateSprite).l
 @BCon_Animatea:
@@ -14353,13 +14320,14 @@ CTC2:	; Routine 4
 ; ===========================================================================
 
 CTC3:	; Routine 4
-		cmpi.w	#$C8,obX(a0) ; has Conic reached final position? (right edge)
+		cmpi.w	#$40,obX(a0) ; has Conic reached final position? (right edge)
 		beq.s	@BCon_Animate	; if not, branch
-		sub.w	#8,obX(a0) ; move Conic right
+		subq.w	#8,obX(a0) ; move Conic right
+		subq.w	#4,obX(a0) ; this is done twice to make him faster
 
 @BCon_Animate:
 		lea	(Ani_BCon).l,a1
-		cmpi.w	#$C8,obX(a0) ; has Conic reached final position? (right edge)
+		cmpi.w	#$40,obX(a0) ; has Conic reached final position? (right edge)
 		beq.s	@BCon_Animatea	; if not, branch
 		jsr	(AnimateSprite).l
 @BCon_Animatea:
@@ -14368,7 +14336,6 @@ CTC3:	; Routine 4
 
 CTC4:	; Routine 4
 		add.w	#$C0,obX(a0) ; move Conic right
-		lea	(Ani_BCon).l,a1
 		jsr	(AnimateSprite).l
 		jmp	(DisplaySprite).l	
 ; ===========================================================================
@@ -14420,8 +14387,7 @@ Ani_obj0F:
 
 map_bcon:
 	include "_maps\Big Conic.asm"
-map_bart:
-	include "_maps\Bart.asm"
+
 
 	include "_anim\Big Conic.asm"
 ; ---------------------------------------------------------------------------
@@ -25076,7 +25042,11 @@ Obj01_Main:				; XREF: Obj01_Index
 		move.w	#$FFF,($FFFFF760).w ; Sonic's top speed
 		move.w	#$F,($FFFFF762).w ; Sonic's acceleration
 		move.w	#$AAA,($FFFFF764).w ; Sonic's deceleration
-
+		tst.b	(v_character).w
+		bne.s	Obj01_Control
+		move.b	#$8D,($FFFFEBC0).w ; load TailsTails (Tails' Tails) at $FFFFD000
+		move.w	a0,($FFFFEBC0+$3E).w ; set its parent object to this
+		
 Obj01_Control:				; XREF: Obj01_Index
 		tst.w	($FFFFFFFA).w	; is debug cheat enabled?
 		beq.s	loc_12C58	; if not, branch
@@ -26937,7 +26907,8 @@ Sonic_Animate:				; XREF: Obj01_Control; et al
 
 		cmpi.b	#char_limited,(v_character)
 		beq.w	Limit_Animate
-	
+
+Sonic_Animate_Part2:	
 		moveq	#0,d0
 		move.b	$1C(a0),d0
 		cmp.b	$1D(a0),d0	; is animation set to restart?
@@ -27060,7 +27031,7 @@ loc_13AC2:
 
 SAnim_RollJump:				; XREF: SAnim_WalkRun
 		addq.b	#1,d0		; is animation rolling/jumping?
-		bne.s	SAnim_Push	; if not, branch
+		bne.w	JmpTo_SAnim_GetTailFrame	; if not, branch
 		move.w	$14(a0),d2	; get Sonic's speed
 		bpl.s	loc_13ADE
 		neg.w	d2
@@ -27107,6 +27078,9 @@ loc_13B26:
 		or.b	d1,1(a0)
 		bra.w	SAnim_Do2
 ; End of function Sonic_Animate
+
+JmpTo_SAnim_GetTailFrame:
+		jmp SAnim_GetTailFrame
 
 	include	"_inc\LimitedSonic\Limit_Animate.asm"
 
@@ -27200,7 +27174,6 @@ SPLC_ReadEntry:
 locret_13C96:
 		rts	
 ; End of function LoadSonicDynPLC
-
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Object 0A - drowning countdown numbers and small bubbles (LZ)
@@ -43606,9 +43579,260 @@ Heinous1_Display:
         jmp     _objectDraw  
 
 	include otisexe\GM_Otis.asm
-	include coninight\GM_CN.asm
 	include mercuryhenshin\GM_Henshin.asm
 	include mercuryend\GM_MercEnd.asm
+	
+	
+
+; ===========================================================================
+; ----------------------------------------------------------------------------
+; Object 8D - Tails' tails
+; ----------------------------------------------------------------------------
+; Sprite_1D200:
+Obj8D:
+		moveq	#0,d0
+		move.b	obRoutine(a0),d0
+		move.w	TailsTails_Index(pc,d0.w),d1
+		jmp	TailsTails_Index(pc,d1.w)
+; ===========================================================================
+; off_1D20E: TailsTails_States:
+TailsTails_Index:
+			dc.w TailsTails_Init-TailsTails_Index	; 0
+			dc.w TailsTails_Main-TailsTails_Index	; 2
+; ===========================================================================
+
+; loc_1D212
+TailsTails_Init:
+		addq.b	#2,obRoutine(a0) ; => TailsTails_Main
+		move.l	#Map_Tails,obMap(a0)
+		move.w	#$7A0,obGfx(a0)
+		move.b	#2,obPriority(a0)
+		move.b	#$18,obActWid(a0)
+		move.b	#4,obRender(a0)
+
+; loc_1D23A:
+TailsTails_Main:
+		movea.w	obParent(a0),a2 ; a2=character
+		move.b	obAngle(a2),obAngle(a0)
+		move.b	obStatus(a2),obStatus(a0)
+		move.w	obX(a2),obX(a0)
+		move.w	obY(a2),obY(a0)
+		andi.w	#$7FFF,obGfx(a0)
+		tst.w	obGfx(a2)
+		bpl.s	@cont1
+		ori.w	#(1<<15),obGfx(a0)
+
+@cont1:
+		moveq	#0,d0
+		move.b	obAnim(a2),d0
+		btst	#5,obStatus(a2)		; is Tails about to push against something?
+		beq.s	@cont2			; if not, branch
+		cmpi.b	#$63,obFrame(a2)	; Is Tails in his pushing animation yet?
+		blo.s	@cont2			; If not yet, branch, and do not set tails' tail pushing animation
+		cmpi.b	#$66,obFrame(a2)	; ''
+		bhi.s	@cont2			; ''
+		moveq	#4,d0
+@cont2:
+		; This is here so TailsTailsAni_Flick works
+		; It changes anim(a0) itself, so we don't want the below code changing it as well
+		cmp.b	TailsTails_parent_next_anim(a0),d0	; Did Tails' animation change?
+		beq.s	@display
+		move.b	d0,TailsTails_parent_next_anim(a0)
+		move.b	TailsTailsAniSelection(pc,d0.w),obAnim(a0)	; If so, update Tails' tails' animation
+; loc_1D288:
+@display:
+		lea	TailsTailsAniData(pc),a1
+		jsr	Sonic_Animate_Part2
+		bsr.w	LoadTailsTailsDynPLC
+		; No need to move Tails' register to another address, silly RHS
+		move.w	(v_player+$30).w,d0	; Move Tails' invulnerable time to d0
+		beq.s	@display2			; Is invulnerable_time 0?  If so, always display his tails
+		addq.b	#1,d0				; Make d0 the same as old invulnerable_time's d0
+		lsr.w	#3,d0				; Shift bits to the right 3 times
+		bcs.s	@display2			; If the Carry bit is set, branch and display his tails
+		rts					; Otherwise, do not display Tails' tails
+@display2:
+		jmp	(DisplaySprite).l			; Display Tails' tails
+		
+; ===========================================================================
+SAnim_GetTailFrame:
+		move.w	obVelX(a2),d1
+		move.w	obVelY(a2),d2
+		jsr	(CalcAngle).w
+		moveq	#0,d1
+		move.b	obStatus(a0),d2
+		andi.b	#1,d2
+		bne.s	loc_1D002
+		not.b	d0
+		bra.s	loc_1D006
+; ===========================================================================
+
+loc_1D002:
+		addi.b	#$80,d0
+
+loc_1D006:
+		addi.b	#$10,d0
+		bpl.s	@cont
+		moveq	#3,d1
+
+	@cont:
+		andi.b	#$FC,obRender(a0)
+		eor.b	d1,d2
+		or.b	d2,obRender(a0)
+		lsr.b	#3,d0
+		andi.b	#$C,d0
+		move.b	d0,d3
+		lea	TailsTailsAni_Directional(pc),a1
+		move.b	#3,obTimeFrame(a0)
+		jsr	SAnim_Do2
+		add.b	d3,obFrame(a0)
+		rts		
+; ===========================================================================
+; animation master script table for the tails
+; chooses which animation script to run depending on what Tails is doing
+; byte_1D29E:
+TailsTailsAniSelection:
+	dc.b	0,0	; TailsAni_Walk,Run	->
+	dc.b	3	; TailsAni_Roll		-> Directional
+	dc.b	3	; TailsAni_Roll2	-> Directional
+	dc.b	9	; TailsAni_Push		-> Pushing
+	dc.b	1	; TailsAni_Wait		-> Swish
+	dc.b	$A	; TailsAni_Balance	-> Blank
+	dc.b	1	; TailsAni_LookUp	-> Flick
+	dc.b	1	; TailsAni_Duck		-> Swish
+	dc.b	7	; TailsAni_Spindash	-> Spindash
+	dc.b	0,0,0	; TailsAni_Dummy1,2,3	->
+	dc.b	8	; TailsAni_Stop		-> Skidding
+	dc.b	0,0	; TailsAni_Float,2	->
+	dc.b	0	; TailsAni_Spring	->
+	dc.b	0	; TailsAni_Hang		->
+	dc.b	0,0	; TailsAni_Blink,2	->
+	dc.b	$A	; TailsAni_Hang2	-> Hanging
+	dc.b	0	; TailsAni_Bubble	->
+	dc.b	0,0,0,0	; TailsAni_Death,2,3,4	->
+	dc.b	0,0	; TailsAni_Hurt,Slide	->
+	dc.b	0	; TailsAni_Blank	->
+	dc.b	0,0	; TailsAni_Dummy4,5	->
+	dc.b	0	; TailsAni_HaulAss	->
+	even
+
+; ---------------------------------------------------------------------------
+; Animation script - Tails' tails
+; ---------------------------------------------------------------------------
+; off_1D2C0:
+TailsTailsAniData:
+		dc.w TailsTailsAni_Blank-TailsTailsAniData	;  0
+		dc.w TailsTailsAni_Swish-TailsTailsAniData	;  1
+		dc.w TailsTailsAni_Flick-TailsTailsAniData	;  2
+		dc.w TailsTailsAni_Directional-TailsTailsAniData	;  3
+		dc.w TailsTailsAni_DownLeft-TailsTailsAniData	;  4
+		dc.w TailsTailsAni_Down-TailsTailsAniData	;  5
+		dc.w TailsTailsAni_DownRight-TailsTailsAniData	;  6
+		dc.w TailsTailsAni_Spindash-TailsTailsAniData	;  7
+		dc.w TailsTailsAni_Skidding-TailsTailsAniData	;  8
+		dc.w TailsTailsAni_Pushing-TailsTailsAniData	;  9
+		dc.w TailsTailsAni_Hanging-TailsTailsAniData	; $A
+
+TailsTailsAni_Blank:		dc.b $20,  0,$FF
+	even
+TailsTailsAni_Swish:		dc.b   7,  9, $A, $B, $C, $D,$FF
+	even
+TailsTailsAni_Flick:		dc.b   3,  9, $A, $B, $C, $D,$FD,  1
+	even
+TailsTailsAni_Directional:	dc.b $FC,$49,$4A,$4B,$4C,$FF ; Tails is moving right
+	even
+TailsTailsAni_DownLeft:	dc.b   3,$4D,$4E,$4F,$50,$FF ; Tails is moving up-right
+	even
+TailsTailsAni_Down:		dc.b   3,$51,$52,$53,$54,$FF ; Tails is moving up
+	even
+TailsTailsAni_DownRight:	dc.b   3,$55,$56,$57,$58,$FF ; Tails is moving up-left
+	even
+TailsTailsAni_Spindash:	dc.b   2,$75,$76,$77,$78,$FF
+	even
+TailsTailsAni_Skidding:	dc.b   2,$79,$7A,$7B,$7C,$FF
+	even
+TailsTailsAni_Pushing:	dc.b   9,$79,$7A,$7B,$7C,$FF
+	even
+TailsTailsAni_Hanging:	dc.b   9,$75,$76,$77,$78,$FF
+	even
+
+; ===========================================================================
+
+JmpTo2_KillSonic ; JmpTo
+	jmp	(KillSonic).l
+; ===========================================================================
+; ---------------------------------------------------------------------------
+; Tails' Tails pattern loading subroutine
+; ---------------------------------------------------------------------------
+
+; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
+
+; loc_1D184:
+LoadTailsTailsDynPLC:
+		moveq	#0,d0
+		move.b	$1A(a0),d0
+		cmp.b	($FFFFF7DF).w,d0
+		beq.w	return_1D1FE
+		move.b	d0,($FFFFF7DF).w
+		lea	(TailsDynPLC).l,a2
+		add.w	d0,d0
+		adda.w	(a2,d0.w),a2
+		moveq.l	#0,d5
+		move.b	(a2)+,d5
+		subq.w	#1,d5
+		bmi.w	return_1D1FE
+		move.w	#-$C00,d4
+		move.l	#Art_Tails,d6 ; load Tails's art
+		jmp	TPLC_ReadEntry
+
+; ---------------------------------------------------------------------------
+; Tails pattern loading subroutine
+; ---------------------------------------------------------------------------
+
+; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
+
+Tails_LoadGfx:
+		moveq	#0,d0
+		move.b	obFrame(a0),d0	; load frame number
+		cmp.b	($FFFFF766).w,d0
+		beq.s	return_1D1FE
+		move.b	d0,($FFFFF766).w
+		lea	(TailsDynPLC).l,a2
+		add.w	d0,d0
+		adda.w	(a2,d0.w),a2
+		moveq	#0,d5
+		move.b	(a2)+,d5
+		subq.w	#1,d5
+		bmi.s	return_1D1FE
+		move.w	#$F000,d4
+		move.l	#Art_Tails,d6		; load Tails's art
+		
+TPLC_ReadEntry:
+		moveq	#0,d1
+		move.b	(a2)+,d1
+		lsl.w	#8,d1
+		move.b	(a2)+,d1
+		move.w	d1,d3
+		lsr.w	#8,d3
+		andi.w	#$F0,d3
+		addi.w	#$10,d3
+		andi.w	#$FFF,d1
+		lsl.l	#5,d1
+		add.l	d6,d1
+		move.w	d4,d2
+		add.w	d3,d4
+		add.w	d3,d4
+		jsr	(Add_To_DMA_Queue).l
+		dbf	d5,TPLC_ReadEntry	; repeat for number of entries
+
+return_1D1FE:
+	rts
+
+
+Art_Tails:	incbin	"artunc\Tails.bin"
+Map_Tails:	include	"_maps\Tails.asm"	
+TailsDynPLC:	include	"_inc\Tails dynamic pattern load cues.asm"	
+
 ; ---------------------------------------------------------------------------
 EndOfRom:
 
