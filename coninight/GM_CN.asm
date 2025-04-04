@@ -64,11 +64,13 @@ CN_MainLoop:
 		jsr	WaitForVBla
 		jsr	ObjectsLoad
 		jsr	BuildSprites
+		cmp.b	#$80,($FFFFF605).w
+		beq.s	CN_End
 		tst.w   (v_demolength).w
 		bne.s	CN_MainLoop	; if yes, branch
 		bsr.w	bartsecondadd
 		bsr.s	CN_RoutCHG
-		cmp.b	#5,(v_mercnum).w ; is id OVER 8?
+		cmp.b	#5,(v_mercnum).w ; is id OVER 5?
 		bne.s	CN_MainLoop	; if yes, branch
 
 		jsr	PaletteWhiteOut
@@ -80,8 +82,11 @@ CN_MainLoop:
 CN_MainLoop1:
 		move.b	#4,(v_vbla_routine).w
 		jsr	WaitForVBla
+		cmp.b	#$80,($FFFFF605).w
+		beq.s	CN_End
 		tst.w   (v_demolength).w
 		bne.s	CN_MainLoop1	; if yes, branch
+CN_End:
 		rts
 CN_RoutCHG:
 		add.b	#1,(v_mercnum).w

@@ -57,7 +57,7 @@
 	dc.w $1F
 	dc.l Pal_SpeContinue
 	dc.w $FB00
-	dc.w $F
+	dc.w $17
 	dc.l Pal_Ending
 	dc.w $FB00
 	dc.w $1F

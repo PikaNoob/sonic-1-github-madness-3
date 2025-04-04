@@ -6331,7 +6331,7 @@ ContinueScreen:				; XREF: GameModeArray
 		move.w	d0,($C00004).l
 		lea	($C00004).l,a6
 		move.w	#$8004,(a6)
-		move.w	#$8700,(a6)
+		move.w	#$8720,(a6)
 		bsr.w	ClearScreen
 		lea	($FFFFD000).w,a1
 		moveq	#0,d0
@@ -6344,12 +6344,22 @@ Cont_ClrObjRam:
 		move.l	#$70000002,($C00004).l
 		lea	(Nem_TitleCard).l,a0 ; load title card patterns
 		bsr.w	NemDec
+		locvram $0
+		lea	(Nem_Cirno).l,a0 ; load title card patterns
+		bsr.w	NemDec
 		move.l	#$60000002,($C00004).l
 		lea	(Nem_ContSonic).l,a0 ; load Sonic patterns
 		bsr.w	NemDec
 		move.l	#$6A200002,($C00004).l
 		lea	(Nem_MiniSonic).l,a0 ; load continue screen patterns
 		bsr.w	NemDec
+
+		lea	($FF0000).l,a1
+		lea	(Eni_Cirno).l,a0 ; load Sega	logo mappings
+		move.w	#0,d0
+		bsr.w	EniDec
+		copyTilemap	$FF0000,$C000,$27,$1D
+
 		moveq	#10,d1
 		jsr	ContScrCounter	; run countdown	(start from 10)
 		moveq	#$12,d0
@@ -6373,7 +6383,7 @@ Cont_ClrObjRam:
 		move.w	d0,($C00004).l
 		bsr.w	Pal_FadeTo
 		jsr	Obj01_setplayerpalette
-		move.w	#$880,($FFFFFB00).w ; 1st pallet, 1st entry = cyan
+
 ; ---------------------------------------------------------------------------
 ; Continue screen main loop
 ; ---------------------------------------------------------------------------
@@ -40328,6 +40338,10 @@ Nem_Bonus:	incbin	artnem\bonus.bin	; hidden bonuses at end of a level
 Nem_ContSonic:	incbin	artnem\cntsonic.bin	; Sonic on continue screen
 		even
 Nem_MiniSonic:	incbin	artnem\cntother.bin	; mini Sonic and text on continue screen
+		even
+Eni_Cirno:	incbin	mapeni\Cirno.bin	; title screen foreground (mappings)
+		even
+Nem_Cirno:	incbin	artnem\Cirno.bin	; title screen foreground
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - animals
