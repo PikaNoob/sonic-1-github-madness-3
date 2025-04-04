@@ -732,7 +732,7 @@ locret_C42:
 
 loc_C44:				; XREF: off_B6E
 		bsr.w	sub_106E
-		bsr.w	sub_6886
+;		bsr.w	sub_6886	; level draw background only
 		bsr.w	sub_1642
 		tst.w	($FFFFF614).w
 		beq.w	locret_C5C
@@ -3558,7 +3558,7 @@ TITLE_SCR:
 .Exit:
 
 	lea	($FF0000).l,a1
-	lea	(Eni_TitleBG).l,a0 ; load	title screen mappings
+	lea	(Eni_TitleBG).l,a0 ; load title screen mappings
 	move.w	#0,d0
 	bsr.w	EniDec
 	move.l	#$60000003,d0
@@ -6105,7 +6105,7 @@ loc_4992:
 		move.w	d0,($FFFFF7A0).w
 		lea	(byte_4ABC).l,a1
 		lea	(a1,d0.w),a1
-		move.w	#-$7E00,d0
+		move.w	#$8200,d0
 		move.b	(a1)+,d0
 		move.w	d0,(a6)
 		move.b	(a1),($FFFFF616).w
@@ -12903,8 +12903,7 @@ Obj29:					; XREF: Obj_Index
 		moveq	#0,d0
 		move.b	$24(a0),d0
 		move.w	Obj29_Index(pc,d0.w),d1
-		jsr	Obj29_Index(pc,d1.w)
-		bra.w	DisplaySprite
+		jmp	Obj29_Index(pc,d1.w)
 ; ===========================================================================
 Obj29_Index:	dc.w Obj29_Main-Obj29_Index
 		dc.w Obj29_Slower-Obj29_Index
@@ -12913,7 +12912,7 @@ Obj29_Index:	dc.w Obj29_Main-Obj29_Index
 Obj29_Main:				; XREF: Obj29_Index
 		addq.b	#2,$24(a0)
 		move.l	#Map_obj29,4(a0)
-		move.w	#$2797,2(a0)
+		move.w	#$27A2,2(a0)
 		move.b	#4,1(a0)
 		move.b	#1,$18(a0)
 		move.b	#8,$19(a0)
@@ -12921,10 +12920,12 @@ Obj29_Main:				; XREF: Obj29_Index
 
 Obj29_Slower:				; XREF: Obj29_Index
 		tst.w	$12(a0)		; is object moving?
-		bpl.w	DeleteObject	; if not, branch
+		bpl.s	@delete		; if not, branch
 		bsr.w	SpeedToPos
 		addi.w	#$18,$12(a0)	; reduce object	speed
-		rts	
+		bra.w	DisplaySprite
+@delete:
+		bra.w	DeleteObject
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Sprite mappings - animals
@@ -31223,7 +31224,7 @@ Obj79_Index:	dc.w Obj79_Main-Obj79_Index
 Obj79_Main:				; XREF: Obj79_Index
 		addq.b	#2,$24(a0)
 		move.l	#Map_obj79,4(a0)
-		move.w	#$7A0,2(a0)
+		move.w	#$7A8,2(a0)
 		move.b	#4,1(a0)
 		move.b	#8,$19(a0)
 		move.b	#5,$18(a0)
@@ -31289,7 +31290,7 @@ Obj79_HitLamp:
 		move.w	$C(a0),$32(a1)
 		subi.w	#$18,$32(a1)
 		move.l	#Map_obj79,4(a1)
-		move.w	#$7A0,2(a1)
+		move.w	#$7A8,2(a1)
 		move.b	#4,1(a1)
 		move.b	#8,$19(a1)
 		move.b	#4,$18(a1)
@@ -40722,6 +40723,8 @@ MusicIndex:	; $01-$7F
 		dc.l Music20 ; there is a house
 		dc.l Music21 ; sailor moon transformaion for mercury (BISHOUJO SENSHI SAILOR MOON, 1994)
 		dc.l Music22 ; sailor moon ending for mercury (BISHOUJO SENSHI SAILOR MOON, 1994)
+		dc.l Music23 ; Transcription of a Silvagunner rip
+		dc.l Music24 ; AT&T Silly Ringtone
 ; wait i don't have time to implement these oops
 
 MusicIndex80:	; $81-$9F
@@ -43247,6 +43250,10 @@ Music20:	incbin	sound\SDUNST.bin
 Music21:	incbin	sound\sailormoon.bin
 		even
 Music22:	incbin	sound\sailormoonend.bin
+		even
+Music23:	include	sound\tg2000tracks\PaintBlack.asm
+		even
+Music24:	include	sound\tg2000tracks\Ringtone.asm
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
