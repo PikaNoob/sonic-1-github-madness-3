@@ -20,32 +20,6 @@ btna = %01000000
 v_jpadhold1:		equ $FFFFF604
 psg_input:		equ $C00011
 
-; ---------------------------------------------------------------------------
-; Set a VRAM address via the VDP control port.
-; input: 16-bit VRAM address, control port (default is ($C00004).l)
-; ---------------------------------------------------------------------------
-
-locVRAM:	macro loc,controlport
-		if (narg=1)
-		move.l	#($40000000+((loc&$3FFF)<<16)+((loc&$C000)>>14)),(vdp_control_port).l
-		else
-		move.l	#($40000000+((loc&$3FFF)<<16)+((loc&$C000)>>14)),\controlport
-		endc
-		endm
-
-; ---------------------------------------------------------------------------
-; Copy a tilemap from 68K (ROM/RAM) to the VRAM without using DMA
-; input: source, destination, width [cells], height [cells]
-; ---------------------------------------------------------------------------
-
-copyTilemap:	macro source,destination,width,height
-		lea	(source).l,a1
-		locVRAM	\destination,d0
-		moveq	#width,d1
-		moveq	#height,d2
-		jsr	ShowVDPGraphics
-		endm
-
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; OTIS.EXE

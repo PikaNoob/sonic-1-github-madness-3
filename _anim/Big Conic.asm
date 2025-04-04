@@ -2,5 +2,5 @@
 ; Animation script - Conic on the CTC screen
 ; ---------------------------------------------------------------------------
 Ani_BCon:	dc.w byte_C706-Ani_BCon
-byte_C706:	dc.b 1,	0, 1, $FE, 2, 0
+byte_C706:	dc.b 1,	0, 1, 1, 3, 4, 3, 1, 1, $FF
 		even
