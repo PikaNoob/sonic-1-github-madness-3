@@ -10,8 +10,14 @@ smpsHeaderStartSong = 1
 	smpsHeaderFM        ATTRing_FM3,	$00, $09
 	smpsHeaderFM        ATTRing_FM4,	$00, $00
 	smpsHeaderFM        ATTRing_FM5,	$00, $00
+	smpsHeaderPSG       ATTRing_PSG1,	$D0, $00, $00, $00
+	smpsHeaderPSG       ATTRing_PSG2,	$D0, $00, $00, $00
+	smpsHeaderPSG       ATTRing_PSG3,	$00, $00, $00, $00
 
-; PSG3 Data
+ATTRing_PSG1:
+
+ATTRing_PSG2:
+
 ATTRing_PSG3:
 	smpsStop
 
