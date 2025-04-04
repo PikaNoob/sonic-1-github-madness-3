@@ -139,6 +139,7 @@ GM_SplashScreensListIG:
 	dc.l $81<<24|@nem_ronicsetro,$00<<24|@enifg_ronicsetro,$00<<24|@enibg_ronicsetro,$1B<<24|@pal_ronicsetro,0
 	dc.l $81<<24|@nem_newbark,$00<<24|@enifg_newbark,$00<<24|@enibg_newbark,$01<<24|@pal_newbark,0				;	Literally just New Bark Town
 	dc.l 0	; terminator 2
+;advanced splash screen plays here, THX is way down here
 ; -----------------------------------------------------------------------------
 @nem_pillow:	incbin artnem\splash_pillow.bin
 	even
@@ -250,13 +251,18 @@ GM_SplashScreensListIG:
 	even
 @pal_ronicsetro: incbin pallet\ronicsetro.bin
 	even
-nem_thx:	incbin artnem\splash_thx.bin
+
+thxsplash:
+	dc.l $81<<24|@nem_thx,$03<<24|@enifg_thx,$00<<24|@enibg_thx,$08<<24|@pal_thx,0
+	dc.l 0	; terminator 2
+@nem_thx:	incbin artnem\splash_thx.bin
 	even
-enifg_thx:
-enibg_thx:	incbin mapeni\splash_thx.bin
+@enifg_thx:
+@enibg_thx:	incbin mapeni\splash_thx.bin
 	even
-pal_thx:	incbin pallet\splash_thx.bin
+@pal_thx:	incbin pallet\splash_thx.bin
 	even
+
 IntroCutscene:		; no one fucking modify this or i swear to fucking god, except malachi :3
 	dc.l $81<<24|@nem_PicBatch,$02<<24|@enifg_Picture1,$9F<<24|@enibg_Picture1,$85<<24|@pal_monochrome,1
 	dc.l $81<<24|@nem_PicBatch,$03<<24|@enifg_Picture2,$A0<<24|@enibg_Picture2,$00<<24|@pal_monochrome,0	
@@ -359,6 +365,10 @@ EndingSleeper:
 
 EndingAlways:
 	dc.l $81<<24|Nem_ToyFreddy,$08<<24|Eni_ToyFreddyEnjoyer,$AD<<24|Eni_ToyFreddy,$99<<24|Pal_ToyFreddy,0
+	dc.l 0	; terminator 2
+
+EndingGomer:
+	dc.l $81<<24|Nem_Gomer,$08<<24|Eni_Gomer,$90<<24|Eni_Gomer,$11<<24|Pal_Sonic,0
 	dc.l 0	; terminator 2
 
 Nem_ToyFreddy:	incbin artnem\splash_fat.bin
