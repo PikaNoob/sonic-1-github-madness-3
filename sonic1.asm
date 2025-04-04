@@ -323,6 +323,9 @@ GameClrRAM:
 		jsr	GM_AntiTMSS
 @notmss:
 		jsr	GM_SplashScreensIG
+		jsr	GM_CN
+		lea	thxsplash(pc),a6
+		jsr	GM_CustomSplashScreensIG
 		kdebugtext "you can soft reset to skip all those splash screens btw"
 @nosplashscreens:
 	;	move.b	#$20,($FFFFF600).w ; set Game Mode to Minecraft
@@ -332,6 +335,9 @@ MainGameLoop:
 		and.b	($FFFFF600).w,d0 ; load	Game Mode
 		jsr	GameModeArray(pc,d0.w) ; jump to apt location in ROM
 		bra.s	MainGameLoop
+thxsplash:
+	dc.l $81<<24|nem_thx,$03<<24|enifg_thx,$00<<24|enibg_thx,$08<<24|pal_thx,0
+	dc.l 0	; terminator 3
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Main game mode array
@@ -3106,6 +3112,7 @@ Pal_hen1:	incbin	pallet\henshin1.bin
 Pal_hen2:	incbin	pallet\henshin2.bin
 Pal_hencyc:	incbin	pallet\henshincyc.bin
 Pal_mercend:	incbin	pallet\mercend.bin	; ending sequence pallets
+Pal_BART:	incbin	pallet\BART.bin	; ending sequence pallets
 ; ---------------------------------------------------------------------------
 ; Subroutine to	delay the program by ($FFFFF62A) frames
 ; ---------------------------------------------------------------------------
@@ -3266,6 +3273,33 @@ Sine_Data:	incbin	misc\sinewave.bin	; values for a 360º sine wave
 
 	include "_inc\DMA Queue.asm"
 
+; map & art macros
+; ===========================================================================
+; ---------------------------------------------------------------------------
+; Set a VRAM address via the VDP control port.
+; input: 16-bit VRAM address, control port (default is ($C00004).l)
+; ---------------------------------------------------------------------------
+
+locVRAM:	macro loc,controlport
+		if (narg=1)
+		move.l	#($40000000+((loc&$3FFF)<<16)+((loc&$C000)>>14)),(vdp_control_port).l
+		else
+		move.l	#($40000000+((loc&$3FFF)<<16)+((loc&$C000)>>14)),\controlport
+		endc
+		endm
+
+; ---------------------------------------------------------------------------
+; Copy a tilemap from 68K (ROM/RAM) to the VRAM without using DMA
+; input: source, destination, width [cells], height [cells]
+; ---------------------------------------------------------------------------
+
+copyTilemap:	macro source,destination,width,height
+		lea	(source).l,a1
+		locVRAM	\destination,d0
+		moveq	#width,d1
+		moveq	#height,d2
+		jsr	ShowVDPGraphics
+		endm
 ; ===========================================================================
 
 ; ---------------------------------------------------------------------------
@@ -3297,16 +3331,12 @@ SegaScreen:				; XREF: GameModeArray
 		lea	(Eni_SegaLogo).l,a0 ; load Sega	logo mappings
 		move.w	#0,d0
 		bsr.w	EniDec
-		lea	($FF0000).l,a1
-		move.l	#$65100003,d0
-		moveq	#$17,d1
-		moveq	#7,d2
-		bsr.w	ShowVDPGraphics
-		lea	($FF0180).l,a1
-		move.l	#$40000003,d0
-		moveq	#$27,d1
-		moveq	#$1B,d2
-		bsr.w	ShowVDPGraphics
+; sega block
+		copyTilemap	$FF0000,$E510,$17,7
+; this draws the logo cover
+		copyTilemap	$FF0180,$C000,$27,$1B
+;this covers the bottom area to not reveal a mess
+                copyTilemap	$FF0240,$CB00,$27,$6 ; Fix garbled graphics after demo - this is from an old hack
 
 		move.b  #0,($FFFFF601).w ;bugfix
 
@@ -14297,21 +14327,26 @@ Obj0E_Show:				; XREF: Obj0E_Index
 CTC1:	; Routine 0
 		addq.b	#2,obRoutine(a0)
 		move.l	#Map_BCon,obMap(a0)
-		move.w	#$100,obGfx(a0)
+		tst.b	(f_bart).w
+		beq.s	nobartm
+		move.l	#Map_Bart,obMap(a0)
+nobartm:
+		move.w	#0,obGfx(a0)
+		move.w	#$0000,obGfx(a0)
 		move.b	#1,obPriority(a0)
-		move.w	#$C0,obX(a0)
+		move.w	#$C8,obX(a0)
 		move.w	#$F4,obScreenY(a0) ; position is fixed to the middle of the screen
 ; ===========================================================================
 
 CTC2:	; Routine 4
-		cmpi.w	#$180,obX(a0) ; has Conic reached final position? (right edge)
+		cmpi.w	#$188,obX(a0) ; has Conic reached final position? (right edge)
 		beq.s	@BCon_Animate	; if not, branch
 		addq.w	#8,obX(a0) ; move Conic right
 		addq.w	#4,obX(a0) ; this is done twice to make him faster
 
 @BCon_Animate:
 		lea	(Ani_BCon).l,a1
-		cmpi.w	#$180,obX(a0) ; has Conic reached final position? (right edge)
+		cmpi.w	#$188,obX(a0) ; has Conic reached final position? (right edge)
 		beq.s	@BCon_Animatea	; if not, branch
 		jsr	(AnimateSprite).l
 @BCon_Animatea:
@@ -14320,14 +14355,14 @@ CTC2:	; Routine 4
 ; ===========================================================================
 
 CTC3:	; Routine 4
-		cmpi.w	#$40,obX(a0) ; has Conic reached final position? (right edge)
+		cmpi.w	#$C8,obX(a0) ; has Conic reached final position? (right edge)
 		beq.s	@BCon_Animate	; if not, branch
 		subq.w	#8,obX(a0) ; move Conic right
 		subq.w	#4,obX(a0) ; this is done twice to make him faster
 
 @BCon_Animate:
 		lea	(Ani_BCon).l,a1
-		cmpi.w	#$40,obX(a0) ; has Conic reached final position? (right edge)
+		cmpi.w	#$C8,obX(a0) ; has Conic reached final position? (right edge)
 		beq.s	@BCon_Animatea	; if not, branch
 		jsr	(AnimateSprite).l
 @BCon_Animatea:
@@ -14336,6 +14371,7 @@ CTC3:	; Routine 4
 
 CTC4:	; Routine 4
 		add.w	#$C0,obX(a0) ; move Conic right
+		lea	(Ani_BCon).l,a1
 		jsr	(AnimateSprite).l
 		jmp	(DisplaySprite).l	
 ; ===========================================================================
@@ -14388,6 +14424,8 @@ Ani_obj0F:
 map_bcon:
 	include "_maps\Big Conic.asm"
 
+map_bart:
+	include "_maps\Bart.asm"
 
 	include "_anim\Big Conic.asm"
 ; ---------------------------------------------------------------------------
@@ -43579,6 +43617,7 @@ Heinous1_Display:
         jmp     _objectDraw  
 
 	include otisexe\GM_Otis.asm
+	include coninight\GM_CN.asm
 	include mercuryhenshin\GM_Henshin.asm
 	include mercuryend\GM_MercEnd.asm
 	
