@@ -63,9 +63,6 @@ Fatass
 # Sailor Jupiter
 Slightly less of a fatass
 
-# Toothpaste Conic
-Gum Disease
-
 # Fatman
 Only formally appearing in the credits, he can be made angy with you having the emerals. He won't be angy unless your have all of the emald
 The Fatman in the Final zone is an imposter, white guy was being sussy baka
@@ -92,7 +89,7 @@ He will bestow upon the will of Otis.exe to any non-believer
 # Otis.exe
 The only thing our god hates roaming his perfect garden, is cheaters, hex editors, and also Gavin Graham. Oh yeah!
 
-# Miku
+# Hatsune Miku
 If for whatever reason you so choose to deny his will, mikuing it is the key to escape the wrath of our god
 
 # Andrew Dobson
@@ -112,3 +109,12 @@ He didn't make it while finding the income for sonic
 
 # Conic the Cat
 "HAPPY BIRHTDAY!" as they fall to an exploding death
+
+# Bart leaning on skateboard
+"EAT SHIT" said on a teal gradient background as he spins
+
+# Cirno Fumo
+judges your life decision on continuing this fucked up adventure or not
+
+# Fucked up Dog
+"This Dog is fucked up bruh"

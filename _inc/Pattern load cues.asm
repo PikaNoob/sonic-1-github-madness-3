@@ -22,7 +22,6 @@
 	dc.w Plc_TetoBoss-ArtLoadCues
 	dc.w PLC_TruthNuke-ArtLoadCues	; GMZ
 	dc.w Plc_MakoBoss-ArtLoadCues
-	dc.w Plc_ConicBoss-ArtLoadCues
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - standard block 1
 ; ---------------------------------------------------------------------------
@@ -580,18 +579,3 @@ PLC_MakoBoss:	dc.w 2
 		dc.l Nem_makobomb		; bomb enemy (gets overwritten)
 		dc.w $9000
 		; even
-; ---------------------------------------------------------------------------
-; Pattern load cues - toothpasteconic
-; ---------------------------------------------------------------------------
-PLC_ConicBoss:	dc.w 4
-		dc.l Nem_Conic		; Eggman main patterns
-		dc.w $8000
-		dc.l Nem_Weapons	; Eggman's weapons
-		dc.w $8D80
-		dc.l Nem_Prison		; prison capsule
-		dc.w $93A0
-		dc.l Nem_SlzSpike	; spikeball (SLZ boss)
-		dc.w $A300
-		dc.l Nem_Exhaust	; exhaust flame
-		dc.w $A540
-		 even

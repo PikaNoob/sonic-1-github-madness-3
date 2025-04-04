@@ -9810,13 +9810,12 @@ Resize_SLZ3boss:
 		blo.s	locret_715C
 		bsr.w	SingleObjLoad
 		bne.s	locret_715C
-;toothpaste conic time
 		move.b	#$7A,(a1)	; load SLZ boss	object
 		move.w	#$8C,d0
 		bsr.w	PlaySound	; play boss music
 		move.b	#1,($FFFFF7AA).w ; lock	screen
 		addq.b	#2,($FFFFF742).w
-		moveq	#$25,d0
+		moveq	#$11,d0
 		bra.w	LoadPLC		; load boss patterns
 ; ===========================================================================
 
@@ -33354,7 +33353,7 @@ Obj7A_LoadBoss:				; XREF: Obj7A_Main
 		move.b	(a2)+,$24(a1)
 		move.b	(a2)+,$1C(a1)
 		move.b	(a2)+,$18(a1)
-		move.l	#Map_Conic,4(a1)
+		move.l	#Map_Eggman,4(a1)
 		move.w	#$400,2(a1)
 		move.b	#4,1(a1)
 		move.b	#$20,$19(a1)
@@ -33717,8 +33716,6 @@ loc_18CB8:
 		move.b	#3,$1A(a0)
 		bra.s	loc_18C78
 ; ---------------------------------------------------------------------------
-Map_Conic:
-	include "_maps\Conic.asm"
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Object 7B - exploding	spikeys	that Eggman drops (SLZ)
@@ -40409,8 +40406,6 @@ Blk256_BHZ:	incbin	map256\bhz.bin
 ; Compressed graphics - bosses and ending sequence
 ; ---------------------------------------------------------------------------
 Nem_Eggman:	incbin	artnem\bossmain.bin	; boss main patterns
-		even
-Nem_Conic:	incbin	artnem\conic.bin	; boss main patterns
 		even
 Nem_Tetoboss:	incbin	artnem\TetoBoss.bin	; boss main patterns
 		even
