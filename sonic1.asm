@@ -40835,6 +40835,8 @@ MusicIndex:	; $01-$7F
 		dc.l Music22 ; sailor moon ending for mercury (BISHOUJO SENSHI SAILOR MOON, 1994)
 		dc.l Music23 ; Transcription of a Silvagunner rip
 		dc.l Music24 ; AT&T Silly Ringtone
+		dc.l Music25 ; I Love Bejing Tiananmen HK97
+
 ; wait i don't have time to implement these oops
 
 MusicIndex80:	; $81-$9F
@@ -43364,6 +43366,8 @@ Music22:	incbin	sound\sailormoonend.bin
 Music23:	include	sound\tg2000tracks\PaintBlack.asm
 		even
 Music24:	include	sound\tg2000tracks\Ringtone.asm
+		even
+Music25:	include	sound\tg2000tracks\HK97.asm
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
