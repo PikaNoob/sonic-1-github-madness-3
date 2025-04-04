@@ -20,8 +20,8 @@ smpsHeaderStartSong = 1
 ;	coninight, 	lz,		the cleveland show (callback) - COMPLETE!
 ;	coninight, 	mz,		somari - COMPLETE!
 ;	carlos, 	slz,		meltdown
-;	undecided, 	sbz,		undecided
-;	undecided, 	ccz,		undecided
+;	coninight, 	sbz,		sailor moon (MD 1994) - dream land part 2 - COMPLETE!
+;	undecided, 	syz,		undecided
 ;	thegamer2000, 	ending,		unknown - COMPLETE!
 
 ; FM1 Data
@@ -213,14 +213,11 @@ Mus91_Credits_Loop15:
 
 Mus91_Credits_Loop16:
 	smpsCall            Mus91_Credits_Call10
-	smpsAlterPitch      $06
+	dc.b	nF3, nF2, nF3, nRst, $09, nF3, $03, nA3, nG3, nG3, nG3, nRst
+	dc.b	$09, nA3, $03, nB3
 	smpsCall            Mus91_Credits_Call10
-	smpsAlterPitch      $FF
-	smpsCall            Mus91_Credits_Call10
-	smpsAlterPitch      $02
-	smpsCall            Mus91_Credits_Call10
-	smpsAlterPitch      $F9
-	smpsLoop            $02, $02, Mus91_Credits_Loop16
+	dc.b	nF3, nF3, nF3, nRst, nG3, nA3, nB3, nG3, nC4, nC4, nC4, nRst
+	dc.b	$09, nE3, $03, nG3
 	smpsNoteFill        $00
 	smpsAlterPitch      $F4
 	smpsAlterVol        $FC
@@ -266,8 +263,11 @@ Mus91_Credits_Call01F:
 	smpsReturn
 
 Mus91_Credits_Call10:
-	dc.b	nC4, $03, nC4, nG3, nG3, nA3, nA3, nG3, nG3
-	smpsLoop            $00, $02, Mus91_Credits_Call10
+	dc.b	nC4, $03, nC4, nC4, nRst, $09, nC4, $03, nB3, nBb3, nBb3, nBb3
+	dc.b	nRst, $09, nBb3, $03, nBb3, nA3, nA3, nA3, nRst, $09, nA3, $03
+	dc.b	nA3, nAb3, nAb3, nAb3, nRst, $09, nAb3, $03, nAb3, nG3, nG3, nG3
+	dc.b	nRst, $09, nA3, $03, nG3, nFs3, nFs3, nFs3, nRst, $09, nD3, $03
+	dc.b	nE3
 	smpsReturn
 
 ; FM3 Data
@@ -411,17 +411,17 @@ oily1:
 	smpsCall            Mus91_Credits_Call0A
 	dc.b	nRst, $0C
 	smpsAlterNote       $EC
-	dc.b	nA5, $02
+	dc.b	nD5, $02
 	smpsAlterNote       $00
-	dc.b	smpsNoAttack, $0A, nRst, $03, nA5, nRst, nRst, nA5, nRst, $09
+	dc.b	smpsNoAttack, $0A, nRst, $03, nF5, nRst, nRst, nF5, nRst, $09
 	smpsCall            Mus91_Credits_Call0A
 	smpsAlterNote       $EC
-	dc.b	nA5, $02
+	dc.b	nE5, $02
 	smpsAlterNote       $00
 	dc.b	$0A, nRst, $06
 	smpsModSet          $18, $01, $07, $04
 	smpsAlterNote       $E2
-	dc.b	nA5, $02, smpsNoAttack
+	dc.b	nE5, $02, smpsNoAttack
 	smpsAlterNote       $00
 	dc.b	$1C
 	smpsAlterNote       $00
@@ -491,13 +491,13 @@ Mus91_Credits_Call0A:
 	smpsAlterNote       $00
 	dc.b	smpsNoAttack, $06, nRst, $01, nG5, $03, nRst, $18, nRst, $0C
 	smpsAlterNote       $EC
-	dc.b	nCs6, $02
+	dc.b	nF5, $02
 	smpsAlterNote       $00
-	dc.b	smpsNoAttack, $06, nRst, $01, nCs6, $03, nRst, $18, nRst, $0C
+	dc.b	smpsNoAttack, $06, nRst, $01, nF5, $03, nRst, $18, nRst, $0C
 	smpsAlterNote       $EC
-	dc.b	nC6, $02
+	dc.b	nE5, $02
 	smpsAlterNote       $00
-	dc.b	smpsNoAttack, $06, nRst, $01, nC6, $03, nRst, $18
+	dc.b	smpsNoAttack, $06, nRst, $01, nE5, $03, nRst, $18
 	smpsReturn
 
 Mus91_Credits_Call06:
@@ -567,9 +567,9 @@ oily2:
 	smpsAlterPitch      $24
 	smpsAlterVol        $F4
 	smpsCall            Mus91_Credits_Call05
-	dc.b	nE6, nF6, nG6
+	dc.b	nD6, $0C, nE6, nF6, nG6
 	smpsCall            Mus91_Credits_Call05
-	dc.b	nG6, nF6, nE6
+	dc.b	nC6, $0C, nD6, nE6, nC6
 	smpsAlterPitch      $F4
 	smpsCall            Mus91_Credits_Call06
 	smpsPan             panCenter, $00
@@ -645,9 +645,9 @@ Mus91_Credits_Loop2B:
 	smpsPSGAlterVol     $FC
 	smpsPSGvoice        $00
 	smpsCall            Mus91_Credits_Call16
-	dc.b	nRst, $0C, nF5, nRst, $03, nF5, nRst, nRst, nF5, nRst, $09
+	dc.b	nRst, $0C, nB4, nRst, $03, nD5, nRst, nRst, nD5, nRst, $09
 	smpsCall            Mus91_Credits_Call16
-	dc.b	nF5, $0C, nRst, $06, nF5, $1E
+	dc.b	nC5, $0C, nRst, $06, nC5, $1E
 	smpsPSGvoice        fTone_06
 	smpsPSGAlterVol     $04
 	dc.b	nRst, $30, nRst, $30
@@ -666,8 +666,8 @@ Mus91_Credits_Loop2B:
 
 Mus91_Credits_Call16:
 	dc.b	nRst, $0C, nE5, $07, nRst, $02, nE5, $03, nRst, $18, nRst, $0C
-	dc.b	nBb5, $07, nRst, $02, nBb5, $03, nRst, $18, nRst, $0C, nA5, $07
-	dc.b	nRst, $02, nA5, $03, nRst, $18
+	dc.b	nC5, $07, nRst, $02, nC5, $03, nRst, $18, nRst, $0C, nC5, $07
+	dc.b	nRst, $02, nC5, $03, nRst, $18
 	smpsReturn
 
 ; PSG2 Data
@@ -712,18 +712,10 @@ Mus91_Credits_Loop26:
 	smpsPSGAlterVol     $FD
 	smpsNoteFill        $03
 
-Mus91_Credits_Loop27:
+	smpsCall Mus91_Credits_Loop27
+	dc.b	nB6, $03, nB6, nF7, nB6, nE7, nB6, nD7, nB6
+	smpsCall Mus91_Credits_Loop27
 	dc.b	nC7, $03, nC7, nG7, nC7, nF7, nC7, nE7, nC7
-	smpsLoop            $00, $02, Mus91_Credits_Loop27
-
-Mus91_Credits_Loop28:
-	dc.b	nBb6, nBb6, nF7, nBb6, nEb7, nBb6, nCs7, nBb6
-	smpsLoop            $00, $02, Mus91_Credits_Loop28
-
-Mus91_Credits_Loop29:
-	dc.b	nA6, nA6, nE7, nA6, nD7, nA6, nC7, nA6
-	smpsLoop            $00, $04, Mus91_Credits_Loop29
-	smpsLoop            $01, $02, Mus91_Credits_Loop27
 	dc.b	nRst, $60, nRst, nRst, nRst, nRst, nRst
 ;	; These rests are unnecessary, and cause the following notes to play way too late.
 ;	; Delete these three notes to fix this.
@@ -736,6 +728,17 @@ Mus91_Credits_Loop29:
 	dc.b	nRst, $0C, nE6, $06, nRst, nB6, nE6, $06, nRst, $0C, nE6, $06
 	dc.b	nRst, nB6, nE6
 	smpsStop
+
+Mus91_Credits_Loop27:
+	dc.b	nC7, $03, nC7, nG7, nC7, nF7, nC7, nE7, nC7
+	smpsLoop            $00, $02, Mus91_Credits_Loop27
+Mus91_Credits_Loop28:
+	dc.b	nBb6, nBb6, nF7, nBb6, nEb7, nBb6, nCs7, nBb6
+	smpsLoop            $00, $02, Mus91_Credits_Loop28
+Mus91_Credits_Loop29:
+	dc.b	nA6, nA6, nE7, nA6, nD7, nA6, nC7, nA6
+	smpsLoop            $00, $03, Mus91_Credits_Loop29
+	smpsReturn
 
 ; PSG3 Data
 Mus91_Credits_PSG3:
@@ -990,9 +993,6 @@ Mus91_Credits_Call0C:
 	smpsReturn
 
 Mus91_Credits_Call15:
-;	dc.b	nRst, $30, nRst, nRst, nF7, $03, nD7, nA6, nF6, nD7, nA6, nF6
-;	dc.b	nD6, nA6, nF6, nD6, nA5, nF6, nD6, nA5, nF5, $33, nRst, $5E
-
 	dc.b	nRst, $30, nRst, nRst
 	dc.b	nF7, $03, nD7, nB6, nA6, nD7, nC7, nA6, nG6, nB6, nG6
 	dc.b	nE6, nD6, nG6, nE6, nC6, nBb5, $33, nRst, $5E
@@ -1061,10 +1061,11 @@ Mus91_Credits_Call18:
 	smpsReturn
 
 Mus91_Credits_Call05:
-	dc.b	nRst, $03, nE6, nC6, $06, $06, nG5, nC6, $09, nE6, $09, nRst
-	dc.b	$06, nRst, $03, nF6, nCs6, $06, $06, nBb5, nCs6, $09, nF6, $09
-	dc.b	nRst, $06, nRst, $03, nE6, nC6, $06, $06, nA5, nC6, $09, nE6
-	dc.b	$0F, nD6, $0C
+	dc.b	nRst, $03, nE6, nC6, $06, $06, nG5, nC6, $09, nE6, $09, nRst, $06
+
+	dc.b	nRst, $03, nF6, nC6, $06, $06, nG5, nC6, $09, nF6, $09, nRst, $06
+
+	dc.b	nRst, $03, nE6, nC6, $06, $06, nA5, nC6, $09, nE6, $09, nRst, $06
 	smpsReturn
 
 Mus91_Credits_Voices:
