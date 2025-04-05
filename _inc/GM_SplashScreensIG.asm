@@ -251,7 +251,21 @@ GM_SplashScreensListIG:
 	even
 @pal_ronicsetro: incbin pallet\ronicsetro.bin
 	even
+@nem_hk97:	incbin artnem\hk97.bin
+	even
+@enifg_hk97:
+@enibg_hk97:	incbin mapeni\hk97.bin
+	even
+@pal_hk97:	incbin pallet\hk97.bin
+	even
 
+@nem_dawg:	incbin artnem\dawg.bin
+	even
+@enifg_dawg:
+@enibg_dawg:	incbin mapeni\dawg.bin
+	even
+@pal_dawg:	incbin pallet\dawg.bin
+	even
 thxsplash:
 	dc.l $81<<24|@nem_thx,$03<<24|@enifg_thx,$00<<24|@enibg_thx,$08<<24|@pal_thx,0
 	dc.l 0	; terminator 2
