@@ -13,7 +13,8 @@ Ogorki plans to defame the the white guys candy brand to advertise his pickles
 A batch file fetishist Green Hedgehog who just happens to look-alike to our Sonic. Got teleported to the dimension during one of their deviant experiments with batch scripts.
 
 # Limited Sonic (from the rom hack Limited Sonic)
-It Is Limited
+Whilst South Island is restored, Eggman's Limited Curse remains on him, so LimitedSonic now roams the lands trying to find a way to restore himself
+and become Unlimited
 
 # Neru
 she goofy and maybe even bald
