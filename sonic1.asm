@@ -324,7 +324,7 @@ GameClrRAM:
 @notmss:
 		jsr	GM_SplashScreensIG
 		jsr	GM_CN
-		lea	thxsplash(pc),a6
+		lea	thxsplash,a6
 		jsr	GM_CustomSplashScreensIG
 		kdebugtext "you can soft reset to skip all those splash screens btw"
 @nosplashscreens:
@@ -335,9 +335,6 @@ MainGameLoop:
 		and.b	($FFFFF600).w,d0 ; load	Game Mode
 		jsr	GameModeArray(pc,d0.w) ; jump to apt location in ROM
 		bra.s	MainGameLoop
-thxsplash:
-	dc.l $81<<24|nem_thx,$03<<24|enifg_thx,$00<<24|enibg_thx,$08<<24|pal_thx,0
-	dc.l 0	; terminator 3
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Main game mode array
@@ -1322,6 +1319,8 @@ PlaySound_Unk:
 ; ---------------------------------------------------------------------------
 ; a1 = array
 PlayerSpecificSound:
+ 		tst.w	($FFFFFFF0).w
+		bne.s	@rout
 		clr.w	d0
 		move.b	(v_character).w,d0
 		add.w	d0,d0
@@ -6628,7 +6627,7 @@ EndingSequence:				; XREF: GameModeArray
 	bra.w	@null
 	bra.w	@null		; limited
 	bra.w	@null		; neru
-	bra.w	@null		; gomer
+	bra.w	@gomer		; gomer
 	bra.w	@mercury	; sailor mercury
 	bra.w	@kiryu		; kiryu
 	bra.w	@purpleguy	; purple guy
@@ -6648,6 +6647,10 @@ EndingSequence:				; XREF: GameModeArray
 @mercury:
 		pea	End_GotoCredits
 		jmp	GM_MercEnd
+@gomer:
+		pea	End_GotoCredits
+		lea	EndingGomer,a6
+		jmp	GM_CustomSplashScreensIG
 @null:
 		jmp	End_GotoCredits
 
@@ -19362,9 +19365,10 @@ Obj6D_Action:				; XREF: Obj6D_Index
 		bchg	#0,$1C(a0)
 		beq.s	loc_E57A
 		move.w	$32(a0),$30(a0)	; begin	flaming	time
+ 		cmp.w	#$8001,($FFFFFFF0).w ; wont play during credits demo
+		beq.s	loc_E57A
 		move.w	#$AE,d0
 		jsr	MegaPCM_PlaySample
-
 loc_E57A:
 		lea	(Ani_obj6D).l,a1
 		bsr.w	AnimateSprite
@@ -26043,9 +26047,13 @@ CallKillSonic:
 ; plays a long scream pcm, said pcm also has the sound driver freeze
 ; please dont remove this its good husgfyuv
 		jsr	KillSonic	; GMZ
+
+	cmp.b	#3,(v_character).w	; is character limited
+	beq.s	nodeathpitscream	; if not, do not scream
 ; test so suicide barney cant scream (immortal)
  		tst.w	($FFFFFFF0).w
 		bne.s	nodeathpitscream
+;demo test
  		tst.b	(f_superconic).w
 		bne.s	nodeathpitscream
 ; intentionally freeze it by setting the pause value to 2
@@ -30380,9 +30388,10 @@ Obj6E_Shock:				; XREF: Obj6E_Index
 		move.b	#1,$1C(a0)	; run "shocking" animation
 		tst.b	1(a0)
 		bpl.s	Obj6E_Animate
+ 		cmp.w	#$8001,($FFFFFFF0).w ; wont play during credits demo
+		beq.s	Obj6E_Animate
 		move.w	#$AF,d0
 		jsr	MegaPCM_PlaySample
-
 Obj6E_Animate:
 		lea	(Ani_obj6E).l,a1
 		jsr	AnimateSprite
@@ -43612,8 +43621,11 @@ Heinous1_Display:
 	bpl.s   .NoJump
         move.w  #-$600,obj.YSpeed(a0)
         move.b  #6,gurgle.Time(a0)
+ 	cmp.w	#$8001,($FFFFFFF0).w ; wont play during credits demo
+	beq.s	.nocredfart
 	move.w	#$AE,d0
 	jsr	MegaPCM_PlaySample
+.nocredfart
         move.b  #6,obj.Frame(a0)
         bra.s   .WaitGurgle
 .NoJump:   

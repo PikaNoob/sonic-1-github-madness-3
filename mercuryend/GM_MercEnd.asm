@@ -46,6 +46,9 @@ GM_MercEnd:
 		jsr	EniDec
 		copyTilemap	$FF0000,$C000,$27,$1D
 
+		lea	mercurytext2,a1
+		jsr	KDebug_WriteToCmd
+
 		moveq	#35,d0	; load palette 1
 		jsr	PalLoad1
 		move.w	#$1A0,(v_demolength).w
@@ -99,7 +102,6 @@ Merc_MapLoadA:
 		move.w	#0,d0
 		jsr	EniDec
 		copyTilemap	$FF0000,$EB04,$23,$03
-Merc_MapLoadE:
 		rts
 mercredmaps:
 	dc.l	Eni_MCE1
@@ -118,6 +120,8 @@ mercredmaps:
 	dc.l	Eni_MCEClr
 	dc.l	Eni_MCEClr
 
+mercurytext2:	dc.b	"This script is provided from the Mega Drive game and translated by 'Eien Ni Hen', might not fit the GHM lore - Coni"
+		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - ENDING stuff
 ; ---------------------------------------------------------------------------

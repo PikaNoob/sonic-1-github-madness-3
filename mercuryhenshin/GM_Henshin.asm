@@ -14,7 +14,8 @@ v_pal_dry = $FFFFFB00
 
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
-; Super Conic Henshin
+; Sailor Moon Henshin
+; Feel free to use and maybe swap out with another senshi, please credit me for the code
 ; ---------------------------------------------------------------------------
 GM_Henshin:
 		move.b	#cmd_FadeOut,d0
@@ -78,6 +79,9 @@ GM_Henshin:
 		jsr	PlaySound	; play title screen music
 		move.b	#$98,d0
 		jsr	MegaPCM_PlaySample	; play title screen music
+		lea	mercurytext1,a1
+		jsr	KDebug_WriteToCmd
+
 HS1_MainLoop:
 		move.b	#4,(v_vbla_routine).w
 		jsr	WaitForVBla
@@ -141,6 +145,8 @@ HS_MainLoop:
 ;		move.b	#id_Level,(v_gamemode).w
 		rts	
 
+mercurytext1:	dc.b	"Mercury Power Make-Up! "
+		even
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; deformation code
