@@ -4,7 +4,7 @@
 # Sonic Heroes
 
 # Sonic
-Sonic got a tan and gained brainrot since his last outting. The rest is history
+Sonic got a tan, grew a tail and gained a serious case of brainrot since his last outting. The rest is history
 
 # Ogorki
 Ogorki plans to defame the the white guys candy brand to advertise his pickles
@@ -22,7 +22,8 @@ she goofy and maybe even bald
 Gomer.
 
 # Sailor Mercury
-Sailor Mercury is helping to smuggle the Chaos Emgles from Fatman, because she's bored. She also hates white guy because she saw the allegations
+Hearing the allegations of white guy, and seeing Sailor Jupiter manipulated into his side, Sailor Mercury rushes to banish him into the Shadow Realm.
+She's also helping to smuggle the Chaos Emgles from Fatman, entirely out of boredom.
 
 # Kiryu
 Awoken by the cacophony from Sonics intro cutscene, Kiryu must now fuck shit up in order to go back asleep
@@ -40,7 +41,7 @@ Quagmire must now return the bees to the hive, lest his std(h) infested sex come
 
 # Microplastics Reimu
 Rightful prisoner of the limited special stage, a storage unit designed for Fatman, Reimu is laced with a special microplastic blend that is contagious, known currently as "cooties" because it only spreads on men, despite being designed to spread onto everything. It is believed that it mutated due to Reimu's residence in the Gensokyo hood.
-This allows Reimu to steal the Special Emerals from Fatman, by passing it from Reimu to Sailor Mercury
+This allows Reimu to steal the Special Emerals from Fatman, by passing it from Reimu to Sailor Mercury or Neru
 
 # Steve
 I am Steve
@@ -56,6 +57,7 @@ In spite of a pained existence, Oily fella appears when hedgehogs need him most,
 White guy is plotting an evil plan to give Free CandyTM to all the land, laced with fetish-obtaining toxic gel that gives you fetishes, or overwrites your pre-existing fetishes with new ones; we're talking about sonic fans.
 Many characters fight white guy to end his evil plans, other happen to be on a war path and run into him
 Matthew could beat Goku easily let alone any of the others, but chooses to hold back his true power and walk in there shoes, for that is his fetish.
+Matthew also turned every hegdehogs face into his own image, which is odd considering his aformentioned fetish
 
 # Teto
 Fatass
@@ -65,7 +67,6 @@ Slightly less of a fatass
 
 # Fatman
 Only formally appearing in the credits, he can be made angy with you having the emerals. He won't be angy unless your have all of the emald
-The Fatman in the Final zone is an imposter, white guy was being sussy baka
 
 # Peter
 Peter plans to punch Quagmire as you reach the bee hive
@@ -106,6 +107,7 @@ He kinda, uhh, well, fat
 
 # Mark the Hedgehog
 He didn't make it while finding the income for sonic
+Godspeed, Mark.
 
 # Conic the Cat
 "HAPPY BIRHTDAY!" as they fall to an exploding death
@@ -114,7 +116,7 @@ He didn't make it while finding the income for sonic
 "EAT SHIT" said on a teal gradient background as he spins
 
 # Cirno Fumo
-judges your life decision on continuing this fucked up adventure or not
+Another resident of the Gensokyo hood, Cirno judges your life decision on continuing this fucked up adventure or not
 
 # Fucked up Dog
 "This Dog is fucked up bruh"
