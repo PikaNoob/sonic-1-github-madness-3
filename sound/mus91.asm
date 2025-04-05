@@ -137,10 +137,15 @@ Mus91_Credits_DameDameYo1:
 	smpsReturn
 
 Mus91_Credits_Call07:
-	dc.b	nRst, $0C, nCs6, $15, nRst, $03, nCs6, $06, nRst, nD6, $0F, nRst
-	dc.b	$03, nB5, $18, nRst, $06, nCs6, $06, nRst, nCs6, nRst, nCs6, nRst
-	dc.b	nA5, nRst, nG5, $0F, nRst, $03, nB5, $18, nRst, $06
-	smpsLoop            $00, $02, Mus91_Credits_Call07
+	dc.b		nCs6,	$0C,	nRst,	nB5,	$09,	nA5,	$03,	nRst
+	dc.b		$06,	nCs6,	$1E,	nRst,	$0C,	nA5,	$09,	nB5
+	dc.b		$03,	nCs6,	$06,	nRst,	nCs6,	nRst,	nB5,	nRst
+	dc.b		nA5,	nRst,	nCs6,	nRst,	nD6,	nRst,	nE6,	nRst
+	dc.b		nFs6,	nRst,	$12,	nA5,	$06,	nRst,	nA5,	nRst
+	dc.b		nFs5,	nRst,	nE5,	$0C,	nRst,	$06,	nCs6,	$12
+	dc.b		nRst,	$0C,	nFs5,	$06,	nRst,	nA5,	nRst,	nB5
+	dc.b		nRst,	nCs6,	nRst,	nB5,	$0C,	nRst,	$06,	nE5
+	dc.b		$12,	nRst,	$0C
 	smpsReturn
 
 ; FM2 Data
@@ -524,9 +529,15 @@ Mus91_Credits_Call17:
 	smpsReturn
 
 Mus91_Credits_Call0B:
-	dc.b	nRst, $0C, nG6, nB6, nD7, nFs7, nRst, $06, nFs7, $0C, nG7, $06
-	dc.b	nFs7, $0C, nAb7, $54, nRst, $0C, nA7, nRst, nA7, nRst, $12, nAb7
-	dc.b	nA7, $0C
+	dc.b	nRst, $09
+	dc.b	nD7,	$03
+	dc.b	nCs7,	$09,	nD7,	$03,	nCs7,	$09,	nD7,	$03
+	dc.b	nRst,	$09,	nD7,	$03,	nCs7,	$09,	nD7,	$03
+	dc.b	nCs7,	$06,	nFs7,	$0C,	nG7,	$06,	nFs7,	$0C
+	dc.b	nE7,	$06,	nRst,	nE7,	nRst,	nD7,	nRst,	nD7
+	dc.b	nRst,	nCs7,	nRst,	nCs7,	nRst,	nB6,	nRst,	nB6
+	dc.b	nRst,	nA6,	$0C,	nB6,	nC7,	nD7,	nB6,	$06
+	dc.b	nG7,	$12,	nA7,	$0C
 	smpsReturn
 
 ; FM5 Data
