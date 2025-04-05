@@ -118,3 +118,6 @@ judges your life decision on continuing this fucked up adventure or not
 
 # Fucked up Dog
 "This Dog is fucked up bruh"
+
+# Hue Hue Hue
+https://youtu.be/4XZN6DbA914
