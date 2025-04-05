@@ -11,6 +11,8 @@ smpsHeaderStartSong = 1
 	smpsHeaderFM        HongKong97_FM4,	$00, $00
 	smpsHeaderFM        HongKong97_FM5,	$00, $00
 	smpsHeaderPSG       HongKong97_PSG3,	$00, $00, $00, $00
+	smpsHeaderPSG       HongKong97_PSG1,	$00, $00, $00, $00
+	smpsHeaderPSG       HongKong97_PSG2,	$00, $00, $00, $00
 
 ; FM1 Data
 HongKong97_FM1:
@@ -92,6 +94,11 @@ HongKong97_FM5:
 
 	smpsJump	HongKong97_FM5
 
+; PSG1 Data
+HongKong97_PSG1:
+
+; PSG2 Data
+HongKong97_PSG2:
 
 ; PSG3 Data
 HongKong97_PSG3:

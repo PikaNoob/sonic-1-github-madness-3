@@ -136,7 +136,9 @@ GM_SplashScreensListIG:
 	dc.l $81<<24|@nem_urfat,$01<<24|@enifg_urfat,$82<<24|@enibg_urfat,$00<<24|@pal_urfat,0
 	dc.l $81<<24|@nem_BILLglider,$00<<24|@enifg_BILLglider,$00<<24|@enibg_BILLglider,$0B<<24|@pal_BILLglider,0	; homemade aircraft very safe
 	dc.l $81<<24|@nem_stop,$00<<24|@enifg_stop,$00<<24|@enibg_stop,$13<<24|@pal_stop,0
+	dc.l $81<<24|@nem_hk97,$00<<24|@enifg_hk97,$00<<24|@enibg_hk97,$25<<24|@pal_hk97,0
 	dc.l $81<<24|@nem_ronicsetro,$00<<24|@enifg_ronicsetro,$00<<24|@enibg_ronicsetro,$1B<<24|@pal_ronicsetro,0
+	dc.l $81<<24|@nem_dawg,$00<<24|@enifg_dawg,$00<<24|@enibg_dawg,$09<<24|@pal_dawg,0
 	dc.l $81<<24|@nem_newbark,$00<<24|@enifg_newbark,$00<<24|@enibg_newbark,$01<<24|@pal_newbark,0				;	Literally just New Bark Town
 	dc.l 0	; terminator 2
 ; -----------------------------------------------------------------------------
@@ -243,12 +245,30 @@ GM_SplashScreensListIG:
 	even
 @pal_stop:	incbin pallet\splash_stop.bin
 	even
+
+
 @nem_ronicsetro: incbin artnem\splash_ronicsetro.bin
 	even
 @enifg_ronicsetro:
 @enibg_ronicsetro: incbin mapeni\splash_ronicsetro.bin
 	even
 @pal_ronicsetro: incbin pallet\ronicsetro.bin
+	even
+
+@nem_hk97:	incbin artnem\hk97.bin
+	even
+@enifg_hk97:
+@enibg_hk97:	incbin mapeni\hk97.bin
+	even
+@pal_hk97:	incbin pallet\hk97.bin
+	even
+
+@nem_dawg:	incbin artnem\dawg.bin
+	even
+@enifg_dawg:
+@enibg_dawg:	incbin mapeni\dawg.bin
+	even
+@pal_dawg:	incbin pallet\dawg.bin
 	even
 nem_thx:	incbin artnem\splash_thx.bin
 	even
