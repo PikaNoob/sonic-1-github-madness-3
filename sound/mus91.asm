@@ -1012,13 +1012,17 @@ Mus91_Credits_CallMeltdown1:
 	; first chorus lyrics
 	dc.b	nCs6, $0C, nB5, nAb5, nCs5 ; ka ku yuu uu
 ;nCs5 was nD5, offkey fix by coni
-	dc.b	nE5, $0C, nEb5, $06, nE5, $0C, nCs6, nCs6, $30 ; goo uu ro ni saaaaa
-	dc.b	nCs6, $03, nCs6, nC6, $0C, nAb5, $06, nAb6, $0C ; to-bi-te kon de MI
-	dc.b	nEb6, $06, $06, nE6, $24 ; ta i toooo
+	dc.b	nE5, $0C, nEb5, $06, nE5, $0C, nCs6, nCs6, $24, $06 ; goo uu ro ni saaaaa
+
+	dc.b	nEb6, $06, nCs6, nC6, nAb5, nAb5, nAb6, $0C ; to-bi-te kon de MI
+
+	dc.b	nEb6, $06, $06, nE6, $06, $1E ; ta i toooo
+
 	dc.b	nEb6, $06, nE6, nCs7, nB6, $0C, nA6, $06, nAb6, $18 ; omo oeoooooo oo u
-	dc.b	nCs6, $03, $03, nAb6, $0C, nCs6, $06, nAb6, $0C, nCs6 ; (ma) sa{sa}-o na hi ka ri
+
+	dc.b	nCs6, $06, nAb6, nCs6, nCs6, nAb6, nAb6, nCs6, nCs6, nCs6 ; (ma) sa{sa}-o na hi ka ri
 	; skipped to second chorus because that one is more conclusive
-	dc.b	nD6, $06, nEb6, nEb6, nE6, nFs6, nAb6, nFs6, nE6, $0C
+	dc.b	nEb6, nEb6, nE6, nFs6, nAb6, nFs6, nE6, $0C
 	smpsReturn
 
 Mus91_Credits_Call04:
