@@ -39998,6 +39998,8 @@ Eni_Gomer1:	incbin	mapeni\gomer1.bin
 		even
 Eni_Gomer2:	incbin	mapeni\gomer2.bin
 		even
+Eni_Gomer3:	incbin	mapeni\gomer3.bin
+		even
 Eni_Title:	incbin	mapeni\titlescr.bin	; title screen foreground (mappings)
 		even
 Eni_TitleBG:	incbin	mapeni\titlescr_bg.bin	; title screen foreground (mappings)

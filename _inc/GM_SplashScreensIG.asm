@@ -387,6 +387,7 @@ EndingGomer:
 	dc.l $81<<24|Nem_Gomer,$08<<24|Eni_Gomer,$90<<24|Eni_Gomer,$11<<24|Pal_Sonic,1
 	dc.l $81<<24|Nem_Gomer,$08<<24|Eni_Gomer1,$90<<24|Eni_Gomer1,$00<<24|Pal_Sonic,1
 	dc.l $81<<24|Nem_Gomer,$08<<24|Eni_Gomer2,$90<<24|Eni_Gomer2,$00<<24|Pal_Sonic,0
+	dc.l $81<<24|Nem_Gomer,$08<<24|Eni_Gomer3,$90<<24|Eni_Gomer3,$B9<<24|Pal_Sonic,0
 	dc.l 0	; terminator 2
 
 Nem_ToyFreddy:	incbin artnem\splash_fat.bin
