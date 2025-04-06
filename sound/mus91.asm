@@ -19,7 +19,7 @@ smpsHeaderStartSong = 1
 ;	coninight, 	ghz,		luka luka night fever - COMPLETE!
 ;	coninight, 	lz,		the cleveland show (callback) - COMPLETE!
 ;	coninight, 	mz,		somari - COMPLETE!
-;	carlos, 	slz,		meltdown - COMPLETE! maybe?
+;	carlos, 	slz,		meltdown - COMPLETE!
 ;	coninight, 	sbz,		sailor moon (MD 1994) - dream land part 2 - COMPLETE!
 ;	undecided, 	syz,		undecided...
 ;	thegamer2000, 	ending,		super mario land, unknown - COMPLETE!
@@ -79,12 +79,9 @@ Mus91_Credits_FM1:
 	smpsCall            Mus91_Credits_Call0C
 	smpsSetvoice        $0B
 	smpsAlterVol        $EB
-	dc.b	nRst, $0C, nG5, nA5, nG6
+	dc.b	nRst, $0C, nAb5, nBb5, nAb6
 	smpsCall            Mus91_Credits_CallMeltdown1 ; meltdown haha funny
-	
-	;dc.b	nE6, $1E, nE7, $06, nC7, $18, nRst, $24
-	;smpsNop             $01
-	; no more interlude
+	smpsNop             $01
 	smpsSetTempoMod     $0A
 	smpsSetvoice        $0F
 	smpsAlterPitch      $0C
@@ -195,11 +192,11 @@ Mus91_Credits_Loop13:
 	smpsLoop            $00, $07, Mus91_Credits_Loop13
 	dc.b	nA3, $03, nRst, $09, nRst, $24
 	smpsAlterVol        $F8
+	smpsAlterPitch      $01		;added for carlos' rip
 	dc.b	nC4, $06, nRst, $03, nC4, nRst, $06, nC4, $12, nRst, $06, nC4
 	dc.b	$02, nRst, $01, nC4, $02, nRst, $01, nBb3, $06, nRst, $03, nBb3
 	dc.b	$03, nRst, $06, nA3, $12, nRst, $06, nA3, $02, nRst, $01, nA3
 	dc.b	$02, nRst, $01
-
 Mus91_Credits_Loop15:
 	dc.b	nD4, $06, nRst, $03, nD4, $06, nRst, $03, nD4, $02, nRst, $01
 	dc.b	nD4, $02, nRst, $01
@@ -213,13 +210,13 @@ Mus91_Credits_Loop15:
 	dc.b	$06, nE4, $02, nRst, $01, nF4, $02, nRst, $01, nG4, $06, nRst
 	dc.b	nG3, $24
 	smpsSetvoice        $10
-	smpsAlterPitch      $0C
+	smpsAlterPitch      $0B
 	smpsAlterVol        $07
 	smpsNoteFill        $06
 
 Mus91_Credits_Loop16:
 	smpsCall            Mus91_Credits_Call10
-	dc.b	nF3, nF2, nF3, nRst, $09, nF3, $03, nA3, nG3, nG3, nG3, nRst
+	dc.b	nF3, nF3, nF3, nRst, $09, nF3, $03, nA3, nG3, nG3, nG3, nRst
 	dc.b	$09, nA3, $03, nB3
 	smpsCall            Mus91_Credits_Call10
 	dc.b	nF3, nF3, nF3, nRst, nG3, nA3, nB3, nG3, nC4, nC4, nC4, nRst
@@ -318,42 +315,11 @@ Mus91_Credits_Loop0C:
 	smpsSetvoice        $0D
 	smpsAlterPitch      $0C
 	smpsAlterVol        $0B
-	dc.b	nRst, $0C, nG5, nA5, nG6
+	dc.b	nRst, $0C, nAb5, nBb5, nAb6
 	smpsCall            Mus91_Credits_CallMeltdown1
 	; no more interlude teehee
-;	smpsSetvoice        $0A
-;	smpsAlterVol        $EC
-;	dc.b	nRst, $06
-;	smpsAlterNote       $14
-;	dc.b	nG5, $01, smpsNoAttack
-;	smpsAlterNote       $00
-;	dc.b	$02, nA5, $03
-;	smpsNoteFill        $05
-;	dc.b	nC6, $03, nC6, $06, nA5, $03, nC6
-;	smpsNoteFill        $00
-;	dc.b	nC6
-;	smpsAlterVol        $FC
-;	smpsAlterPitch      $33
-;	smpsSetvoice        $0E
-;	dc.b	nEb4, $03
-;	smpsAlterVol        $07
-;	dc.b	nEb4
-;	smpsAlterVol        $07
-;	dc.b	nEb4
-;	smpsAlterVol        $07
-;	dc.b	nEb4
-;	smpsSetvoice        $0A
-;	smpsAlterVol        $EF
-;	smpsAlterPitch      $CD
-;	dc.b	nE6, $03, nF6, nG6, nRst, $09
-;	smpsAlterNote       $EC
-;	dc.b	nC7, $01, smpsNoAttack
-;	smpsAlterNote       $00
-;	smpsModSet          $2C, $01, $04, $04
-;	dc.b	nC7, $23
-;	smpsModOff
 	smpsSetvoice        $0F
-	smpsAlterVol        $FF
+	smpsAlterVol        $EC
 	smpsAlterNote       $03
 	smpsCall            Mus91_Credits_Call0E
 	smpsAlterNote       $00
@@ -367,15 +333,14 @@ Mus91_Credits_Loop0C:
 	smpsSetvoice        $0A
 	smpsAlterVol        $F9
 	dc.b	nRst, $60
-
-	dc.b		nE6,	$06,	nRst,	nE6,	nRst,	nE6,	nRst,	nE6
-	dc.b		nRst,	nE6,	$0C,	nRst,	$06,	nCs6,	$1E,	nCs6
-	dc.b		$06,	nRst,	nCs6,	nRst,	nCs6,	nRst,	nCs6,	nRst
-	dc.b		nCs6,	$0C,	nRst,	$06,	nCs6,	$1E,	nA5,	$06
-	dc.b		nRst,	nA5,	nRst,	nA5,	nRst,	nCs6,	nRst,	nCs6
-	dc.b		$0C,	nRst,	$06,	nCs6,	$1E,	nD6,	$06,	nRst
-	dc.b		nD6,	nRst,	nCs6,	nRst,	nCs6,	nRst,	nAb5,	$0C
-	dc.b		nRst,	$06,	nAb5,	$1E
+	dc.b	nE6,	$06,	nRst,	nE6,	nRst,	nE6,	nRst,	nE6
+	dc.b	nRst,	nE6,	$0C,	nRst,	$06,	nCs6,	$1E,	nCs6
+	dc.b	$06,	nRst,	nCs6,	nRst,	nCs6,	nRst,	nCs6,	nRst
+	dc.b	nCs6,	$0C,	nRst,	$06,	nCs6,	$1E,	nA5,	$06
+	dc.b	nRst,	nA5,	nRst,	nA5,	nRst,	nCs6,	nRst,	nCs6
+	dc.b	$0C,	nRst,	$06,	nCs6,	$1E,	nD6,	$06,	nRst
+	dc.b	nD6,	nRst,	nCs6,	nRst,	nCs6,	nRst,	nAb5,	$0C
+	dc.b	nRst,	$06,	nAb5,	$1E
 	dc.b	nRst, $0C, nD6, $12, nRst, $06, nD6, nRst, nCs6, $12, nD6, nCs6
 	dc.b	$0C, nAb5, $18, nB5, nD6, nAb6, nRst, $0C, nE6, nRst, nE6, $12
 	dc.b	nEb6, nE6, $06, nRst
@@ -1045,7 +1010,8 @@ Mus91_Credits_Call15:
 
 Mus91_Credits_CallMeltdown1:
 	; first chorus lyrics
-	dc.b	nCs6, $0C, nB5, nAb5, nD5 ; ka ku yuu uu
+	dc.b	nCs6, $0C, nB5, nAb5, nCs5 ; ka ku yuu uu
+;nCs5 was nD5, offkey fix by coni
 	dc.b	nE5, $0C, nEb5, $06, nE5, $0C, nCs6, nCs6, $30 ; goo uu ro ni saaaaa
 	dc.b	nCs6, $03, nCs6, nC6, $0C, nAb5, $06, nAb6, $0C ; to-bi-te kon de MI
 	dc.b	nEb6, $06, $06, nE6, $24 ; ta i toooo
@@ -1056,6 +1022,7 @@ Mus91_Credits_CallMeltdown1:
 	smpsReturn
 
 Mus91_Credits_Call04:
+	smpsAlterPitch      $01
 	smpsCall            Mus91_Credits_Call19
 	dc.b	nD6, $06, nRst, $03, nD6, nRst, $06, nCs6, $18, nRst, $06
 
@@ -1075,6 +1042,7 @@ Mus91_Credits_Loop2C:
 	dc.b	$03, $03
 	smpsNoteFill        $00
 	dc.b	nRst, $0C, nF6, $24
+	smpsAlterPitch      $FF
 	smpsReturn
 
 Mus91_Credits_Call19:
@@ -1082,6 +1050,7 @@ Mus91_Credits_Call19:
 	smpsReturn
 
 Mus91_Credits_Call09:
+	smpsAlterPitch      $01
 	dc.b	nG6, $06, nRst, $03, nG6, nRst, $06, nG6, $18, nRst, $06, nF6
 	dc.b	$06, nRst, $03, nF6, nRst, $06, nE6, $18, nRst, $06, nA6, $06
 	dc.b	nRst, $03, nG6, $06, nRst, $03, nF6, nRst, nA6, $06, nRst, $03
@@ -1095,6 +1064,7 @@ Mus91_Credits_Call09:
 	dc.b	$03, $03
 	smpsNoteFill        $00
 	dc.b	nRst, $0C, nA6, $24
+	smpsAlterPitch      $FF
 	smpsReturn
 
 Mus91_Credits_Call0E:
