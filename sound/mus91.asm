@@ -19,7 +19,7 @@ smpsHeaderStartSong = 1
 ;	coninight, 	ghz,		luka luka night fever - COMPLETE!
 ;	coninight, 	lz,		the cleveland show (callback) - COMPLETE!
 ;	coninight, 	mz,		somari - COMPLETE!
-;	carlos, 	slz,		meltdown - incomplete...
+;	carlos, 	slz,		meltdown - COMPLETE! maybe?
 ;	coninight, 	sbz,		sailor moon (MD 1994) - dream land part 2 - COMPLETE!
 ;	undecided, 	syz,		undecided...
 ;	thegamer2000, 	ending,		super mario land, unknown - COMPLETE!
