@@ -40851,6 +40851,7 @@ MusicIndex:	; $01-$7F
 		dc.l Music23 ; Transcription of a Silvagunner rip
 		dc.l Music24 ; AT&T Silly Ringtone
 		dc.l Music25 ; I Love Bejing Tiananmen HK97
+		dc.l Music26 ; Red Ball 4 Boss Track Remix (For Selected Boss)
 
 ; wait i don't have time to implement these oops
 
@@ -43383,6 +43384,8 @@ Music23:	include	sound\tg2000tracks\PaintBlack.asm
 Music24:	include	sound\tg2000tracks\Ringtone.asm
 		even
 Music25:	include	sound\tg2000tracks\HK97.asm
+		even
+Music26:	include	sound\tg2000tracks\BallBoss.asm
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
