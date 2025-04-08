@@ -17456,6 +17456,10 @@ Obj3B_Main:				; XREF: Obj3B_Index
 		addq.b	#2,$24(a0)
 		move.l	#Map_obj3B,4(a0)
 		move.w	#$63D0,2(a0)
+		cmp.b	#7,($FFFFFE10).w	; Are we in BHZ?
+		bne.s	@notmako	; GMZ: If not, branch
+		move.w	#$23D0,2(a0)
+@notmako
 		move.b	#4,1(a0)
 		move.b	#$13,$19(a0)
 		move.b	#4,$18(a0)
@@ -40158,6 +40162,8 @@ Nem_PplRock:	incbin	artnem\ghzrock.bin	; GHZ purple rock
 Nem_GhzWall1:	incbin	artnem\ghzwall1.bin	; GHZ destroyable wall
 		even
 Nem_GhzWall2:	incbin	artnem\ghzwall2.bin	; GHZ normal wall
+		even
+Nem_bhzPplRock:	incbin	artnem\bhzrock.bin	; bHZ purple rock
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - LZ stuff

@@ -312,7 +312,7 @@ PLC_BHZ:	dc.w $A
 		dc.w 0
 		dc.l Nem_Stalk		; flower stalk
 		dc.w $6B00
-		dc.l Nem_PplRock	; purple rock
+		dc.l Nem_bhzPplRock	; 1 grit
 		dc.w $7A00
 		dc.l Nem_bhzCrabmeat	; crabmeat enemy
 		dc.w $8000
