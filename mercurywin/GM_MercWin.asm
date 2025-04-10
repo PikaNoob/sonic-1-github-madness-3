@@ -44,6 +44,11 @@ GM_MercWin:
 
 		moveq	#37,d0	; load palette
 		jsr	PalLoad1
+		move.l	#$1000000,($FFFFF704).w ; correct vertical position for "wander conic" 
+		move.l	#$0000000,($FFFFF700).w ; correct horizonal position for "wander conic" 
+		move.b	#$8E,($FFFFD040).w ; load Sailor Mercury
+		move.b	#$8E,($FFFFD080).w ; again but...
+		move.b	#$4,($FFFFD0A4).w ; set so it's Tuxedo Mask!
 		jsr	(ObjectsLoad).l
 		jsr	(BuildSprites).l
 		jsr	PaletteFadeIn
@@ -69,7 +74,7 @@ MCW_StartLoop:
 
 MERCW_resskip:
 ;get the result that was calculated then send stuff to write in plane B and kdebug
-;		move.b	#1,obAnim(a0) ; use "floating" animation
+		move.b	#$1,($FFFFD080+obanim).w ; make Tuxedo Mask wave his hand out
 		lea	mercurytextA,a1
 		jsr	KDebug_WriteToCmd
 

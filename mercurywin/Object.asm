@@ -18,12 +18,12 @@ WMerc_Index:	dc.w WMerc_Init-WMerc_Index
 WMerc_Init:	; Routine 0
 ;set up mercury
 		addq.b	#2,obRoutine(a0)
-		move.w	#$C0,obX(a0)
 		move.l	#Map_MercWin,obMap(a0)
 		move.w	#$270,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#2,obPriority(a0)
-		move.w	#$1C0,obY(a0)
+		move.w	#$41,obX(a0)
+		move.w	#$1A6,obY(a0)
 
 WMerc_Animate:	; Routine 2
 ;do her cute idle!
@@ -33,12 +33,12 @@ WMerc_Animate:	; Routine 2
 WMask_Init:	; Routine 4
 ;set up mercury
 		addq.b	#2,obRoutine(a0)
-		move.w	#$100,obX(a0)
 		move.l	#Map_MaskWin,obMap(a0)
 		move.w	#$140,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#2,obPriority(a0)
-		move.w	#$1C0,obY(a0)
+		move.w	#$F3,obX(a0)
+		move.w	#$1A5,obY(a0)
 
 WMask_Animate:	; Routine 6
 ;he's standing, menacingly...
