@@ -355,7 +355,8 @@ GameModeArray:
 ; ===========================================================================
 		bra.w	EndingSequence	; End of game sequence ($18)
 ; ===========================================================================
-		bra.w	Credits		; Credits ($1C)
+		; bra.w	Credits		; Credits ($1C)
+		bra.w	JmpTo_Credits		; GMZ
 ; ===========================================================================
 		bra.w	jmpto_Minecraft	; Minecraft ($20)
 ; ===========================================================================
@@ -433,6 +434,10 @@ jmpto_IntroCutscene:
 	dc.b "FORGET IT!",0
 	dc.b 1
 	even
+
+JmpTo_Credits:	; GMZ
+		jmp	Credits	; GMZ
+
 ; ===========================================================================
 
 CheckSumError:
@@ -6794,7 +6799,8 @@ End_MainLoop:
 		beq.s	loc_52DA	; if yes, branch
 End_GotoCredits:
 		move.b	#$1C,($FFFFF600).w ; set scene to $1C (credits)
-		move.b	#$91,d0
+		; move.b	#$91,d0
+		move.b	#$8B,d0	; GMZ
 		bsr.w	PlaySound_Special ; play credits music
 		move.w	#0,($FFFFFFF4).w ; set credits index number to 0
 		rts	
@@ -7149,190 +7155,8 @@ Map_obj89:
 ; Credits ending sequence
 ; ---------------------------------------------------------------------------
 
-Credits:				; XREF: GameModeArray
-		bsr.w	ClearPLC
-		bsr.w	Pal_FadeFrom
-		lea	($C00004).l,a6
-		move.w	#$8004,(a6)
-		move.w	#$8230,(a6)
-		move.w	#$8407,(a6)
-		move.w	#$9001,(a6)
-		move.w	#$9200,(a6)
-		move.w	#$8B03,(a6)
-		move.w	#$8720,(a6)
-		clr.b	($FFFFF64E).w
-		bsr.w	ClearScreen
-		lea	($FFFFD000).w,a1
-		moveq	#0,d0
-		move.w	#$7FF,d1
-
-Cred_ClrObjRam:
-		move.l	d0,(a1)+
-		dbf	d1,Cred_ClrObjRam ; clear object RAM
-
-		move.l	#$74000002,($C00004).l
-		lea	(Nem_CreditText).l,a0 ;	load credits alphabet patterns
-		bsr.w	NemDec
-		lea	($FFFFFB80).w,a1
-		moveq	#0,d0
-		move.w	#$1F,d1
-
-Cred_ClrPallet:
-		move.l	d0,(a1)+
-		dbf	d1,Cred_ClrPallet ; fill pallet	with black ($0000)
-
-		moveq	#3,d0
-		bsr.w	PalLoad1	; load Sonic's pallet
-		move.b	#$8A,($FFFFD080).w ; load credits object
-		jsr	ObjectsLoad
-		jsr	BuildSprites
-		bsr.w	EndingDemoLoad
-		moveq	#0,d0
-		move.b	($FFFFFE10).w,d0
-		lsl.w	#4,d0
-		lea	(MainLoadBlocks).l,a2 ;	load block mappings etc
-		lea	(a2,d0.w),a2
-		moveq	#0,d0
-		move.b	(a2),d0
-		beq.s	loc_5862
-		bsr.w	LoadPLC		; load level patterns
-
-loc_5862:
-		moveq	#1,d0
-		bsr.w	LoadPLC		; load standard	level patterns
-		move.w	#120,($FFFFF614).w ; display a credit for 2 seconds
-		bsr.w	Pal_FadeTo
-
-Cred_WaitLoop:
-		move.b	#4,($FFFFF62A).w
-		bsr.w	DelayProgram
-		bsr.w	RunPLC_RAM
-		tst.w	($FFFFF614).w	; have 2 seconds elapsed?
-		bne.s	Cred_WaitLoop	; if not, branch
-		tst.l	($FFFFF680).w	; have level gfx finished decompressing?
-		bne.s	Cred_WaitLoop	; if not, branch
-		cmpi.w	#9,($FFFFFFF4).w ; have	the credits finished?
-		beq.w	TryAgainEnd	; if yes, branch
-		rts	
-
-; ---------------------------------------------------------------------------
-; Ending sequence demo loading subroutine
-; ---------------------------------------------------------------------------
-
-; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
-
-
-EndingDemoLoad:				; XREF: Credits
-		move.w	($FFFFFFF4).w,d0
-		andi.w	#$F,d0
-		add.w	d0,d0
-		move.w	EndDemo_Levels(pc,d0.w),d0 ; load level	array
-		move.w	d0,($FFFFFE10).w ; set level from level	array
-		addq.w	#1,($FFFFFFF4).w
-		cmpi.w	#9,($FFFFFFF4).w ; have	credits	finished?
-		bcc.s	EndDemo_Exit	; if yes, branch
-		move.w	#$8001,($FFFFFFF0).w ; force demo mode
-		move.b	#8,($FFFFF600).w ; set game mode to 08 (demo)
-		move.b	#39,($FFFFFE12).w ; set lives to	3
-		moveq	#0,d0
-		move.w	d0,($FFFFFE20).w ; clear rings
-		move.l	d0,($FFFFFE22).w ; clear time
-		move.l	d0,($FFFFFE26).w ; clear score
-		move.b	d0,($FFFFFE30).w ; clear lamppost counter
-		cmpi.w	#4,($FFFFFFF4).w ; is SLZ demo running?
-		bne.s	EndDemo_Exit	; if not, branch
-		lea	(EndDemo_LampVar).l,a1 ; load lamppost variables
-		lea	($FFFFFE30).w,a2
-		move.w	#8,d0
-
-EndDemo_LampLoad:
-		move.l	(a1)+,(a2)+
-		dbf	d0,EndDemo_LampLoad
-
-EndDemo_Exit:
-		rts	
-; End of function EndingDemoLoad
-
-; ===========================================================================
-; ---------------------------------------------------------------------------
-; Levels used in the end sequence demos
-; ---------------------------------------------------------------------------
-EndDemo_Levels:	incbin	misc\dm_ord2.bin
-
-; ---------------------------------------------------------------------------
-; Lamppost variables in the end sequence demo (Star Light Zone)
-; ---------------------------------------------------------------------------
-EndDemo_LampVar:
-		dc.b 1,	1		; XREF: EndingDemoLoad
-		dc.w $A00, $62C, $D
-		dc.l 0
-		dc.b 0,	0
-		dc.w $800, $957, $5CC, $4AB, $3A6, 0, $28C, 0, 0, $308
-		dc.b 1,	1
-; ===========================================================================
-; ---------------------------------------------------------------------------
-; "TRY AGAIN" and "END"	screens
-; ---------------------------------------------------------------------------
-
-TryAgainEnd:				; XREF: Credits
-		bsr.w	ClearPLC
-		bsr.w	Pal_FadeFrom
-		lea	($C00004).l,a6
-		move.w	#$8004,(a6)
-		move.w	#$8230,(a6)
-		move.w	#$8407,(a6)
-		move.w	#$9001,(a6)
-		move.w	#$9200,(a6)
-		move.w	#$8B03,(a6)
-		move.w	#$8720,(a6)
-		clr.b	($FFFFF64E).w
-		bsr.w	ClearScreen
-		lea	($FFFFD000).w,a1
-		moveq	#0,d0
-		move.w	#$7FF,d1
-
-TryAg_ClrObjRam:
-		move.l	d0,(a1)+
-		dbf	d1,TryAg_ClrObjRam ; clear object RAM
-
-		moveq	#$1D,d0
-		bsr.w	RunPLC_ROM	; load "TRY AGAIN" or "END" patterns
-		lea	($FFFFFB80).w,a1
-		moveq	#0,d0
-		move.w	#$1F,d1
-
-TryAg_ClrPallet:
-		move.l	d0,(a1)+
-		dbf	d1,TryAg_ClrPallet ; fill pallet with black ($0000)
-
-		moveq	#$13,d0
-		bsr.w	PalLoad1	; load ending pallet
-		clr.w	($FFFFFBC0).w
-		move.b	#$8B,($FFFFD080).w ; load Eggman object
-		jsr	ObjectsLoad
-		jsr	BuildSprites
-		move.w	#1800,($FFFFF614).w ; show screen for 30 seconds
-		bsr.w	Pal_FadeTo
-
-; ---------------------------------------------------------------------------
-; "TRY AGAIN" and "END"	screen main loop
-; ---------------------------------------------------------------------------
-TryAg_MainLoop:
-		bsr.w	PauseGame
-		move.b	#4,($FFFFF62A).w
-		bsr.w	DelayProgram
-		jsr	ObjectsLoad
-		jsr	BuildSprites
-		andi.b	#$80,($FFFFF605).w ; is	Start button pressed?
-		bne.s	TryAg_Exit	; if yes, branch
-		tst.w	($FFFFF614).w	; has 30 seconds elapsed?
-		beq.s	TryAg_Exit	; if yes, branch
-		cmpi.b	#$1C,($FFFFF600).w
-		beq.s	TryAg_MainLoop
-
-TryAg_Exit:
-		move.b	#0,($FFFFF600).w ; go to Sega screen
-		rts	
+; Credits:				; XREF: GameModeArray
+		; GMZ: We moved!
 
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -43934,6 +43758,11 @@ Map_Tails:	include	"_maps\Tails.asm"
 TailsDynPLC:	include	"_inc\Tails dynamic pattern load cues.asm"	
 
 ; ---------------------------------------------------------------------------
+
+Nem_CrackersASCII:	incbin	artnem\CrackersASCII.bin	; GMZ
+		even
+CreditsCode:	include	_inc\Credits.asm	; GMZ
+
 EndOfRom:
 
 
