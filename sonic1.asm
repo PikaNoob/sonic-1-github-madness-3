@@ -16837,25 +16837,10 @@ loc_C61A:				; XREF: Obj3A_ChkPos
 		bne.s	loc_C5FE
 		addq.b	#2,$24(a0)
 
-		move.w	#180,$1E(a0)	; set time delay to 3 seconds
-; CHAR_WIN_SND: SMCsoundCHKWN: NormalsoundCHKWN:
-		lea	@sndlut(pc),a1		; >charcount
-		jsr	PlayerSpecificSound
-		bra.w	@contgame
-@sndlut:
-		dc.b 0,$00	; sonic
-		dc.b 0,$00
-		dc.b 0,$00
-		dc.b 0,$00	; limited
-		dc.b 0,$00
-		dc.b 2,$90	; gomer
-		dc.b 2,$9E	; sailer mercury
-		dc.b 0,$00	; kiryu
-		dc.b 2,$AD	; purple guy
-		dc.b 0,$00	; sans maybe temporary????
-		even
-@contgame:
+		move.w	#$8E,d0
+		jsr	(PlaySound_Special).l ;	play "Sonic got	through" music
 
+		move.w	#180,$1E(a0)	; set time delay to 3 seconds
 Obj3A_Wait:				; XREF: Obj3A_Index
 		subq.w	#1,$1E(a0)	; subtract 1 from time delay
 		bne.s	Obj3A_Display
@@ -19805,7 +19790,7 @@ loc_EC70:
 		move.w	($FFFFF72A).w,d1
 		addi.w	#$128,d1
 		cmp.w	d1,d0
-		bcs.s	locret_ECEE
+		bcs.w	locret_ECEE
 
 loc_EC86:
 		addq.b	#2,$24(a0)
@@ -19818,12 +19803,33 @@ loc_EC86:
 
 
 GotThroughAct:				; XREF: Obj3E_EndAct
+; CHAR_WIN_SND: SMCsoundCHKWN: NormalsoundCHKWN:
+		lea	@sndlut(pc),a1		; >charcount
+		jsr	PlayerSpecificSound
+		bra.w	@contgame
+@sndlut:
+		dc.b 0,$00	; sonic
+		dc.b 0,$00
+		dc.b 0,$00
+		dc.b 0,$00	; limited
+		dc.b 0,$00
+		dc.b 2,$90	; gomer
+		dc.b 2,$9E	; sailer mercury
+		dc.b 0,$00	; kiryu
+		dc.b 2,$AD	; purple guy
+		dc.b 0,$00	; sans maybe temporary????
+		even
+@contgame:
 		tst.b	($FFFFD5C0).w
 		bne.s	locret_ECEE
 		move.w	($FFFFF72A).w,($FFFFF728).w
 		clr.b	($FFFFFE2D).w	; disable invincibility
 	move.b	#2,(v_superpal).w
 		clr.b	($FFFFFE1E).w	; stop time counter
+
+		cmp.b	#char_mercury,(v_character).w	;is this mercury
+		beq.s	MercuryGotThrough		;go to her results screen instead
+
 		move.b	#$3A,($FFFFD5C0).w
 		moveq	#$10,d0
 		jsr	(LoadPLC2).l	; load title card patterns
@@ -19846,11 +19852,16 @@ loc_ECD0:
 		move.w	($FFFFFE20).w,d0 ; load	number of rings
 		mulu.w	#10,d0		; multiply by 10
 		move.w	d0,($FFFFF7D4).w ; set ring bonus
-		move.w	#$8E,d0
-		jsr	(PlaySound_Special).l ;	play "Sonic got	through" music
+		move.w	#$E0,d0
+		jsr	(PlaySound_Special).l ;	FADE
+; this was done in favor to make sure no music plays while a character plays their sound
 
 locret_ECEE:
 		rts	
+
+MercuryGotThrough:
+		move.b	#$30,($FFFFF600).w
+		rts
 ; End of function GotThroughAct
 
 ; ===========================================================================
