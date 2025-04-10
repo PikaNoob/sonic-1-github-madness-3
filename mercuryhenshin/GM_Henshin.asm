@@ -30,7 +30,7 @@ GM_Henshin:
 		move.w	#$9200,(a6)	; window vertical position
 		move.w	#$8B03,(a6)
 		move.w	#$8720,(a6)	; set background colour (palette line 2, entry 0)
-		move.w  #6,(v_pcyc_num).w
+		move.w  #5,(v_pcyc_num).w
 		move.w  #0,(v_pal_buffer+$C).w
 		move.w  #0,(v_pal_buffer+$A).w
 		clr.b	(f_wtr_state).w
@@ -89,9 +89,10 @@ HS1_MainLoop:
 		bsr.w	PalCycle_HS
 ;		jsr	(ExecuteObjects).l
 ;		jsr	(BuildSprites).l
+		cmpi.b	#$80,($FFFFF605).w ; is Start pressed?
+		beq.w	MERCtransend	; if yes, branch
 		tst.w   (v_demolength).w
-		beq.s   HSCONT
-		bra.s	HS1_MainLoop	; if yes, branch
+		bne.s	HS1_MainLoop
 
 HSCONT:
 		jsr	PaletteWhiteOut
@@ -135,7 +136,9 @@ HS_MainLoop:
 		jsr	WaitForVBla
 ;		jsr	(ExecuteObjects).l
 ;		jsr	(BuildSprites).l
-		tst.w	(v_demolength).w
+		cmpi.b	#$80,($FFFFF605).w ; is Start pressed?
+		beq.w	MERCtransend	; if yes, branch
+		tst.w   (v_demolength).w
 		bne.s	HS_MainLoop
 ;		cmp.b	#id_Bonus,(v_GMTest).w
 ;		beq.s	@level
@@ -143,6 +146,7 @@ HS_MainLoop:
 ;		rts	
 ;@level:
 ;		move.b	#id_Level,(v_gamemode).w
+MERCtransend:
 		rts	
 
 mercurytext1:	dc.b	"Mercury Power Make-Up! "
@@ -202,7 +206,7 @@ PalCycle_HS: ; mercury power make up!
 PCycHS_Skip:
 		rts	
 HSPalIncrease:
-		move.w  #6,(v_pcyc_num).w
+		move.w  #5,(v_pcyc_num).w
 		jmp	PalCycle_HS
 
 ; ---------------------------------------------------------------------------

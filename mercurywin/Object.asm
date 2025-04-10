@@ -22,7 +22,7 @@ WMerc_Init:	; Routine 0
 		move.w	#$270,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#2,obPriority(a0)
-		move.w	#$41,obX(a0)
+		move.w	#$51,obX(a0)
 		move.w	#$1A6,obY(a0)
 
 WMerc_Animate:	; Routine 2
