@@ -365,6 +365,8 @@ GameModeArray:
 ; ===========================================================================
 		bra.w	jmpto_IntroCutscene   ; Intro Cutscene($2C)	
 ; ===========================================================================
+		bra.w	jmpto_MercWin   ; mercury results ($30)	
+; ===========================================================================
 
 jmpto_Minecraft:
 		move.w  #$100,Z80BUS
@@ -378,6 +380,9 @@ jmpto_BeeBush:
 
 jmpto_Otis:
 		jmp     GM_Otis
+
+jmpto_MercWin:
+		jmp	GM_MercWin
 
 jmpto_IntroCutscene:
 		pea	PlayLevel
@@ -3112,6 +3117,7 @@ Pal_hen2:	incbin	pallet\henshin2.bin
 Pal_hencyc:	incbin	pallet\henshincyc.bin
 Pal_mercend:	incbin	pallet\mercend.bin	; ending sequence pallets
 Pal_BART:	incbin	pallet\BART.bin	; ending sequence pallets
+Pal_mercwin:	incbin	pallet\mercwin.bin	; ending sequence pallets
 ; ---------------------------------------------------------------------------
 ; Subroutine to	delay the program by ($FFFFF62A) frames
 ; ---------------------------------------------------------------------------
@@ -40858,6 +40864,7 @@ MusicIndex:	; $01-$7F
 		dc.l Music24 ; AT&T Silly Ringtone
 		dc.l Music25 ; I Love Bejing Tiananmen HK97
 		dc.l Music26 ; Red Ball 4 Boss Track Remix (For Selected Boss)
+		dc.l Music27 ; sailor moon results for mercury (BISHOUJO SENSHI SAILOR MOON, 1994)
 
 ; wait i don't have time to implement these oops
 
@@ -43393,6 +43400,8 @@ Music25:	include	sound\tg2000tracks\HK97.asm
 		even
 Music26:	include	sound\tg2000tracks\BallBoss.asm
 		even
+Music27:	incbin	sound\sailormoonresults.bin
+		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
 Music82:	incbin	sound\music82.bin ; Labyrinth Act 1
@@ -43659,6 +43668,7 @@ Heinous1_Display:
 	include otisexe\GM_Otis.asm
 	include coninight\GM_CN.asm
 	include mercuryhenshin\GM_Henshin.asm
+	include mercurywin\GM_MercWin.asm
 	include mercuryend\GM_MercEnd.asm
 	
 	

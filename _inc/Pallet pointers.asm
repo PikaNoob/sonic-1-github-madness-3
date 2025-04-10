@@ -112,3 +112,6 @@
 	dc.l Pal_BART
 	dc.w $FB00
 	dc.w $1F
+	dc.l Pal_mercwin
+	dc.w $FB00
+	dc.w $1F
