@@ -79,6 +79,18 @@ Attached to the honey on Quagmires penis, they continue to swarm him unless Quag
 You. Are an idiot. Hahaha ha ha ha ha haha ha haha ha~
 
 -----------------------------------------------------------
+# Sonic Badniks
+
+# Craig
+Once an old mate you can bring with you, now under control of White Guy, they grit back
+
+# Kagamine Leg
+Once a failed attempt of a Kagamine Len clone, they always are out to gang up on anyone
+
+# Lenner
+Another attempt of a Kagamine Len clone, while full bodied this time, they can't stop "Lenning Their Banana", whoever was operating was listening to freaky Kagamine Len songs, Unkowingly affecting them
+
+-----------------------------------------------------------
 # Sonic Misc
 
 # Toni
