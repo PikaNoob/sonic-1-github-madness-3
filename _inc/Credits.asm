@@ -227,6 +227,7 @@ CredText_Index:
 		dc.w	CredText_GrafxDetail06-CredText_Index
 		dc.w	CredText_GrafxDetail07-CredText_Index
 		dc.w	CredText_GrafxDetail08-CredText_Index
+		dc.w	CredText_GrafxDetail31-CredText_Index
 		dc.w	CredText_Coni-CredText_Index
 		dc.w	CredText_Linebreak-CredText_Index
 		dc.w	CredText_GrafxDetail09-CredText_Index
@@ -334,14 +335,23 @@ CredText_Index:
 		dc.w	CredText_Music-CredText_Index
 		dc.w	CredText_Linebreak-CredText_Index
 		dc.w	CredText_MusicDetail00-CredText_Index
+		dc.w	CredText_MusicDetail20-CredText_Index
+		dc.w	CredText_MusicDetail21-CredText_Index
 		dc.w	CredText_Carlos-CredText_Index
 		dc.w	CredText_Linebreak-CredText_Index
 		dc.w	CredText_MusicDetail01-CredText_Index
 		dc.w	CredText_MusicDetail02-CredText_Index
+		dc.w	CredText_MusicDetail22-CredText_Index
+		dc.w	CredText_MusicDetail1F-CredText_Index
+		dc.w	CredText_MusicDetail21-CredText_Index
 		dc.w	CredText_MusicDetail03-CredText_Index
+		dc.w	CredText_MusicDetail21-CredText_Index
 		dc.w	CredText_MusicDetail04-CredText_Index
+		dc.w	CredText_MusicDetail21-CredText_Index
 		dc.w	CredText_MusicDetail05-CredText_Index
+		dc.w	CredText_MusicDetail21-CredText_Index
 		dc.w	CredText_MusicDetail06-CredText_Index
+		dc.w	CredText_MusicDetail21-CredText_Index
 		dc.w	CredText_Coni-CredText_Index
 		dc.w	CredText_Linebreak-CredText_Index
 		dc.w	CredText_MusicDetail07-CredText_Index
@@ -624,7 +634,7 @@ CredText_GrafxDetail06:
 		dc.b	"# Spongebob Basaran",0
 
 CredText_GrafxDetail07:
-		dc.b	"# Sonic Hurt",0
+		dc.b	"# Sonic's Hurt Sprite",0
 
 CredText_GrafxDetail08:
 		dc.b	"# Banpresto Sailor Moon S Jupiter",0
@@ -749,6 +759,9 @@ CredText_GrafxDetail2F:
 CredText_GrafxDetail30:
 		dc.b	"# Final Boss defeated sprite",0
 
+CredText_GrafxDetail31:
+		dc.b	"  Plush (1995)",0 ; added to complete CredText_GrafxDetail08 ^ - CONI
+
 CredText_LevelDetail00:
 		dc.b	"# Ring Monitor Guy",0
 
@@ -792,16 +805,16 @@ CredText_MusicDetail02:
 		dc.b	"# Marbl Zone Act 2",0
 
 CredText_MusicDetail03:
-		dc.b	"# Luka Luka Night Fever (Credits Rip)",0
+		dc.b	"# Luka Luka Night Fever",0
 
 CredText_MusicDetail04:
-		dc.b	"# Cleveland Brown Show (Credits Rip)",0
+		dc.b	"# The Cleveland Show ",0
 
 CredText_MusicDetail05:
-		dc.b	"# Somari Marble (Credits Rip)",0
+		dc.b	"# Somari Marble",0
 
 CredText_MusicDetail06:
-		dc.b	"# Sailor Moon MD Stage 2-2",0
+		dc.b	"# Sailor Moon MD Stage 2-2 ",0
 
 CredText_MusicDetail07:
 		dc.b	"# New Bark Town",0
@@ -874,6 +887,18 @@ CredText_MusicDetail1D:
 
 CredText_MusicDetail1E:
 		dc.b	"# Older Death Sound",0
+
+CredText_MusicDetail1F:
+		dc.b	"# Beavis & Butthead",0
+
+CredText_MusicDetail20:
+		dc.b	"# Meltdown",0
+
+CredText_MusicDetail21:
+		dc.b	"(Credits Rip)",0
+
+CredText_MusicDetail22:
+		dc.b	"# Sailor Moon MD Music ",0
 
 CredText_SplaDetail00:
 		dc.b	"# Actual Poop",0
