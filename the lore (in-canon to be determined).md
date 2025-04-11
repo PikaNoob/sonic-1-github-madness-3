@@ -82,7 +82,7 @@ You. Are an idiot. Hahaha ha ha ha ha haha ha haha ha~
 # Sonic Badniks
 
 # Craig
-Once an old mate you can be bring with you, now under control of White Guy, they grit back
+Once an old mate you can bring with you, now under control of White Guy, they grit back
 
 # Kagamine Leg
 Once a failed attempt of a Kagamine Len clone, they always are out to gang up on anyone
