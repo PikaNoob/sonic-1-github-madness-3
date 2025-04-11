@@ -22,7 +22,7 @@ smpsHeaderStartSong = 1
 ;	carlos, 	slz,		meltdown - COMPLETE!
 ;	coninight, 	sbz,		sailor moon (MD 1994) - dream land part 2 - COMPLETE!
 ;	undecided, 	syz,		undecided...
-;	thegamer2000, 	ending,		super mario land, unknown - COMPLETE!
+;	thegamer2000, 	ending,		the lick - COMPLETE!
 ; additional fart by coninight
 
 ; FM1 Data

@@ -155,7 +155,7 @@ CredText_Index:
 		dc.w	CredText_ProgDetail07-CredText_Index
 		dc.w	CredText_ProgDetail08-CredText_Index
 		dc.w	CredText_ProgDetail09-CredText_Index
-		dc.w	CredText_ProgDetail1D-CredText_Index
+		dc.w	CredText_ProgDetail1C-CredText_Index
 		dc.w	CredText_Coni-CredText_Index
 		dc.w	CredText_Linebreak-CredText_Index
 		dc.w	CredText_ProgDetail0A-CredText_Index
