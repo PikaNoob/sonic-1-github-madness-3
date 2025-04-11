@@ -362,6 +362,8 @@ CredText_Index:
 		dc.w	CredText_Linebreak-CredText_Index
 		dc.w	CredText_MusicDetail0F-CredText_Index
 		dc.w	CredText_MusicDetail10-CredText_Index
+		dc.w	CredText_MusicDetail1D-CredText_Index
+		dc.w	CredText_MusicDetail1E-CredText_Index
 		dc.w	CredText_Matt-CredText_Index
 		dc.w	CredText_Linebreak-CredText_Index
 		dc.w	CredText_MusicDetail11-CredText_Index
@@ -866,6 +868,12 @@ CredText_MusicDetail1B:
 
 CredText_MusicDetail1C:
 		dc.b	"# Bumper Frying Pan",0
+
+CredText_MusicDetail1D:
+		dc.b	"# rivalry.bin",0
+
+CredText_MusicDetail1E:
+		dc.b	"# Older Death Sound",0
 
 CredText_SplaDetail00:
 		dc.b	"# Actual Poop",0
