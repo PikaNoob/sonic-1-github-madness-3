@@ -155,6 +155,7 @@ CredText_Index:
 		dc.w	CredText_ProgDetail07-CredText_Index
 		dc.w	CredText_ProgDetail08-CredText_Index
 		dc.w	CredText_ProgDetail09-CredText_Index
+		dc.w	CredText_ProgDetail1D-CredText_Index
 		dc.w	CredText_Coni-CredText_Index
 		dc.w	CredText_Linebreak-CredText_Index
 		dc.w	CredText_ProgDetail0A-CredText_Index
@@ -228,6 +229,7 @@ CredText_Index:
 		dc.w	CredText_GrafxDetail07-CredText_Index
 		dc.w	CredText_GrafxDetail08-CredText_Index
 		dc.w	CredText_GrafxDetail31-CredText_Index
+		dc.w	CredText_GrafxDetail32-CredText_Index
 		dc.w	CredText_Coni-CredText_Index
 		dc.w	CredText_Linebreak-CredText_Index
 		dc.w	CredText_GrafxDetail09-CredText_Index
@@ -591,6 +593,9 @@ CredText_ProgDetail1A:
 CredText_ProgDetail1B:
 		dc.b	"# Minecraft",0
 
+CredText_ProgDetail1C:
+		dc.b	"# Invincible Baka Palette Cycle",0
+
 CredText_CharsDetail00:
 		dc.b	"# Kiryu Kazuma",0
 
@@ -761,6 +766,9 @@ CredText_GrafxDetail30:
 
 CredText_GrafxDetail31:
 		dc.b	"  Plush (1995)",0 ; added to complete CredText_GrafxDetail08 ^ - CONI
+
+CredText_GrafxDetail32:
+		dc.b	"# Makoto Zone Art",0
 
 CredText_LevelDetail00:
 		dc.b	"# Ring Monitor Guy",0
