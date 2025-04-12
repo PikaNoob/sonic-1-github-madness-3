@@ -12394,7 +12394,7 @@ Obj28_Index:	dc.w Obj28_Ending-Obj28_Index, loc_912A-Obj28_Index
 		dc.w loc_9314-Obj28_Index, loc_9370-Obj28_Index
 		dc.w loc_92D6-Obj28_Index
 
-Obj28_VarIndex:	dc.b 0,	5, 2, 3, 6, 3, 4, 5, 4,	1, 0, 1, 0,	5, 0,	5
+Obj28_VarIndex:	dc.b 0,	5, 2, 3, 6, 3, 4, 5, 4,	1, 0, 1, 0,	5, 0,	2
 
 Obj28_Variables:dc.w $FE00, $FC00
 		dc.l Map_obj28
@@ -12465,6 +12465,8 @@ Obj28_FromEnemy:			; XREF: Obj28_Ending
 		move.w	(a1)+,$32(a0)	; load horizontal speed
 		move.w	(a1)+,$34(a0)	; load vertical	speed
 		move.l	(a1)+,4(a0)	; load mappings
+;i'm having trouble here, in makoto zone there are two even animals, which both end up displaying ted
+;i don't know what i can do with it, so please make a new routine ^^
 		move.w	#$580,2(a0)	; VRAM setting for 1st animal
 		btst	#0,$30(a0)	; is 1st animal	used?
 		beq.s	loc_90C0	; if yes, branch
@@ -16467,7 +16469,7 @@ Obj34_AnimalPLC:
 		dc.b $19
 		dc.b $1A	; "SBZ"
 		dc.b $15	; Ending (placeholder?
-		dc.b $1A	; MAKOTO
+		dc.b $25	; MAKOTO
 	even
 Obj34_ItemData:	dc.w $D0	; y-axis position
 		dc.b 2,	0	; routine number, frame	number (changes)
@@ -40233,6 +40235,10 @@ Nem_Pig:	incbin	artnem\pig.bin		; pig
 Nem_Flicky:	incbin	artnem\flicky.bin	; flicky
 		even
 Nem_Squirrel:	incbin	artnem\squirrel.bin	; squirrel
+		even
+Nem_LilTed:	incbin	artnem\LilTed.bin	; LilTed
+		even
+Nem_LilYuu:	incbin	artnem\LilYuu.bin	; LilYuu
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - primary patterns and block mappings

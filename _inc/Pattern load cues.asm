@@ -22,6 +22,7 @@
 	dc.w Plc_TetoBoss-ArtLoadCues
 	dc.w PLC_TruthNuke-ArtLoadCues	; GMZ
 	dc.w Plc_MakoBoss-ArtLoadCues
+	dc.w PLC_BHZAnimals-ArtLoadCues
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - standard block 1
 ; ---------------------------------------------------------------------------
@@ -578,4 +579,13 @@ PLC_MakoBoss:	dc.w 2
 		dc.w $93A0
 		dc.l Nem_makobomb		; bomb enemy (gets overwritten)
 		dc.w $9000
-		; even
+;		even
+; ---------------------------------------------------------------------------
+; Pattern load cues - BHZ animals
+; ---------------------------------------------------------------------------
+PLC_BHZAnimals:	dc.w 1
+		dc.l Nem_LilTed		; kasane ted (my beloved)
+		dc.w $B000
+		dc.l Nem_LilYuu	; madobe yuu (also my beloved)
+		dc.w $B240
+		even
