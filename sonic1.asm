@@ -12465,8 +12465,6 @@ Obj28_FromEnemy:			; XREF: Obj28_Ending
 		move.w	(a1)+,$32(a0)	; load horizontal speed
 		move.w	(a1)+,$34(a0)	; load vertical	speed
 		move.l	(a1)+,4(a0)	; load mappings
-;i'm having trouble here, in makoto zone there are two even animals, which both end up displaying ted
-;i don't know what i can do with it, so please make a new routine ^^
 		move.w	#$580,2(a0)	; VRAM setting for 1st animal
 		btst	#0,$30(a0)	; is 1st animal	used?
 		beq.s	loc_90C0	; if yes, branch
@@ -12812,7 +12810,6 @@ Map_obj28a:
 
 Map_obj28b:
 	include "_maps\obj28b.asm"
-
 ; ---------------------------------------------------------------------------
 ; Sprite mappings - points that	appear when you	destroy	something
 ; ---------------------------------------------------------------------------

@@ -473,7 +473,7 @@ PLC_SYZAnimals:	dc.w 1
 ; Pattern load cues - SBZ animals
 ; ---------------------------------------------------------------------------
 PLC_SBZAnimals:	dc.w 1
-		dc.l Nem_Rabbit		; rabbit
+		dc.l Nem_LilTed		; kasane ted (my beloved)
 		dc.w $B000
 		dc.l Nem_Chicken	; chicken
 		dc.w $B240
@@ -584,8 +584,8 @@ PLC_MakoBoss:	dc.w 2
 ; Pattern load cues - BHZ animals
 ; ---------------------------------------------------------------------------
 PLC_BHZAnimals:	dc.w 1
-		dc.l Nem_LilTed		; kasane ted (my beloved)
+		dc.l Nem_LilYuu		; madobe yuu (also my beloved)
 		dc.w $B000
-		dc.l Nem_LilYuu	; madobe yuu (also my beloved)
+		dc.l Nem_Chicken	
 		dc.w $B240
 		even
