@@ -555,7 +555,7 @@ PLC_FZBoss:	dc.w 4
 ; ---------------------------------------------------------------------------
 PLC_TetoBoss:	dc.w 2
 		dc.l Nem_Tetoboss		; Eggman main patterns
-		dc.w $8000
+		dc.w $6A00
 		dc.l Nem_Prison		; prison capsule
 		dc.w $93A0
 		dc.l Nem_Peartobomb		; bomb enemy (gets overwritten)
@@ -573,7 +573,7 @@ PLC_TruthNuke:	dc.w 0
 ; ---------------------------------------------------------------------------
 PLC_MakoBoss:	dc.w 2
 		dc.l Nem_makoboss		; Eggman main patterns
-		dc.w $8000
+		dc.w $7000
 		dc.l Nem_Prison		; prison capsule
 		dc.w $93A0
 		dc.l Nem_makobomb		; bomb enemy (gets overwritten)
