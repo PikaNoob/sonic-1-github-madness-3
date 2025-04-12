@@ -9987,12 +9987,12 @@ loc_6EB0B:
 		bcs.s	locret_6EE8B
 		bsr.w	SingleObjLoad
 		bne.s	loc_6ED0B
-		move.b	#$77,0(a1)	; load LZ boss object
+		move.b	#$77,0(a1)	; load LZ boss object (as plush jupiter)
 		move.w	#$2B00,8(a1)
 		move.w	#$3A0,$C(a1)
 
 loc_6ED0B:
-		move.w	#$8C,d0
+		move.w	#$28,d0
 		bsr.w	PlaySound	; play boss music
 		move.b	#1,($FFFFF7AA).w ; lock	screen
 		addq.b	#2,($FFFFF742).w
@@ -40700,6 +40700,7 @@ MusicIndex:	; $01-$7F
 		dc.l Music25 ; I Love Bejing Tiananmen HK97
 		dc.l Music26 ; Red Ball 4 Boss Track Remix (For Selected Boss)
 		dc.l Music27 ; sailor moon results for mercury (BISHOUJO SENSHI SAILOR MOON, 1994)
+		dc.l Music28 ; jupiter plush theme (crayon shin chan 4 or super mario land 4)
 
 ; wait i don't have time to implement these oops
 
@@ -43236,6 +43237,8 @@ Music25:	include	sound\tg2000tracks\HK97.asm
 Music26:	include	sound\tg2000tracks\BallBoss.asm
 		even
 Music27:	incbin	sound\sailormoonresults.bin
+		even
+Music28:	incbin	sound\jupiterplush.bin
 		even
 Music81:	incbin	sound\jahl.bin ; 	Green Hill Act 1
 		even
