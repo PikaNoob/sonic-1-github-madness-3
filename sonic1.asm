@@ -11283,6 +11283,9 @@ loc_7076:
 		move.b	#$87,$20(a0)
 		move.b	#8,$18(a0)
 		move.w	#$18,$30(a0)
+		cmp.b	#7,($FFFFFE10).w	; Are we in BHZ?
+		bne.s	loc_70A6	; GMZ: If not, dont use 2ND frame that has the correct line
+		move.b	#1,$1A(a0)
 
 loc_70A6:
 		btst	#7,$22(a0)
@@ -11298,7 +11301,7 @@ loc_70C2:
                 moveq   #$FFFFFFBD,d0 ;i am a pear (pearto)
 		cmp.b	#7,($FFFFFE10).w	; Are we in BHZ?
 		bne.s	@notmako	; GMZ: If not, branch
-                moveq   #$FFFFFFBE,d0 ;happy birthday! (conic) (this was done a week before my birthday)
+                moveq   #$FFFFFFBE,d0 ;happy birthday! (NOTc onic KI\TS SONIC CLOCK NOW) (this was done a week before my birthday)
 @notmako:
                 jsr     MegaPCM_PlaySample
 		move.b	#$27,0(a0); change object to explosion (why was this even here with the 3F branch)
