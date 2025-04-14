@@ -122,9 +122,6 @@ He kinda, uhh, well, fat
 He didn't make it while finding the income for sonic
 Godspeed, Mark.
 
-# Conic the Cat
-"HAPPY BIRHTDAY!" as they fall to an exploding death
-
 # Bart leaning on skateboard
 "EAT SHIT" said on a teal gradient background as he spins
 
