@@ -32221,6 +32221,9 @@ loc2_17772:
 		move.w	d0,(v_tetoystart).w
 		move.b	#$F,$20(a0)
 		move.b	#8,$21(a0)	; set number of	hits to	8
+		cmp.b	#7,($FFFFFE10).w	; Are we in BHZ?
+		bne.s	obj77_ShipMain	; If not, branch
+		move.b	#$14,$21(a0)	; Sailor jupiter is twice as powerful with 20 hits
 
 obj77_ShipMain:				; XREF: obj77_Index
 		moveq	#0,d0
