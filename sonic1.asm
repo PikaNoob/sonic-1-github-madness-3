@@ -32204,7 +32204,11 @@ obj77_LoadBoss:				; XREF: obj77_Main
 		bne.s	@notmako	; GMZ: If not, branch
 		move.l	#Map_MakoBoss,4(a1)
 @notmako:
-		move.w	#$400,2(a1)
+		move.w	#$350,2(a1)
+		cmp.b	#7,($FFFFFE10).w	; Are we in BHZ?
+		bne.s	@notmakoGFX	; GMZ: If not, branch
+		move.w	#$380,2(a1)
+@notmakoGFX:
 		move.b	#4,1(a1)
 		move.b	#$20,$19(a1)
 		move.b	#3,$18(a1)
@@ -32221,7 +32225,9 @@ loc2_17772:
 		move.w	d0,(v_tetoystart).w
 		move.b	#$F,$20(a0)
 		move.b	#8,$21(a0)	; set number of	hits to	8
-
+		cmp.b	#7,($FFFFFE10).w	; Are we in BHZ?
+		bne.s	obj77_ShipMain	; If not, branch
+		move.b	#$14,$21(a0)	; Sailor jupiter is twice as powerful with 20 hits
 obj77_ShipMain:				; XREF: obj77_Index
 		moveq	#0,d0
 		move.b	$25(a0),d0
@@ -32242,6 +32248,7 @@ obj77_ShipIndex:dc.w obj77_ShipStart-obj77_ShipIndex
 		dc.w fatassruns-obj77_ShipIndex		
 		dc.w loc2_1797A-obj77_ShipIndex
 		dc.w loc2_179AC-obj77_ShipIndex
+		dc.w Tetosplodetest-obj77_ShipIndex
 		dc.w loc2_179F6-obj77_ShipIndex
 ; ===========================================================================
 
@@ -32454,18 +32461,26 @@ loc2_179DA:
 ; ===========================================================================
 
 loc2_179E0:
-		clr.w	$12(a0)
-		move.w	#$97,d0
-		jsr	(PlaySound).l	; play lz3 music
-
+;		clr.w	$12(a0)
+;now set up explosion
+		move.w	#-$400,$12(a0)
 loc2_179EE:
 		bsr.w	BossMove
 		bra.w	loc2_177E6
 ; ===========================================================================
 
+tetosplodetest:
+		move.w	(v_tetoystart).w,d0
+		cmp.w	$38(a0),d0 ; is she at the right Y location to do the funny
+		beq.s	loc2_179F6  ; if not don't pass
+		move.b	#3,$1C(a0)	; shit out
+		move.w	#$97,d0
+		jsr	(PlaySound).l	; play lz3 music
+		addq.b	#2,$25(a0)
+		move.w	#$C4,d0
+		jmp	(PlaySound_Special).l ;	play exploding bomb sound
+
 loc2_179F6:				; XREF: obj77_ShipIndex
-		move.w	#$400,$10(a0)
-		move.w	#-$40,$12(a0)
 		move.w	#$1F00,d0
 		cmp.b	#7,($FFFFFE10).w
 		bne.s	@notbhz
