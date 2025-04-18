@@ -1,0 +1,10 @@
+calculate everything needed for the score
+then write the apropriate info in the text tilemap data
+
+the screen starts out printing out stats (using copy commands determined by a variable)
+one thing to note is that it slowly prints, but pressing the start button prints it faster (so a timer variable is needed)
+
+then waits again for the rank cycle (CYCLE BETWEEN A-E), start again and skip to current rank gotten
+
+END
+tuxedo mask plays animation and wait for the player to push start

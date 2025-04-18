@@ -25714,7 +25714,7 @@ Sonic_AirUnroll:
 		dc.b 1,$A5	; limited
 		dc.b 1,$A5
 		dc.b 2,$90	; gomer
-		dc.b 2,$9A	; sailer mercury
+		dc.b 2,$99	; sailer mercury
 		dc.b 2,$AC	; kiryu
 		dc.b 1,$A5	; purple
 		dc.b 1,$CD	; sans
@@ -26040,7 +26040,7 @@ loc_1341C:
 		dc.b 1,$A0	; limited
 		dc.b 1,$A0
 		dc.b 2,$90	; gomer
-		dc.b 2,$99	; sailer mercury
+		dc.b 1,$CE	; sailer mercury
 		dc.b 2,$AA	; kiryu
 		dc.b 1,$A0	; purple
 		dc.b 1,$CD
@@ -41315,9 +41315,9 @@ Sound_ChkValue:				; XREF: sub_71B4C
 		blo.w	Sound_SFX
 ; - this is a little fix, but also opens for more sounds!
 		cmpi.b	#$D1,d7		; special sound $D0
-		blo.w	Sound_SFX
-		cmpi.b	#$E0,d7		; sound	$D1-$DF
 		blo.w	Sound_D0
+		cmpi.b	#$E0,d7		; sound	$D1-$DF
+		blo.w	Sound_SFX
 
 		; falls to command
 ; ===========================================================================
@@ -43440,7 +43440,7 @@ SoundCC:	incbin	sound\C9.ssf
 		even
 SoundCD:	incbin	sound\soundCD.bin
 		even
-SoundCE:	incbin	sound\soundCE.bin
+SoundCE:	incbin	sound\SMSFX\CHARJUMP.sfx
 		even
 SoundCF:	incbin	sound\soundCF.bin
 		even
