@@ -41313,9 +41313,12 @@ Sound_ChkValue:				; XREF: sub_71B4C
 		blo.w	Sound_Music
 		cmpi.b	#$D0,d7		; sound	$A0-$CF
 		blo.w	Sound_SFX
-		cmpi.b	#$E0,d7		; special sound $D0-DF
+; - this is a little fix, but also opens for more sounds!
+		cmpi.b	#$D1,d7		; special sound $D0
+		blo.w	Sound_SFX
+		cmpi.b	#$E0,d7		; sound	$D1-$DF
 		blo.w	Sound_D0
-		
+
 		; falls to command
 ; ===========================================================================
 
@@ -41685,14 +41688,15 @@ Sound_SFX:				; XREF: Sound_ChkValue
 		bne.w	loc_722C6
 		tst.b	$24(a6)
 		bne.w	loc_722C6
-		cmpi.b	#$B5,d7		; is ring sound	effect played?
-		bne.s	Sound_notB5	; if not, branch
-		tst.b	$2B(a6)
-		bne.s	loc_721EE
-		move.b	#$CE,d7		; play ring sound in left speaker
-
-loc_721EE:
-		bchg	#0,$2B(a6)	; change speaker
+; THIS ISN'T NEEDED! as they both use the same channel!
+;		cmpi.b	#$B5,d7		; is ring sound	effect played?
+;		bne.s	Sound_notB5	; if not, branch
+;		tst.b	$2B(a6)
+;		bne.s	loc_721EE
+;		move.b	#$CE,d7		; play ring sound in left speaker
+;
+;loc_721EE:
+;		bchg	#0,$2B(a6)	; change speaker
 
 Sound_notB5:
 		cmpi.b	#$A7,d7		; is "pushing" sound played?
@@ -43386,7 +43390,7 @@ SoundB3:	incbin	sound\soundB3.bin
 		even
 SoundB4:	include	sound\soundB4.asm
 		even
-SoundB5:	incbin	sound\soundB5.bin
+SoundB5:	include	sound\soundB5.asm
 		even
 SoundB6:	incbin	sound\soundB6.bin
 		even
