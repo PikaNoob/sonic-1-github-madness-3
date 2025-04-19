@@ -51,7 +51,7 @@ GM_MercEnd:
 
 		moveq	#35,d0	; load palette 1
 		jsr	PalLoad1
-		move.w	#$1A0,(v_demolength).w
+		bsr.w	mercendtime
 		move.b	#$FF,(v_mercnum).w
 		bsr.w	Merc_MapLoad
 		move.w	#$600F,(v_pfade_start).w ; fade in 2th palette line
@@ -62,7 +62,7 @@ MCE_MainLoop:
 		jsr	WaitForVBla
 		tst.w   (v_demolength).w
 		bne.s	MCE_MainLoop	; if yes, branch
-		move.w	#$1A0,(v_demolength).w
+		bsr.w	mercendtime
 		bsr.s	Merc_MapLoad
 		cmp.b	#9,(v_mercnum).w ; is id OVER 8?
 		bne.s	MCE_MainLoop	; if yes, branch
@@ -75,6 +75,7 @@ MCE_MainLoop:
 		jsr	EniDec
 		copyTilemap	$FF0000,$C000,$27,$1F
 		jsr	PaletteFadeIn
+		bsr.w	mercendtime ; more time ^^
 MCE_MainLoop1:
 		move.b	#4,(v_vbla_routine).w
 		jsr	WaitForVBla
@@ -103,6 +104,17 @@ Merc_MapLoadA:
 		jsr	EniDec
 		copyTilemap	$FF0000,$EB04,$23,$03
 		rts
+
+mercendtime
+		btst	#6,($FFFFFFF8).w
+		bne.s	@PALTIME
+		add.w	#8*60,(v_demolength).w	; Reset frame counter to 8 NTSC SECONDS
+		bra.s	@NTSCTIME
+@PALTIME
+		add.w	#8*50,(v_demolength).w	; Reset frame counter to 8 PAL SECONDS
+@NTSCTIME
+		rts
+
 mercredmaps:
 	dc.l	Eni_MCE1
 	dc.l	Eni_MCE2

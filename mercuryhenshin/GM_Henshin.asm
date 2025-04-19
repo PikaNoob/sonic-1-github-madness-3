@@ -70,7 +70,12 @@ GM_Henshin:
 
 		moveq	#33,d0	; load palette 1
 		jsr	PalLoad1
-		move.w	#$B0,(v_demolength).w
+
+		move.w	#2*60,(v_demolength).w	; Reset frame counter to 2 NTSC SECONDS
+		btst	#6,($FFFFFFF8).w
+		beq.s	@NTSCTIMEH
+		move.w	#2*50,(v_demolength).w	; Reset frame counter to 2 PAL SECONDS
+@NTSCTIMEH
 ;		jsr	(ExecuteObjects).l
 ;		jsr	(BuildSprites).l
 		jsr	PaletteWhiteIn
@@ -95,7 +100,42 @@ HS1_MainLoop:
 		bne.s	HS1_MainLoop
 
 HSCONT:
-		jsr	PaletteWhiteOut
+
+		move.w	#1*80,($FFFFF614).w	; Reset frame counter to 1 NTSC SECONDS
+		btst	#6,($FFFFFFF8).w
+		beq.s	@NTSCTIMEHF
+		move.w	#1*70,($FFFFF614).w	; Reset frame counter to 1 PAL SECONDS
+@NTSCTIMEHF
+;		move.w	#60,($FFFFF614).w ; set	delay time to 1	second
+		move.w	#$3F,($FFFFF626).w
+		clr.w	($FFFFF794).w
+SS_EndLoopH:
+		move.b	#$4,($FFFFF62A).w
+		jsr	DelayProgram
+		move.w	($FFFFF604).w,($FFFFF602).w
+		bsr.w	DeformHS
+
+;		jsr	ObjectsLoad
+;		jsr	BuildSprites
+;		jsr	SS_ShowLayout
+;		jsr	SS_BGAnimate
+		subq.w	#1,($FFFFF794).w
+		bpl.s	loc_47D4H
+		move.w	#2,($FFFFF794).w
+		jsr	Pal_ToWhite
+
+loc_47D4H:
+		tst.w	($FFFFF614).w
+		bne.s	SS_EndLoopH
+
+
+		subq.w	#1,($FFFFF794).w
+		bpl.s	End_SlowFade
+		move.w	#2,($FFFFF794).w
+		jsr	Pal_ToWhite
+
+	End_SlowFade:
+;		jsr	PaletteWhiteOut
 		lea	($FF0000).l,a1
 		lea	(Eni_HSBG2).l,a0
 		moveq	#0,d0
@@ -126,7 +166,11 @@ loc_68Dat2:
 
 		moveq	#34,d0	; load palette 2
 		jsr	PalLoad1
-		move.w	#$1D0,(v_demolength).w ; run title screen for $999 frames
+		move.w	#7*60,(v_demolength).w	; Reset frame counter to 8 NTSC SECONDS
+		btst	#6,($FFFFFFF8).w
+		beq.s	@NTSCTIMEH1
+		move.w	#7*50,(v_demolength).w	; Reset frame counter to 8 PAL SECONDS
+@NTSCTIMEH1
 ;		jsr	(ExecuteObjects).l
 ;		jsr	(BuildSprites).l
 		jsr	PaletteWhiteIn
