@@ -42,6 +42,12 @@ GM_MercWin:
 		jsr	EniDec
 		copyTilemap	$FF0000,$C000,$27,$1D
 
+
+		lea	($FF0000).l,a1
+		lea	(Eni_MWSCOR).l,a0
+		moveq	#0,d0
+		jsr	EniDec
+
 		moveq	#37,d0	; load palette
 		jsr	PalLoad1
 		move.l	#$1000000,($FFFFF704).w ; correct vertical position for "wander conic" 
@@ -108,6 +114,18 @@ loc_C6EAMERCW:				; XREF: Obj3A_ChkSS
 		move.b	#$C,($FFFFF600).w
 MERCWEND
 		rts	
+
+		copyTilemap	$FF0000,$C30A,$1D,$1 ;CLEAR TIME
+		copyTilemap	$FF0078,$C40A,$1D,$1 ;DAMAGE TAKEN
+		copyTilemap	$FF00F0,$C50A,$1D,$1 ;SCORE
+		copyTilemap	$FF0168,$C696,$0F,$1 ;OVERALL SCORE
+		copyTilemap	$FF01A8,$C8A4,$01,$1 ;A
+		copyTilemap	$FF01B0,$C8A4,$01,$1 ;B
+		copyTilemap	$FF01B8,$C8A4,$01,$1 ;C
+		copyTilemap	$FF01C0,$C8A4,$01,$1 ;D
+		copyTilemap	$FF01C8,$C8A4,$01,$1 ;E
+		copyTilemap	$FF01D0,$C8A4,$01,$1 ;F
+
 ;start
 mercurytext3:	dc.b	"Let's see your results!"
 		even
@@ -141,6 +159,8 @@ Nem_MercWin:	incbin	"mercurywin\winart.bin"
 Eni_MWBG:	incbin	"mercurywin\BG.bin"
 		even
 Eni_MWFG:	incbin	"mercurywin\FG.bin"
+		even
+Eni_MWSCOR:	incbin	"mercurywin\SCORE.bin"
 		even
 ; ---------------------------------------------------------------------------
 ; Object stuff
