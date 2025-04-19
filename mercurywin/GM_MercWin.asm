@@ -135,7 +135,11 @@ MCW_StartLoop:
 		beq.w	MERCW_resskipa	; if yes, branch
 		cmp.b	#$0C,(v_mwwid).w
 		bne.s	MCW_StartLoop
-		bsr.w	MCW_StartNext
+		bra.w	MCW_StartNext ; bra not bsr you fucking moron - future coni
+;on another note 
+;craig
+;heh
+;the next github madess should have a sex button on the menu
 MERCW_resskipa:
 		move.b	#2,(v_mwtime).w
 		move.b	#2,(v_mwtimea).w
@@ -146,7 +150,7 @@ MERCW_resskip:
 		jsr	(ObjectsLoad).l
 		jsr	(BuildSprites).l
 		bsr.w	MERCWtextw
-		cmp.b	#$10,(v_mwwid).w
+		cmp.b	#$0C,(v_mwwid).w
 		bne.s	MERCW_resskip
 MCW_StartNext
 		move.w	#120,(v_demolength).w
