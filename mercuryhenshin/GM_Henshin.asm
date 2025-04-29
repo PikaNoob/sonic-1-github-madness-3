@@ -150,19 +150,13 @@ loc_47D4H:
 		bsr.w	DeformHS
 		clr.w	(v_bgscrposy_vdp).w
 		clr.w	(v_bgscreenposx).w
-		lea	(v_hscrolltablebuffer).w,a1	; copy fg and bg positions to hscroll
-		move.w	#223,d1
-		btst	#6,(v_megadrive).w	; Is this a PAL console?
-		beq.s	@V28			; If not, skip.
-		addi.b	#16,d1			; Scroll an extra 16 pixels.
-@V28:
-		move.w	(v_screenposx).w,d0
-		swap.w	d0
-		move.w	(v_bgscreenposx).w,d0
-		neg.w	d0
-loc_68Dat2:		
+
+		lea	(v_hscrolltablebuffer).w,a1
+		moveq	#0,d0
+		move.w	#239,d1
+MercClrScroll:
 		move.l	d0,(a1)+
-		dbf	d1,loc_68Dat2
+		dbf	d1,MercClrScroll ; clear scroll data (in RAM)
 
 		moveq	#34,d0	; load palette 2
 		jsr	PalLoad1
