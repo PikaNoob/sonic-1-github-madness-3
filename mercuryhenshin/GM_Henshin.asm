@@ -147,7 +147,7 @@ loc_47D4H:
 		moveq	#0,d0
 		jsr	EniDec
 		copyTilemap	$FF0000,$C000,$27,$1D
-		bsr.w	DeformHS
+;		bsr.w	DeformHS ; WHY DID I HAVE THAT HERE
 		clr.w	(v_bgscrposy_vdp).w
 		clr.w	(v_bgscreenposx).w
 

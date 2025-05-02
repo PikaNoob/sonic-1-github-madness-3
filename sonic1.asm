@@ -4965,7 +4965,7 @@ Level_StartGame:
 		dc.b 0,$00	; limited
 		dc.b 0,$00
 		dc.b 2,$90	; gomer
-		dc.b 2,$98	; sailer mercury
+		dc.b 0,$00	; sailer mercury - initially her transformation sound
 		dc.b 2,$A8 ;  kiryu
 		dc.b 2,$B2	; purple guy
 		dc.b 2,$B3	; sans temporary!!!!!!!!!!!!!
@@ -26037,7 +26037,7 @@ loc_1341C:
 		dc.b 1,$A0	; sonic
 		dc.b 1,$A0
 		dc.b 1,$A0
-		dc.b 1,$A0	; limited
+		dc.b 1,$D3	; limited
 		dc.b 1,$A0
 		dc.b 2,$90	; gomer
 		dc.b 1,$CE	; sailer mercury
@@ -43347,7 +43347,7 @@ SoundIndex:	dc.l SoundA0, SoundA1, SoundA2
 		dc.l SoundCA, SoundCB, SoundCC
 		dc.l SoundCD, SoundCE, SoundCF
 SoundD0Index:	dc.l SoundD0
-		dc.l SoundD1, SoundD2
+		dc.l SoundD1, SoundD2, SoundD3
 SoundA0:	include	sound\jump.asm
 		even
 SoundA1:	incbin	sound\soundA1.bin
@@ -43449,6 +43449,8 @@ SoundD0:	incbin	sound\soundD0.bin
 SoundD1:	incbin	sound\MenuBIT.bin
 		even
 SoundD2:	incbin	sound\MenuAffirm.bin
+		even
+SoundD3:	include	sound\SoundD3.asm
 		even
 
 IdiotPCM:	incbin	sound\youare.bin
