@@ -21,7 +21,7 @@ smpsHeaderStartSong = 1
 ;	coninight, 	mz,		somari - COMPLETE!
 ;	carlos, 	slz,		meltdown - COMPLETE!
 ;	coninight, 	sbz,		sailor moon (MD 1994) - dream land part 2 - COMPLETE!
-;	undecided, 	syz,		undecided...
+;	coninight, 	syz,		family guy - COMPLETE!
 ;	thegamer2000, 	ending,		the lick - COMPLETE!
 ; additional fart by coninight
 
@@ -95,15 +95,21 @@ Mus91_Credits_FM1:
 	dc.b	nRst, $30
 	smpsSetvoice        $17
 	smpsAlterVol        $0E
-	dc.b	nRst, $04, nF6, $08, nE6, $03, nRst, nD6, nRst, nC6, nRst, nD6
-	dc.b	nRst, nC6, $04, nA5, nRst, $02, nBb5, nRst, $04, nBb5, $08, nC6
-	dc.b	$03, nRst, nBb5, nRst, nA5, $04, nBb5, nRst, $02, nC6, $0E, nRst
-	dc.b	$06, nE6, $02, nRst, $04, nE6, $0C, nF6, nE6, $0A, nD6, $02
-	smpsNop             $01
+; it was not that funny it was gay did you know this part was done too late after release
+	dc.b	nD6, $04, nC6, $02, nD6, $04, nE6, $02, nF6, $04, nE6, $02, nD6, $04, nC6, $0D, nRst
+
+	dc.b	nBb5, $04, nA5, $02, nBb5, $04, nA5, $02, nBb5, $04, nC6, nRst
+
+	dc.b	nA5, $04, nG5, $02, nA5, $04, nG5, $02, nA5, $04, nBb5, nRst
+
+	dc.b	nG5, $04, nFs5, $02, nG5, $04, nFs5, $02, nG5, $04, nA5, nRst
+
+	dc.b	nF5, $04, nA5, nRst, $02, nD6, $08, nRst, $06
 	smpsSetTempoMod     $04
+	dc.b	nC6, nRst, nC6, nRst, nD6, nRst, nE6, nRst
+	smpsNop             $01
 	smpsAlterVol        $F5
 	smpsSetvoice        $1A
-	dc.b	nRst, $60
 	smpsCall            Mus91_Credits_Call07
 	smpsAlterVol        $09
 	smpsAlterNote       $03
@@ -115,6 +121,7 @@ Mus91_Credits_FM1:
 	smpsAlterNote       $02
 	dc.b	nA1, $6C, smpsNoAttack, $60
 	smpsNop             $01
+;thend
 	smpsStop
 
 Mus91_Credits_Call12:
@@ -871,10 +878,10 @@ Mus91_Credits_Loop00:
 
 Mus91_Credits_Loop01:
 	dc.b	dKick, $18, dSnare, $0C, dKick, $18, $0C, dSnare, $18
-	smpsLoop            $00, $03, Mus91_Credits_Loop01
-	dc.b	dKick, $18, dSnare, $0C, dKick, $18, dSnare, $0C, dSnare, dSnare
+	smpsLoop            $00, $02, Mus91_Credits_Loop01
+	dc.b	dKick, $18, dSnare, $0C, dKick, $18, $0C, dSnare
+	dc.b	$89, $18, $88, $0C, $89, $88, $8A, $30 ; the drums as well why not
 	smpsSetTempoDiv     $02
-
 Mus91_Credits_Loop02:
 	dc.b	dKick, $12, dKick, $06, dKick, $0C, dSnare
 	smpsLoop            $00, $05, Mus91_Credits_Loop02
