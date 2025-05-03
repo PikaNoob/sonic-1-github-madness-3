@@ -586,6 +586,6 @@ PLC_MakoBoss:	dc.w 2
 PLC_BHZAnimals:	dc.w 1
 		dc.l Nem_LilYuu		; madobe yuu (also my beloved)
 		dc.w $B000
-		dc.l Nem_Chicken	
+		dc.l Nem_RedChicken	
 		dc.w $B240
 		even

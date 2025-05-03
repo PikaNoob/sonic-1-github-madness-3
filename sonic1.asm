@@ -12397,7 +12397,7 @@ Obj28_Index:	dc.w Obj28_Ending-Obj28_Index, loc_912A-Obj28_Index
 		dc.w loc_9314-Obj28_Index, loc_9370-Obj28_Index
 		dc.w loc_92D6-Obj28_Index
 
-Obj28_VarIndex:	dc.b 0,	5, 2, 3, 6, 3, 4, 5, 4,	1, 0, 1, 0,	5, 0,	2
+Obj28_VarIndex:	dc.b 0,	5, 2, 3, 6, 3, 4, 5, 4,	1, 0, 1, 0,	5, 0,	1
 
 Obj28_Variables:dc.w $FE00, $FC00
 		dc.l Map_obj28
@@ -40239,6 +40239,8 @@ Nem_Squirrel:	incbin	artnem\squirrel.bin	; squirrel
 Nem_LilTed:	incbin	artnem\LilTed.bin	; LilTed
 		even
 Nem_LilYuu:	incbin	artnem\LilYuu.bin	; LilYuu
+		even
+Nem_RedChicken:	incbin	artnem\redchicken.bin	; red
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - primary patterns and block mappings
